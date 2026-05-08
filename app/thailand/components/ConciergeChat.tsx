@@ -1,6 +1,8 @@
+"use client"; // Client-side hooks သုံးထားလို့ မဖြစ်မနေ ထည့်ရပါမယ်
+
 import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { Send, Bot, User, Loader2, Info } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion'; // motion/react မှ framer-motion သို့ ပြောင်းလိုက်ပါ
+import { Send, Bot, Loader2, Info } from 'lucide-react';
 import { getConciergeResponse } from '../services/geminiService';
 import { ChatMessage, ThaiLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../i18n';
@@ -31,22 +33,27 @@ export default function ConciergeChat({ language }: Props) {
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
 
-    const history = messages.map(m => ({
-      role: (m.role === 'user' ? 'user' : 'model') as 'user' | 'model',
-      parts: [{ text: m.content }]
-    }));
+    try {
+      const history = messages.map(m => ({
+        role: (m.role === 'user' ? 'user' : 'model') as 'user' | 'model',
+        parts: [{ text: m.content }]
+      }));
 
-    const response = await getConciergeResponse(userMessage, history, language);
-    setMessages(prev => [...prev, { role: 'assistant', content: response }]);
-    setIsLoading(false);
+      const response = await getConciergeResponse(userMessage, history, language);
+      setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+    } catch (error) {
+      console.error("Concierge Chat Error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="flex flex-col h-[500px] w-full bg-sacred-bg/50 rounded-2xl overflow-hidden gold-border">
+    <div className="flex flex-col h-[500px] w-full bg-[#fdfaf3]/50 rounded-2xl overflow-hidden border border-[#D4AF37]/30">
       {/* Header */}
       <div className="p-4 bg-white border-b border-gray-100 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-gold-deep/10 flex items-center justify-center text-gold-deep">
+          <div className="w-8 h-8 rounded-full bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37]">
             <Bot size={18} />
           </div>
           <div>
@@ -68,28 +75,31 @@ export default function ConciergeChat({ language }: Props) {
           </div>
         )}
         
-        {messages.map((m, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
-            <div className={`max-w-[85%] rounded-2xl p-4 shadow-sm ${
-              m.role === 'user' 
-                ? 'bg-sacred-green text-white rounded-tr-none' 
-                : 'bg-white border border-gold-soft/30 text-gray-900 rounded-tl-none'
-            }`}>
-              <div className="whitespace-pre-wrap leading-relaxed text-sm font-medium">
-                {m.content}
+        <AnimatePresence>
+          {messages.map((m, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div className={`max-w-[85%] rounded-2xl p-4 shadow-sm ${
+                m.role === 'user' 
+                  ? 'bg-[#2d4a3e] text-white rounded-tr-none' 
+                  : 'bg-white border border-[#D4AF37]/30 text-gray-900 rounded-tl-none'
+              }`}>
+                <div className="whitespace-pre-wrap leading-relaxed text-sm font-medium">
+                  {m.content}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
         {isLoading && (
           <div className="flex justify-start">
             <div className="bg-white border border-gray-100 rounded-2xl p-4 rounded-tl-none flex items-center gap-2">
-              <Loader2 size={14} className="animate-spin text-gold-deep" />
+              <Loader2 size={14} className="animate-spin text-[#D4AF37]" />
               <span className="text-[10px] uppercase font-bold tracking-widest text-gray-400">{t.processing || 'Thinking...'}</span>
             </div>
           </div>
@@ -105,12 +115,12 @@ export default function ConciergeChat({ language }: Props) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder={t.placeholder}
-            className="w-full bg-sacred-bg/50 border border-transparent rounded-xl py-3 pl-4 pr-12 text-sm focus:outline-none focus:border-gold-soft transition-all placeholder:text-gray-400"
+            className="w-full bg-[#fdfaf3]/50 border border-transparent rounded-xl py-3 pl-4 pr-12 text-sm focus:outline-none focus:border-[#D4AF37] transition-all placeholder:text-gray-400"
           />
           <button
             onClick={handleSend}
             disabled={isLoading || !input.trim()}
-            className="absolute right-2 p-2 bg-gold-deep text-white rounded-lg hover:bg-gold-soft transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="absolute right-2 p-2 bg-[#D4AF37] text-white rounded-lg hover:bg-[#D4AF37]/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Send size={18} />
           </button>
