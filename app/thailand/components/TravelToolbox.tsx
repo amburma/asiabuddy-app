@@ -1,13 +1,14 @@
+"use client";
+
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'framer-motion'; // framer-motion ကို ပြောင်းသုံးပါ
 import { ThaiLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../i18n';
-import { Calculator, Cloud, Bus, Receipt, FileCheck, X, ChevronRight, Info, Check, AlertCircle, Home, Utensils, Stethoscope, Music, ShoppingBag, MessageSquare, ShieldCheck, Gavel } from 'lucide-react';
-import TransportChat from './TransportChat';
-import { TRANSPORT_DETAILS } from '../data/transportDetails';
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
-
+import { 
+  Calculator, Cloud, Bus, Receipt, FileCheck, Info, Home, 
+  Utensils, Stethoscope, Music, ShoppingBag, MessageSquare, 
+  ShieldCheck, Gavel, Navigation, Calendar 
+} from 'lucide-react';
 import CurrencyConverter from './CurrencyConverter';
 
 interface Props {
@@ -46,321 +47,116 @@ export default function TravelToolbox({
   onOpenLawsModal
 }: Props) {
   const uiT = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
-  const enT = UI_TRANSLATIONS.EN;
-  
-  const t = uiT.tools || enT.tools;
-  const vatT = uiT.vatRefund || enT.vatRefund;
-  const visaT = uiT.visa || enT.visa;
-  const weatherT = uiT.weather || enT.weather;
-  const transportT = uiT.transport || enT.transport;
-  const accommodationT = uiT.accommodation || enT.accommodation;
-  const foodT = uiT.food || enT.food;
-  const travelTypesT = uiT.travelTypes || enT.travelTypes;
-  const medicalT = uiT.medical || enT.medical;
-  const nightlifeT = uiT.nightlife || enT.nightlife;
-  const shoppingT = uiT.shopping || enT.shopping;
+  const t = uiT.tools || UI_TRANSLATIONS.EN.tools;
+  const weatherT = uiT.weather || UI_TRANSLATIONS.EN.weather;
 
-  // Weather dynamic data
-  const tempC = 32;
-  const tempF = Math.round((tempC * 9/5) + 32);
-  
-  // ICT Time calculation (UTC+7)
+  // ICT Time (UTC+7) Dynamic Update
   const now = new Date();
-  const ictTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
-  const timeString = ictTime.toISOString().replace('T', ' ').substring(0, 16) + ' ' + (weatherT.timeSuffix || 'ICT');
+  const ictTime = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + (7 * 3600000));
+  const timeString = ictTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ' ICT';
   
   const toolsBySection = [
     {
       title: uiT.menuCategories.guides,
       items: [
-        {
-          id: 'travelTypes',
-          icon: Info,
-          title: travelTypesT.title,
-          content: (
-            <span>
-              <button 
-                onClick={onOpenTravelTypesModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
-              >
-                {travelTypesT.link}
-              </button>
-            </span>
-          )
-        },
-        {
-          id: 'visa',
-          icon: FileCheck,
-          title: visaT.title,
-          content: (
-            <span>
-              <button 
-                onClick={onOpenVisaModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
-              >
-                {visaT.link}
-              </button>
-            </span>
-          )
-        },
-        {
-          id: 'transport',
-          icon: Bus,
-          title: transportT.detailsTitle,
-          content: (
-            <div className="flex flex-col gap-3">
-              <button 
-                onClick={onOpenTransportModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors text-left"
-              >
-                {transportT.transportGuideLink}
-              </button>
-              <button 
-                onClick={onOpenAppsModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors text-left"
-              >
-                {transportT.appsGuideLink}
-              </button>
-              <button 
-                onClick={onOpenBookingModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors text-left"
-              >
-                {uiT.booking?.link || 'Book car rentals, bus tickets, flight tickets, and entrance fees.'}
-              </button>
-            </div>
-          )
-        },
-        {
-          id: 'accommodation',
-          icon: Home,
-          title: accommodationT.detailsTitle,
-          content: (
-            <span>
-              <button 
-                onClick={onOpenAccommodationModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
-              >
-                {accommodationT.guideLink}
-              </button>
-            </span>
-          )
-        },
-        {
-          id: 'food',
-          icon: Utensils,
-          title: foodT?.detailsTitle || 'Thailand Food Guide',
-          content: (
-            <span>
-              <button 
-                onClick={onOpenFoodModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
-              >
-                {foodT?.guideLink || 'Thailand Food Guide For more information'}
-              </button>
-            </span>
-          )
-        },
-        {
-          id: 'shopping',
-          icon: ShoppingBag,
-          title: shoppingT?.detailsTitle || 'Thailand Shopping Guide',
-          content: (
-            <span>
-              <button 
-                onClick={onOpenShoppingModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
-              >
-                {shoppingT?.guideLink || 'Thailand Shopping Guide For more information'}
-              </button>
-            </span>
-          )
-        },
-        {
-          id: 'medical',
-          icon: Stethoscope,
-          title: medicalT?.detailsTitle || 'Thailand Medical Guide',
-          content: (
-            <span>
-              <button 
-                onClick={onOpenMedicalModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
-              >
-                {medicalT?.guideLink || 'The Ultimate Thailand Medical Guide For more information'}
-              </button>
-            </span>
-          )
-        },
-        {
-          id: 'nightlife',
-          icon: Music,
-          title: nightlifeT?.detailsTitle || 'Thailand Nightlife Guide',
-          content: (
-            <span>
-              <button 
-                onClick={onOpenNightlifeModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
-              >
-                {nightlifeT?.guideLink || 'The Ultimate Thailand Nightlife Guide For more information'}
-              </button>
-            </span>
-          )
-        },
-        {
-          id: 'vat',
-          icon: Receipt,
-          title: vatT.title,
-          content: (
-            <span>
-              {vatT.description}{' '}
-              <button 
-                onClick={onOpenVatModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
-              >
-                {vatT.link}
-              </button>
-            </span>
-          )
-        }
+        { id: 'travelTypes', icon: Info, title: uiT.travelTypes.title, onClick: onOpenTravelTypesModal, linkText: uiT.travelTypes.link },
+        { id: 'visa', icon: FileCheck, title: uiT.visa.title, onClick: onOpenVisaModal, linkText: uiT.visa.link },
+        { id: 'accommodation', icon: Home, title: uiT.accommodation.detailsTitle, onClick: onOpenAccommodationModal, linkText: uiT.accommodation.guideLink },
+        { id: 'food', icon: Utensils, title: uiT.food.detailsTitle, onClick: onOpenFoodModal, linkText: uiT.food.guideLink },
+        { id: 'shopping', icon: ShoppingBag, title: uiT.shopping.detailsTitle, onClick: onOpenShoppingModal, linkText: uiT.shopping.guideLink },
+        { id: 'medical', icon: Stethoscope, title: uiT.medical.detailsTitle, onClick: onOpenMedicalModal, linkText: uiT.medical.guideLink },
+        { id: 'nightlife', icon: Music, title: uiT.nightlife.detailsTitle, onClick: onOpenNightlifeModal, linkText: uiT.nightlife.guideLink },
+        { id: 'vat', icon: Receipt, title: uiT.vatRefund.title, onClick: onOpenVatModal, linkText: uiT.vatRefund.link },
       ]
     },
     {
       title: uiT.menuCategories.tools,
       items: [
-        {
-          id: 'weather',
-          icon: Cloud,
-          title: weatherT.title,
-          content: (
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xl font-bold text-sacred-green">
-                  {tempC}°C / {tempF}°F
-                </span>
-                <span className="text-[9px] italic text-gray-400">
-                  {timeString}
-                </span>
-              </div>
-              <div className="space-y-2 text-[10px] leading-relaxed">
-                <p className="flex items-center gap-1">
-                  <span className="text-gold-deep text-[12px]">{weatherT.updateFrequency.split('.')[0]}</span>
-                  <span className="font-medium text-gray-500 uppercase tracking-tighter">{weatherT.updateFrequency.split('.')[1]}</span>
-                </p>
-                <div className="p-3 bg-sacred-bg/50 rounded-lg border border-gold-soft/10">
-                  <p className="font-bold text-sacred-green mb-1">{weatherT.climate}</p>
-                  <p className="text-gray-600 mb-1">
-                    <span className="font-bold text-gold-deep">{weatherT.alertsLabel || 'Alerts'}:</span> {weatherT.alerts}
-                  </p>
-                  <div className="pt-2 mt-2 border-t border-gold-soft/10">
-                    <p className="italic text-gray-500">
-                      <span className="font-semibold not-italic text-gray-700">{weatherT.tipLabel || 'Tip'}:</span> {weatherT.tip}
-                    </p>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-3 gap-2 pt-1">
-                  <div className="text-center">
-                    <p className="text-gray-400 text-[8px] uppercase">{weatherT.humidity || 'Humidity'}</p>
-                    <p className="font-bold">65%</p>
-                  </div>
-                  <div className="text-center border-x border-gray-100">
-                    <p className="text-gray-400 text-[8px] uppercase">{weatherT.uvIndex || 'UV Index'}</p>
-                    <p className="font-bold text-orange-500">8 ({weatherT.high || 'High'})</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-gray-400 text-[8px] uppercase">{weatherT.wind || 'Wind'}</p>
-                    <p className="font-bold">12 km/h</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )
-        },
-        {
-          id: 'currency',
-          icon: Calculator,
-          title: t.currency,
-          content: <CurrencyConverter language={language} />
-        },
-        {
-          id: 'phrases',
-          icon: MessageSquare,
-          title: t.phrases || 'Essential Phrases',
-          content: (
-            <span>
-              <button 
-                onClick={onOpenPhrasesModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
-              >
-                {t.learnThaiBasics || 'Learn Thai Basics & Pronunciation'}
-              </button>
-            </span>
-          )
-        },
-        {
-          id: 'etiquette',
-          icon: ShieldCheck,
-          title: t.etiquette || 'Thai Etiquette',
-          content: (
-            <span>
-              <button 
-                onClick={onOpenEtiquetteModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
-              >
-                {uiT.culturalGuideLink || "Cultural Dos & Don'ts Guide"}
-              </button>
-            </span>
-          )
-        },
-        {
-          id: 'laws',
-          icon: Gavel,
-          title: t.laws || 'Key Laws',
-          content: (
-            <span>
-              <button 
-                onClick={onOpenLawsModal}
-                className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
-              >
-                {uiT.lawsRegulationsLink || "Crucial Regulations for 2026"}
-              </button>
-            </span>
-          )
-        }
+        { id: 'weather', icon: Cloud, title: weatherT.title, isWeather: true },
+        { id: 'currency', icon: Calculator, title: t.currency, isCurrency: true },
+        { id: 'phrases', icon: MessageSquare, title: t.phrases, onClick: onOpenPhrasesModal, linkText: t.learnThaiBasics },
+        { id: 'etiquette', icon: ShieldCheck, title: t.etiquette, onClick: onOpenEtiquetteModal, linkText: uiT.culturalGuideLink },
+        { id: 'laws', icon: Gavel, title: t.laws, onClick: onOpenLawsModal, linkText: uiT.lawsRegulationsLink },
+        { id: 'transport', icon: Bus, title: uiT.transport.detailsTitle, customContent: (
+          <div className="flex flex-col gap-2 mt-1">
+            <button onClick={onOpenTransportModal} className="tool-link-btn text-left">{uiT.transport.transportGuideLink}</button>
+            <button onClick={onOpenAppsModal} className="tool-link-btn text-left">{uiT.transport.appsGuideLink}</button>
+            <button onClick={onOpenBookingModal} className="tool-link-btn text-left">{uiT.booking?.link || 'Tickets & Rentals'}</button>
+          </div>
+        )},
       ]
     }
   ];
 
   return (
-    <div className="space-y-12">
+    <div className="space-y-10 pb-10">
       {toolsBySection.map((section) => (
         <div key={section.title} className="space-y-6">
           <div className="flex items-center gap-4">
-            <h3 className="text-sm font-bold text-sacred-green uppercase tracking-[0.2em] whitespace-nowrap">
+            <h3 className="text-[10px] font-bold text-[#2d4a3e] uppercase tracking-[0.25em] whitespace-nowrap">
               {section.title}
             </h3>
-            <div className="h-[1px] w-full bg-gold-soft/20"></div>
+            <div className="h-[1px] flex-grow bg-gradient-to-r from-[#D4AF37]/30 to-transparent"></div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {section.items.map((tool) => (
               <motion.div 
                 key={tool.id}
-                whileHover={{ y: -5 }}
-                className={`p-6 glass-card ${tool.id === 'currency' ? 'bg-gold-soft/5' : ''}`}
+                whileHover={{ y: -3, transition: { duration: 0.2 } }}
+                className={`p-5 rounded-2xl border border-gray-100 bg-white shadow-sm hover:shadow-md transition-all ${tool.id === 'currency' ? 'md:col-span-1' : ''}`}
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className={`p-2 rounded-lg ${tool.id === 'currency' ? 'bg-gold-deep/10 text-gold-deep' : 'bg-sacred-green/10 text-sacred-green'}`}>
-                    <tool.icon size={18} />
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="p-2 rounded-xl bg-[#fdfaf3] text-[#D4AF37]">
+                    <tool.icon size={16} />
                   </div>
-                  <h4 className="text-xs font-bold uppercase tracking-widest">{tool.title}</h4>
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-gray-700">{tool.title}</h4>
                 </div>
-                <div className="text-[11px] text-gray-800 font-medium leading-relaxed">
-                  {tool.content}
+
+                <div className="text-[11px] leading-relaxed text-gray-600">
+                  {tool.isWeather ? (
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-end">
+                        <span className="text-2xl font-bold text-[#2d4a3e]">32°C <span className="text-sm font-medium text-gray-400">/ 90°F</span></span>
+                        <span className="text-[9px] font-bold text-[#D4AF37] uppercase">{timeString}</span>
+                      </div>
+                      <div className="p-2.5 bg-[#fdfaf3] rounded-xl border border-[#D4AF37]/10">
+                        <p className="font-bold text-[#2d4a3e] mb-1">{weatherT.climate}</p>
+                        <p className="text-[10px]"><span className="text-[#D4AF37] font-bold">Alert:</span> {weatherT.alerts}</p>
+                      </div>
+                    </div>
+                  ) : tool.isCurrency ? (
+                    <CurrencyConverter language={language} />
+                  ) : tool.customContent ? (
+                    tool.customContent
+                  ) : (
+                    <button 
+                      onClick={tool.onClick}
+                      className="text-[#D4AF37] hover:text-[#2d4a3e] font-bold underline decoration-[#D4AF37]/30 decoration-2 underline-offset-4 transition-all text-left block"
+                    >
+                      {tool.linkText}
+                    </button>
+                  )}
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
       ))}
+
+      <style jsx>{`
+        .tool-link-btn {
+          color: #D4AF37;
+          font-weight: 700;
+          text-decoration: underline;
+          text-decoration-style: dotted;
+          text-underline-offset: 3px;
+          transition: color 0.2s;
+        }
+        .tool-link-btn:hover {
+          color: #2d4a3e;
+        }
+      `}</style>
     </div>
   );
 }
