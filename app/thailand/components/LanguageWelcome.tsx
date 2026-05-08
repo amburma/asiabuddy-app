@@ -1,7 +1,9 @@
+"use client";
+
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion'; // motion/react အစား framer-motion ကို သုံးခြင်းက ပို၍ stable ဖြစ်ပါသည်
 import { ThaiLanguage } from '../types';
-import { Sparkles, Languages } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { UI_TRANSLATIONS } from '../i18n';
 
 interface Props {
@@ -56,15 +58,13 @@ const LANGUAGES: { id: ThaiLanguage; label: string; flag: string; start: string 
 export default function LanguageWelcome({ onStart }: Props) {
   const [selected, setSelected] = useState<ThaiLanguage | null>(null);
 
-  const currentLang = LANGUAGES.find(l => l.id === selected);
-
   return (
-    <div className="fixed inset-0 z-[100] bg-sacred-bg flex flex-col items-center overflow-y-auto">
+    <div className="fixed inset-0 z-[100] bg-[#fdfaf3] flex flex-col items-center overflow-y-auto">
       {/* Engaging Gold Banner */}
       <motion.div 
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="w-full bg-gold-deep py-12 px-6 text-center shadow-lg"
+        className="w-full bg-[#D4AF37] py-12 px-6 text-center shadow-lg"
       >
         <div className="max-w-4xl mx-auto flex flex-col items-center gap-6">
           <motion.div
@@ -73,7 +73,7 @@ export default function LanguageWelcome({ onStart }: Props) {
             transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.2 }}
             className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-2xl"
           >
-            <PagodaIcon size={52} className="text-gold-deep" />
+            <PagodaIcon size={52} className="text-[#D4AF37]" />
           </motion.div>
           
           <AnimatePresence mode="wait">
@@ -108,38 +108,38 @@ export default function LanguageWelcome({ onStart }: Props) {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl md:text-6xl mb-2 text-sacred-green">ThaiGuide</h1>
-          <p className="text-[10px] uppercase tracking-[0.4em] font-bold text-gray-700 italic">{(UI_TRANSLATIONS[selected || 'EN']?.appTagline) || 'AsiaBuddy Digital Concierge'}</p>
+          <h1 className="text-4xl md:text-6xl mb-2 text-[#2d4a3e]">ThaiGuide</h1>
+          <p className="text-[10px] uppercase tracking-[0.4em] font-bold text-gray-700 italic">
+            {(selected && UI_TRANSLATIONS[selected]?.appTagline) || 'AsiaBuddy Digital Concierge'}
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-12">
-          {LANGUAGES.map((lang) => {
-            return (
-              <motion.button
-                key={lang.id}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setSelected(lang.id)}
-                className={`p-4 rounded-2xl flex items-center gap-3 transition-all border relative overflow-hidden ${
-                  selected === lang.id 
-                    ? 'bg-sacred-green text-white border-sacred-green shadow-lg' 
-                    : 'bg-white text-gray-700 border-gold-soft/20 hover:border-gold-deep shadow-sacred'
-                }`}
-              >
-                <div className="flex flex-col items-center justify-center">
-                   <span className="text-2xl">{lang.flag}</span>
-                </div>
-                <div className="text-left">
-                  <span className="block text-xs font-bold uppercase tracking-widest leading-none mb-1">
-                    {lang.label}
-                  </span>
-                  <span className="block text-[8px] opacity-60 font-serif italic">
-                    {lang.start}
-                  </span>
-                </div>
-              </motion.button>
-            );
-          })}
+          {LANGUAGES.map((lang) => (
+            <motion.button
+              key={lang.id}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setSelected(lang.id)}
+              className={`p-4 rounded-2xl flex items-center gap-3 transition-all border relative overflow-hidden ${
+                selected === lang.id 
+                  ? 'bg-[#2d4a3e] text-white border-[#2d4a3e] shadow-lg' 
+                  : 'bg-white text-gray-700 border-gray-100 hover:border-[#D4AF37] shadow-sm'
+              }`}
+            >
+              <div className="flex flex-col items-center justify-center">
+                 <span className="text-2xl">{lang.flag}</span>
+              </div>
+              <div className="text-left">
+                <span className="block text-xs font-bold uppercase tracking-widest leading-none mb-1">
+                  {lang.label}
+                </span>
+                <span className="block text-[8px] opacity-60 font-serif italic">
+                  {lang.start}
+                </span>
+              </div>
+            </motion.button>
+          ))}
         </div>
 
         <AnimatePresence mode="wait">
@@ -153,7 +153,7 @@ export default function LanguageWelcome({ onStart }: Props) {
             >
               <button
                 onClick={() => onStart(selected)}
-                className="px-16 py-5 bg-gold-deep text-white rounded-full text-sm font-bold uppercase tracking-[0.3em] shadow-2xl hover:bg-sacred-green hover:scale-105 transition-all flex items-center gap-3 group"
+                className="px-16 py-5 bg-[#D4AF37] text-white rounded-full text-sm font-bold uppercase tracking-[0.3em] shadow-2xl hover:bg-[#2d4a3e] hover:scale-105 transition-all flex items-center gap-3 group"
               >
                 <Sparkles size={18} className="group-hover:rotate-12 transition-transform" />
                 {UI_TRANSLATIONS[selected]?.start || 'Start Journey'}
