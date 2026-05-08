@@ -6,7 +6,11 @@ const nextConfig: NextConfig = {
   },
   images: {
     unoptimized: true,
-  }
+  },
+  // ❌ Remove any eslint block like this:
+  // eslint: {
+  //   ignoreDuringBuilds: true,
+  // },
 };
 
 export default nextConfig;
