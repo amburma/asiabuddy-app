@@ -1,10 +1,11 @@
 "use client";
 
 import Image from 'next/image';
+import Link from 'next/link'; // ၁။ Link ကို import လုပ်ထားပါသည်
 
 const activeDestinations = [
-  { flag: '🇹🇭', name: 'Thailand', isActive: true },
-  { flag: '🇲🇲', name: 'Myanmar', isActive: false }, // Dimmed because service is not yet available
+  { flag: '🇹🇭', name: 'Thailand', isActive: true, path: '/thailand' }, // path ထည့်ထားသည်
+  { flag: '🇲🇲', name: 'Myanmar', isActive: false, path: '#' },
 ];
 
 const pendingDestinations = [
@@ -50,6 +51,7 @@ export default function Home() {
           transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
           backdrop-filter: blur(12px);
           box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+          text-decoration: none; /* Link အတွက် text decoration ဖြုတ်ခြင်း */
         }
 
         .ab-btn:hover:not(.disabled) {
@@ -60,7 +62,6 @@ export default function Home() {
           box-shadow: 0 8px 25px rgba(0,0,0,0.4);
         }
 
-        /* Styling for the dimmed Myanmar button */
         .ab-btn.disabled {
           opacity: 0.35;
           cursor: not-allowed;
@@ -199,16 +200,25 @@ export default function Home() {
           justifyContent: 'center',
           padding: '0 40px 60px'
         }}>
-          {/* Active/Inactive Buttons */}
-          {activeDestinations.map(({ flag, name, isActive }) => (
-            <button 
-              key={name} 
-              className={`ab-btn ${!isActive ? 'disabled' : ''}`}
-              disabled={!isActive}
-            >
-              <span style={{ fontSize: '22px' }}>{flag}</span>
-              <span>{name}</span>
-            </button>
+          {/* Active/Inactive Buttons with Link */}
+          {activeDestinations.map(({ flag, name, isActive, path }) => (
+            isActive ? (
+              <Link href={path} key={name} style={{ textDecoration: 'none' }}>
+                <button className="ab-btn">
+                  <span style={{ fontSize: '22px' }}>{flag}</span>
+                  <span>{name}</span>
+                </button>
+              </Link>
+            ) : (
+              <button 
+                key={name} 
+                className="ab-btn disabled"
+                disabled
+              >
+                <span style={{ fontSize: '22px' }}>{flag}</span>
+                <span>{name}</span>
+              </button>
+            )
           ))}
 
           {/* Placeholder Buttons */}
