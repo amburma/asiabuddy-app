@@ -1,6 +1,6 @@
 "use client";
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ThaiLanguage } from './types';
 import EmergencyBanner from './components/EmergencyBanner';
 import LanguageSelector from './components/LanguageSelector';
