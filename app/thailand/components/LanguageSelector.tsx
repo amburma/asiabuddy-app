@@ -1,3 +1,5 @@
+"use client"; // Client component ဖြစ်ကြောင်း သတ်မှတ်ရန်
+
 import { ThaiLanguage } from '../types';
 import { Globe } from 'lucide-react';
 
@@ -32,11 +34,11 @@ const LANGUAGES: { id: ThaiLanguage; label: string }[] = [
 export default function LanguageSelector({ currentLanguage, onLanguageChange }: Props) {
   return (
     <div className="flex items-center gap-2">
-      <Globe size={14} className="text-gold-deep" />
+      <Globe size={14} className="text-[#D4AF37]" /> {/* gold-deep အတွက် hex သုံးထားသည် */}
       <select
         value={currentLanguage}
         onChange={(e) => onLanguageChange(e.target.value as ThaiLanguage)}
-        className="bg-transparent text-[10px] uppercase font-bold tracking-widest text-gray-500 outline-none cursor-pointer hover:text-gold-deep transition-colors"
+        className="bg-transparent text-[10px] uppercase font-bold tracking-widest text-gray-500 outline-none cursor-pointer hover:text-[#D4AF37] transition-colors"
       >
         {LANGUAGES.map((lang) => {
           const isTier1 = TIER1_LANGUAGES.includes(lang.id);
