@@ -1,20 +1,17 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* TypeScript Error ရှိရင်တောင် Build ဆက်လုပ်ဖို့ ခွင့်ပြုခြင်း */
+  /* TypeScript Error ရှိနေသော်လည်း Build ဆက်လုပ်ရန် */
   typescript: {
     ignoreBuildErrors: true,
   },
-  
-  /* ESLint ကို Next.js 15+ အတွက် စနစ်တကျ ကျော်ခိုင်းခြင်း */
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
 
-  /* Turbopack သို့မဟုတ် အခြား optimization များအတွက် (လိုအပ်လျှင်) */
+  /* Images optimization ကို ပိတ်ထားရန် */
   images: {
     unoptimized: true,
   },
+
+  /* မှတ်ချက် - ESLint ကို ဤနေရာတွင် လုံးဝ မထည့်ပါနှင့် */
 };
 
 export default nextConfig;
