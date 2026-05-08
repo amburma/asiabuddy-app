@@ -3,8 +3,8 @@
 import Image from 'next/image';
 
 const activeDestinations = [
-  { flag: '🇹🇭', name: 'Thailand' },
-  { flag: '🇲🇲', name: 'Myanmar' },
+  { flag: '🇹🇭', name: 'Thailand', isActive: true },
+  { flag: '🇲🇲', name: 'Myanmar', isActive: false }, // Dimmed because service is not yet available
 ];
 
 const pendingDestinations = [
@@ -52,12 +52,20 @@ export default function Home() {
           box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        .ab-btn:hover {
+        .ab-btn:hover:not(.disabled) {
           background: var(--btn-hover-bg);
           border-color: var(--btn-hover-border);
           transform: translateY(-3px);
           color: var(--gold-bright);
           box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        /* Styling for the dimmed Myanmar button */
+        .ab-btn.disabled {
+          opacity: 0.35;
+          cursor: not-allowed;
+          filter: grayscale(0.5);
+          border: 1px solid rgba(232,200,74,0.15);
         }
 
         .ab-btn-blank {
@@ -103,7 +111,6 @@ export default function Home() {
             style={{ objectFit: 'cover', objectPosition: 'center 50%' }}
             priority
           />
-          {/* Elegant Overlay Gradients */}
           <div style={{
             position: 'absolute', inset: 0,
             background: 'radial-gradient(circle at center, rgba(10,12,16,0.2) 0%, rgba(10,12,16,0.8) 100%)',
@@ -192,9 +199,13 @@ export default function Home() {
           justifyContent: 'center',
           padding: '0 40px 60px'
         }}>
-          {/* Active Buttons */}
-          {activeDestinations.map(({ flag, name }) => (
-            <button key={name} className="ab-btn">
+          {/* Active/Inactive Buttons */}
+          {activeDestinations.map(({ flag, name, isActive }) => (
+            <button 
+              key={name} 
+              className={`ab-btn ${!isActive ? 'disabled' : ''}`}
+              disabled={!isActive}
+            >
               <span style={{ fontSize: '22px' }}>{flag}</span>
               <span>{name}</span>
             </button>
