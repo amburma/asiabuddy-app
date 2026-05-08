@@ -4,55 +4,60 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-[#0a0c10] font-sans text-[#f4e8c1]">
+    <main style={{ backgroundColor: '#0a0c10', color: '#f4e8c1', minHeight: '100vh', width: '100%', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
+      {/* Background Image & Overlay */}
+      <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
         <Image
           src="/AB_Web_Background.jpg"
           alt="AsiaBuddy Background"
           fill
-          className="object-cover object-bottom"
+          style={{ objectCover: 'cover', objectPosition: 'bottom' }}
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0c10]/20 via-[#0a0c10]/40 via-[#0a0c10]/85 to-[#0a0c10]" />
+        {/* Dark Gradient Overlay for Legibility */}
+        <div style={{ 
+          position: 'absolute', 
+          inset: 0, 
+          background: 'linear-gradient(180deg, rgba(10,12,16,0.2) 0%, rgba(10,12,16,0.4) 40%, rgba(10,12,16,0.85) 85%, rgba(10,12,16,1) 100%)' 
+        }} />
       </div>
 
       {/* Content Section */}
-      <div className="relative z-10 flex flex-col items-center justify-center text-center max-w-[960px] px-6 mt-5 w-full">
+      <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', maxWidth: '960px', padding: '0 24px', marginTop: '20px' }}>
         
-        <p className="text-[13px] font-medium tracking-[0.4em] uppercase text-[#D4AF37] mb-[15px] animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-forwards">
+        <p style={{ fontSize: '13px', fontWeight: 500, letterSpacing: '0.4em', textTransform: 'uppercase', color: '#D4AF37', marginBottom: '15px' }}>
           Your Gateway to Asia
         </p>
 
-        <h1 className="font-serif text-[clamp(38px,6vw,62px)] leading-[1.1] mb-5 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300 fill-mode-forwards opacity-0">
+        <h1 style={{ fontFamily: 'serif', fontSize: 'clamp(38px, 6vw, 62px)', lineHeight: 1.1, marginBottom: '20px' }}>
           Unveil the Soul of Asia<br />
-          <span className="block italic text-[#D4AF37] text-[0.65em] mt-2 tracking-[0.05em]">Explore Asia Like a Local</span>
+          <span style={{ fontStyle: 'italic', color: '#D4AF37', display: 'block', fontSize: '0.65em', marginTop: '8px', letterSpacing: '0.05em' }}>
+            Explore Asia Like a Local
+          </span>
         </h1>
 
-        <p className="text-[16px] font-light text-[#f4e8c1]/80 max-w-[680px] leading-[1.7] mb-[55px] animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500 fill-mode-forwards opacity-0">
+        <p style={{ fontSize: '16px', fontWeight: 300, color: 'rgba(244, 232, 193, 0.8)', maxWidth: '680px', lineHeight: 1.7, marginBottom: '55px', marginInline: 'auto' }}>
           One hub. Trusted guides, visa support, travel plans, and on-ground services—tailored for every destination across the continent.
         </p>
 
-        <div className="country-section w-full animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-700 fill-mode-forwards opacity-0">
-          <p className="text-[11px] font-semibold tracking-[0.3em] uppercase text-[#D4AF37]/70 mb-[30px]">
+        <div>
+          <p style={{ fontSize: '11px', fontWeight: 600, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(212, 175, 55, 0.7)', marginBottom: '30px' }}>
             Select Your Destination
           </p>
           
-          <div className="flex flex-wrap gap-4 justify-center">
-            {/* Thailand Button */}
-            <button className="flex items-center gap-[10px] px-7 py-[14px] bg-white/7 border border-[#D4AF37]/25 rounded hover:border-[#D4AF37] hover:bg-[#D4AF37]/15 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md">
-              <span className="text-[20px]">🇹🇭</span> Thailand
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', justifyContent: 'center' }}>
+            <button style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 28px', background: 'rgba(255, 255, 255, 0.07)', border: '1px solid rgba(212, 175, 55, 0.25)', color: '#f4e8c1', borderRadius: '4px', cursor: 'pointer' }}>
+              <span style={{ fontSize: '20px' }}>🇹🇭</span> Thailand
             </button>
 
-            {/* Myanmar Button */}
-            <button className="flex items-center gap-[10px] px-7 py-[14px] bg-white/7 border border-[#D4AF37]/25 rounded hover:border-[#D4AF37] hover:bg-[#D4AF37]/15 hover:-translate-y-1 transition-all duration-300 backdrop-blur-md">
-              <span className="text-[20px]">🇲🇲</span> Myanmar
+            <button style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '14px 28px', background: 'rgba(255, 255, 255, 0.07)', border: '1px solid rgba(212, 175, 55, 0.25)', color: '#f4e8c1', borderRadius: '4px', cursor: 'pointer' }}>
+              <span style={{ fontSize: '20px' }}>🇲🇲</span> Myanmar
             </button>
 
             {/* Blank Buttons */}
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="min-w-[130px] min-h-[52px] bg-white/3 border border-[#D4AF37]/10 opacity-50 rounded backdrop-blur-md" />
+              <div key={i} style={{ minWidth: '130px', minHeight: '52px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(212, 175, 55, 0.1)', borderRadius: '4px', opacity: 0.5 }} />
             ))}
           </div>
         </div>
