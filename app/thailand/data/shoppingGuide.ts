@@ -1,7 +1,7 @@
 import { ThaiLanguage } from '../types';
 
 export const SHOPPING_GUIDE_MARKDOWN: Record<ThaiLanguage, string> = {
-  english: `
+  EN: `
 # Comprehensive Thailand Shopping Guide
 
 To ensure a satisfying shopping experience in Thailand, travelers should study these detailed guidelines covering locations, cultural nuances, and practical procedures.
@@ -78,7 +78,7 @@ Thai shopping is influenced by **"Sanuk"** (fun) and **"Mai Pen Rai"** (don't wo
 *   **Timing:** Malls (10:00 AM – 10:00 PM). Night markets (After 5:00 PM).
 *   **Transport:** Use **Grab** or **Bolt** for transparent pricing and to avoid haggling when carrying bags.
 `,
-  thai: `
+  TH: `
 # คู่มือการช้อปปิ้งในไทยฉบับสมบูรณ์
 เพื่อรับประกันประสบการณ์การช้อปปิ้งที่น่าพึงพอใจในประเทศไทย นักเดินทางควรศึกษาแนวทางปฏิบัติโดยละเอียดเหล่านี้ซึ่งครอบคลุมถึงสถานที่ ความแตกต่างทางวัฒนธรรม และขั้นตอนปฏิบัติ
 
@@ -154,7 +154,56 @@ Thai shopping is influenced by **"Sanuk"** (fun) and **"Mai Pen Rai"** (don't wo
 *   **เวลา:** ห้างสรรพสินค้า (10:00 น. – 22:00 น.) ตลาดนัดกลางคืน (หลัง 17:00 น.)
 *   **การเดินทาง:** ใช้ **Grab** หรือ **Bolt** เพื่อราคาที่โปร่งใสและหลีกเลี่ยงการตกลงราคาเมื่อพกสัมภาระเยอะ
 `,
-  spanish: `
+  MM: `# ထိုင်းနိုင်ငံ ရှော့ပင်းထွက်ခြင်းဆိုင်ရာ အလုံးစုံလမ်းညွှန်
+
+ထိုင်းနိုင်ငံတွင် စိတ်ကျေနပ်ဖွယ်ရာ ရှော့ပင်းထွက်ခြင်း အတွေ့အကြုံ ရရှိစေရန် ခရီးသွားများအနေဖြင့် နေရာများ၊ ယဉ်ကျေးမှုဆိုင်ရာ ကွဲပြားမှုများနှင့် လက်တွေ့လုပ်ဆောင်ရမည့် လုပ်ငန်းစဉ်များကို ဤလမ်းညွှန်တွင် လေ့လာနိုင်ပါသည်။
+
+## ၁။ အဓိက ရှော့ပင်းနယ်မြေများနှင့် နေရာများ
+ထိုင်းနိုင်ငံ၊ အထူးသဖြင့် ဘန်ကောက်မြို့သည် ရှော့ပင်းထွက်ရန် အကောင်းဆုံးနေရာဖြစ်ပြီး နေရာတစ်ခုချင်းစီတွင် ထူးခြားသော ပတ်ဝန်းကျင်နှင့် ပစ္စည်းမျိုးစုံ ရှိပါသည်။
+
+### ခေတ်မီပြီး ဇိမ်ခံကုန်တိုက်ကြီးများ
+*   **Siam Paragon & Siam Center:** ကမ္ဘာကျော် ဇိမ်ခံအမှတ်တံဆိပ်များ (ဥပမာ- Chanel, Louis Vuitton, Prada)၊ အဆင့်မြင့် ရုပ်ရှင်ရုံများနှင့် အာရှ၏ အကြီးဆုံး ငါးပြတိုက်ရှိရာ နေရာများဖြစ်သည်။
+*   **ICONSIAM:** ကျောက်ဖရားမြစ်ကမ်းဘေးတွင် တည်ရှိပြီး ခေတ်မီဒီဇိုင်းနှင့် ထိုင်းရိုးရာ လက်မှုပညာတို့ကို ပေါင်းစပ်ထားသည်။ အဆောက်အအုံအတွင်းရှိ SookSiam တွင် ထိုင်းရိုးရာအစားအစာနှင့် လက်မှုပစ္စည်းများကို ရရှိနိုင်သည်။
+*   **CentralWorld:** ကမ္ဘာ့အကြီးဆုံး ကုန်တိုက်ကြီးများထဲမှ တစ်ခုဖြစ်ပြီး ခေတ်မီဖက်ရှင်၊ အားကစားပစ္စည်းနှင့် လူနေမှုဘဝဆိုင်ရာ ပစ္စည်းမျိုးစုံ ရရှိနိုင်သော ဗဟိုချက်ဖြစ်သည်။
+*   **The Emsphere, EmQuartier & Emporium:** Sukhumvit လမ်းပေါ်တွင် တည်ရှိပြီး အဆင့်မြင့် လူနေမှုဘဝဆိုင်ရာ ပစ္စည်းများနှင့် ထူးခြားသော အတွေ့အကြုံများကို ပေးစွမ်းနိုင်သော ကုန်တိုက်များ ဖြစ်သည်။
+*   **MBK Center:** လျှပ်စစ်ပစ္စည်းများ၊ လက်ကိုင်ဖုန်းများ၊ ဂိမ်းစက်များနှင့် ဖက်ရှင်ပစ္စည်းများကို သင့်တင့်သော စျေးနှုန်းဖြင့် ရရှိနိုင်သော ထိပ်တန်းနေရာ ဖြစ်သည်။
+
+### ဒေသန္တရနှင့် ညဈေးများ
+*   **Chatuchak Weekend Market:** စနေနှင့် တနင်္ဂနွေနေ့များတွင် ဖွင့်သည်။ ဆိုင်ခန်းပေါင်း ၁၅,၀၀၀ ကျော်ရှိပြီး အိမ်အလှဆင်ပစ္စည်းမှအစ အိမ်မွေးတိရစ္ဆာန်များအထိ အရာအားလုံး ရရှိနိုင်သော ကမ္ဘာ့အကြီးဆုံး ဈေးများထဲမှ တစ်ခုဖြစ်သည်။
+*   **Jodd Fairs:** ၂၀၂၆ ခုနှစ်တွင် အလွန်လူကြိုက်များသော ညဈေးဖြစ်ပြီး လမ်းဘေးစာများ၊ ခေတ်မီဖက်ရှင်များနှင့် စည်ကားသော ညဥ့်ဘဝကို ခံစားနိုင်သည်။
+*   **Talad Rot Fai (Srinakarin):** ရှေးဟောင်းပစ္စည်းများ၊ အမှတ်တရပစ္စည်းများနှင့် ထူးခြားသော စုဆောင်းစရာများ ရှာဖွေနေသူများအတွက် အကောင်းဆုံး ဖြစ်သည်။
+*   **Asiatique The Riverfront:** မြစ်ကမ်းဘေးရှိ လှပသော လဟာပြင်ဈေးကြီးဖြစ်ပြီး အမှတ်တရပစ္စည်းများ ဝယ်ယူရန်၊ ညစာစားရန်နှင့် ဖျော်ဖြေရေးများအတွက် သင့်တော်သည်။
+
+---
+
+## ၂။ ဝယ်ယူသင့်သော အမှတ်တရပစ္စည်းများနှင့် ထုတ်ကုန်များ
+*   **အလှကုန်:** Mistine (ရေစိုခံမိတ်ကပ်)၊ 4U2 (နှုတ်ခမ်းနီ)၊ အုန်းဆီနှင့် ရှားစောင်းလက်ပတ်ဂျယ်။
+*   **ကျန်းမာရေး:** Siang Pure Oil (ရှန်ပြူးအဆီ)၊ Tiger Balm (ကျားဘမ်း)၊ ယဒုံ (နှာခမ်းရှူဆေး) နှင့် မြွေတံဆိပ် အအေးမိန့်တို့ ဖြစ်သည်။
+*   **အစားအစာ:** ChaTraMue လက်ဖက်ခြောက်၊ သစ်သီးခြောက်များ (သရက်သီး၊ ဒူးရင်းသီး)၊ Bento ကဏန်းချောင်းနှင့် Pocky (ထိုင်းအထူးအရသာများ)။
+*   **ဖက်ရှင်:** ဆင်ရုပ်ပါသော ဘောင်းဘီများ (Elephant Pants)၊ ထိုင်းပိုးထည်နှင့် Pop Mart (Art Toys)။
+
+---
+
+## ၃။ ရှော့ပင်းယဉ်ကျေးမှုနှင့် စျေးဆင်ခြင်း နည်းဗျူဟာများ
+ထိုင်းနိုင်ငံတွင် ရှော့ပင်းထွက်ခြင်းသည် **"Sanuk"** (ပျော်ရွှင်ခြင်း) နှင့် **"Mai Pen Rai"** (ကိစ္စမရှိပါဘူး) ဟူသော စရိုက်များအပေါ် အခြေခံသည်။
+
+*   **အပြုံးနိုင်ငံတော်:** အမြဲယဉ်ကျေးစွာနှင့် ပြုံးပြုံးရွှင်ရွှင် ဆက်ဆံပါ၊ ရိုင်းစိုင်းစွာ ပြောဆိုခြင်းသည် စျေးလျှော့မပေးအောင် လုပ်ဆောင်သကဲ့သို့ ဖြစ်စေပါလိမ့်မည်။
+*   **နံနက်ခင်း စျေးဦးပေါက်:** ရောင်းသူများသည် ပထမဆုံး ဖောက်သည်သည် ကံကောင်းခြင်း ယူဆောင်လာသည်ဟု ယုံကြည်သဖြင့် နံနက်စောစောပိုင်းတွင် စျေးပိုလျှော့ပေးလေ့ ရှိသည်။
+*   **သတ်မှတ်စျေးနှင့် စျေးဆစ်နိုင်သောစျေး:** ဇိမ်ခံကုန်တိုက်များ၊ 7-Eleven နှင့် အမှတ်တံဆိပ်ပါ ဆိုင်များတွင် စျေးနှုန်းများမှာ သတ်မှတ်စျေးများ ဖြစ်သည်။ လမ်းဘေးဈေးများနှင့် ကုန်ဆိုင်ငယ်လေးများတွင်သာ စျေးဆစ်နိုင်ပါသည်။
+
+### စျေးဆစ်နည်း လမ်းညွှန်:
+၁။ **စျေးနှုန်းကို မေးပါ:** *"Tao-rai krap/ka?"* (ဘယ်လောက်လဲ) ဟု မေးပါ။
+၂။ **စျေးလျှော့ရန် ပြောပါ:** ၂၀-၃၀% ခန့် လျှော့ခိုင်းပါ။ တန်ဖိုးကြီး လက်မှုပစ္စည်းများကို စျေးတစ်ဝက်ခန့်အထိ လျှော့ခိုင်းခြင်းမျိုးကို ရှောင်ပါ။
+၃။ **အများကြီးဝယ်ခြင်း နည်းဗျူဟာ:** ပစ္စည်းအများကြီး ဝယ်လျှင် စျေးထပ်လျှော့ပေးရန် မေးပါ။
+၄။ **ထွက်လာခြင်း:** စျေးမတည့်ပါက ကျေးဇူးတင်စကားပြောပြီး ထွက်လာပါ၊ ၎င်းတို့က သင့်ကို ပြန်ခေါ်ပြီး ပိုကောင်းသော စျေးနှုန်းဖြင့် ရောင်းပေးနိုင်ပါသည်။
+
+---
+
+## ၄။ နိုင်ငံခြားသားများအတွက် အခွန်ပြန်အမ်းခြင်း (VAT Refund 7%)
+*   **အရည်အချင်း:** ဆိုင်တစ်ဆိုင်တည်းတွင် တစ်ရက်အတွင်း အနည်းဆုံး ဘတ် ၂,၀၀၀ ဖိုး ဝယ်ယူရပါမည်။
+*   **ဆိုင်အတွင်း:** "VAT Refund for Tourists" ဟူသော ဆိုင်းဘုတ်ကို ရှာပါ။ ပတ်စပို့ပြသပြီး **P.P.10 Form** ကို တောင်းယူပါ။
+*   **လေဆိပ်တွင်:** အိတ်များမအပ်မီ **Customs Office** တွင် တံဆိပ်တုံး ထုခိုင်းပါ။ လူဝင်မှုကြီးကြပ်ရေးကို ဖြတ်ပြီးနောက် **VAT Refund Office** တွင် ငွေသား သို့မဟုတ် ကတ်ဖြင့် ပြန်အမ်းငွေကို ထုတ်ယူပါ။`,
+  ES: `
 # Guía Completa de Compras en Tailandia
 
 Para garantizar una experiencia de compra satisfactoria en Tailandia, los viajeros deben estudiar estas pautas detalladas.
@@ -173,7 +222,7 @@ El regateo es común en mercados. Sea siempre amable y sonría. Empiece con un d
 ## 4. Reembolso de IVA (VAT Refund)
 Gaste al menos 2,000 THB en una tienda con el logo de "VAT Refund for Tourists" para solicitar el formulario P.P. 10.
 `,
-  french: `
+  FR: `
 # Guide Complet du Shopping en Thaïlande
 
 Découvrez les meilleurs endroits pour faire du shopping et les astuces pour bien acheter en Thaïlande.
@@ -192,51 +241,33 @@ Négociez dans les marchés mais restez poli. Un sourire est essentiel pour obte
 ## 4. Remboursement de la TVA
 Minimum 2 000 THB d'achat pour demander un remboursement de la TVA (VAT Refund).
 `,
-  italian: `
-# Guida Completa allo Shopping in Thailandia
+  DE: `
+# Umfassender Einkaufsführer für Thailand
 
-Per un'esperienza di shopping indimenticabile in Thailandia, segui questi consigli pratici.
+Um ein zufriedenstellendes Einkaufserlebnis in Thailand zu gewährleisten, sollten Reisende diese detaillierten Richtlinien zu Standorten, kulturellen Nuancen und praktischen Abläufen studieren.
 
-## 1. Distretti e Luoghi Principali
-*   **Siam Paragon & ICONSIAM**: Centri commerciali di lusso.
-*   **Mercato di Chatuchak**: Oltre 15.000 bancarelle.
-*   **MBK Center**: Ideale per elettronica e gadget.
+## 1. Wichtige Einkaufsviertel und Standorte
+Thailand, insbesondere Bangkok, ist ein erstklassiges Einkaufsparadies, in dem jeder Ort eine einzigartige Atmosphäre und Auswahl bietet.
 
-## 2. Souvenirs da non Perdere
-*   Seta tailandese, prodotti spa, argento e snack tipici.
+### Moderne und luxuriöse Einkaufszentren
+*   **Siam Paragon & Siam Center:** Die besten Ziele für weltberühmte Luxusmarken (z. B. Chanel, Louis Vuitton, Prada), High-End-Kinos und Asiens größtes Aquarium.
+*   **ICONSIAM:** Am Ufer des Chao Phraya Flusses gelegen; kombiniert modernes Design mit traditioneller thailändischer Handwerkskunst. Es beherbergt SookSiam, einen schwimmenden Markt im Innenbereich mit authentischem Essen und Kunsthandwerk.
+*   **CentralWorld:** Einer der weltweit größten Einkaufskomplexe, der als Lifestyle-Zentrum für trendige Mode, Sportartikel und vielfältigen Einzelhandel dient.
+*   **MBK Center:** Das erstklassige Ziel für Elektronik, Mobiltelefone, Gaming-Ausrüstung und Mode zu günstigen Preisen.
 
-## 3. Contrattazione
-La contrattazione è normale nei mercati. Sorridi e sii gentile. Punta a uno sconto del 20-30%.
+## 2. Must-Buy Souvenirs und Produkte
+*   **Kosmetik & Hautpflege:** Mistine (wasserfestes Make-up), 4U2 (Lippenstifte), Kokosnussöl und Aloe Vera Gel.
+*   **Gesundheit & Wellness:** Siang Pure Oil, Tiger Balm, Ya Dom (Inhalatoren) und Snake Brand Kühlpulver.
+*   **Essen & Snacks:** ChaTraMue Thai-Tee-Blätter, getrocknete Früchte (Mango, Durian), Bento-Tintenfisch und Pocky (exklusive thailändische Geschmacksrichtungen).
 
-## 4. Rimborso IVA (VAT Refund)
-Cerca il logo "VAT Refund for Tourists". Spesa minima 2.000 THB per negozio.
+## 3. Einkaufskultur und Feilschen
+Thailändisches Einkaufen ist von **"Sanuk"** (Spaß) und **"Mai Pen Rai"** (keine Sorge) geprägt.
+
+*   **Das Lächeln:** Bleiben Sie höflich und lächeln Sie; Aggression kann dazu führen, dass Verkäufer Rabatte ablehnen.
+*   **Festpreis vs. Verhandelbar:** In Luxus-Malls und Markengeschäften sind die Preise fest. Auf Straßenmärkten und an unabhängigen Ständen wird Feilschen erwartet.
+
+## 4. Mehrwertsteerrückerstattung für Touristen (7 %)
+*   **Berechtigung:** Geben Sie mindestens 2.000 Baht (einschließlich MwSt.) in einem einzigen Geschäft an einem Tag aus.
+*   **Im Geschäft:** Achten Sie auf das Schild "VAT Refund for Tourists". Legen Sie Ihren Reisepass vor und bitten Sie um das **Formular P.P.10** zusammen mit der Steuerrechnung.
 `,
-  german: ``,
-  portuguese: ``,
-  russian: ``,
-  chinese: ``,
-  japanese: ``,
-  korean: ``,
-  vietnamese: ``,
-  arabic: ``,
-  malay: ``,
-  indonesian: ``,
-  bengali: ``,
-  dutch: ``,
-  filipino: ``,
-  farsi: ``,
-  polish: ``,
-  romanian: ``,
-  swedish: ``,
-  turkish: ``,
-  hebrew: ``,
-  hindi: ``,
-  myanmar: ``
 };
-
-// Fill in remaining with English for consistency
-Object.keys(SHOPPING_GUIDE_MARKDOWN).forEach(lang => {
-  if (!SHOPPING_GUIDE_MARKDOWN[lang as ThaiLanguage]) {
-    SHOPPING_GUIDE_MARKDOWN[lang as ThaiLanguage] = SHOPPING_GUIDE_MARKDOWN.english;
-  }
-});

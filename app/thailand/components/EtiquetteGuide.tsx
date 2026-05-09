@@ -1,7 +1,5 @@
-"use client"; // animation တွေပါဝင်တဲ့အတွက် ထည့်သွင်းရန်
-
-import { motion } from 'framer-motion'; // motion/react အစား framer-motion ကို သုံးပါ
-import { CheckCircle2, XCircle, Star, ShieldCheck, Heart } from 'lucide-react';
+import { motion } from 'motion/react';
+import { CheckCircle2, XCircle, Info, Star, ShieldCheck, Heart } from 'lucide-react';
 import { ThaiLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../i18n';
 
@@ -17,16 +15,16 @@ export default function EtiquetteGuide({ language }: Props) {
   return (
     <div className="bg-white min-h-full">
       {/* Header Decoration */}
-      <div className="h-2 bg-gradient-to-r from-[#D4AF37] via-[#2d4a3e] to-[#D4AF37]" />
+      <div className="h-2 bg-gradient-to-r from-gold-deep via-sacred-green to-gold-deep" />
       
       <div className="p-8 max-w-4xl mx-auto space-y-12">
         {/* Intro Section */}
         <div className="text-center space-y-4">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#fdfaf3] text-[#D4AF37] mb-2">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-sacred-bg text-gold-deep mb-2">
             <Heart size={32} />
           </div>
-          <h2 className="text-2xl font-serif text-[#2d4a3e] italic">{t.jaiYen}</h2>
-          <p className="text-[10px] uppercase tracking-[0.2em] text-[#D4AF37] font-bold">{t.labels.culturalSubtitle}</p>
+          <h2 className="text-2xl font-serif text-sacred-green italic">{t.jaiYen}</h2>
+          <p className="text-[10px] uppercase tracking-[0.2em] text-gold-deep font-bold">{t.labels.culturalSubtitle}</p>
           <p className="text-sm text-gray-600 max-w-xl mx-auto leading-relaxed">
             {t.jaiYenDesc}
           </p>
@@ -41,20 +39,20 @@ export default function EtiquetteGuide({ language }: Props) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
-              className="p-6 rounded-3xl border border-[#D4AF37]/10 bg-[#fdfaf3]/50 space-y-4 hover:border-[#D4AF37]/30 transition-all group"
+              className="p-6 rounded-3xl border border-gold-soft/10 bg-sacred-bg/20 space-y-4 hover:border-gold-deep/30 transition-all group"
             >
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-[#D4AF37]/10 flex items-center justify-center text-[#D4AF37] group-hover:bg-[#D4AF37] group-hover:text-white transition-all">
+                <div className="w-8 h-8 rounded-lg bg-gold-deep/10 flex items-center justify-center text-gold-deep group-hover:bg-gold-deep group-hover:text-white transition-all">
                   <Star size={16} />
                 </div>
-                <h3 className="text-xs font-bold uppercase tracking-widest text-[#2d4a3e]">{section.title}</h3>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-sacred-green">{section.title}</h3>
               </div>
               <p className="text-[11px] text-gray-700 leading-relaxed italic">{section.content}</p>
               {section.points && (
                 <ul className="space-y-2 pt-2">
                   {section.points.map((point: string, pIdx: number) => (
                     <li key={pIdx} className="flex items-start gap-2 text-[10px] text-gray-500">
-                      <div className="w-1 h-1 rounded-full bg-[#D4AF37] mt-1.5 flex-shrink-0" />
+                      <div className="w-1 h-1 rounded-full bg-gold-deep mt-1.5 flex-shrink-0" />
                       <span>{point}</span>
                     </li>
                   ))}
@@ -98,7 +96,7 @@ export default function EtiquetteGuide({ language }: Props) {
         </div>
 
         {/* Legal Advisory Banner */}
-        <div className="p-6 bg-[#2d4a3e] rounded-3xl text-white flex items-center gap-6 shadow-xl shadow-[#2d4a3e]/20">
+        <div className="p-6 bg-sacred-green rounded-3xl text-white flex items-center gap-6 shadow-xl shadow-sacred-green/20">
           <div className="p-4 bg-white/10 rounded-2xl">
             <ShieldCheck size={32} />
           </div>

@@ -1,5 +1,3 @@
-"use client"; // Client component ဖြစ်ကြောင်း သတ်မှတ်ရန်
-
 import { useState } from 'react';
 import { Calculator } from 'lucide-react';
 import { ThaiLanguage } from '../types';
@@ -19,19 +17,7 @@ export default function CurrencyConverter({ language }: Props) {
     USD: 36.75,
     EUR: 39.38,
     GBP: 45.89,
-    CNY: 5.08,
-    JPY: 0.238,
-    INR: 0.441,
-    KRW: 0.0267,
-    SGD: 27.15,
-    MYR: 7.68,
-    IDR: 0.00227,
-    VND: 0.00144,
-    RUB: 0.395,
-    SAR: 9.79,
-    AED: 10.01,
     MMK: 0.0175,
-    ILS: 9.88,
     THB: 1.0
   };
 
@@ -62,10 +48,8 @@ export default function CurrencyConverter({ language }: Props) {
     setVal1(calculate(val2, c, curr1));
   };
 
-  // Initial calculation check
   if (val2 === '' && val1 !== '') {
-    const initialVal2 = calculate(val1, curr1, curr2);
-    setVal2(initialVal2);
+    setVal2(calculate(val1, curr1, curr2));
   }
 
   const uiT = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
@@ -79,7 +63,7 @@ export default function CurrencyConverter({ language }: Props) {
           <select 
             value={curr1}
             onChange={(e) => handleCurr1Change(e.target.value)}
-            className="w-16 bg-[#fdfaf3] border border-gray-100 rounded-lg p-1.5 text-[9px] font-bold focus:outline-none focus:border-[#D4AF37] cursor-pointer appearance-none"
+            className="w-16 bg-sacred-bg border border-gray-100 rounded-lg p-1.5 text-[9px] font-bold focus:outline-none focus:border-gold-soft cursor-pointer appearance-none"
           >
             {Object.keys(rates).sort().map(curr => (
               <option key={curr} value={curr}>{curr}</option>
@@ -92,7 +76,7 @@ export default function CurrencyConverter({ language }: Props) {
             value={val1} 
             onChange={(e) => handleVal1Change(e.target.value)}
             onFocus={(e) => e.target.select()}
-            className="flex-1 bg-[#fdfaf3] border border-gray-100 rounded-lg p-1.5 text-xs focus:outline-none focus:border-[#D4AF37] font-medium"
+            className="flex-1 bg-sacred-bg border border-gray-100 rounded-lg p-1.5 text-xs focus:outline-none focus:border-gold-soft font-medium"
           />
         </div>
       </div>
@@ -106,7 +90,7 @@ export default function CurrencyConverter({ language }: Props) {
           <select 
             value={curr2}
             onChange={(e) => handleCurr2Change(e.target.value)}
-            className="w-16 bg-[#fdfaf3] border border-gray-100 rounded-lg p-1.5 text-[9px] font-bold focus:outline-none focus:border-[#D4AF37] cursor-pointer appearance-none"
+            className="w-16 bg-sacred-bg border border-gray-100 rounded-lg p-1.5 text-[9px] font-bold focus:outline-none focus:border-gold-soft cursor-pointer appearance-none"
           >
             {Object.keys(rates).sort().map(curr => (
               <option key={curr} value={curr}>{curr}</option>
@@ -119,7 +103,7 @@ export default function CurrencyConverter({ language }: Props) {
             value={val2} 
             onChange={(e) => handleVal2Change(e.target.value)}
             onFocus={(e) => e.target.select()}
-            className="flex-1 bg-[#fdfaf3] border border-gray-100 rounded-lg p-1.5 text-xs focus:outline-none focus:border-[#D4AF37] font-medium"
+            className="flex-1 bg-sacred-bg border border-gray-100 rounded-lg p-1.5 text-xs focus:outline-none focus:border-gold-soft font-medium"
           />
         </div>
       </div>
