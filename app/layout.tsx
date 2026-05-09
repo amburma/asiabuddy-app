@@ -22,11 +22,13 @@ export const metadata = {
   description: "Explore Asia Like a Local",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${outfit.variable} ${cormorant.variable} antialiased`}>
-        {children}
+        <main className="min-h-screen bg-sacred-bg">
+          {children}
+        </main>
       </body>
     </html>
   );

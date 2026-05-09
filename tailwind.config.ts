@@ -2,17 +2,24 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
+      colors: {
+        "sacred-bg": "#FDFCF0",
+        "sacred-green": "#2D4A3E",
+        "gold-deep": "#D4AF37",
+        "gold-light": "#F4E7B5",
+      },
       fontFamily: {
-        sans: ["var(--font-outfit)"],
-        serif: ["var(--font-cormorant)"],
+        serif: ["var(--font-geist-mono)", "serif"],
       },
     },
   },
   plugins: [],
 };
+
 export default config;
