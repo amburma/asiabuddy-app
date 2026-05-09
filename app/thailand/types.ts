@@ -10,6 +10,11 @@ export interface LanguageOption {
   flag: string; // Flag icon သို့မဟုတ် Emoji အတွက်
 }
 
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 // သင်ချန်ထားလိုသော ဘာသာစကားများစာရင်း
 export const SUPPORTED_LANGUAGES: LanguageOption[] = [
   {

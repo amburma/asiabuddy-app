@@ -7,10 +7,15 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  // ❌ Remove any eslint block like this:
-  // eslint: {
-  //   ignoreDuringBuilds: true,
-  // },
+  // webpack configuration ကို ဒီမှာ ထည့်လိုက်ပါ
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        fs: false,
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;

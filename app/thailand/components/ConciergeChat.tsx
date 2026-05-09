@@ -39,7 +39,9 @@ export default function ConciergeChat({ language }: Props) {
         parts: [{ text: m.content }]
       }));
 
-      const response = await getConciergeResponse(userMessage, history, language);
+      const prompt = `You are a helpful concierge for travelers in Thailand. Provide accurate, friendly assistance in ${language}. Keep responses concise and helpful.\n\n${userMessage}`;
+
+      const response = await getConciergeResponse(prompt, history, language);
       setMessages(prev => [...prev, { role: 'assistant', content: response }]);
     } catch (error) {
       console.error("Concierge Chat Error:", error);
