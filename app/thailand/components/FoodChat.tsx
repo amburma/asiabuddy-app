@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion'; // motion/react အစား framer-motion ကို သုံးပါ
-import { Send, Utensils, Loader2, MessageSquare } from 'lucide-center'; // အသုံးများသော icons များ
+import { Send, Utensils, Loader2, MessageSquare } from 'lucide-react'; // အသုံးများသော icons များ
 import { getConciergeResponse } from '../services/geminiService';
 import { ChatMessage, ThaiLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../i18n';
