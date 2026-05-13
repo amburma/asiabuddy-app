@@ -1,6 +1,5 @@
-// app/page.tsx
 import Link from 'next/link';
-import './globals.css'; // This is essential!
+import './globals.css';
 
 export default function Home() {
   return (
@@ -8,7 +7,7 @@ export default function Home() {
       <div className="hero-content">
         <p className="tagline-small">Your Gateway to Asia</p>
         <h1 className="hero-title">
-          Unveil the Soul of Asia<br />
+          Unveil the <span>Soul of Asia</span><br />
           Explore Asia Like a Local
         </h1>
         <p className="hero-subtitle">
@@ -17,7 +16,6 @@ export default function Home() {
         <div className="country-section">
           <p className="country-label">Select Your Destination</p>
           <div className="country-grid">
-            {/* Same Window အတွက် Link component သုံးပါ */}
             <Link href="/thailand" className="country-btn">
               <span className="flag">🇹🇭</span> Thailand
             </Link>
