@@ -1,4 +1,6 @@
+// app/page.tsx
 import Link from 'next/link';
+import './globals.css'; // This is essential!
 
 export default function Home() {
   return (
@@ -7,7 +9,7 @@ export default function Home() {
         <p className="tagline-small">Your Gateway to Asia</p>
         <h1 className="hero-title">
           Unveil the Soul of Asia<br />
-          <em>Explore Asia Like a Local</em>
+          Explore Asia Like a Local
         </h1>
         <p className="hero-subtitle">
           Your single hub for trusted guides, visa support, and premium on-ground services.
