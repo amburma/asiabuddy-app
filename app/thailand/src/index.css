@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Sacred Aesthetic Palette (Core Identity) */
+  --color-gold-deep: #D4AF37; /* Primary headings, key icons, prestige */
+  --color-gold-soft: #E5C27F; /* Decorative elements, borders, highlights */
+  --color-sacred-cream: #FDFBF7; /* Primary surface color */
+  --color-sacred-green: #2D4F3C; /* Nature-themed accents, tranquility */
+  --color-sacred-bg: #FCFAEF; /* Custom base tone */
+  
+  /* Dark Mode Palette */
+  --color-dark-base: #121212;
+  --color-dark-surface: #1E1E1E;
+  --color-dark-accent: #48CAE4;
+  --color-dark-text: #E9ECEF;
+
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-sacred-bg text-gray-900 font-sans selection:bg-gold-soft/30;
+  }
+  
+  h1, h2, h3, h4 {
+    @apply font-serif text-sacred-green font-bold;
+  }
+}
+
+.sacred-gradient {
+  background: linear-gradient(135deg, #FCFAEF 0%, #F5F1D5 100%);
+}
+
+.gold-border {
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.shadow-sacred {
+  box-shadow: 0 4px 20px rgba(45, 79, 60, 0.05);
+}
+
+.glass-card {
+  @apply bg-white rounded-2xl;
+  border: 1px solid rgba(229, 194, 127, 0.4); /* Use Gold-Soft for borders */
+  box-shadow: 0 4px 20px rgba(45, 79, 60, 0.05);
+}
+
+.btn-primary {
+  @apply bg-gold-deep text-white px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-sacred-green hover:shadow-lg disabled:opacity-50;
+}
