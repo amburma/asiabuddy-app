@@ -382,8 +382,8 @@ const titleMap = {
 const keys = Object.keys(accommodationApps);
 
 keys.forEach(lang => {
-  const title = titleMap[lang as keyof typeof titleMap];
-  const section = `\n---\n\n${title}\n---\n${accommodationApps[lang]}`;
+const title = titleMap[lang as keyof typeof titleMap];
+const section = `\n---\n\n${title}\n---\n${accommodationApps[lang as keyof typeof accommodationApps]}`;
   
   // Find the language section start
   const langRegex = new RegExp(`${lang}: \\{`, 'g');
