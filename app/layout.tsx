@@ -1,35 +1,23 @@
-import { Outfit, Cormorant_Garamond } from 'next/font/google';
-import "./globals.css";
+// app/layout.tsx
+import { Playfair_Display, Inter } from 'next/font/google';
+import './globals.css';
 
-// Outfit Font ကို Setup လုပ်ခြင်း
-const outfit = Outfit({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-outfit', // CSS variable အနေနဲ့ သုံးဖို့
+const playfair = Playfair_Display({ 
+  subsets: ['latin'], 
+  variable: '--font-playfair',
+  style: ['italic', 'normal'],
+  weight: ['400', '700', '900'] // 300 ကို ဖယ်ပြီး 400 ပြောင်းလိုက်ပါပြီ
 });
 
-// Cormorant Garamond Font ကို Setup လုပ်ခြင်း
-const cormorant = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['400', '600'],
-  style: ['normal', 'italic'],
-  display: 'swap',
-  variable: '--font-cormorant',
+const inter = Inter({ 
+  subsets: ['latin'], 
+  variable: '--font-inter' 
 });
-
-export const metadata = {
-  title: "AsiaBuddy | Your Gateway to Asia",
-  description: "Explore Asia Like a Local",
-};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${outfit.variable} ${cormorant.variable} antialiased`}>
-        <main className="min-h-screen bg-sacred-bg">
-          {children}
-        </main>
-      </body>
+    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
+      <body className="font-sans antialiased">{children}</body>
     </html>
   );
 }
