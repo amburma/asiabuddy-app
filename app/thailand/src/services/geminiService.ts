@@ -2,7 +2,7 @@ import { UI_TRANSLATIONS } from "../i18n";
 import { GoogleGenAI } from "@google/genai";
 import { ThaiLanguage } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
 export async function getConciergeResponse(
   message: string, 

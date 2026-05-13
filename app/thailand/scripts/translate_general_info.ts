@@ -74,7 +74,7 @@ const englishTemplate = `# Thailand General Information
 *   **[Don't]:** **Respect Buddha**—*Do not climb on statues or use Buddha images as fashion/tattoos.*`;
 
 async function translateAll() {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
   if (!apiKey) {
     console.error("GEMINI_API_KEY is missing");
     return;
