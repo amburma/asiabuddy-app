@@ -21,9 +21,7 @@ export default function Home() {
             <Link href="/thailand" className="country-btn">
               <span className="flag">🇹🇭</span> Thailand
             </Link>
-            <button className="country-btn">
-              <span className="flag">🇲🇲</span> Myanmar
-            </button>
+            <div className="country-btn blank"></div>
             <div className="country-btn blank"></div>
             <div className="country-btn blank"></div>
           </div>
