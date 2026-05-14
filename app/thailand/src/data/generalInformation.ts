@@ -142,7 +142,6 @@ export const GENERAL_INFORMATION: Record<ThaiLanguage, string> = {
 *   **[Public Transit]:** Utilize the **BTS (Skytrain)** and **MRT (Subway)** to bypass Bangkok’s famous traffic jams.
 *   **[Connectivity]:** Purchase a **Tourist SIM Card** (AIS, TrueMove, or DTAC) at the airport upon arrival for instant 5G access.
 *   **[The "7-Eleven" Rule]:** These stores are open 24/7 and are your best resource for snacks, emergency supplies, and bill payments.
-
 ## 3. Safety & Health
 
 *   **[Emergency Numbers]:**
@@ -483,4 +482,4 @@ Besucher können zwischen drei großen Anbietern wählen:
 ### Sicherheit
 
 * **[Do]:** **Wasser aus Flaschen trinken**—*Trinken Sie nur versiegeltes Wasser aus Flaschen oder gefiltertes Wasser.*
-* **[Don't]:** **Buddha respektieren**—*Klettern Sie nicht auf Statuen und nutzen Sie Buddha-Abbildungen nicht als Modeaccessoire oder Tattoo.*`,
+* **[Don't]:** **Buddha respektieren** - Klettern Sie nicht auf Statuen und nutzen Sie Buddha-Abbildungen nicht als Modeaccessoire oder Tattoo.\`,
