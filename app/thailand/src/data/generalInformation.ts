@@ -346,123 +346,12 @@ Visitors can choose from three major operators:
 *   **[Hommes]:** Dites "Sawasdee Krub"
 *   **[Femmes]:** Dites "Sawasdee Ka"
 *   **[Code Vestimentaire]:** Une tenue modeste est obligatoire au Grand Palais et dans tous les Temples (Wats).`,
-  DE: `# Thailand Allgemeine Informationen über Thailand
-## 1. Grundlagen & kulturelle Etikette
+  DE: `# Thailand Allgemeine Informationen
 
-* **[Die Begrüßung (Wai)]:** *Thais begrüßen einander, indem sie die Handflächen in einer gebetsähnlichen Geste aneinanderpressen und sich leicht verbeugen.*
-* **[Männer]:** Sagen Sie „Sawasdee Krub“.
-* **[Frauen]:** Sagen Sie „Sawasdee Ka“.
-* **[Kleiderordnung]:** Im Großen Palast und in allen Tempeln (Wats) ist bescheidene Kleidung obligatorisch. Schultern und Knie müssen bedeckt sein; ärmellose Oberteile, zerrissene Jeans und kurze Röcke sind streng untersagt.
-* **[Trinkgeld-Etikette]:** *Nicht verpflichtend, aber gern gesehen.* In größeren Restaurants wird üblicherweise eine Servicegebühr von 10 % erhoben. Bei kleinen Verkäufern oder Taxis ist es lokal üblich, den Betrag aufzurunden.
+## 1. Grundlagen & Kulturelle Etikette
 
-## 2. Logistik & Konnektivität
-
-* **[Transport-Apps]:** Laden Sie **Grab** oder **Bolt** für zuverlässige Fahrten und transparente Preise herunter. Nutzen Sie **Google Maps** für Fahrpläne von Bussen und Zügen in Echtzeit.
-* **[Öffentlicher Nahverkehr]:** Nutzen Sie den **BTS (Skytrain)** und die **MRT (U-Bahn)**, um die berüchtigten Staus in Bangkok zu umgehen.
-* **[Konnektivität]:** Erwerben Sie direkt bei der Ankunft am Flughafen eine **Tourist SIM Card** (AIS, TrueMove oder DTAC) für sofortigen 5G-Zugang.
-* **[Die „7-Eleven“-Regel]:** Diese Geschäfte sind rund um die Uhr geöffnet und Ihre beste Anlaufstelle für Snacks, Notfallartikel und die Bezahlung von Rechnungen.
-
-## 3. Sicherheit & Gesundheit
-
-* **[Notrufnummern]:**
-* **[Touristenpolizei]:** **1155** (englischsprachig)
-* **[Ambulanz]:** **1669**
-
-* **[Betrugswarnung]:** *Falls ein Fahrer behauptet, eine Sehenswürdigkeit sei „wegen eines Feiertags geschlossen“ oder „heute zu“, lehnen Sie höflich ab.* Meist handelt es sich um einen Versuch, Sie in ein Juweliergeschäft oder eine Schneiderei mit hohen Provisionen zu locken.
-* **[Medizinische Versorgung]:** Das **Bumrungrad** und das **Bangkok Hospital** bieten erstklassige internationale Versorgung. **Boots/Watsons**-Apotheken finden Sie in fast jedem Einkaufszentrum.
-
-### I. Saisonale Übersicht
-
-In Thailand gibt es im Allgemeinen drei unterschiedliche Jahreszeiten:
-
-* **Kühle Jahreszeit (November bis Februar):** Dies ist die beste Reisezeit. Das Wetter ist sonnig und angenehm, was diesen Zeitraum ideal für Rundreisen macht.
-* **Sommerzeit (März bis Mai):** Die heißeste Phase des Jahres mit Temperaturen, die typischerweise zwischen 35 °C und 40 °C liegen.
-* **Regenzeit (Juni bis Oktober):** Es regnet zwar häufig, meist handelt es sich jedoch um kurze, heftige Schauer statt um Dauerregen. Dies ist eine preislich attraktive Zeit für Reisende.
-
-### II. Beste Reisezeit
-
-Der ideale Zeitpunkt für Ihre Reise hängt von Ihren Vorlieben und Ihrem Budget ab:
-
-* **Hauptsaison (November bis Ende Februar):** Angenehmes Wetter mit wenig Hitze und kaum Regen. Ideal für Strandaktivitäten und Besuche in Bergregionen wie Chiang Mai. Bitte beachten Sie jedoch, dass die Preise für Hotels und Flüge aufgrund des hohen Touristenaufkommens deutlich steigen.
-* **Nebensaison (Juni bis Oktober):** Weniger Besucher aufgrund der Regenzeit. Hotels bieten oft Rabatte an, was ein ruhigeres Erlebnis ermöglicht. Diese Zeit besticht durch eine üppige, grüne Natur.
-
-### III. Wichtige saisonale Ereignisse
-
-Erleben Sie Thailands einzigartige kulturelle Festivals in diesen Monaten:
-
-* **April - Songkran Festival:** Findet vom 13. bis 15. April statt. Es ist das traditionelle thailändische Neujahrsfest, bekannt für seine landesweiten Wasserschlachten.
-* **November - Loy Krathong (Lichterfest):** In der Vollmondnacht werden lotusförmige Schiffchen auf Seen und Flüsse gesetzt, um der Wassergöttin Respekt zu zollen.
-* **November - Yi Peng (Laternenfest):** Dieses weltberühmte Ereignis in Chiang Mai zeichnet sich durch tausende Laternen aus, die in den Nachthimmel aufsteigen.
-* **Januar / Februar - Chinesisches Neujahr:** Wird besonders lebhaft in Bangkoks Chinatown (Yaowarat) mit Drachentänzen, Vorführungen und vielfältigem Streetfood gefeiert.
-* **May - Raketenfestival (Bun Bang Fai):** Ein traditionelles Fest in Nordostthailand (Isan), bei dem Raketen gezündet werden, um für Regen zu bitten.
-
-### IV. Kurze Tipps
-
-* **Reisen in der Regenzeit:** Falls es an der Westküste (Phuket, Krabi) zu viel regnet, bietet die Ostküste (Koh Samui, Koh Phangan) oft eine gute Alternative.
-* **Reisen im Sommer:** Tragen Sie stets eine Sonnenbrille, nutzen Sie Sonnenschutz und führen Sie einen Schirm mit sich.
-* **Reisen in der kühlen Jahreszeit:** Wenn Sie nach Chiang Mai oder in nördliche Regionen reisen, packen Sie eine leichte Jacke ein, da es nachts kühl werden kann.
-
-### V. Elektrizität & Steckertypen
-
-Die elektrische Spannung in Thailand beträgt 220 V bei einer Frequenz von 50 Hz.
-
-* **Steckertypen:** Typ A (zwei flache Stifte), Typ B (zwei flache Stifte und ein runder Erdungsstift), Typ C (zwei runde Stifte) und Typ O (drei runde Stifte).
-* **Empfehlung:** Die meisten Steckdosen in Thailand sind Universalsteckdosen, die sowohl flache als auch runde Stifte akzeptieren. Dennoch empfiehlt sich die Mitnahme eines Universaladapters für 3-polige Stecker.
-
-### VI. Telekommunikation & SIM-Karten
-
-Besucher können zwischen drei großen Anbietern wählen:
-
-* **Wichtige Betreiber:** AIS (beste Signalabdeckung), TrueMove H (beliebte Angebote) und dtac (gut in städtischen Gebieten).
-* **Verkaufsstellen:** Flughafen (sofortige Einrichtung, etwas teurer) oder Convenience-Stores (7-Eleven oder FamilyMart).
-* **Voraussetzung:** Für die Registrierung der SIM-Karte ist beim Kauf zwingend ein **Reisepass** erforderlich.
-
-### VII. Internetverbindung
-
-* **Tourist SIM Pakete:** Unlimitierte Datenpakete sind ab 299 Baht für 8, 15 oder 30 Tage erhältlich.
-* **Öffentliches WLAN:** Kostenloses WLAN ist an Flughäfen, in großen Einkaufszentren und den meisten Cafés weit verbreitet.
-* **eSIM:** Wenn Ihr Telefon eSIM unterstützt, können Sie diese vorab online erwerben, um ohne Wartezeiten sofort verbunden zu sein.
-
-## 4. Finanzielle Angelegenheiten
-
-* **[Währung]:** **Thailändischer Baht (THB)**.
-* **[Bester Wechselkurs]:** Halten Sie Ausschau nach **SuperRich** (Orange oder Grün), dort erhalten Sie im Vergleich zu Banken meist bessere Kurse.
-* **[Zahlungsmittel]:** Auf Straßenmärkten und an Garküchen ist Bargeld unverzichtbar. Kreditkarten werden in Malls, Hotels und gehobenen Restaurants akzeptiert.
-* **[ATM-Nutzung]:** Rechnen Sie mit einer Gebühr von **220 Baht pro Abhebung** mit internationalen Karten. Heben Sie größere Beträge ab, um die Gebühren zu minimieren.
-
-## 5. Essen, Sehenswürdigkeiten & Klima
-
-* **[Kulinarische Highlights]:** **Tom Yum Goong**, **Pad Thai** und **Mango Sticky Rice**.
-* **[Wichtigste Sehenswürdigkeiten]:** **Großer Palast**, **Wat Arun** und **Wat Pho**.
-* **[Shopping-Tipps]:** **Siam Paragon** (Luxus) und **Iconsiam** (Lage am Fluss).
-* **[Wetter]:** *Heiß und feucht (28 °C - 35 °C).* Die Regenzeit dauert von Juni bis Oktober. Führen Sie stets einen leichten Regenponcho mit sich.
-
----
-
-## Do’s und Don’ts in Thailand
-
-### Monarchie
-
-* **[Do]:** **Tiefen Respekt zeigen** - *Behandeln Sie alle Abbildungen des Königs mit größter Ehrfurcht.*
-* **[Don't]:** **Niemals die Währung beschädigen** - *Auf eine Münze oder einen Geldschein zu treten ist eine Straftat, da sie das Bild des Königs tragen.*
-
-### Soziales
-
-* **[Do]:** **Das „Lächeln“** - *Nutzen Sie ein Lächeln, um kleine Konflikte oder Missverständnisse charmant zu lösen.*
-* **[Don't]:** **Kopf nicht berühren** - *Der Kopf gilt als heilig. Berühren Sie niemals den Kopf einer anderen Person (auch nicht bei Kindern).*
-
-### Etikette
-
-* **[Do]:** **Schuhe ausziehen** - *Ziehen Sie Ihre Schuhe aus, bevor Sie Privatwohnungen oder das Innere eines Tempels betreten.*
-* **[Don't]:** **Nicht mit den Füßen zeigen** - *Zeigen Sie niemals mit Ihren Füßen auf Personen, Mönche oder Buddha-Statuen.*
-
-### Transport
-
-* **[Do]:** **Nach dem Taxameter fragen** - *Stellen Sie sicher, dass das „Meter“ eingeschaltet ist, bevor das Taxi losfährt.*
-* **[Don't]:** **Keine öffentliche Wut** - *Vermeiden Sie es, laut zu werden oder die Beherrschung zu verlieren (dies führt zum „Gesichtsverlust“).*
-
-### Sicherheit
-
-* **[Do]:** **Abgefülltes Wasser trinken** - *Trinken Sie nur versiegeltes, in Flaschen abgefülltes oder gefiltertes Wasser.*
-* **[Don't]:** **Respekt vor Buddha** - *Klettern Sie nicht auf Statuen und verwenden Sie Buddha-Abbildungen nicht als Mode-Accessoire oder Tattoo.*
+*   **[Die Begrüßung (Wai)]:** *Thailänder grüßen, indem sie ihre Handflächen in einer gebetsähnlichen Geste zusammendrücken und sich leicht verbeugen.*
+*   **[Männer]:** Sagen Sie "Sawasdee Krub"
+*   **[Frauen]:** Sagen Sie "Sawasdee Ka"
+*   **[Kleiderordnung]:** Im Großen Palast und in allen Tempeln (Wats) ist bescheidene Kleidung obligatorisch.`
 };
