@@ -123,11 +123,9 @@ export default function DestinationExplorer({ language }: Props) {
                       href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title + ' ' + selectedDest.name + ' Thailand')}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-gold-deep hover:text-gold-soft transition-colors mb-4 group/link w-fit"
+                      className="text-[10px] font-bold uppercase tracking-wider text-gold-deep hover:underline transition-all mb-4 w-fit inline-block"
                     >
-                      <MapPin size={12} className="group-hover/link:animate-bounce" />
-                      <span>{labels.goToLocation}</span>
-                      <ExternalLink size={10} />
+                      Go to Location
                     </a>
                     <div className="text-xs text-gray-800 leading-relaxed font-normal mb-6 flex-grow">
                       {item.description}
