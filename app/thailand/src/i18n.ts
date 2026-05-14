@@ -13,7 +13,7 @@ const ENGLISH_UI = {
   "explore": "Explore",
   "concierge": "Concierge",
   "hero": "Explore the Magic Now",
-  "heroSub": "Timeless hospitality, your digital Thai guide.",
+  "heroSub": "Explore Asia beside AsiaBuddy.",
   "welcome": "Welcome to Thailand from ThaiGuide",
   "sacredAesthetic": "Sacred Aesthetic",
   "toolbox": "",
@@ -37,7 +37,8 @@ const ENGLISH_UI = {
     "donts": "Key Don'ts",
     "legalAdvisory": "Legal Advisory",
     "culturalSubtitle": "Cultural Dos & Don'ts • Local Customs",
-    "bestTime": "Best Time to Visit"
+    "bestTime": "Best Time to Visit",
+    "goToLocation": "Go to Location"
   },
   "infoLink": "for more information click here",
   "exploreThailandEssentials": "Explore Thailand Essentials",
@@ -193,7 +194,7 @@ const ENGLISH_UI = {
   },
   "footer": {
     "by": "AsiaBuddy Services",
-    "tagline": "Your premium Thailand travel guide assistant.",
+    "tagline": "Explore Asia beside AsiaBuddy.",
     "rights": "© 2026 AsiaBuddy Services. Prototype Version.",
     "privacyPolicy": "Privacy Policy",
     "legalTerms": "Legal Terms",
@@ -331,7 +332,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "explore": "Explore",
   "concierge": "Concierge",
   "hero": "Explore the Magic Now",
-  "heroSub": "Timeless hospitality, your digital Thai guide.",
+  "heroSub": "สำรวจเอเชียไปพร้อมกับเอเชียบัดดี้",
   "welcome": "Welcome to Thailand from ThaiGuide",
   "sacredAesthetic": "Sacred Aesthetic",
   "toolbox": "",
@@ -340,12 +341,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "assistance": "Call for immediate help (24/7)",
   "contactNow": "Contact Now",
   "tabs": {
-    "mustVisit": "Must Visit Places",
-    "dining": "Dining & Food Experiences",
-    "otherExperiences": "Other Experiences",
-    "uniqueActivities": "Unique Activities",
-    "hiddenGems": "Hidden Gems",
-    "information": "Information"
+    "mustVisit": "สถานที่ต้องไปเยือน",
+    "dining": "ประสบการณ์รับประทานอาหาร",
+    "otherExperiences": "ประสบการณ์อื่นๆ",
+    "uniqueActivities": "กิจกรรมที่น่าสนใจ",
+    "hiddenGems": "เพชรเม็ดงามที่ซ่อนอยู่",
+    "information": "ข้อมูล"
   },
   "labels": {
     "etiquette": "Etiquette",
@@ -355,7 +356,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "donts": "Key Don'ts",
     "legalAdvisory": "Legal Advisory",
     "culturalSubtitle": "Cultural Dos & Don'ts • Local Customs",
-    "bestTime": "Best Time to Visit"
+    "bestTime": "Best Time to Visit",
+    "goToLocation": "ไปที่ตำแหน่งนี้"
   },
   "infoLink": "สำหรับข้อมูลเพิ่มเติม คลิกที่นี่",
   "exploreThailandEssentials": "สำรวจสิ่งจำเป็นในประเทศไทย",
@@ -511,7 +513,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   },
   "footer": {
     "by": "ความเป็นเลิศทางวัฒนธรรมไทย • บริการ AsiaBuddy",
-    "tagline": "Your premium Thailand travel guide assistant.",
+    "tagline": "สำรวจเอเชียไปพร้อมกับเอเชียบัดดี้",
     "rights": "© 2026 AsiaBuddy Services. Prototype Version.",
     "privacyPolicy": "Privacy Policy",
     "legalTerms": "Legal Terms",
@@ -640,7 +642,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "explore": "Explore",
   "concierge": "Concierge",
   "hero": "Explore the Magic Now",
-  "heroSub": "Timeless hospitality, your digital Thai guide.",
+  "heroSub": "AsiaBuddy နှင့်အတူ အာရှကို ရှာဖွေပါ",
   "welcome": "Welcome to Thailand from ThaiGuide",
   "sacredAesthetic": "Sacred Aesthetic",
   "toolbox": "",
@@ -649,12 +651,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "assistance": "Call for immediate help (24/7)",
   "contactNow": "Contact Now",
   "tabs": {
-    "mustVisit": "Must Visit Places",
-    "dining": "Dining & Food Experiences",
-    "otherExperiences": "Other Experiences",
-    "uniqueActivities": "Unique Activities",
-    "hiddenGems": "Hidden Gems",
-    "information": "Information"
+    "mustVisit": "သွားရောက်လည်ပတ်သင့်သောနေရာများ",
+    "dining": "အစားအသောက်အတွေ့အကြုံများ",
+    "otherExperiences": "အခြားအတွေ့အကြုံများ",
+    "uniqueActivities": "ထူးခြားသောလုပ်ဆောင်ချက်များ",
+    "hiddenGems": "ဝှက်ထားသောရတနာများ",
+    "information": "အချက်အလက်"
   },
   "labels": {
     "etiquette": "Etiquette",
@@ -664,7 +666,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "donts": "Key Don'ts",
     "legalAdvisory": "Legal Advisory",
     "culturalSubtitle": "Cultural Dos & Don'ts • Local Customs",
-    "bestTime": "Best Time to Visit"
+    "bestTime": "Best Time to Visit",
+    "goToLocation": "တည်နေရာသို့သွားပါ"
   },
   "infoLink": "ပိုမိုသိရှိလိုပါက ဤနေရာကိုနှိပ်ပါ",
   "exploreThailandEssentials": "ထိုင်းနိုင်ငံ၏ အခြေခံလိုအပ်ချက်များကို ရှာဖွေပါ",
@@ -820,7 +823,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   },
   "footer": {
     "by": "ထိုင်းယဉ်ကျေးမှု ထူးချွန်မှု • AsiaBuddy ဝန်ဆောင်မှုများ",
-    "tagline": "Your premium Thailand travel guide assistant.",
+    "tagline": "AsiaBuddy နှင့်အတူ အာရှကို ရှာဖွေပါ",
     "rights": "© 2026 AsiaBuddy Services. Prototype Version.",
     "privacyPolicy": "Privacy Policy",
     "legalTerms": "Legal Terms",
@@ -949,7 +952,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "explore": "Explorar",
   "concierge": "Conserje",
   "hero": "Explora la Magia Ahora",
-  "heroSub": "Hospitalidad atemporal, su guía tailandés digital.",
+  "heroSub": "Explore Asia junto a AsiaBuddy.",
   "welcome": "Bienvenido a Tailandia de parte de ThaiGuide",
   "sacredAesthetic": "Estética Sagrada",
   "toolbox": "",
@@ -973,7 +976,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "donts": "Qué No Hacer",
     "legalAdvisory": "Aviso Legal",
     "culturalSubtitle": "Qué Hacer y Qué No Hacer • Costumbres Locales",
-    "bestTime": "Mejor Época para Visitar"
+    "bestTime": "Mejor Época para Visitar",
+    "goToLocation": "Ir a la ubicación"
   },
   "infoLink": "para más información haga clic aquí",
   "exploreThailandEssentials": "Explore los elementos esenciales de Tailandia",
@@ -1129,7 +1133,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   },
   "footer": {
     "by": "Excelencia Cultural Tailandesa • Servicios AsiaBuddy",
-    "tagline": "Su asistente premium de guía de viaje en Tailandia.",
+    "tagline": "Explore Asia junto a AsiaBuddy.",
     "rights": "© 2026 AsiaBuddy Services. Prototyp-Version.",
     "privacyPolicy": "Política de Privacidad",
     "legalTerms": "Términos Legales",
@@ -1258,7 +1262,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "explore": "Explorer",
   "concierge": "Concierge",
   "hero": "Explorez la Magie Maintenant",
-  "heroSub": "Hospitalité intemporelle, votre guide thaïlandais numérique.",
+  "heroSub": "Explorez l'Asie aux côtés d'AsiaBuddy.",
   "welcome": "Bienvenue en Thaïlande de la part de ThaiGuide",
   "sacredAesthetic": "Esthétique Sacrée",
   "toolbox": "",
@@ -1282,7 +1286,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "donts": "À Ne Pas Faire",
     "legalAdvisory": "Conseil Juridique",
     "culturalSubtitle": "À Faire et À Ne Pas Faire • Coutumes Locales",
-    "bestTime": "Meilleur Moment pour Visiter"
+    "bestTime": "Meilleur Moment pour Visiter",
+    "goToLocation": "Aller à l'emplacement"
   },
   "infoLink": "pour plus d'informations cliquez ici",
   "exploreThailandEssentials": "Explorez les essentiels de la Thaïlande",
@@ -1438,7 +1443,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   },
   "footer": {
     "by": "Excellence Culturelle Thaïlandaise • Services AsiaBuddy",
-    "tagline": "Votre assistant de guide de voyage haut de gamme en Thaïlande.",
+    "tagline": "Explorez l'Asie aux côtés d'AsiaBuddy.",
     "rights": "© 2026 Services AsiaBuddy. Version Prototype.",
     "privacyPolicy": "Politique de Confidentialité",
     "legalTerms": "Termes Légaux",
@@ -1567,7 +1572,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "explore": "Erkunden",
   "concierge": "Concierge",
   "hero": "Entdecken Sie jetzt die Magie",
-  "heroSub": "Zeitlose Gastfreundschaft, Ihr digitaler Thai-Guide.",
+  "heroSub": "Entdecke Asien an der Seite von AsiaBuddy.",
   "welcome": "Willkommen in Thailand von ThaiGuide",
   "sacredAesthetic": "Heilige Ästhetik",
   "toolbox": "",
@@ -1591,7 +1596,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "donts": "Was man lassen sollte",
     "legalAdvisory": "Rechtliche Hinweise",
     "culturalSubtitle": "Kulturelle Do's & Don'ts • Lokale Bräuche",
-    "bestTime": "Beste Reisezeit"
+    "bestTime": "Beste Reisezeit",
+    "goToLocation": "Zum Standort gehen"
   },
   "infoLink": "für weitere Informationen hier klicken",
   "exploreThailandEssentials": "Erkunden Sie Thailand Essentials",
@@ -1747,7 +1753,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   },
   "footer": {
     "by": "Thailändische kulturelle Exzellenz • AsiaBuddy Services",
-    "tagline": "Ihr Premium-Reiseleiter-Assistent für Thailand.",
+    "tagline": "Entdecke Asien an der Seite von AsiaBuddy.",
     "rights": "© 2026 AsiaBuddy Services. Prototyp-Version.",
     "privacyPolicy": "Datenschutzrichtlinie",
     "legalTerms": "Rechtliche Bedingungen",
