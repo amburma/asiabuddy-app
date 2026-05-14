@@ -465,3 +465,4 @@ Besucher können zwischen drei großen Anbietern wählen:
 
 * **[Do]:** **Wasser aus Flaschen trinken** - Trinken Sie nur versiegeltes Wasser aus Flaschen oder gefiltertes Wasser.
 * **[Don't]:** **Buddha respektieren** - Klettern Sie nicht auf Statuen und nutzen Sie Buddha-Abbildungen nicht als Modeaccessoire oder Tattoo.`,
+* };
