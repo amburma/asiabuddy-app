@@ -112,20 +112,23 @@ export default function DestinationExplorer({ language }: Props) {
                     exit={{ opacity: 0, scale: 0.95 }}
                     className="flex flex-col bg-sacred-bg/30 rounded-2xl p-6 gold-border group hover:bg-white transition-colors"
                   >
-                    <div className="flex justify-between items-start mb-4">
-                      <a 
-                        href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title + ' ' + selectedDest.name + ' Thailand')}`}
-                        target="_self"
-                        rel="noopener noreferrer"
-                        className="group/title flex items-center gap-2 hover:text-gold-deep transition-colors"
-                      >
-                        <h4 className="text-xl text-sacred-green font-serif group-hover/title:text-gold-deep">{item.title}</h4>
-                        <ExternalLink size={14} className="opacity-0 group-hover/title:opacity-100 transition-opacity" />
-                      </a>
+                    <div className="flex justify-between items-start mb-2">
+                      <h4 className="text-xl text-sacred-green font-serif">{item.title}</h4>
                       <span className="text-[9px] uppercase font-bold tracking-tighter text-gold-deep border border-gold-deep/20 px-2 py-1 rounded bg-gold-deep/5">
                         {item.badge}
                       </span>
                     </div>
+
+                    <a 
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.title + ' ' + selectedDest.name + ' Thailand')}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-gold-deep hover:text-gold-soft transition-colors mb-4 group/link w-fit"
+                    >
+                      <MapPin size={12} className="group-hover/link:animate-bounce" />
+                      <span>{labels.goToLocation}</span>
+                      <ExternalLink size={10} />
+                    </a>
                     <div className="text-xs text-gray-800 leading-relaxed font-normal mb-6 flex-grow">
                       {item.description}
                     </div>
