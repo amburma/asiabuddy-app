@@ -23,7 +23,7 @@ import { TRAVEL_STYLE_GUIDE } from './data/travelStyleGuide';
 import { SHOPPING_GUIDE_MARKDOWN } from './data/shoppingGuide';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
-import { Compass, MessageSquare, Map as MapIcon, ShieldCheck, Languages, Info, X, Bus, ChevronRight, Check, AlertCircle, Receipt, FileCheck, Menu, Grid, MessageCircle, Home, Utensils, Plane, Ticket, Stethoscope, Music, ShoppingBag, Calculator, Gavel, Briefcase } from 'lucide-react';
+import { Compass, MessageSquare, Map as MapIcon, ShieldCheck, Languages, Info, X, Bus, ChevronRight, Check, AlertCircle, Receipt, FileCheck, Menu, Grid, MessageCircle, Home, Utensils, Plane, Ticket, Stethoscope, Music, ShoppingBag, Calculator, Gavel, Briefcase, Phone, Mail, Globe } from 'lucide-react';
 import TripPlannerChat from './components/TripPlannerChat';
 import MedicalChat from './components/MedicalChat';
 import NightlifeChat from './components/NightlifeChat';
@@ -180,6 +180,50 @@ export default function App() {
             <p className="max-w-xl mx-auto text-gray-800 font-light italic text-sm md:text-base leading-relaxed tracking-wide">
               {t.heroSub}
             </p>
+
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2, duration: 0.8 }}
+              className="flex items-center justify-center gap-4 md:gap-6 mt-10"
+            >
+              <a 
+                href="https://m.me/asiabuddyapp" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="group p-3 bg-white/40 backdrop-blur-md rounded-full text-sacred-green hover:bg-sacred-green hover:text-white transition-all shadow-sm border border-gold-deep/20"
+                id="social-messenger"
+              >
+                <MessageCircle size={20} />
+              </a>
+              <a 
+                href="https://wa.me/+491793956759" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="group p-3 bg-white/40 backdrop-blur-md rounded-full text-sacred-green hover:bg-emerald-600 hover:text-white transition-all shadow-sm border border-gold-deep/20"
+                id="social-whatsapp"
+              >
+                <MessageSquare size={20} />
+              </a>
+              <a 
+                href="mailto:asiabuddyapp@gmail.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="group p-3 bg-white/40 backdrop-blur-md rounded-full text-sacred-green hover:bg-red-700 hover:text-white transition-all shadow-sm border border-gold-deep/20"
+                id="social-email"
+              >
+                <Mail size={20} />
+              </a>
+              <a 
+                href="https://asiabuddy.app/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="group p-3 bg-white/40 backdrop-blur-md rounded-full text-sacred-green hover:bg-gold-deep hover:text-white transition-all shadow-sm border border-gold-deep/20"
+                id="social-website"
+              >
+                <Globe size={20} />
+              </a>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -596,6 +640,44 @@ export default function App() {
             <p className="text-sm text-gray-800 font-light max-w-sm italic">
               {(t.footer || UI_TRANSLATIONS.EN.footer).tagline}
             </p>
+            <div className="flex items-center gap-5 pt-2">
+              <a 
+                href="https://m.me/asiabuddyapp" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110" 
+                id="footer-messenger"
+              >
+                <MessageCircle size={18} />
+              </a>
+              <a 
+                href="https://wa.me/+491793956759" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110" 
+                id="footer-whatsapp"
+              >
+                <MessageSquare size={18} />
+              </a>
+              <a 
+                href="mailto:asiabuddyapp@gmail.com" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110" 
+                id="footer-email"
+              >
+                <Mail size={18} />
+              </a>
+              <a 
+                href="https://asiabuddy.app/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110" 
+                id="footer-website"
+              >
+                <Globe size={18} />
+              </a>
+            </div>
           </div>
         </div>
         
