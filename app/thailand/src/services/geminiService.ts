@@ -6,6 +6,18 @@ const ai = new GoogleGenAI({
   apiKey: import.meta.env.VITE_GEMINI_API_KEY || ""
 });
 
+function getGreeting(code: ThaiLanguage): string {
+  const greetings: Record<ThaiLanguage, string> = {
+    EN: "Sawasdee khrap. I am ThaiGuide from AsiaBuddy.app. How can I help you today? 🙏✨",
+    TH: "สวัสดีครับ ผม ThaiGuide จาก AsiaBuddy.app ครับ วันนี้มีอะไรให้ช่วยไหมครับ? 🙏✨",
+    MM: "ဆဝါဒီးခရပ်။ ကျွန်တော်သည် AsiaBuddy.app မှ ThaiGuide ဖြစ်ပါသည်။ ယနေ့ လူကြီးမင်းကို ဘာများ ကူညီပေးရမလဲ? 🙏✨",
+    DE: "Sawasdee khrap. Ich bin ThaiGuide von AsiaBuddy.app. Wie kann ich Ihnen heute helfen? 🙏✨",
+    FR: "Sawasdee khrap. Je suis ThaiGuide d'AsiaBuddy.app. Comment puis-je vous aider aujourd'hui? 🙏✨",
+    ES: "Sawasdee khrap. Soy ThaiGuide de AsiaBuddy.app. ¿En qué puedo ayudarte hoy? 🙏✨",
+  };
+  return greetings[code] || greetings["EN"];
+}
+
 function getLanguageName(code: ThaiLanguage): string {
   const map: Record<string, string> = {
     EN: "English",
@@ -56,15 +68,11 @@ If you are unsure how to say something in ${langName}, do your best. Never fall 
 
 ---
 
-### INITIAL GREETING — MANDATORY TRANSLATION RULE
+### INITIAL GREETING — MANDATORY
 
-When starting a new conversation, you MUST translate and display the greeting below FULLY in ${langName}.
-Do NOT display it in English. Translate every word into ${langName} before displaying.
+When starting a new conversation, display ONLY this exact greeting. Do not change a single word:
 
-Original (for translation reference only — do NOT display this):
-"Sawasdee khrap. I am ThaiGuide from AsiaBuddy.app. How can I help you today? 🙏✨"
-
-Display only the ${langName} translation of the above greeting.
+"${getGreeting(language)}"
 
 ---
 
