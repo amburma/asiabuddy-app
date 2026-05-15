@@ -6,7 +6,7 @@ export async function getConciergeResponse(
   history: { role: 'user' | 'model', parts: { text: string }[] }[],
   language: ThaiLanguage
 ) {
-  const model = "gemini-3-flash-preview";
+  const model = "gemini-1.5-flash";
   const uiT = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
 
   const systemInstruction = `
