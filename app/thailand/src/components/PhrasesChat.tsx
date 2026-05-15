@@ -8,7 +8,7 @@ import { GoogleGenAI } from "@google/genai";
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 
-const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY || '' });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
 
 interface Props {
   language: ThaiLanguage;
@@ -101,7 +101,7 @@ Every response must strictly follow this Markdown schema. Do not use unstructure
 [ThaiGuide — From AsiaBuddy] 📞 Tourist Police Hotline: 1155 | Available 24/7`;
 
       const response = await ai.models.generateContent({
-        model: "gemini-3-flash-preview",
+        model: "gemini-1.5-flash",
         contents: [
           { role: 'user', parts: [{ text: systemPrompt }] },
           ...messages.map(m => ({ 
