@@ -11,7 +11,7 @@ export async function getConciergeResponse(
   history: { role: 'user' | 'model', parts: { text: string }[] }[],
   language: ThaiLanguage
 ) {
-  const model = "gemini-2.0-flash-lite";
+  const model = "gemini-2.5-flash-lite";
   const uiT = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
 
   const systemInstruction = `
