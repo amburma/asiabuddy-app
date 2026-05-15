@@ -23,7 +23,7 @@ import { TRAVEL_STYLE_GUIDE } from './data/travelStyleGuide';
 import { SHOPPING_GUIDE_MARKDOWN } from './data/shoppingGuide';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
-import { Compass, MessageSquare, Map as MapIcon, ShieldCheck, Languages, Info, X, Bus, ChevronRight, Check, AlertCircle, Receipt, FileCheck, Menu, Grid, MessageCircle, Home, Utensils, Plane, Ticket, Stethoscope, Music, ShoppingBag, Calculator, Gavel, Briefcase, Phone, Mail, Globe } from 'lucide-react';
+import { Compass, MessageSquare, Map as MapIcon, ShieldCheck, Languages, Info, X, Bus, ChevronRight, Check, AlertCircle, Receipt, FileCheck, Menu, Grid, MessageCircle, Home, Utensils, Plane, Ticket, Stethoscope, Music, ShoppingBag, Calculator, Gavel, Briefcase, Phone, Mail, Globe, Facebook } from 'lucide-react';
 import TripPlannerChat from './components/TripPlannerChat';
 import MedicalChat from './components/MedicalChat';
 import NightlifeChat from './components/NightlifeChat';
@@ -597,6 +597,15 @@ export default function App() {
               {(t.footer || UI_TRANSLATIONS.EN.footer).tagline}
             </p>
             <div className="flex items-center gap-5 pt-2">
+              <a 
+                href="https://www.facebook.com/asiabuddyapp/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110" 
+                id="footer-facebook"
+              >
+                <Facebook size={18} />
+              </a>
               <a 
                 href="https://m.me/asiabuddyapp" 
                 target="_blank" 
