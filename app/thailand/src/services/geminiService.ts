@@ -1,15 +1,12 @@
 import { UI_TRANSLATIONS } from "../i18n";
-import { GoogleGenAI } from "@google/genai";
 import { ThaiLanguage } from "../types";
-
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export async function getConciergeResponse(
   message: string, 
   history: { role: 'user' | 'model', parts: { text: string }[] }[],
   language: ThaiLanguage
 ) {
-  const model = "gemini-1.5-flash";
+  const model = "gemini-3-flash-preview";
   const uiT = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
 
   const systemInstruction = `
@@ -91,19 +88,29 @@ Every response must strictly follow this Markdown schema. Do not use unstructure
   `;
 
   try {
-    const response = await ai.models.generateContent({
-      model,
-      contents: [
-        ...history,
-        { role: 'user', parts: [{ text: message }] }
-      ],
-      config: {
-        systemInstruction,
-        temperature: 0.7,
-      }
+    const res = await fetch("/api/gemini", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model,
+        contents: [
+          ...history,
+          { role: 'user', parts: [{ text: message }] }
+        ],
+        config: {
+          systemInstruction,
+          temperature: 0.7,
+        }
+      })
     });
 
-    return response.text || "I apologize, but I am unable to provide information at this time. Please check locally.";
+    if (!res.ok) {
+      const errData = await res.json();
+      throw new Error(errData.error || "Failed to fetch from Gemini API");
+    }
+
+    const data = await res.json();
+    return data.text || "I apologize, but I am unable to provide information at this time. Please check locally.";
   } catch (error) {
     console.error("Concierge Chat Error:", error);
     return "I encountered a difficulty. Please contact the Tourist Police at 1155 if this is urgent.";
