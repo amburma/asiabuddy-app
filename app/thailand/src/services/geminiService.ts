@@ -1,3 +1,4 @@
+import { GoogleGenAI } from "@google/genai";
 import { UI_TRANSLATIONS } from "../i18n";
 import { ThaiLanguage } from "../types";
 
@@ -88,29 +89,23 @@ Every response must strictly follow this Markdown schema. Do not use unstructure
   `;
 
   try {
-    const res = await fetch("/api/gemini", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model,
-        contents: [
-          ...history,
-          { role: 'user', parts: [{ text: message }] }
-        ],
-        config: {
-          systemInstruction,
-          temperature: 0.7,
-        }
-      })
+
+const ai = new GoogleGenAI({ 
+      apiKey: import.meta.env.VITE_GEMINI_API_KEY 
     });
+    const response = await ai.models.generateContent({
+      model,
+      contents: [
+        ...history,
+        { role: 'user', parts: [{ text: message }] }
+      ],
+      config: {
+        systemInstruction,
+        temperature: 0.7,
+      }
+    });
+    return response.text || "I apologize, but I am unable to provide information at this time.";
 
-    if (!res.ok) {
-      const errData = await res.json();
-      throw new Error(errData.error || "Failed to fetch from Gemini API");
-    }
-
-    const data = await res.json();
-    return data.text || "I apologize, but I am unable to provide information at this time. Please check locally.";
   } catch (error) {
     console.error("Concierge Chat Error:", error);
     return "I encountered a difficulty. Please contact the Tourist Police at 1155 if this is urgent.";
