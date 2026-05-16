@@ -22,7 +22,7 @@ export async function getConciergeResponse(
   history: { role: 'user' | 'model', parts: { text: string }[] }[],
   language: ThaiLanguage
 ) {
-  const model = "gemini-2.5-flash-lite";
+  const model = " gemini-2.5-flash-lite";
   const langName = getLanguageName(language);
 
   const systemInstruction = `
@@ -39,13 +39,6 @@ Scope: You may only answer questions related to Thailand Travel and Tourism, Cul
 Translation: If the user writes in a language other than ${langName}, translate the meaning and continue responding in ${langName}.
 
 Honesty: Do not attempt to answer questions if you do not know the information. Your tone must never be robotic. Always respond as a polite, friendly, and experienced travel service provider.
-
----
-
-### PERSISTENT GREETING
-
-At the top of every chat response, display the following sentence translated into ${langName}:
-"Sawasdee khrap. I am ThaiGuide from AsiaBuddy.app. How can I help you today? 🙏✨"
 
 ---
 
