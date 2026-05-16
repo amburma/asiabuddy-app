@@ -20,7 +20,8 @@ function getLanguageName(code: ThaiLanguage): string {
 export async function getConciergeResponse(
   message: string, 
   history: { role: 'user' | 'model', parts: { text: string }[] }[],
-  language: ThaiLanguage
+  language: ThaiLanguage,
+  systemContext?: string
 ) {
   const model = "gemini-2.5-flash-lite";
   const langName = getLanguageName(language);

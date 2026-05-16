@@ -174,7 +174,7 @@ export default function PhrasesChat({ language }: Props) {
                     <Sparkles size={32} />
                   </div>
                   <p className="text-[11px] text-gray-500 leading-relaxed uppercase tracking-widest font-medium">
-                    Ask anything about Thai phrases and language.
+		{uiT.tools?.phrasesEmptyText || 'Ask anything about Thai phrases and language.'}
                   </p>
                   <div className="flex flex-wrap justify-center gap-2">
                     {suggestedQuestions.map((q, idx) => (
