@@ -4,11 +4,10 @@ import { Volume2, Send, MessageSquare, Sparkles, User, Bot, Loader2, Play } from
 import { ESSENTIAL_PHRASES, TRAVELER_TIPS } from '../data/phrasesData';
 import { SUPPORTED_LANGUAGES, ThaiLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../i18n';
-import { GoogleGenAI } from "@google/genai";
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+import { getConciergeResponse } from '../services/geminiService';
 
 interface Props {
   language: ThaiLanguage;
@@ -46,76 +45,23 @@ export default function PhrasesChat({ language }: Props) {
     }
   };
 
-  const langLabel = SUPPORTED_LANGUAGES.find(l => l.code === language)?.label || 'ENGLISH';
-
   const handleSend = async (messageText?: string) => {
     const userMessage = messageText || input.trim();
     if (!userMessage) return;
 
     if (!messageText) setInput('');
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
-    setIsTyping(true);
+    isTyping || setIsTyping(true);
 
     try {
-      const systemPrompt = `You are ThaiGuide, a friendly and knowledgeable travel assistant for Thailand, created by AsiaBuddy.app. You assist tourists and travelers with all things related to Thailand: language, culture, food, transport, etiquette, safety, and practical travel tips.
+      const history = messages.map(m => ({ 
+        role: (m.role === 'user' ? 'user' : 'model') as 'user' | 'model', 
+        parts: [{ text: m.content }] 
+      }));
 
----
+      const systemContext = `Thai phrases, audio, and pronunciation guide`;
 
-## LANGUAGE POLICY
-
-**Primary Language:** Respond in ${langLabel} [${language}] at all times, unless the user explicitly writes in a different language.
-
-**Translation:** If the user provides text in another language (e.g., German or Burmese), translate the meaning into ${langLabel} [${language}] while maintaining the structured response format defined below.
-
----
-
-## RESPONSE FORMAT
-
-Every response must strictly follow this Markdown schema. Do not use unstructured prose. All content must fit within this structure.
-
-[Emoji] [Main Section Heading]
-"[Introductory sentence in ${langLabel}]"
-
-[Emoji] [Information Section]
-
-* **[Key Term]**: [Detailed description or information in ${langLabel}].
-
-* **[Key Term]**: [Detailed description or information in ${langLabel}].
-
-[Emoji] **Pro-Tip:** [Helpful tip in ${langLabel}]
-
-[ThaiGuide — From AsiaBuddy] 📞 Tourist Police Hotline: 1155 | Available 24/7
-
----
-
-## VISUAL HIERARCHY RULES — APPLY TO EVERY RESPONSE
-
-1. **Headings:** Use ### for the main topic title. Use #### for all subsection headings.
-2. **Emphasis:** Bold all key terms using **term**. Use *italics* for secondary emphasis only.
-3. **Separation:** Insert a horizontal rule (---) between distinct topics or sections.
-4. **Spacing:** Add one blank line between each bullet point block to ensure scannability and avoid dense text.
-5. **Bullet Structure:** Every bullet must follow the format — **[Subject]**: Description.
-6. **No Plain Paragraphs:** Do not respond with unstructured prose. All content must fit the schema above.
-7. **Closing Signature:** Append the following block at the end of every response:
-
-[ThaiGuide — From AsiaBuddy] 📞 Tourist Police Hotline: 1155 | Available 24/7`;
-
-      const response = await ai.models.generateContent({
-        model: "gemini-1.5-flash",
-        contents: [
-          { role: 'user', parts: [{ text: systemPrompt }] },
-          ...messages.map(m => ({ 
-            role: m.role === 'user' ? 'user' : 'model', 
-            parts: [{ text: m.content }] 
-          })),
-          { 
-            role: 'user', 
-            parts: [{ text: userMessage }] 
-          }
-        ]
-      });
-
-      const text = response.text || '';
+      const text = await getConciergeResponse(userMessage, history, language, systemContext);
       
       const thaiMatch = text.match(/[\u0E00-\u0E7F]+/);
       const pronMatch = text.match(/\[(.*?)\]/);
@@ -228,7 +174,7 @@ Every response must strictly follow this Markdown schema. Do not use unstructure
                     <Sparkles size={32} />
                   </div>
                   <p className="text-[11px] text-gray-500 leading-relaxed uppercase tracking-widest font-medium">
-                    Try asking about accommodations in Thailand
+                    Ask anything about Thai phrases and language.
                   </p>
                   <div className="flex flex-wrap justify-center gap-2">
                     {suggestedQuestions.map((q, idx) => (
@@ -328,3 +274,5 @@ Every response must strictly follow this Markdown schema. Do not use unstructure
     </div>
   );
 }
+
+
