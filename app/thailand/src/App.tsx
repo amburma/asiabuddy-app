@@ -305,22 +305,7 @@ export default function App() {
                 <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-700 italic">{t.chat.advice}</p>
               </div>
               <ConciergeChat language={language} />
-              
-              <div className="mt-12 p-6 glass-card bg-sacred-green/5 flex items-center justify-between border-sacred-green/10">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-white rounded-full text-sacred-green shadow-sm">
-                    <ShieldCheck size={20} />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-bold uppercase tracking-widest text-sacred-green">{t.touristPolice}</h4>
-                    <p className="text-[10px] text-gray-800 italic">{t.assistance}</p>
-                  </div>
-                </div>
-                <button className="px-6 py-2 bg-gold-deep text-white text-[10px] font-bold uppercase tracking-widest rounded-full hover:bg-sacred-green transition-colors shadow-md">
-                  {t.contactNow}
-                </button>
-              </div>
-            </motion.div>
+             </motion.div>
           )}
         </AnimatePresence>
       </main>
