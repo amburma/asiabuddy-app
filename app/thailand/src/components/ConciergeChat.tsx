@@ -92,20 +92,20 @@ export default function ConciergeChat({ language }: Props) {
           </div>
         )}
         
-        {messages.map((m, i) => (
+        {messages.map((message, i) => (
           <motion.div
             key={i}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div className={`max-w-[85%] rounded-2xl p-4 shadow-sm ${
-              m.role === 'user' 
+              message.role === 'user' 
                 ? 'bg-sacred-green text-white rounded-tr-none' 
                 : 'bg-white border border-gold-soft/30 text-gray-900 rounded-tl-none'
             }`}>
               <div className="prose prose-sm max-w-none prose-p:leading-relaxed prose-headings:font-serif prose-headings:text-sacred-green prose-hr:my-4 prose-hr:border-gold-soft/20">
-                <ReactMarkdown rehypePlugins={[rehypeRaw]}>{m.content}</ReactMarkdown>
+                <ReactMarkdown rehypePlugins={[rehypeRaw]}>{message.content}</ReactMarkdown>
               </div>
             </div>
           </motion.div>
