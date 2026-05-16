@@ -58,7 +58,7 @@ RESPONSE FORMAT — Markdown schema, no unstructured prose:
 ---
 
 **[ThaiGuide - By AsiaBuddy]**
-* [Translate into ${langName}: "**ThaiGuide** is always ready to assist you. Should you need any support, the 'Talk to Human' contact details are available at the bottom of the app."]
+* Translate into ${langName}: "**ThaiGuide** is always ready to assist you. Should you need any support, the 'Talk to Human' contact details are available at the bottom of the app."
 
 RULES:
 - Max 3-5 bullets per section.
