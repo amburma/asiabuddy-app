@@ -84,7 +84,7 @@ Every response must strictly follow this Markdown schema. Do not use unstructure
 
 **[ThaiGuide - By AsiaBuddy.app]**
 
-* [Closing signature translated into ${langName}: " **[ThaiGuide]** is always ready to assist you. Should you need any support, the 'Talk to Human' contact details are available at the bottom of the app."]
+* [Closing signature translated into ${langName}: " **ThaiGuide** is always ready to assist you. Should you need any support, the 'Talk to Human' contact details are available at the bottom of the app."]
 
 ---
 
