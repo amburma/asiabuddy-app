@@ -646,7 +646,12 @@ export default function App() {
 
       {/* Floating Concierge Icon */}
       <button
-        onClick={() => setActiveView('chat')}
+	onClick={() => {
+	  setActiveView('chat');
+	  setTimeout(() => {
+	    window.scrollTo({ top: 0, behavior: 'smooth' });
+	  }, 100);
+		}}
         className={`fixed bottom-8 left-8 z-50 p-4 rounded-full shadow-2xl transition-all duration-500 flex items-center gap-3 group ${
           activeView === 'chat' 
             ? 'bg-sacred-green text-white scale-90 opacity-50 pointer-events-none' 
