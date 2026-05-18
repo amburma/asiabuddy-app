@@ -889,14 +889,7 @@ export default function App() {
                     rehypePlugins={[rehypeRaw]}
                     components={MarkdownComponents}
                   >
-                    {(() => {
-                      const transportData = TRANSPORT_DETAILS[language] || TRANSPORT_DETAILS['EN'];
-                      // Show both guides if they exist
-                      return [
-                        transportData.fullGuideMarkdown,
-                        transportData.appsGuideMarkdown ? `\n\n---\n\n${transportData.appsGuideMarkdown}` : ''
-                      ].filter(Boolean).join('');
-                    })()}
+	{(TRANSPORT_DETAILS[language] || TRANSPORT_DETAILS['EN']).fullGuideMarkdown}
                   </ReactMarkdown>
                 </div>
               </div>
