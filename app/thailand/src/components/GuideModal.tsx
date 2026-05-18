@@ -1,3 +1,4 @@
+import MarkdownRenderer from './MarkdownRenderer';
 import { motion, AnimatePresence } from 'motion/react';
 import { X } from 'lucide-react';
 

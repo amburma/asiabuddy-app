@@ -1,3 +1,4 @@
+import MarkdownRenderer from './components/MarkdownRenderer';
 import GuideModal from './components/GuideModal';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -74,25 +75,14 @@ export default function App() {
   const uiT = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
 
   // Standardized Markdown components for all guides
-  const MarkdownComponents: any = {
-    h1: ({ node, ...props }: any) => <h1 className="text-2xl font-serif text-sacred-green mb-8 border-b border-gold-soft/20 pb-4 leading-tight" {...props} />,
-    h2: ({ node, ...props }: any) => <h2 className="text-lg font-serif text-sacred-green mt-12 mb-6 flex items-center gap-3 before:content-[''] before:w-1 before:h-6 before:bg-gold-deep before:rounded-full" {...props} />,
-    h3: ({ node, ...props }: any) => <h3 className="text-base font-bold uppercase tracking-widest text-gold-deep mt-8 mb-4 border-b border-gray-50 pb-2" {...props} />,
-    h4: ({ node, ...props }: any) => <h4 className="text-sm font-bold text-gray-800 mt-6 mb-2" {...props} />,
-    p: ({ node, ...props }: any) => <p className="text-xs text-gray-700 leading-relaxed mb-5" {...props} />,
-    ul: ({ node, ...props }: any) => <ul className="space-y-3 mb-6 list-none p-0" {...props} />,
-    li: ({ node, ...props }: any) => (
-      <li className="flex gap-3 text-xs text-gray-700 leading-relaxed">
-        <span className="text-gold-deep mt-1 flex-shrink-0">•</span>
-        <span {...props} />
-      </li>
-    ),
-    strong: ({ node, ...props }: any) => <strong className="font-bold text-gray-900 bg-gold-soft/10 px-1 rounded" {...props} />,
-    em: ({ node, ...props }: any) => <em className="italic text-gray-600 font-serif" {...props} />,
-    a: ({ node, ...props }: any) => <a {...props} target="_self" className="text-gold-deep hover:underline font-bold" />,
-    hr: ({ node, ...props }: any) => <hr className="my-12 border-gray-100" {...props} />,
-    u: ({ node, ...props }: any) => <span className="underline decoration-gold-soft/50 decoration-2 underline-offset-4" {...props} />
-  };
+
+<div className="markdown-body">
+  <MarkdownRenderer content={VAT_REFUND_GUIDE[language] || VAT_REFUND_GUIDE['EN']} />
+</div>
+
+<div className="markdown-body">
+  <MarkdownRenderer content={VISA_GUIDE[language] || VISA_GUIDE['EN']} />
+</div>
 
   const handleStart = (lang: ThaiLanguage) => {
     setLanguage(lang);
@@ -322,11 +312,11 @@ export default function App() {
   icon={<Plane size={20} />}
   footer="Comprehensive Travel Guide • AsiaBuddy Services"
 >
-  <div className="markdown-body mb-20">
-    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
-      {TRAVEL_STYLE_GUIDE[language] || TRAVEL_STYLE_GUIDE['EN']}
-    </ReactMarkdown>
-  </div>
+
+<div className="markdown-body mb-20">
+  <MarkdownRenderer content={TRAVEL_STYLE_GUIDE[language] || TRAVEL_STYLE_GUIDE['EN']} />
+</div>
+
   <div className="border-t border-gray-100 pt-12 pb-8">
     <TripPlannerChat language={language} />
   </div>
@@ -341,11 +331,11 @@ export default function App() {
   icon={<Stethoscope size={20} />}
   footer="Medical Tourism Guide • AsiaBuddy Services"
 >
-  <div className="markdown-body mb-20">
-    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
-      {MEDICAL_GUIDE_MARKDOWN[language] || MEDICAL_GUIDE_MARKDOWN['EN']}
-    </ReactMarkdown>
-  </div>
+
+<div className="markdown-body mb-20">
+  <MarkdownRenderer content={MEDICAL_GUIDE_MARKDOWN[language] || MEDICAL_GUIDE_MARKDOWN['EN']} />
+</div>
+
   <div className="border-t border-gray-100 pt-12 pb-8">
     <MedicalChat language={language} />
   </div>
@@ -360,11 +350,11 @@ export default function App() {
   icon={<Music size={20} />}
   footer="Nightlife Guide • AsiaBuddy Services"
 >
-  <div className="markdown-body mb-20">
-    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
-      {NIGHTLIFE_GUIDE_MARKDOWN[language] || NIGHTLIFE_GUIDE_MARKDOWN['EN']}
-    </ReactMarkdown>
-  </div>
+
+<div className="markdown-body mb-20">
+  <MarkdownRenderer content={NIGHTLIFE_GUIDE_MARKDOWN[language] || NIGHTLIFE_GUIDE_MARKDOWN['EN']} />
+</div>
+
   <div className="border-t border-gray-100 pt-12 pb-8">
     <NightlifeChat language={language} />
   </div>
@@ -378,11 +368,11 @@ export default function App() {
   icon={<ShoppingBag size={20} />}
   footer={`${uiT.footer?.shoppingGuide || 'Thailand Shopping Guide'} • ${uiT.footer?.by || 'AsiaBuddy Services'}`}
 >
-  <div className="markdown-body">
-    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
-      {SHOPPING_GUIDE_MARKDOWN[language] || SHOPPING_GUIDE_MARKDOWN['EN']}
-    </ReactMarkdown>
-  </div>
+
+<div className="markdown-body">
+  <MarkdownRenderer content={SHOPPING_GUIDE_MARKDOWN[language] || SHOPPING_GUIDE_MARKDOWN['EN']} />
+</div>
+
   <div className="mt-12 pt-12 border-t border-gray-100">
     <div className="mb-6">
       <h3 className="text-lg font-serif text-sacred-green">
@@ -506,11 +496,11 @@ export default function App() {
   icon={<Info size={20} />}
   footer="AsiaBuddy Services • Preserving Excellence in Thai Hospitality"
 >
-  <div className="markdown-body">
-    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
-      {GENERAL_INFORMATION[language] || GENERAL_INFORMATION['EN']}
-    </ReactMarkdown>
-  </div>
+
+<div className="markdown-body">
+  <MarkdownRenderer content={GENERAL_INFORMATION[language] || GENERAL_INFORMATION['EN']} />
+</div>
+
 </GuideModal>
 
       {/* Global VAT Refund Modal */}
@@ -552,11 +542,11 @@ export default function App() {
   icon={<Bus size={20} />}
   footer="Thailand Transport Guide • AsiaBuddy Services"
 >
-  <div className="markdown-body">
-    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
-      {(TRANSPORT_DETAILS[language] || TRANSPORT_DETAILS['EN']).fullGuideMarkdown}
-    </ReactMarkdown>
-  </div>
+
+<div className="markdown-body">
+  <MarkdownRenderer content={(TRANSPORT_DETAILS[language] || TRANSPORT_DETAILS['EN']).fullGuideMarkdown} />
+</div>
+
 </GuideModal>
 
 {/* Accommodation Modal */}
@@ -568,11 +558,11 @@ export default function App() {
   icon={<Home size={20} />}
   footer="Accommodation Guide for Travelers • AsiaBuddy Services"
 >
-  <div className="markdown-body">
-    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
-      {ACCOMMODATION_GUIDE[language] || ACCOMMODATION_GUIDE['EN']}
-    </ReactMarkdown>
-  </div>
+
+<div className="markdown-body">
+  <MarkdownRenderer content={ACCOMMODATION_GUIDE[language] || ACCOMMODATION_GUIDE['EN']} />
+</div>
+
   <div className="mt-12 pt-12 border-t border-gray-100">
     <div className="mb-6">
       <h3 className="text-lg font-serif text-sacred-green">
@@ -593,11 +583,11 @@ export default function App() {
   icon={<Utensils size={20} />}
   footer="Thailand Food Guide • AsiaBuddy Services"
 >
-  <div className="markdown-body">
-    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
-      {FOOD_GUIDE_MARKDOWN[language] || FOOD_GUIDE_MARKDOWN['EN']}
-    </ReactMarkdown>
-  </div>
+
+<div className="markdown-body">
+  <MarkdownRenderer content={FOOD_GUIDE_MARKDOWN[language] || FOOD_GUIDE_MARKDOWN['EN']} />
+</div>
+
   <div className="mt-12 pt-12 border-t border-gray-100">
     <div className="mb-6">
       <h3 className="text-lg font-serif text-sacred-green">
@@ -618,12 +608,12 @@ export default function App() {
   icon={<Compass size={20} />}
   footer={`${uiT.footer?.transportAppsGuide || 'Transportation Apps Guide'} • ${uiT.footer?.by || 'AsiaBuddy Services'}`}
 >
-  <div className="markdown-body">
-    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
-      {(TRANSPORT_DETAILS[language] || TRANSPORT_DETAILS['EN'])?.appsGuideMarkdown || 
-      (TRANSPORT_DETAILS['EN']?.appsGuideMarkdown || '')}
-    </ReactMarkdown>
-  </div>
+
+<div className="markdown-body">
+  <MarkdownRenderer content={(TRANSPORT_DETAILS[language] || TRANSPORT_DETAILS['EN'])?.appsGuideMarkdown || 
+    (TRANSPORT_DETAILS['EN']?.appsGuideMarkdown || '')} />
+</div>
+
 </GuideModal>
       {/* Menu Overlay */}
       <AnimatePresence>
