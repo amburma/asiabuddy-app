@@ -73,17 +73,11 @@ const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
 const uiT = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
 
 const handleStart = (lang: ThaiLanguage) => {
-    setLanguage(lang);
-    setHasStarted(true);
-    localStorage.setItem('thaiguide_target_lang', lang);
-    localStorage.setItem('thaiguide_has_started', 'true');
+  setLanguage(lang);
+  setHasStarted(true);
+  localStorage.setItem('thaiguide_target_lang', lang);
+  localStorage.setItem('thaiguide_has_started', 'true');
 };
-    setLanguage(lang);
-    setHasStarted(true);
-    localStorage.setItem('thaiguide_target_lang', lang);
-    localStorage.setItem('thaiguide_has_started', 'true');
-  };
-
 const handleResetLanguage = () => {
   setHasStarted(false);
   setLanguage('EN');
