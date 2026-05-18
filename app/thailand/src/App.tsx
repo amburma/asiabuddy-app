@@ -89,12 +89,25 @@ export default function App() {
     localStorage.setItem('thaiguide_has_started', 'true');
   };
 
-   const handleResetLanguage = () => {
+const handleResetLanguage = () => {
   setHasStarted(false);
-  setLanguage('EN'); // state ပါ reset လုပ်
+  setLanguage('EN');
   localStorage.removeItem('thaiguide_has_started');
-  localStorage.removeItem('thaiguide_target_lang'); // ဒါ ထပ်ဖြည့်
+  localStorage.removeItem('thaiguide_target_lang');
 };
+
+useEffect(() => {
+  const titles: Record<string, string> = {
+    EN: 'ThaiGuide – Thailand Travel Guide',
+    TH: 'ThaiGuide – คู่มือท่องเที่ยวไทย',
+    MM: 'ThaiGuide – ထိုင်းခရီးသွားလမ်းညွှန်',
+    ES: 'ThaiGuide – Guía de Viaje a Tailandia',
+    FR: 'ThaiGuide – Guide de Voyage en Thaïlande',
+    DE: 'ThaiGuide – Thailand Reiseführer',
+  };
+  document.title = titles[language] || 'ThaiGuide – Thailand Travel Guide';
+}, [language]);
+
 
   if (!hasStarted) {
     return <LanguageWelcome onStart={handleStart} />;
@@ -143,7 +156,7 @@ export default function App() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative h-[50vh] flex items-center justify-center overflow-hidden bg-sacred-green/5">
+      <section className="relative min-h-[40vh] flex items-center justify-center overflow-hidden bg-sacred-green/5">
         <div className="absolute inset-0 z-0">
           <img 
             src="https://thutatravel.com/wp-content/uploads/2026/04/Gemini_Generated_Image_rrwlx8rrwlx8rrwl.png"
