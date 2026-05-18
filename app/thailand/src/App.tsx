@@ -1,6 +1,6 @@
 import MarkdownRenderer from './components/MarkdownRenderer';
 import GuideModal from './components/GuideModal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThaiLanguage } from './types';
 import EmergencyBanner from './components/EmergencyBanner';
@@ -23,8 +23,6 @@ import { VAT_REFUND_GUIDE } from './data/vatRefundGuide';
 import { VISA_GUIDE } from './data/visaGuide';
 import { TRAVEL_STYLE_GUIDE } from './data/travelStyleGuide';
 import { SHOPPING_GUIDE_MARKDOWN } from './data/shoppingGuide';
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
 import { Compass, MessageSquare, Map as MapIcon, ShieldCheck, Languages, Info, X, Bus, ChevronRight, Check, AlertCircle, Receipt, FileCheck, Menu, Grid, MessageCircle, Home, Utensils, Plane, Ticket, Stethoscope, Music, ShoppingBag, Calculator, Gavel, Briefcase, Phone, Mail, Globe, Facebook } from 'lucide-react';
 import TripPlannerChat from './components/TripPlannerChat';
 import MedicalChat from './components/MedicalChat';
