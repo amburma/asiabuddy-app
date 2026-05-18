@@ -69,20 +69,15 @@ export default function App() {
   const [showChecklist, setShowChecklist] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
 
-  const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
-  const uiT = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
+const t = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
+const uiT = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
 
-  // Standardized Markdown components for all guides
-
-<div className="markdown-body">
-  <MarkdownRenderer content={VAT_REFUND_GUIDE[language] || VAT_REFUND_GUIDE['EN']} />
-</div>
-
-<div className="markdown-body">
-  <MarkdownRenderer content={VISA_GUIDE[language] || VISA_GUIDE['EN']} />
-</div>
-
-  const handleStart = (lang: ThaiLanguage) => {
+const handleStart = (lang: ThaiLanguage) => {
+    setLanguage(lang);
+    setHasStarted(true);
+    localStorage.setItem('thaiguide_target_lang', lang);
+    localStorage.setItem('thaiguide_has_started', 'true');
+};
     setLanguage(lang);
     setHasStarted(true);
     localStorage.setItem('thaiguide_target_lang', lang);
@@ -315,6 +310,7 @@ useEffect(() => {
       </main>
 
 {/* Global Travel Types Modal */}
+
 <GuideModal
   isOpen={showTravelTypesModal}
   onClose={() => setShowTravelTypesModal(false)}
@@ -323,11 +319,9 @@ useEffect(() => {
   icon={<Plane size={20} />}
   footer="Comprehensive Travel Guide • AsiaBuddy Services"
 >
-
-<div className="markdown-body mb-20">
-  <MarkdownRenderer content={TRAVEL_STYLE_GUIDE[language] || TRAVEL_STYLE_GUIDE['EN']} />
-</div>
-
+  <div className="markdown-body mb-20">
+    <MarkdownRenderer content={TRAVEL_STYLE_GUIDE[language] || TRAVEL_STYLE_GUIDE['EN']} />
+  </div>
   <div className="border-t border-gray-100 pt-12 pb-8">
     <TripPlannerChat language={language} />
   </div>
