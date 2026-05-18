@@ -1,3 +1,4 @@
+import GuideModal from './components/GuideModal';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThaiLanguage } from './types';
@@ -729,63 +730,20 @@ export default function App() {
       </AnimatePresence>
 
       {/* Global VAT Refund Modal */}
-      <AnimatePresence>
-        {showVatModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowVatModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
-            >
-              <div className="p-6 bg-sacred-bg border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gold-deep/10 flex items-center justify-center text-gold-deep">
-                    <Receipt size={20} />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-sacred-green leading-none mb-1">
-                      {(UI_TRANSLATIONS[language]?.vatRefund || UI_TRANSLATIONS.EN.vatRefund).title}
-                    </h2>
-                    <p className="text-[10px] text-gray-500 font-medium uppercase tracking-tighter text-gold-deep">
-                      Customs & Money Back
-                    </p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowVatModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <div className="flex-grow overflow-y-auto p-8 scroll-smooth bg-white scrollbar-thin scrollbar-thumb-gold-soft scrollbar-track-transparent">
-                <div className="markdown-body">
-                  <ReactMarkdown 
-                    rehypePlugins={[rehypeRaw]}
-                    components={MarkdownComponents}
-                  >
-                    {VAT_REFUND_GUIDE[language] || VAT_REFUND_GUIDE['EN']}
-                  </ReactMarkdown>
-                </div>
-              </div>
-              
-              <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-center italic text-[10px] text-gray-400">
-                VAT Refund Guide for Travelers &bull; AsiaBuddy Services
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
+<GuideModal
+  isOpen={showVatModal}
+  onClose={() => setShowVatModal(false)}
+  title={(UI_TRANSLATIONS[language]?.vatRefund || UI_TRANSLATIONS.EN.vatRefund).title}
+  subtitle="Customs & Money Back"
+  icon={<Receipt size={20} />}
+  footer="VAT Refund Guide for Travelers • AsiaBuddy Services"
+>
+  <div className="markdown-body">
+    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
+      {VAT_REFUND_GUIDE[language] || VAT_REFUND_GUIDE['EN']}
+    </ReactMarkdown>
+  </div>
+</GuideModal>
       {/* Global Visa Modal */}
       <AnimatePresence>
         {showVisaModal && (
