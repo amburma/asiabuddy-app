@@ -100,10 +100,12 @@ export default function App() {
     localStorage.setItem('thaiguide_has_started', 'true');
   };
 
-  const handleResetLanguage = () => {
-    setHasStarted(false);
-    localStorage.removeItem('thaiguide_has_started');
-  };
+   const handleResetLanguage = () => {
+  setHasStarted(false);
+  setLanguage('EN'); // state ပါ reset လုပ်
+  localStorage.removeItem('thaiguide_has_started');
+  localStorage.removeItem('thaiguide_target_lang'); // ဒါ ထပ်ဖြည့်
+};
 
   if (!hasStarted) {
     return <LanguageWelcome onStart={handleStart} />;
