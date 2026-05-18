@@ -313,257 +313,86 @@ export default function App() {
         </AnimatePresence>
       </main>
 
-      {/* Global Travel Types Modal */}
-      <AnimatePresence>
-        {showTravelTypesModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowTravelTypesModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
-            >
-              <div className="p-6 bg-sacred-bg border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gold-deep/10 flex items-center justify-center text-gold-deep">
-                    <Plane size={20} />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-sacred-green leading-none mb-1">
-                      {(uiT.travelTypes as any)?.modalTitle || 'Comprehensive Guide to Traveling in Thailand'}
-                    </h2>
-                    <p className="text-[10px] text-gray-500 font-medium uppercase tracking-tighter text-gold-deep">
-                      {(uiT.travelTypes as any)?.modalSubtitle || 'Travel Styles & Planner'}
-                    </p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowTravelTypesModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600"
-                >
-                  <X size={20} />
-                </button>
-              </div>
+{/* Global Travel Types Modal */}
+<GuideModal
+  isOpen={showTravelTypesModal}
+  onClose={() => setShowTravelTypesModal(false)}
+  title={(uiT.travelTypes as any)?.modalTitle || 'Comprehensive Guide to Traveling in Thailand'}
+  subtitle={(uiT.travelTypes as any)?.modalSubtitle || 'Travel Styles & Planner'}
+  icon={<Plane size={20} />}
+  footer="Comprehensive Travel Guide • AsiaBuddy Services"
+>
+  <div className="markdown-body mb-20">
+    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
+      {TRAVEL_STYLE_GUIDE[language] || TRAVEL_STYLE_GUIDE['EN']}
+    </ReactMarkdown>
+  </div>
+  <div className="border-t border-gray-100 pt-12 pb-8">
+    <TripPlannerChat language={language} />
+  </div>
+</GuideModal>
 
-              <div className="flex-grow overflow-y-auto p-8 scroll-smooth bg-white scrollbar-thin scrollbar-thumb-gold-soft scrollbar-track-transparent">
-                <div className="markdown-body mb-20">
-                  <ReactMarkdown 
-                    rehypePlugins={[rehypeRaw]}
-                    components={MarkdownComponents}
-                  >
-                    {TRAVEL_STYLE_GUIDE[language] || TRAVEL_STYLE_GUIDE['EN']}
-                  </ReactMarkdown>
-                </div>
+{/* Global Medical Guide Modal */}
+<GuideModal
+  isOpen={showMedicalModal}
+  onClose={() => setShowMedicalModal(false)}
+  title={uiT.medical?.modalTitle || 'The Ultimate Thailand Medical Guide'}
+  subtitle={uiT.medical?.modalSubtitle || 'Healthcare, Checkups & Preparation'}
+  icon={<Stethoscope size={20} />}
+  footer="Medical Tourism Guide • AsiaBuddy Services"
+>
+  <div className="markdown-body mb-20">
+    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
+      {MEDICAL_GUIDE_MARKDOWN[language] || MEDICAL_GUIDE_MARKDOWN['EN']}
+    </ReactMarkdown>
+  </div>
+  <div className="border-t border-gray-100 pt-12 pb-8">
+    <MedicalChat language={language} />
+  </div>
+</GuideModal>
 
-                <div className="border-t border-gray-100 pt-12 pb-8">
-                   <TripPlannerChat language={language} />
-                </div>
-              </div>
-              
-              <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-center italic text-[10px] text-gray-400">
-                Comprehensive Travel Guide &bull; AsiaBuddy Services
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* Global Medical Guide Modal */}
-      <AnimatePresence>
-        {showMedicalModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowMedicalModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
-            >
-              <div className="p-6 bg-sacred-bg border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gold-deep/10 flex items-center justify-center text-gold-deep">
-                    <Stethoscope size={20} />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-sacred-green leading-none mb-1">
-                      {uiT.medical?.modalTitle || 'The Ultimate Thailand Medical Guide'}
-                    </h2>
-                    <p className="text-[10px] text-gray-500 font-medium uppercase tracking-tighter text-gold-deep">
-                      {uiT.medical?.modalSubtitle || 'Healthcare, Checkups & Preparation'}
-                    </p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowMedicalModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <div className="flex-grow overflow-y-auto p-8 scroll-smooth bg-white scrollbar-thin scrollbar-thumb-gold-soft scrollbar-track-transparent">
-                <div className="markdown-body mb-20">
-                  <ReactMarkdown 
-                    rehypePlugins={[rehypeRaw]}
-                    components={MarkdownComponents}
-                  >
-                    {MEDICAL_GUIDE_MARKDOWN[language] || MEDICAL_GUIDE_MARKDOWN['EN']}
-                  </ReactMarkdown>
-                </div>
-
-                <div className="border-t border-gray-100 pt-12 pb-8">
-                   <MedicalChat language={language} />
-                </div>
-              </div>
-              
-              <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-center italic text-[10px] text-gray-400">
-                Medical Tourism Guide &bull; AsiaBuddy Services
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* Global Nightlife Guide Modal */}
-      <AnimatePresence>
-        {showNightlifeModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowNightlifeModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
-            >
-              <div className="p-6 bg-sacred-bg border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gold-deep/10 flex items-center justify-center text-gold-deep">
-                    <Music size={20} />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-sacred-green leading-none mb-1">
-                      {uiT.nightlife?.modalTitle || 'The Ultimate Thailand Nightlife Guide'}
-                    </h2>
-                    <p className="text-[10px] text-gray-500 font-medium uppercase tracking-tighter text-gold-deep">
-                      {uiT.nightlife?.modalSubtitle || 'Clubs, Bars & Safety'}
-                    </p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowNightlifeModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <div className="flex-grow overflow-y-auto p-8 scroll-smooth bg-white scrollbar-thin scrollbar-thumb-gold-soft scrollbar-track-transparent">
-                <div className="markdown-body mb-20">
-                  <ReactMarkdown 
-                    rehypePlugins={[rehypeRaw]}
-                    components={MarkdownComponents}
-                  >
-                    {NIGHTLIFE_GUIDE_MARKDOWN[language] || NIGHTLIFE_GUIDE_MARKDOWN['EN']}
-                  </ReactMarkdown>
-                </div>
-
-                <div className="border-t border-gray-100 pt-12 pb-8">
-                   <NightlifeChat language={language} />
-                </div>
-              </div>
-              
-              <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-center italic text-[10px] text-gray-400">
-                Nightlife Guide &bull; AsiaBuddy Services
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* Global Shopping Guide Modal */}
-      <AnimatePresence>
-        {showShoppingModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowShoppingModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
-            >
-              <div className="p-6 bg-sacred-bg border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gold-deep flex items-center justify-center text-white shadow-lg">
-                    <ShoppingBag size={20} />
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-bold uppercase tracking-widest text-sacred-green leading-none mb-1">
-                      {uiT.shopping?.modalTitle || 'Comprehensive Thailand Shopping Guide'}
-                    </h3>
-                    <p className="text-[10px] text-gray-500 font-medium tracking-tight">
-                      {uiT.shopping?.modalSubtitle || 'Malls & Local Markets'}
-                    </p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowShoppingModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <div className="flex-grow overflow-y-auto p-8 scroll-smooth no-scrollbar bg-white max-w-none">
-                <div className="markdown-body">
-                  <ReactMarkdown 
-                    rehypePlugins={[rehypeRaw]}
-                    components={MarkdownComponents}
-                  >
-                    {SHOPPING_GUIDE_MARKDOWN[language] || SHOPPING_GUIDE_MARKDOWN['EN']}
-                  </ReactMarkdown>
-                </div>
-
-                <div className="mt-12 pt-12 border-t border-gray-100">
-                  <div className="mb-6">
-                    <h3 className="text-lg font-serif text-sacred-green">{uiT.shopping?.title || 'Ask any Thailand Shopping you want to know.'}</h3>
-                    <div className="w-12 h-1 bg-gold-deep mt-2 rounded-full" />
-                  </div>
-                  <ShoppingChat language={language} />
-                </div>
-              </div>
-              
-              <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-center italic text-[10px] text-gray-400">
-                {uiT.footer?.shoppingGuide || 'Thailand Shopping Guide'} &bull; {uiT.footer?.by}
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+{/* Global Nightlife Guide Modal */}
+<GuideModal
+  isOpen={showNightlifeModal}
+  onClose={() => setShowNightlifeModal(false)}
+  title={uiT.nightlife?.modalTitle || 'The Ultimate Thailand Nightlife Guide'}
+  subtitle={uiT.nightlife?.modalSubtitle || 'Clubs, Bars & Safety'}
+  icon={<Music size={20} />}
+  footer="Nightlife Guide • AsiaBuddy Services"
+>
+  <div className="markdown-body mb-20">
+    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
+      {NIGHTLIFE_GUIDE_MARKDOWN[language] || NIGHTLIFE_GUIDE_MARKDOWN['EN']}
+    </ReactMarkdown>
+  </div>
+  <div className="border-t border-gray-100 pt-12 pb-8">
+    <NightlifeChat language={language} />
+  </div>
+</GuideModal>
+{/* Global Shopping Guide Modal */}
+<GuideModal
+  isOpen={showShoppingModal}
+  onClose={() => setShowShoppingModal(false)}
+  title={uiT.shopping?.modalTitle || 'Comprehensive Thailand Shopping Guide'}
+  subtitle={uiT.shopping?.modalSubtitle || 'Malls & Local Markets'}
+  icon={<ShoppingBag size={20} />}
+  footer={`${uiT.footer?.shoppingGuide || 'Thailand Shopping Guide'} • ${uiT.footer?.by || 'AsiaBuddy Services'}`}
+>
+  <div className="markdown-body">
+    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
+      {SHOPPING_GUIDE_MARKDOWN[language] || SHOPPING_GUIDE_MARKDOWN['EN']}
+    </ReactMarkdown>
+  </div>
+  <div className="mt-12 pt-12 border-t border-gray-100">
+    <div className="mb-6">
+      <h3 className="text-lg font-serif text-sacred-green">
+        {uiT.shopping?.title || 'Ask any Thailand Shopping you want to know.'}
+      </h3>
+      <div className="w-12 h-1 bg-gold-deep mt-2 rounded-full" />
+    </div>
+    <ShoppingChat language={language} />
+  </div>
+</GuideModal>
 
       <div className="mt-20">
         <EmergencyBanner 
@@ -669,65 +498,20 @@ export default function App() {
       </button>
 
       {/* Global Information Modal */}
-      <AnimatePresence>
-        {showInfoModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowInfoModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
-            >
-              {/* Header */}
-              <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-sacred-bg/50">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-gold-deep flex items-center justify-center text-white shadow-lg shadow-gold-deep/20">
-                    <Info size={20} />
-                  </div>
-                  <div>
-                    <h2 className="text-lg font-bold uppercase tracking-widest text-sacred-green leading-none mb-1">
-                      {uiT.infoModalTitle || 'Thailand Essentials Guide'}
-                    </h2>
-                    <p className="text-[10px] text-gray-500 font-medium lowercase italic">
-                      {uiT.infoModalSubtitle || 'Practical guidance for your stay'}
-                    </p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowInfoModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-400 hover:text-gray-600"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              {/* Content */}
-              <div className="flex-1 overflow-y-auto p-8 scrollbar-thin scrollbar-thumb-gold-soft scrollbar-track-transparent bg-white">
-                <div className="markdown-body">
-                  <ReactMarkdown 
-                    rehypePlugins={[rehypeRaw]}
-                    components={MarkdownComponents}
-                  >
-                    {GENERAL_INFORMATION[language] || GENERAL_INFORMATION['EN']}
-                  </ReactMarkdown>
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-center italic text-[10px] text-gray-400">
-                AsiaBuddy Services &bull; Preserving Excellence in Thai Hospitality
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+<GuideModal
+  isOpen={showInfoModal}
+  onClose={() => setShowInfoModal(false)}
+  title={uiT.infoModalTitle || 'Thailand Essentials Guide'}
+  subtitle={uiT.infoModalSubtitle || 'Practical guidance for your stay'}
+  icon={<Info size={20} />}
+  footer="AsiaBuddy Services • Preserving Excellence in Thai Hospitality"
+>
+  <div className="markdown-body">
+    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
+      {GENERAL_INFORMATION[language] || GENERAL_INFORMATION['EN']}
+    </ReactMarkdown>
+  </div>
+</GuideModal>
 
       {/* Global VAT Refund Modal */}
 <GuideModal
@@ -759,249 +543,88 @@ export default function App() {
     </ReactMarkdown>
   </div>
 </GuideModal>
-      {/* Global Transport Modal */}
-      <AnimatePresence>
-        {showTransportModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowTransportModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
-            >
-              <div className="p-6 bg-sacred-bg border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gold-deep/10 flex items-center justify-center text-gold-deep">
-                    <Bus size={20} />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-sacred-green leading-none mb-1">
-                      {uiT.transport?.modalTitle || 'Thailand Nationwide Transport Guide'}
-                    </h2>
-                    <p className="text-[10px] text-gray-500 font-medium uppercase tracking-tighter text-gold-deep">
-                      {uiT.transport?.modalSubtitle || 'Transportation'}
-                    </p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowTransportModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <X size={20} />
-                </button>
-              </div>
+{/* Global Transport Modal */}
+<GuideModal
+  isOpen={showTransportModal}
+  onClose={() => setShowTransportModal(false)}
+  title={uiT.transport?.modalTitle || 'Thailand Nationwide Transport Guide'}
+  subtitle={uiT.transport?.modalSubtitle || 'Transportation'}
+  icon={<Bus size={20} />}
+  footer="Thailand Transport Guide • AsiaBuddy Services"
+>
+  <div className="markdown-body">
+    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
+      {(TRANSPORT_DETAILS[language] || TRANSPORT_DETAILS['EN']).fullGuideMarkdown}
+    </ReactMarkdown>
+  </div>
+</GuideModal>
 
-              <div className="flex-grow overflow-y-auto p-8 scroll-smooth no-scrollbar bg-white max-w-none">
-                <div className="markdown-body">
-                  <ReactMarkdown 
-                    rehypePlugins={[rehypeRaw]}
-                    components={MarkdownComponents}
-                  >
-	{(TRANSPORT_DETAILS[language] || TRANSPORT_DETAILS['EN']).fullGuideMarkdown}
-                  </ReactMarkdown>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+{/* Accommodation Modal */}
+<GuideModal
+  isOpen={showAccommodationModal}
+  onClose={() => setShowAccommodationModal(false)}
+  title={uiT.accommodation?.modalTitle || 'Comprehensive Guide to Accommodations in Thailand'}
+  subtitle={uiT.accommodation?.detailsTitle || 'Accommodations'}
+  icon={<Home size={20} />}
+  footer="Accommodation Guide for Travelers • AsiaBuddy Services"
+>
+  <div className="markdown-body">
+    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
+      {ACCOMMODATION_GUIDE[language] || ACCOMMODATION_GUIDE['EN']}
+    </ReactMarkdown>
+  </div>
+  <div className="mt-12 pt-12 border-t border-gray-100">
+    <div className="mb-6">
+      <h3 className="text-lg font-serif text-sacred-green">
+        {uiT.accommodation?.title}
+      </h3>
+      <div className="w-12 h-1 bg-gold-deep mt-2 rounded-full" />
+    </div>
+    <AccommodationChat language={language} />
+  </div>
+</GuideModal>
 
-      {/* Accommodation Modal */}
-      <AnimatePresence>
-        {showAccommodationModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowAccommodationModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
-            >
-              <div className="p-6 bg-sacred-bg border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gold-deep/10 flex items-center justify-center text-gold-deep">
-                    <Home size={20} />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-sacred-green leading-none mb-1">
-                      {uiT.accommodation?.modalTitle || 'Comprehensive Guide to Accommodations in Thailand'}
-                    </h2>
-                    <p className="text-[10px] text-gray-500 font-medium uppercase tracking-tighter text-gold-deep">
-                      {uiT.accommodation?.detailsTitle || 'Accommodations'}
-                    </p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowAccommodationModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <X size={20} />
-                </button>
-              </div>
+{/* Food Modal */}
+<GuideModal
+  isOpen={showFoodModal}
+  onClose={() => setShowFoodModal(false)}
+  title={uiT.food?.modalTitle || 'The Ultimate Thailand Food Guide: From Michelin Stars to Street Eats'}
+  subtitle={uiT.food?.detailsTitle || 'Food Guide'}
+  icon={<Utensils size={20} />}
+  footer="Thailand Food Guide • AsiaBuddy Services"
+>
+  <div className="markdown-body">
+    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
+      {FOOD_GUIDE_MARKDOWN[language] || FOOD_GUIDE_MARKDOWN['EN']}
+    </ReactMarkdown>
+  </div>
+  <div className="mt-12 pt-12 border-t border-gray-100">
+    <div className="mb-6">
+      <h3 className="text-lg font-serif text-sacred-green">
+        {uiT.food?.title || 'Ask any Thailand Food you want to know.'}
+      </h3>
+      <div className="w-12 h-1 bg-gold-deep mt-2 rounded-full" />
+    </div>
+    <FoodChat language={language} />
+  </div>
+</GuideModal>
 
-              <div className="flex-grow overflow-y-auto p-8 scroll-smooth no-scrollbar bg-white max-w-none">
-                <div className="markdown-body">
-                  <ReactMarkdown 
-                    rehypePlugins={[rehypeRaw]}
-                    components={MarkdownComponents}
-                  >
-                    {ACCOMMODATION_GUIDE[language] || ACCOMMODATION_GUIDE['EN']}
-                  </ReactMarkdown>
-                </div>
-
-                <div className="mt-12 pt-12 border-t border-gray-100">
-                  <div className="mb-6">
-                    <h3 className="text-lg font-serif text-sacred-green">{uiT.accommodation?.title}</h3>
-                    <div className="w-12 h-1 bg-gold-deep mt-2 rounded-full" />
-                  </div>
-                  <AccommodationChat language={language} />
-                </div>
-              </div>
-              
-              <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-center italic text-[10px] text-gray-400">
-                Accommodation Guide for Travelers &bull; AsiaBuddy Services
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* Food Modal */}
-      <AnimatePresence>
-        {showFoodModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowFoodModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
-            >
-              <div className="p-6 bg-sacred-bg border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gold-deep/10 flex items-center justify-center text-gold-deep">
-                    <Utensils size={20} />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-sacred-green leading-none mb-1">
-                      {uiT.food?.modalTitle || 'The Ultimate Thailand Food Guide: From Michelin Stars to Street Eats'}
-                    </h2>
-                    <p className="text-[10px] text-gray-500 font-medium uppercase tracking-tighter text-gold-deep">
-                      {uiT.food?.detailsTitle || 'Food Guide'}
-                    </p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowFoodModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <div className="flex-grow overflow-y-auto p-8 scroll-smooth no-scrollbar bg-white max-w-none">
-                <div className="markdown-body">
-                  <ReactMarkdown 
-                    rehypePlugins={[rehypeRaw]}
-                    components={MarkdownComponents}
-                  >
-                    {FOOD_GUIDE_MARKDOWN[language] || FOOD_GUIDE_MARKDOWN['EN']}
-                  </ReactMarkdown>
-                </div>
-
-                <div className="mt-12 pt-12 border-t border-gray-100">
-                  <div className="mb-6">
-                    <h3 className="text-lg font-serif text-sacred-green">{uiT.food?.title || 'Ask any Thailand Food you want to know.'}</h3>
-                    <div className="w-12 h-1 bg-gold-deep mt-2 rounded-full" />
-                  </div>
-                  <FoodChat language={language} />
-                </div>
-              </div>
-              
-              <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-center italic text-[10px] text-gray-400">
-                Thailand Food Guide &bull; AsiaBuddy Services
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-
-      {/* Essential Apps Modal */}
-      <AnimatePresence>
-        {showAppsModal && (
-          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowAppsModal(false)}
-              className="absolute inset-0 bg-black/60 backdrop-blur-md"
-            />
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
-            >
-              <div className="p-6 bg-sacred-bg border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gold-deep/10 flex items-center justify-center text-gold-deep">
-                    <Compass size={20} />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-bold uppercase tracking-widest text-sacred-green leading-none mb-1">
-                      Essential Apps & Tools
-                    </h2>
-                    <p className="text-[10px] text-gray-500 font-medium uppercase tracking-tighter text-gold-deep">
-                      {uiT.transport?.detailsTitle || 'Transportation'}
-                    </p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setShowAppsModal(false)}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              <div className="flex-grow overflow-y-auto p-8 scroll-smooth no-scrollbar bg-white max-w-none">
-                <div className="markdown-body">
-                  <ReactMarkdown 
-                    rehypePlugins={[rehypeRaw]}
-                    components={MarkdownComponents}
-                  >
-                    {(TRANSPORT_DETAILS[language] || TRANSPORT_DETAILS['EN'])?.appsGuideMarkdown || (TRANSPORT_DETAILS['EN']?.appsGuideMarkdown || '')}
-                  </ReactMarkdown>
-                </div>
-              </div>
-              
-              <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 flex justify-center italic text-[10px] text-gray-400">
-                {uiT.footer?.transportAppsGuide || 'Transportation Apps Guide'} &bull; {uiT.footer?.by}
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+{/* Essential Apps Modal */}
+<GuideModal
+  isOpen={showAppsModal}
+  onClose={() => setShowAppsModal(false)}
+  title="Essential Apps & Tools"
+  subtitle={uiT.transport?.detailsTitle || 'Transportation'}
+  icon={<Compass size={20} />}
+  footer={`${uiT.footer?.transportAppsGuide || 'Transportation Apps Guide'} • ${uiT.footer?.by || 'AsiaBuddy Services'}`}
+>
+  <div className="markdown-body">
+    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
+      {(TRANSPORT_DETAILS[language] || TRANSPORT_DETAILS['EN'])?.appsGuideMarkdown || 
+      (TRANSPORT_DETAILS['EN']?.appsGuideMarkdown || '')}
+    </ReactMarkdown>
+  </div>
+</GuideModal>
       {/* Menu Overlay */}
       <AnimatePresence>
         {showMenu && (
