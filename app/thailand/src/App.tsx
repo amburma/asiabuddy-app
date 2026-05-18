@@ -510,12 +510,9 @@ useEffect(() => {
   subtitle="Customs & Money Back"
   icon={<Receipt size={20} />}
   footer="VAT Refund Guide for Travelers • AsiaBuddy Services"
->
-  <div className="markdown-body">
-    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
-      {VAT_REFUND_GUIDE[language] || VAT_REFUND_GUIDE['EN']}
-    </ReactMarkdown>
-  </div>
+><div className="markdown-body">
+  <MarkdownRenderer content={VAT_REFUND_GUIDE[language] || VAT_REFUND_GUIDE['EN']} />
+</div>
 </GuideModal>
       {/* Global Visa Modal */}
 <GuideModal
@@ -526,11 +523,9 @@ useEffect(() => {
   icon={<FileCheck size={20} />}
   footer="Essential Thai Travel Visa Guide • AsiaBuddy Services"
 >
-  <div className="markdown-body">
-    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
-      {VISA_GUIDE[language] || VISA_GUIDE['EN']}
-    </ReactMarkdown>
-  </div>
+<div className="markdown-body">
+  <MarkdownRenderer content={VISA_GUIDE[language] || VISA_GUIDE['EN']} />
+</div>
 </GuideModal>
 {/* Global Transport Modal */}
 <GuideModal
