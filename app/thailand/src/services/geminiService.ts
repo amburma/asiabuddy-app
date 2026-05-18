@@ -82,8 +82,27 @@ RULES:
       }
     });
     return response.text || "I apologize, but I am unable to provide information at this time.";
-  } catch (error) {
+} catch (error: any) {
     console.error("Concierge Chat Error:", error);
-    return "I encountered a difficulty. Please contact the Tourist Police at 1155 if this is urgent.";
+    
+    if (error?.message?.includes('429') || 
+        error?.message?.includes('RESOURCE_EXHAUSTED') ||
+        error?.message?.includes('quota')) {
+      return language === 'MM' 
+        ? "⚠️ ယနေ့အတွက် အသုံးပြုမှု ကန့်သတ်ချက် ပြည့်သွားပါပြီ။ မနက်ဖြန် ပြန်လည်ကြိုးစားပါ။ မေတ္တာရပ်ခံပါသည်။ 🙏"
+        : language === 'TH'
+        ? "⚠️ ถึงขีดจำกัดการใช้งานประจำวันแล้ว กรุณาลองใหม่พรุ่งนี้ ขอบคุณสำหรับความอดทน 🙏"
+        : language === 'DE'
+        ? "⚠️ Tageslimit erreicht. Bitte versuchen Sie es morgen erneut. Danke für Ihre Geduld. 🙏"
+        : language === 'FR'
+        ? "⚠️ Limite quotidienne atteinte. Veuillez réessayer demain. Merci de votre patience. 🙏"
+        : language === 'ES'
+        ? "⚠️ Límite diario alcanzado. Por favor, inténtelo mañana. Gracias por su paciencia. 🙏"
+        : "⚠️ Daily usage limit reached. Please try again tomorrow. Thank you for your patience. 🙏";
+    }
+    
+    return language === 'MM'
+      ? "တစ်စုံတစ်ရာ အခက်အခဲဖြစ်သွားပါသည်။ ခဏကြာပြီး ထပ်စမ်းကြည့်ပါ။ 🙏"
+      : "Something went wrong. Please try again shortly. 🙏";
   }
 }
