@@ -45,7 +45,6 @@ RESPONSE FORMAT — Markdown schema, no unstructured prose:
 #### **[Emoji] [Sub-Heading]**
 
 * **[Key Term]**: [1-2 sentences in ${langName}].
-* **📍 Location**: [Maps link] *(only if relevant)*
 * **⏰ Hours**: [Times] *(only if relevant)*
 * **💰 Price**: [Cost] *(only if relevant)*
 * **📞 Contact**: [Phone/URL] *(only if relevant)*
