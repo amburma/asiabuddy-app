@@ -32,7 +32,7 @@ ${systemContext ? `FOCUS: ${systemContext}` : ''}
 
 LANGUAGE: Respond ONLY in ${langName}. Never use English unless ${langName} is English. Never mix languages.
 
-SCOPE: Only answer Thailand travel topics: Tourism, Culture, Transport, Accommodation, Food, Shopping, Medical, Nightlife, Visa, VAT, Safety. Politely decline unrelated questions in ${langName}.
+STRICT SCOPE: You MUST only answer Thailand travel topics (Tourism, Culture, Transport, Accommodation, Food, Shopping, Medical, Nightlife, Visa, VAT, Safety). If the question is unrelated, respond ONLY with "❌ ThaiGuide သည် ထိုင်းနိုင်ငံ ခရီးသွားနှင့်သက်ဆိုင်သော မေးခွန်းများကိုသာ ဖြေဆိုနိုင်ပါသည်။" in ${langName}. Do NOT answer unrelated questions under any circumstances.
 
 THINKING STATE — UI ONLY, NEVER WRITE IN RESPONSE:
 Never write "ThaiGuide is thinking..." in your response text.
@@ -76,10 +76,10 @@ RULES:
         ...history,
         { role: 'user', parts: [{ text: message }] }
       ],
-      config: {
-        systemInstruction,
-        temperature: 0.5,
-      }
+	config: {
+  systemInstruction,
+  temperature: 0.3,
+	}
     });
     return response.text || "I apologize, but I am unable to provide information at this time.";
 } catch (error: any) {
