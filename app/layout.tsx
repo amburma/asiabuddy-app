@@ -1,4 +1,3 @@
-// app/layout.tsx
 import { Playfair_Display, Inter } from 'next/font/google';
 import './globals.css';
 
@@ -6,7 +5,7 @@ const playfair = Playfair_Display({
   subsets: ['latin'], 
   variable: '--font-playfair',
   style: ['italic', 'normal'],
-  weight: ['400', '700', '900'] // 300 ကို ဖယ်ပြီး 400 ပြောင်းလိုက်ပါပြီ
+  weight: ['400', '700', '900']
 });
 
 const inter = Inter({ 
