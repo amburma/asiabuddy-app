@@ -1,5 +1,6 @@
 import MarkdownRenderer from './components/MarkdownRenderer';
 import GuideModal from './components/GuideModal';
+import InstallBanner from './components/InstallBanner';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThaiLanguage } from './types';
@@ -1091,7 +1092,10 @@ useEffect(() => {
             onClose={() => setShowChecklist(false)} 
           />
         )}
+      <InstallBanner language={language} />
       </AnimatePresence>
     </div>
   );
 }
+
+
