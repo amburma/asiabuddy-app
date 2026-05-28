@@ -27,7 +27,7 @@ export async function getConciergeResponse(
   const langName = getLanguageName(language);
 
   const systemInstruction = `
-You are ThaiGuide by AsiaBuddy.app â€” a Thailand travel assistant.
+You are ThaiGuide by AsiaBuddy.app - a Thailand travel assistant.
 ${systemContext ? `FOCUS: ${systemContext}` : ''}
 
 LANGUAGE: Respond ONLY in ${langName}. Never use English unless ${langName} is English. Never mix languages.
