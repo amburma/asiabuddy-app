@@ -10,7 +10,7 @@ export interface ChatMessage {
 export async function translateToMyanmar(text: string): Promise<string> {
   const prompt = `Translate the following text to Myanmar (Burmese) language. Return only the translated text without any explanation:\n\n${text}`;
   const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash",
+    model: "gemini-2.5-flash-lite",
     contents: [{ role: "user", parts: [{ text: prompt }] }]
   });
   return response.text || "";
