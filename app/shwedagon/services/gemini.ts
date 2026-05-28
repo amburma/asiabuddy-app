@@ -1,20 +1,20 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
-const ai = new GoogleGenerativeAI(apiKey);
+const ai = new GoogleGenAI({ apiKey });
 
 export interface ChatMessage {
   role: "user" | "model";
   text: string;
 }
-export async function translateToMyanmar(text: string, messages?: any[], langName?: string): Promise<string> {
-  const model = ai.getGenerativeModel({ model: "gemini-pro" });
+export async function translateToMyanmar(text: string): Promise<string> {
   const prompt = `Translate the following text to Myanmar (Burmese) language. Return only the translated text without any explanation:\n\n${text}`;
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  return response.text();
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-flash",
+    contents: [{ role: "user", parts: [{ text: prompt }] }]
+  });
+  return response.text || "";
 }
-
 export async function chatWithAmbassador(
   message: string,
   history: ChatMessage[],
@@ -56,7 +56,7 @@ Formatting Rules:
     });
 
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash-lite",
       contents: contents,
       config: {
         systemInstruction: systemInstruction,
