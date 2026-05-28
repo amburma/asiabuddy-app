@@ -3,6 +3,7 @@ import InstallBanner from './components/InstallBanner';
 import IOSInstallBanner from './components/IOSInstallBanner';
 import MarkdownRenderer from './components/MarkdownRenderer';
 import GuideModal from './components/GuideModal';
+import InstallBanner from './components/InstallBanner';
 import { useState, useEffect } from 'react';
 import InstallBanner from './components/InstallBanner';
 import { motion, AnimatePresence } from 'motion/react';
@@ -1095,9 +1096,12 @@ useEffect(() => {
             onClose={() => setShowChecklist(false)} 
           />
         )}
+      <InstallBanner language={language} />
       </AnimatePresence>
     <InstallBanner language={language} />
           <IOSInstallBanner language={language} />
     </div>
   );
 }
+
+
