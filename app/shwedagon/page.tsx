@@ -1289,8 +1289,15 @@ function EmergencySection({ t, setActiveSection }: { t: (k: string) => string, s
                   <Info size={20} className="text-gold-soft group-hover:scale-110 transition-transform" />
                   {t('moreInfoBtn')}
                 </Button>
-              }
-            />
+            <DialogTrigger asChild>
+  <Button
+    variant="outline"
+    className="w-full flex items-center ju...
+  >
+    <Info size={20} className="text-gold-s...
+    {t('moreInfoBtn')}
+  </Button>
+</DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[85vh] w-[95vw] rounded-3xl p-0 overflow-hidden flex flex-col border-gold-soft/20 shadow-2xl">
               <div className="bg-gold-deep p-6 text-white">
                 <DialogHeader>
