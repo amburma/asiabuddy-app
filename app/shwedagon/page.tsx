@@ -1294,7 +1294,7 @@ function EmergencySection({ t, setActiveSection }: { t: (k: string) => string, s
     variant="outline"
     className="w-full flex items-center ju...
   >
-    <Info size={20} className="text-gold-s...
+<Info size={20} className="text-gold-soft group-hover:scale-110 transition-transform" />
     {t('moreInfoBtn')}
   </Button>
 </DialogTrigger>
