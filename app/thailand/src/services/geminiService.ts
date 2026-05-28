@@ -23,7 +23,7 @@ export async function getConciergeResponse(
   language: ThaiLanguage,
   systemContext?: string,
 ) {
-  const model = "gemini-2.0-flash";
+  const model = "gemini-2.5-flash-lite";
   const langName = getLanguageName(language);
 
   const outOfScope: Record<string, string> = {
