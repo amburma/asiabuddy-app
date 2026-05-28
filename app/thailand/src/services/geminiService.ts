@@ -1,4 +1,4 @@
-﻿import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI } from "@google/genai";
 import { ThaiLanguage } from "../types";
 
 const ai = new GoogleGenAI({ 
