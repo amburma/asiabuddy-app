@@ -1326,9 +1326,9 @@ className="w-full flex items-center justify-center gap-2 py-6 rounded-2xl border
     </Button>
   </DialogClose>
 </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+          </DialogContent>
+        </Dialog>
+      </div>
 
         {/* Home Button to return to Menu */}
         <div className="pt-8 pb-4">
