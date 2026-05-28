@@ -14,8 +14,7 @@ export default defineConfig({
       scope: '/thailand/',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        navigateFallback: '/thailand/',
-        navigateFallbackDenylist: [/^\/api\//],
+        navigateFallback: null,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/generativelanguage\.googleapis\.com\/.*/i,
@@ -46,7 +45,7 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'ThaiGuide – Thailand Travel Guide',
+        name: 'ThaiGuide \u2013 Thailand Travel Guide',
         short_name: 'ThaiGuide',
         description: 'Your complete Thailand travel companion by AsiaBuddy Services',
         start_url: '/thailand/',
@@ -55,20 +54,20 @@ export default defineConfig({
         orientation: 'portrait',
         background_color: '#ffffff',
         theme_color: '#B59410',
-icons: [
-  {
-    src: '/thailand/icons/icon-192x192.png',
-    sizes: '192x192',
-    type: 'image/png',
-    purpose: 'maskable any',
-  },
-  {
-    src: '/thailand/icons/icon-512x512.png',
-    sizes: '512x512',
-    type: 'image/png',
-    purpose: 'maskable any',
-  },
-],
+        icons: [
+          {
+            src: '/thailand/icons/icon-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable any',
+          },
+          {
+            src: '/thailand/icons/icon-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable any',
+          },
+        ],
       },
     }),
   ],

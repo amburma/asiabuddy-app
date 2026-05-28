@@ -4,20 +4,23 @@ const ENGLISH_GUIDE = `# Essential Thai Travel Visa Guide
 
 ---
 
-## 60-Day Visa Exemption
+## VISA RULES CHANGED (May 2026)
 
-To promote tourism, the Thai government allows citizens from 93 countries, including Myanmar, to enter Thailand for up to 60 days without a prior visa application.
+The 60-day visa-free stay has been officially cancelled by the Thai government starting May 2026.
 
-*   **Period of Stay**: Exactly 60 days starting from the date of arrival.
-*   **Purpose of Visit**: Valid for tourism, business negotiations, or short-term meetings only.
+| | Old Rule | New Rule |
+|---|---|---|
+| **Stay Duration** | 60 days | 30 days |
+| **Eligible Countries** | 93 countries | 54 countries |
+| **Land Entries** | Unlimited | Only 2 per year |
 
 ---
 
 ## Visa Extension
 
-If you wish to stay longer than 60 days, you can apply for an additional 30-day extension at any Immigration Office within Thailand.
+If you wish to stay longer than 30 days, you can apply for an extension at any Immigration Office within Thailand.
 
-***Important Note***: *Once the total stay reaches 90 days, you must depart the country. If you wish to return, you must re-enter under a new entry permit.*
+***Important Note***: *Extensions are no longer automatic and are now entirely at the officer's discretion.*
 
 ---
 
@@ -67,12 +70,15 @@ export const VISA_GUIDE: Record<ThaiLanguage, string> = {
 
 ---
 
-## การยกเว้นวีซ่า 60 วัน
+## การเปลี่ยนแปลงกฎวีซ่า (พฤษภาคม 2026)
 
-เพื่อส่งเสริมการท่องเที่ยว รัฐบาลไทยอนุญาตให้พลเมืองจาก 93 ประเทศ รวมถึงเมียนมา เข้าประเทศไทยได้นานถึง 60 วันโดยไม่ต้องขอวีซ่าล่วงหน้า
+ไทยได้ยกเลิกการยกเว้นวีซ่า 60 วัน อย่างเป็นทางการ
 
-*   **ระยะเวลาพำนัก**: 60 วันพอดี นับจากวันที่เดินทางมาถึง
-*   **วัตถุประสงค์การเยี่ยมชม**: ใช้สำหรับเพื่อการท่องเที่ยว การเจรจาธุรกิจ หรือการประชุมระยะสั้นเท่านั้น
+| | กฎเดิม | กฎใหม่ |
+|---|---|---|
+| **ระยะเวลาพัก** | 60 วัน | 30 วัน |
+| **ประเทศที่มีสิทธิ์** | 93 ประเทศ | 54 ประเทศ |
+| **เข้าทางบก** | ไม่จำกัด | 2 ครั้ง/ปี |
 
 ---
 
@@ -126,12 +132,15 @@ export const VISA_GUIDE: Record<ThaiLanguage, string> = {
 
 ---
 
-## **၁။ ရက်ပေါင်း ၆၀ ဗီဇာကင်းလွတ်ခွင့်**
+## **၁။ နိုင်ငံတကာ ဗီဇာ ကင်းလွတ်ခွင့် ပြောင်းလဲမှု (မေ ၂၀၂၆)
 
-ခရီးသွားလုပ်ငန်းကို မြှင့်တင်ရန်အတွက် ထိုင်းအစိုးရသည် မြန်မာနိုင်ငံအပါအဝင် နိုင်ငံပေါင်း ၉၃ နိုင်ငံမှ နိုင်ငံသားများကို ကြိုတင်ဗီဇာလျှောက်ထားရန်မလိုဘဲ ရက်ပေါင်း ၆၀ အထိ ထိုင်းနိုင်ငံသို့ ဝင်ရောက်ခွင့်ပြုထားသည်။
+ထိုင်းနိုင်ငံသည် ၆၀ ရက် ဗီဇာကင်းလွတ်ခွင့်ကို ဖျက်သိမ်းလိုက်ပြီး အောက်ပါအတိုင်း ပြောင်းလဲသွားပါသည်။
 
-*   **နေထိုင်ခွင့်ကာလ**: ဆိုက်ရောက်သည့်နေ့မှစ၍ ရက်ပေါင်း ၆၀ တိတိ။
-*   **လာရောက်သည့်ရည်ရွယ်ချက်**: ခရီးသွားလာခြင်း၊ စီးပွားရေးဆွေးနွေးခြင်း သို့မဟုတ် ရေတိုအစည်းအဝေးများအတွက်သာ အကျုံးဝင်သည်။
+| | ဟောင်းသော စည်းမျဉ်း | အသစ်သော စည်းမျဉ်း |
+|---|---|---|
+| **နေထိုင်ခွင့်** | ၆၀ ရက် | ၃၀ ရက် |
+| **နိုင်ငံအရေအတွက်** | ၉၃ နိုင်ငံ | ၅၄ နိုင်ငံ |
+| **ကုန်းလမ်း ဝင်ခွင့်** | အကန့်အသတ်မရှိ | တစ်နှစ် ၂ ကြိမ်သာ |
 
 ---
 
@@ -185,12 +194,15 @@ export const VISA_GUIDE: Record<ThaiLanguage, string> = {
 
 ---
 
-## 60-tägige Visumbefreiung
+## Visaregeln geändert (Mai 2026)
 
-Um den Tourismus zu fördern, erlaubt die thailändische Regierung Bürgern aus 93 Ländern, einschließlich Deutschland, die Einreise nach Thailand für bis zu 60 Tage ohne vorherige Visumsbeantragung.
+Thailand hat die 60-tägige visafreie Einreise offiziell abgeschafft.
 
-*   **Aufenthaltsdauer**: Genau 60 Tage ab dem Datum der Ankunft.
-*   **Zweck des Besuchs**: Gilt nur für Tourismus, geschäftliche Verhandlungen oder kurzfristige Treffen.
+| | Alte Regel | Neue Regel |
+|---|---|---|
+| **Aufenthaltsdauer** | 60 Tage | 30 Tage |
+| **Berechtigte Länder** | 93 Länder | 54 Länder |
+| **Landeinreisen** | Unbegrenzt | Nur 2 pro Jahr |
 
 ---
 
@@ -244,12 +256,15 @@ Die Visabestimmungen können sich aufgrund politischer oder gesundheitlicher Sit
 
 ---
 
-## Exención de Visa de 60 Días
+## Cambio en las reglas de visa (Mayo 2026)
 
-Para promover el turismo, el gobierno tailandés permite que ciudadanos de 93 países entren a Tailandia por hasta 60 días sin una solicitud de visa previa.
+Tailandia ha cancelado oficialmente la exención de visa de 60 días.
 
-*   **Periodo de Estancia**: Exactamente 60 días a partir de la fecha de llegada.
-*   **Propósito de la Visita**: Válido únicamente para turismo, negociaciones comerciales o reuniones de corto plazo.
+| | Regla anterior | Nueva regla |
+|---|---|---|
+| **Duración de estancia** | 60 días | 30 días |
+| **Países elegibles** | 93 países | 54 países |
+| **Entradas terrestres** | Ilimitadas | Solo 2 por año |
 
 ---
 
@@ -304,12 +319,15 @@ Las regulaciones de visa están sujetas a cambios en cualquier momento según la
 
 ---
 
-## Exemption de Visa de 60 Jours
+## Changement des règles de visa (Mai 2026)
 
-Pour promouvoir le tourisme, le gouvernement thaïlandais autorise les citoyens de 93 pays à entrer en Thaïlande pour une durée maximale de 60 jours sans demande de visa préalable.
+La Thaïlande a officiellement annulé l'exemption de visa de 60 jours.
 
-*   **Durée du Séjour** : Exactement 60 jours à compter de la date d'arrivée.
-*   **Motif de la Visite** : Valable uniquement pour le tourisme, les négociations commerciales ou les réunions de courte durée.
+| | Ancienne règle | Nouvelle règle |
+|---|---|---|
+| **Durée de séjour** | 60 jours | 30 jours |
+| **Pays éligibles** | 93 pays | 54 pays |
+| **Entrées terrestres** | Illimitées | 2 par an |
 
 ---
 

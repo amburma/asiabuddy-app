@@ -1,6 +1,10 @@
+import InstallBanner from './components/InstallBanner';
+import InstallBanner from './components/InstallBanner';
+import IOSInstallBanner from './components/IOSInstallBanner';
 import MarkdownRenderer from './components/MarkdownRenderer';
 import GuideModal from './components/GuideModal';
 import { useState, useEffect } from 'react';
+import InstallBanner from './components/InstallBanner';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThaiLanguage } from './types';
 import EmergencyBanner from './components/EmergencyBanner';
@@ -1092,6 +1096,8 @@ useEffect(() => {
           />
         )}
       </AnimatePresence>
+    <InstallBanner language={language} />
+          <IOSInstallBanner language={language} />
     </div>
   );
 }
