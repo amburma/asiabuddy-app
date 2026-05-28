@@ -7,6 +7,13 @@ export interface ChatMessage {
   role: "user" | "model";
   text: string;
 }
+export async function translateToMyanmar(text: string): Promise<string> {
+  const model = ai.getGenerativeModel({ model: "gemini-pro" });
+  const prompt = `Translate the following text to Myanmar (Burmese) language. Return only the translated text without any explanation:\n\n${text}`;
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  return response.text();
+}
 
 export async function chatWithAmbassador(
   message: string,
