@@ -1236,17 +1236,15 @@ function EmergencySection({ t, setActiveSection }: { t: (k: string) => string, s
         {/* Foreign Embassies Button & Modal */}
         <div className="pt-2">
           <Dialog>
-            <DialogTrigger
-              render={
-                <Button 
-                  variant="outline" 
-                  className="w-full flex items-center justify-center gap-2 py-6 rounded-2xl border-gold-soft/30 text-gold-deep hover:bg-gold-soft/10 hover:border-gold-soft transition-all font-bold shadow-sm group"
-                >
-                  <MapPin size={20} className="text-gold-soft group-hover:scale-110 transition-transform" />
-                  {t('foreignEmbassies')}
-                </Button>
-              }
-            />
+            <DialogTrigger asChild>
+  <Button 
+    variant="outline" 
+    className="w-full flex items-center justify-center gap-2 py-6 rounded-2xl border-gold-soft/30 text-gold-deep hover:bg-gold-soft/10 hover:border-gold-soft transition-all font-bold shadow-sm group"
+  >
+    <MapPin size={20} className="text-gold-soft group-hover:scale-110 transition-transform" />
+    {t('foreignEmbassies')}
+  </Button>
+</DialogTrigger>
             <DialogContent className="max-w-2xl max-h-[85vh] w-[95vw] rounded-3xl p-0 overflow-hidden flex flex-col border-gold-soft/20 shadow-2xl">
               <div className="bg-gold-deep p-6 text-white">
                 <DialogHeader>
