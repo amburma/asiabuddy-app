@@ -1289,7 +1289,7 @@ function EmergencySection({ t, setActiveSection }: { t: (k: string) => string, s
                   <Info size={20} className="text-gold-soft group-hover:scale-110 transition-transform" />
                   {t('moreInfoBtn')}
                 </Button>
-            <DialogTrigger asChild>
+            
   <Button
     variant="outline"
 className="w-full flex items-center justify-center gap-2 py-6 rounded-2xl border-gold-soft/30 text-gold-deep hover:bg-gold-soft/10 hover:border-gold-soft transition-all font-bold shadow-sm group"
