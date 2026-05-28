@@ -1280,8 +1280,8 @@ function EmergencySection({ t, setActiveSection }: { t: (k: string) => string, s
         {/* More Information Button & Modal */}
         <div className="pt-2">
           <Dialog>
-            <DialogTrigger
-              render={
+            <DialogTrigger asChild>
+              
                 <Button 
                   variant="outline" 
                   className="w-full flex items-center justify-center gap-2 py-6 rounded-2xl border-gold-soft/30 text-gold-deep hover:bg-gold-soft/10 hover:border-gold-soft transition-all font-bold shadow-sm group"
@@ -1313,11 +1313,11 @@ function EmergencySection({ t, setActiveSection }: { t: (k: string) => string, s
               </div>
 
               <div className="p-4 border-t border-gold-soft/10 bg-white flex justify-end">
-                <DialogClose render={
-                  <Button variant="ghost" className="rounded-xl text-gray-500 hover:text-gold-deep">
-                    Close
-                  </Button>
-                } />
+                <DialogClose asChild>
+  <Button variant="ghost" className="rounded-xl text-gray-500 hover:text-gray-700">
+    Close
+  </Button>
+</DialogClose>
               </div>
             </DialogContent>
           </Dialog>
