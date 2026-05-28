@@ -2,7 +2,11 @@
   "rewrites": [
     {
       "source": "/thailand/:path*",
-      "destination": "https://asiabuddy-app-k8ps.vercel.app/:path*"
+      "destination": "https://asiabuddy-thailand-vite.vercel.app/:path*"
+    },
+    {
+      "source": "/thailand",
+      "destination": "https://asiabuddy-thailand-vite.vercel.app"
     }
   ]
 }
