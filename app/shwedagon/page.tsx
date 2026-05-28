@@ -1320,12 +1320,12 @@ className="w-full flex items-center justify-center gap-2 py-6 rounded-2xl border
               </div>
 
               <div className="p-4 border-t border-gold-soft/10 bg-white flex justify-end">
-                <DialogClose asChild>
-  <Button variant="ghost" className="rounded-xl text-gray-500 hover:text-gold-deep">
-    Close
-  </Button>
-</DialogClose>
-              </div>
+  <DialogClose asChild>
+    <Button variant="ghost" className="rounded-xl text-gray-500 hover:text-gold-deep">
+      Close
+    </Button>
+  </DialogClose>
+</div>
             </DialogContent>
           </Dialog>
         </div>
