@@ -118,7 +118,7 @@ export default function App() {
   useEffect(() => {
     if (isAROpen && videoRef.current) {
       navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-          .then(stream => {
+          
   .then(stream => {
     if (videoRef.current) videoRef.current.srcObject = stream;
   })
