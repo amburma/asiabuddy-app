@@ -1,4 +1,11 @@
 @import "tailwindcss";
+@theme {
+  --color-sacred-bg: #FDFCF0;
+  --color-sacred-green: #2D4A3E;
+  --color-gold-deep: #D4AF37;
+  --color-gold-light: #F4E7B5;
+  --color-gold-soft: #d4b94a;
+}
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500&display=swap');
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
