@@ -1,7 +1,7 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || "";
-const ai = new GoogleGenerativeAI(apiKey);
+const ai = new GoogleGenAI({ apiKey });
 
 export interface ChatMessage {
   role: "user" | "model";
@@ -9,10 +9,12 @@ export interface ChatMessage {
 }
 
 export async function translateToMyanmar(text: string, messages?: any[], langName?: string): Promise<string> {
-  const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
   const prompt = `Translate the following text to Myanmar (Burmese) language. Return only the translated text without any explanation:\n\n${text}`;
-  const result = await model.generateContent(prompt);
-  return result.response.text();
+  const response = await ai.models.generateContent({
+    model: "gemini-1.5-flash",
+    contents: prompt,
+  });
+  return response.text ?? "";
 }
 
 export async function chatWithAmbassador(
@@ -37,22 +39,26 @@ Formatting Rules:
 - Keep answers engaging, highly informative, structured with logical bullet points or paragraphs, and spiritually respectful yet intensely practical.
 - Use clean Markdown tags where appropriate. Do not use complex HTML layout structures.`;
 
-  const model = ai.getGenerativeModel({
-    model: "gemini-1.5-flash",
-    systemInstruction: systemInstruction,
-  });
-
-  const chat = model.startChat({
-    history: history.map((msg) => ({
+  const contents = [
+    ...history.map((msg) => ({
       role: msg.role,
       parts: [{ text: msg.text }],
     })),
-    generationConfig: {
+    {
+      role: "user" as const,
+      parts: [{ text: message }],
+    },
+  ];
+
+  const response = await ai.models.generateContent({
+    model: "gemini-1.5-flash",
+    contents,
+    config: {
+      systemInstruction,
       temperature: 0.35,
       maxOutputTokens: 1500,
     },
   });
 
-  const result = await chat.sendMessage(message);
-  return result.response.text();
+  return response.text ?? "";
 }
