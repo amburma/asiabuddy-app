@@ -65,7 +65,7 @@ const Pagoda = ({ size = 24, className = "" }: { size?: number; className?: stri
     <path d="M6.5 18l1-2h9l1 2" />
     {/* The Bell (Anda) */}
     <path d="M8.5 16c0-3.5 1.5-6 3.5-6s3.5 2.5 3.5 6" />
-    {/* Spire (Hti) and Crown */}
+
     <path d="M12 10v-2" />
     <path d="M10 8h4" />
     <path d="M10.5 7h3" />
@@ -118,7 +118,7 @@ export default function App() {
   useEffect(() => {
     if (isAROpen && videoRef.current) {
       navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-        .then(stream => {
+
           if (videoRef.current) videoRef.current.srcObject = stream;
         })
         .catch(err => console.error("AR Camera error:", err));
