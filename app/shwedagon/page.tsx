@@ -118,9 +118,10 @@ export default function App() {
   useEffect(() => {
     if (isAROpen && videoRef.current) {
       navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-
-          if (videoRef.current) videoRef.current.srcObject = stream;
-        })
+          .then(stream => {
+  .then(stream => {
+    if (videoRef.current) videoRef.current.srcObject = stream;
+  })
         .catch(err => console.error("AR Camera error:", err));
     } else if (!isAROpen && videoRef.current && videoRef.current.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;
