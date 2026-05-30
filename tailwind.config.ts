@@ -13,7 +13,8 @@ const config: Config = {
         "sacred-green": "#2D4A3E",
         "gold-deep": "#D4AF37",
         "gold-light": "#F4E7B5",
-        "gold-soft": "#d4b94a",   // ← ဒါ ထည့်ပါ
+        "gold-soft": "#d4b94a",
+        "cream": "#FFF8E7",
       },
       fontFamily: {
         serif: ["var(--font-geist-mono)", "serif"],

@@ -1,4 +1,10 @@
+/* ၁။ ပြင်ပမှ ခေါ်ယူမည့် Google Fonts (@import) များကို ဖိုင်၏ ထိပ်ဆုံးတွင် အရင်ထားရပါမည် */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500&display=swap');
+
+/* ၂။ ထို့နောက်မှ Tailwind core engine ကို ခေါ်ယူရပါမည် */
 @import "tailwindcss";
+
+/* ၃။ Tailwind v4 ၏ Theme customization ကို သတ်မှတ်ရပါမည် */
 @theme {
   --color-sacred-bg: #FDFCF0;
   --color-sacred-green: #2D4A3E;
@@ -6,194 +12,17 @@
   --color-gold-light: #F4E7B5;
   --color-gold-soft: #d4b94a;
 }
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500&display=swap');
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body { 
-    background: #0a0c10; 
-    overflow-x: hidden; 
-    color: #ffffff;
+/* ၄။ Global Base CSS Styling များကို အောက်ဆုံးတွင် ထားရှိရပါမည် */
+* { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
 }
 
-.hero {
-    position: relative;
-    min-height: 100vh;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-image: url('/AB_Web_Background.jpg');
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
-    overflow: hidden;
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, 
-        rgba(0, 0, 0, 0.55) 0%, 
-        rgba(0, 0, 0, 0.65) 40%, 
-        rgba(0, 0, 0, 0.82) 75%,
-        rgba(0, 0, 0, 0.95) 100%);
-    z-index: 1;
-}
-
-.hero-content {
-    position: relative;
-    z-index: 10;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    width: 100%;
-    max-width: 1000px;
-    padding: 0 24px;
-}
-
-.tagline-small {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    font-family: 'Cinzel', serif;
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.6em;
-    text-transform: uppercase;
-    color: #FFD700;
-    margin-bottom: 28px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-}
-
-.tagline-small::before,
-.tagline-small::after {
-    content: '';
-    width: 50px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, #D4AF37, transparent);
-}
-
-.hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(42px, 7vw, 82px);
-    font-weight: 400;
-    font-style: italic;
-    line-height: 1.15;
-    color: #ffffff;
-    margin-bottom: 24px;
-    text-shadow: 
-        0px 2px 4px rgba(0,0,0,0.9),
-        0px 4px 20px rgba(0,0,0,0.8),
-        0px 8px 40px rgba(0,0,0,0.6);
-    letter-spacing: 0.02em;
-}
-
-.hero-title span {
-    font-style: normal;
-    font-weight: 600;
-    color: #FFD700;
-    text-shadow: 
-        0px 2px 4px rgba(0,0,0,0.9),
-        0px 0px 20px rgba(212, 175, 55, 0.4);
-}
-
-.hero-subtitle {
-    font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.92);
-    max-width: 600px;
-    line-height: 1.9;
-    margin-bottom: 55px;
-    letter-spacing: 0.03em;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-}
-
-.country-section {
-    width: 100%;
-}
-
-.country-label {
-    font-family: 'Cinzel', serif;
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.5em;
-    text-transform: uppercase;
-    color: #FFD700;
-    margin-bottom: 30px;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-}
-
-.country-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    justify-content: center;
-}
-
-.country-btn {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px 36px;
-    background: linear-gradient(135deg, 
-        rgba(212, 175, 55, 0.2) 0%, 
-        rgba(255, 255, 255, 0.1) 100%);
-    border: 1px solid rgba(212, 175, 55, 0.6);
-    color: #ffffff;
-    font-family: 'Cinzel', serif;
-    font-size: 14px;
-    font-weight: 500;
-    letter-spacing: 0.15em;
-    text-decoration: none;
-    cursor: pointer;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 50px;
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    box-shadow: 
-        0 4px 20px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-    position: relative;
-    overflow: hidden;
-}
-
-.country-btn:hover {
-    border-color: #FFD700;
-    background: linear-gradient(135deg, 
-        rgba(212, 175, 55, 0.35) 0%, 
-        rgba(255, 215, 0, 0.15) 100%);
-    transform: translateY(-4px);
-    box-shadow: 
-        0 12px 40px rgba(212, 175, 55, 0.3),
-        0 4px 15px rgba(0, 0, 0, 0.5);
-    color: #FFE88A;
-}
-
-.country-btn.blank {
-    min-width: 130px;
-    min-height: 54px;
-    background: rgba(255, 255, 255, 0.03);
-    border-color: rgba(255, 255, 255, 0.08);
-    cursor: default;
-    opacity: 0.25;
-    pointer-events: none;
-}
-
-.flag { 
-    font-size: 22px;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-}
-
-@media (max-width: 600px) {
-    .hero-title { font-size: 36px; }
-    .hero-subtitle { font-size: 14px; margin-bottom: 40px; }
-    .country-btn { padding: 14px 28px; font-size: 13px; }
-    .tagline-small { font-size: 10px; letter-spacing: 0.4em; }
+body {
+  background-color: var(--color-sacred-bg);
+  color: var(--color-sacred-green);
+  font-family: 'Inter', sans-serif;
+  /* သင် ဆက်လက်ရေးသားလိုသော body style များကို ဒီနေရာတွင် ဆက်ရေးနိုင်ပါသည် */
 }

@@ -26,7 +26,23 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     aboutIntro: "Shwedagon Pagoda is the most sacred Buddhist pagoda in Myanmar.",
     aboutHistory: "History",
     aboutRelics: "Sacred Relics",
-    aboutFullDetail: "Full Details",
+    aboutFullDetail: `
+## The Golden Marvel of Myanmar
+
+The Shwedagon Pagoda, officially known as **Shwedagon Zedi Daw**, is the most sacred Buddhist pagoda in Myanmar. Rising 98 meters (322 feet) above Singuttara Hill in Yangon, its golden stupa dominates the city's skyline and has drawn pilgrims and visitors for over 2,600 years.
+
+### Sacred Relics
+According to legend, the pagoda enshrines eight hairs of the Gautama Buddha, as well as relics of three previous Buddhas: the staff of Kakusandha, the water filter of Koṇāgamana, and a piece of the robe of Kassapa.
+
+### Architectural Splendor
+The main stupa is plated with **60 tonnes of gold** and topped with a crown studded with thousands of diamonds and precious gems. The tip holds a 76-carat diamond. The entire complex covers 114 acres and contains hundreds of smaller temples, shrines, and statues.
+
+### Historical Significance
+- **2,600+ years old** — one of the oldest pagodas in the world
+- Survived earthquakes, wars, and colonial rule
+- Played a central role in Myanmar's independence movement
+- Visited by pilgrims from across Southeast Asia daily
+`,
     goldenStupa: "Golden Stupa",
     goldenStupaDesc: "The main stupa rises 98 meters above its base, covered in gold plates.",
     mainStupa: "Main Stupa",
@@ -41,7 +57,79 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     pyadarshin: "Pyadarshin Pagoda",
     pyadarshinDesc: "Known for its beautiful marble Buddha image.",
     rubyEyeBuddha: "Ruby Eye Buddha",
-    rubyEyeBuddhaDesc: "A revered Buddha image with ruby eyes.",
+    rubyEyeBuddhaDesc: `
+One of the most revered images at Shwedagon, this Buddha statue is distinguished by its **ruby-colored eyes** that seem to glow with an inner light. The image is believed to grant wishes to devoted pilgrims who pray here sincerely. Located in the northern part of the platform, it attracts thousands of worshippers daily.
+
+**Phonetic:** *Padamyar Myetshin Phaya*
+**Direction:** North Platform
+**Best time to visit:** Early morning for quiet prayer
+`,
+
+mainStupaDesc: `
+The **Great Golden Stupa** is the heart of Shwedagon Pagoda, soaring 98 meters into the Yangon skyline. Covered with **60 tonnes of solid gold plates**, the stupa enshrines sacred relics of four Buddhas including eight hairs of Gautama Buddha.
+
+**Phonetic:** *Shwe-da-gon Ze-di Daw*
+**Height:** 98 meters (322 feet)
+**Gold:** Over 60 tonnes of gold plating
+**Tip:** A 76-carat diamond crowns the very top
+`,
+
+naungdawgyiDesc: `
+Known as the **"Elder Brother Pagoda"**, this stunning white and gold stupa stands as one of the five original pagodas on Singuttara Hill. It is believed to be even older than the main Shwedagon stupa and holds tremendous spiritual significance for Myanmar Buddhists.
+
+**Phonetic:** *Naung-daw-gyi Pa-ya*
+**Significance:** One of the five original hill pagodas
+**Feature:** Ancient whitewashed stupa with golden crown
+`,
+
+mahaGandhaBellDesc: `
+Cast in **1779** during the reign of King Singu, this massive bronze bell weighs **23 tonnes** and stands as one of the largest hanging bells in the world. British colonial forces attempted to steal it in 1824, but it sank into the Yangon River. Myanmar divers miraculously recovered it using bamboo floats.
+
+**Phonetic:** *Ma-ha-gan-da Khyan*
+**Weight:** 23 tonnes
+**Cast:** 1779 AD
+**Story:** Survived British theft attempt in 1824
+`,
+
+shinItzagawnaDesc: `
+This exquisite Buddha image is celebrated for its **serene and compassionate expression**. The statue is elaborately decorated with precious gems and gold leaf offerings from devoted pilgrims. It is one of the most photographed Buddha images at Shwedagon.
+
+**Phonetic:** *Shin It-za-gaw-na*
+**Style:** Mandalay period craftsmanship
+**Feature:** Elaborately jeweled crown and robes
+`,
+
+sandawtwinDesc: `
+The **Sandawdwin Tazaung** (Hair Relic Washing Shrine) marks the sacred spot where, according to legend, the original eight hairs of the Buddha were washed before being enshrined in the main stupa. This makes it one of the most spiritually charged locations in the entire complex.
+
+**Phonetic:** *San-daw-twin Ta-zaung*
+**Significance:** Where Buddha's hairs were ceremonially washed
+**Feature:** Ancient well with sacred water
+`,
+
+boBoAungDesc: `
+**Bo Bo Aung** is one of Myanmar's most beloved nat (spirit) figures, known as a powerful protector and wish-granter. His shrine at Shwedagon is perpetually busy with devotees offering flowers, candles, and prayers, seeking his blessing for love, business, and protection.
+
+**Phonetic:** *Boe Boe Aung Nat Shin*
+**Type:** Protective spirit shrine
+**Offerings:** Flowers, candles, coconuts
+`,
+
+latpatletDesc: `
+This unique Buddha image is famous for its **"Touching the Earth"** (*Bhumisparsha*) mudra pose, commemorating the moment of the Buddha's enlightenment. The statue is surrounded by intricate wood carvings and gilded decorations typical of the finest Myanmar craftsmanship.
+
+**Phonetic:** *Lat-pat-let Phaya*
+**Mudra:** Earth-touching gesture
+**Style:** Traditional Myanmar Buddhist art
+`,
+
+pyadarshinDesc: `
+The **Pyadarshin Buddha** is renowned for its extraordinary **crystal-clear complexion** and luminous quality. Pilgrims believe that gazing upon this image purifies the mind and brings clarity of thought. The statue is dressed in royal robes and adorned with precious offerings.
+
+**Phonetic:** *Pya-dar-shin Phaya*
+**Feature:** Luminous, crystal-like appearance
+**Belief:** Gazing upon it purifies the mind
+`,
     shinItzagawna: "Shin Itzagawna",
     shinItzagawnaDesc: "Sacred shrine dedicated to the hermit Shin Itzagawna.",
     boBoAung: "Bo Bo Aung",
@@ -70,7 +158,25 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     basicBurmese: "Basic Burmese Phrases",
     askPlaceholder: "Ask your question...",
     findWay: "Find Your Way",
-    practicalLogistics: "Practical Logistics",
+    practicalLogistics: `
+### Essential Visitor Information
+
+**Opening Hours**
+The pagoda is open daily from **4:00 AM to 10:00 PM**. The best times to visit are early morning (4–7 AM) for peaceful atmosphere and stunning sunrise views, or evening (6–9 PM) when the golden stupa is beautifully illuminated.
+
+**Admission Fees**
+- Foreign visitors: **8,000 MMK** (approximately USD $4)
+- Myanmar nationals: Free entry
+- Tickets are purchased at the entrance elevators
+
+**Getting There**
+- **By Taxi:** Most convenient; approximately 15-30 minutes from downtown Yangon
+- **By Bus:** Routes 43, 51, and 52 stop near the pagoda
+- **By Foot:** 15-minute walk from Bogyoke Aung San Market
+
+**Photography**
+Photography is permitted throughout most of the complex. Flash photography may be restricted near certain shrines out of respect for worshippers.
+`,
     logisticsFacilitate: "Services to facilitate your visit",
     carRentals: "Car Rentals",
     carRentalsDesc: "Reliable car rental services in Yangon.",
