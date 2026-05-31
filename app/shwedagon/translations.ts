@@ -26,23 +26,7 @@ export const UI_TRANSLATIONS: Record<string, Record<string, string>> = {
     aboutIntro: "Shwedagon Pagoda is the most sacred Buddhist pagoda in Myanmar.",
     aboutHistory: "History",
     aboutRelics: "Sacred Relics",
-    aboutFullDetail: `
-## The Golden Marvel of Myanmar
-
-The Shwedagon Pagoda, officially known as **Shwedagon Zedi Daw**, is the most sacred Buddhist pagoda in Myanmar. Rising 98 meters (322 feet) above Singuttara Hill in Yangon, its golden stupa dominates the city's skyline and has drawn pilgrims and visitors for over 2,600 years.
-
-### Sacred Relics
-According to legend, the pagoda enshrines eight hairs of the Gautama Buddha, as well as relics of three previous Buddhas: the staff of Kakusandha, the water filter of Koṇāgamana, and a piece of the robe of Kassapa.
-
-### Architectural Splendor
-The main stupa is plated with **60 tonnes of gold** and topped with a crown studded with thousands of diamonds and precious gems. The tip holds a 76-carat diamond. The entire complex covers 114 acres and contains hundreds of smaller temples, shrines, and statues.
-
-### Historical Significance
-- **2,600+ years old** — one of the oldest pagodas in the world
-- Survived earthquakes, wars, and colonial rule
-- Played a central role in Myanmar's independence movement
-- Visited by pilgrims from across Southeast Asia daily
-`,
+    aboutFullDetail: "Shwedagon Pagoda, rising 98 meters above its base on Singuttara Hill in Yangon, is the most sacred Buddhist site in Myanmar. According to legend, it enshrines eight hairs of Gautama Buddha along with relics of three previous Buddhas. The pagoda is covered in gold plates and topped with a diamond orb encrusted with thousands of precious gems. Administered by the Board of Trustees, Shwedagon remains a vibrant part of Burmese life, with families, pilgrims, and monks visiting every day.",
     goldenStupa: "Golden Stupa",
     goldenStupaDesc: "The main stupa rises 98 meters above its base, covered in gold plates.",
     mainStupa: "Main Stupa",
@@ -57,79 +41,7 @@ The main stupa is plated with **60 tonnes of gold** and topped with a crown stud
     pyadarshin: "Pyadarshin Pagoda",
     pyadarshinDesc: "Known for its beautiful marble Buddha image.",
     rubyEyeBuddha: "Ruby Eye Buddha",
-    rubyEyeBuddhaDesc: `
-One of the most revered images at Shwedagon, this Buddha statue is distinguished by its **ruby-colored eyes** that seem to glow with an inner light. The image is believed to grant wishes to devoted pilgrims who pray here sincerely. Located in the northern part of the platform, it attracts thousands of worshippers daily.
-
-**Phonetic:** *Padamyar Myetshin Phaya*
-**Direction:** North Platform
-**Best time to visit:** Early morning for quiet prayer
-`,
-
-mainStupaDesc: `
-The **Great Golden Stupa** is the heart of Shwedagon Pagoda, soaring 98 meters into the Yangon skyline. Covered with **60 tonnes of solid gold plates**, the stupa enshrines sacred relics of four Buddhas including eight hairs of Gautama Buddha.
-
-**Phonetic:** *Shwe-da-gon Ze-di Daw*
-**Height:** 98 meters (322 feet)
-**Gold:** Over 60 tonnes of gold plating
-**Tip:** A 76-carat diamond crowns the very top
-`,
-
-naungdawgyiDesc: `
-Known as the **"Elder Brother Pagoda"**, this stunning white and gold stupa stands as one of the five original pagodas on Singuttara Hill. It is believed to be even older than the main Shwedagon stupa and holds tremendous spiritual significance for Myanmar Buddhists.
-
-**Phonetic:** *Naung-daw-gyi Pa-ya*
-**Significance:** One of the five original hill pagodas
-**Feature:** Ancient whitewashed stupa with golden crown
-`,
-
-mahaGandhaBellDesc: `
-Cast in **1779** during the reign of King Singu, this massive bronze bell weighs **23 tonnes** and stands as one of the largest hanging bells in the world. British colonial forces attempted to steal it in 1824, but it sank into the Yangon River. Myanmar divers miraculously recovered it using bamboo floats.
-
-**Phonetic:** *Ma-ha-gan-da Khyan*
-**Weight:** 23 tonnes
-**Cast:** 1779 AD
-**Story:** Survived British theft attempt in 1824
-`,
-
-shinItzagawnaDesc: `
-This exquisite Buddha image is celebrated for its **serene and compassionate expression**. The statue is elaborately decorated with precious gems and gold leaf offerings from devoted pilgrims. It is one of the most photographed Buddha images at Shwedagon.
-
-**Phonetic:** *Shin It-za-gaw-na*
-**Style:** Mandalay period craftsmanship
-**Feature:** Elaborately jeweled crown and robes
-`,
-
-sandawtwinDesc: `
-The **Sandawdwin Tazaung** (Hair Relic Washing Shrine) marks the sacred spot where, according to legend, the original eight hairs of the Buddha were washed before being enshrined in the main stupa. This makes it one of the most spiritually charged locations in the entire complex.
-
-**Phonetic:** *San-daw-twin Ta-zaung*
-**Significance:** Where Buddha's hairs were ceremonially washed
-**Feature:** Ancient well with sacred water
-`,
-
-boBoAungDesc: `
-**Bo Bo Aung** is one of Myanmar's most beloved nat (spirit) figures, known as a powerful protector and wish-granter. His shrine at Shwedagon is perpetually busy with devotees offering flowers, candles, and prayers, seeking his blessing for love, business, and protection.
-
-**Phonetic:** *Boe Boe Aung Nat Shin*
-**Type:** Protective spirit shrine
-**Offerings:** Flowers, candles, coconuts
-`,
-
-latpatletDesc: `
-This unique Buddha image is famous for its **"Touching the Earth"** (*Bhumisparsha*) mudra pose, commemorating the moment of the Buddha's enlightenment. The statue is surrounded by intricate wood carvings and gilded decorations typical of the finest Myanmar craftsmanship.
-
-**Phonetic:** *Lat-pat-let Phaya*
-**Mudra:** Earth-touching gesture
-**Style:** Traditional Myanmar Buddhist art
-`,
-
-pyadarshinDesc: `
-The **Pyadarshin Buddha** is renowned for its extraordinary **crystal-clear complexion** and luminous quality. Pilgrims believe that gazing upon this image purifies the mind and brings clarity of thought. The statue is dressed in royal robes and adorned with precious offerings.
-
-**Phonetic:** *Pya-dar-shin Phaya*
-**Feature:** Luminous, crystal-like appearance
-**Belief:** Gazing upon it purifies the mind
-`,
+    rubyEyeBuddhaDesc: "A revered Buddha image with ruby eyes.",
     shinItzagawna: "Shin Itzagawna",
     shinItzagawnaDesc: "Sacred shrine dedicated to the hermit Shin Itzagawna.",
     boBoAung: "Bo Bo Aung",
@@ -158,25 +70,7 @@ The **Pyadarshin Buddha** is renowned for its extraordinary **crystal-clear comp
     basicBurmese: "Basic Burmese Phrases",
     askPlaceholder: "Ask your question...",
     findWay: "Find Your Way",
-    practicalLogistics: `
-### Essential Visitor Information
-
-**Opening Hours**
-The pagoda is open daily from **4:00 AM to 10:00 PM**. The best times to visit are early morning (4–7 AM) for peaceful atmosphere and stunning sunrise views, or evening (6–9 PM) when the golden stupa is beautifully illuminated.
-
-**Admission Fees**
-- Foreign visitors: **8,000 MMK** (approximately USD $4)
-- Myanmar nationals: Free entry
-- Tickets are purchased at the entrance elevators
-
-**Getting There**
-- **By Taxi:** Most convenient; approximately 15-30 minutes from downtown Yangon
-- **By Bus:** Routes 43, 51, and 52 stop near the pagoda
-- **By Foot:** 15-minute walk from Bogyoke Aung San Market
-
-**Photography**
-Photography is permitted throughout most of the complex. Flash photography may be restricted near certain shrines out of respect for worshippers.
-`,
+    practicalLogistics: "Practical Logistics",
     logisticsFacilitate: "Services to facilitate your visit",
     carRentals: "Car Rentals",
     carRentalsDesc: "Reliable car rental services in Yangon.",
@@ -215,7 +109,7 @@ Photography is permitted throughout most of the complex. Flash photography may b
     aboutIntro: "ရွှေတိဂုံဘုရားသည် မြန်မာနိုင်ငံ၏ အမြတ်တနိုးဆုံး ဗုဒ္ဓဘာသာဘုရားဖြစ်သည်",
     aboutHistory: "သမိုင်း",
     aboutRelics: "သာသနာ့ ဓာတ်တော်",
-    aboutFullDetail: "အပြည့်အစုံ",
+    aboutFullDetail: "ရွှေတိဂုံဘုရားသည် ရန်ကုန်မြို့ရှိ သိင်္ဂုတ္တရာတောင်ပေါ်တွင် ၉၈ မီတာ အမြင့်ရှိသော မြန်မာနိုင်ငံ၏ အမြတ်တနိုးဆုံး ဗုဒ္ဓဘာသာ ဘုရားဖြစ်သည်။ ဂေါတမဗုဒ္ဓ၏ ဆံတော် ရှစ်ချောင်းနှင့် ယခင်ဘုရားသုံးပါး၏ ဓာတ်တော်များကို ကိန်းဝပ်သည်ဟု ဆိုသည်။",
     goldenStupa: "ရွှေစေတီ",
     goldenStupaDesc: "အဓိကစေတီသည် ၉၈ မီတာ အမြင့်ရှိသည်",
     mainStupa: "အဓိကစေတီ",
@@ -271,6 +165,172 @@ Photography is permitted throughout most of the complex. Flash photography may b
     systemInstructionDesc: "သင်၏ ကိုယ်ပိုင် ရွှေတိဂုံ လမ်းညွှန်",
     shwedagon_adhihtan_updated: "အဓိဌာန် အပ်ဒိတ်",
   },
+  fr: {
+    welcome: "Bienvenue à la Pagode Shwedagon",
+    selectLang: "Choisir la langue",
+    menu: "Menu",
+    info: "Informations",
+    maps: "Cartes",
+    phrases: "Phrases",
+    places: "Lieux",
+    services: "Services",
+    emergency: "Urgence",
+    ambassador: "Ambassadeur",
+    about: "A propos",
+    goldenWonder: "La Merveille Doree",
+    spiritualJourney: "Commencez votre voyage spirituel",
+    startJourney: "Commencer",
+    learnMore: "En savoir plus",
+    moreInfoBtn: "Plus d'infos",
+    openingHours: "Heures d'ouverture",
+    openingHoursDesc: "Ouvert tous les jours de 4h a 22h",
+    dressCode: "Code vestimentaire",
+    dressCodeDesc: "Retirez chaussures et chaussettes avant d'entrer",
+    entryPoints: "Points d'entree",
+    entryPointsDesc: "Quatre escaliers couverts au Nord, Sud, Est et Ouest",
+    visitorInfo: "Informations visiteurs",
+    aboutIntro: "La Pagode Shwedagon est le site bouddhiste le plus sacre du Myanmar",
+    aboutHistory: "Histoire",
+    aboutRelics: "Reliques sacrees",
+    aboutFullDetail: "La Pagode Shwedagon s'eleve a 98 metres sur la colline Singuttara a Yangon. C'est le site bouddhiste le plus sacre du Myanmar, abritant huit cheveux de Gautama Buddha ainsi que des reliques de trois Bouddhas precedents.",
+    goldenStupa: "Stupa Dore",
+    goldenStupaDesc: "Le stupa principal s'eleve a 98 metres, recouvert de plaques d'or",
+    mainStupa: "Stupa Principal",
+    mainStupaDesc: "Le stupa dore central entoure de petits temples",
+    keyShrines: "Sanctuaires Principaux",
+    mahaGandhaBell: "Cloche Maha Ganda",
+    mahaGandhaBellDesc: "L'une des plus grandes cloches du Myanmar, fondue en 1779",
+    naungdawgyi: "Pagode Naungdawgyi",
+    naungdawgyiDesc: "La pagode frere situee au nord",
+    sandawtwin: "Pagode Sandawtwin",
+    sandawtwinDesc: "Abrite des reliques de cheveux sacres",
+    pyadarshin: "Pagode Pyadarshin",
+    pyadarshinDesc: "Connue pour sa belle statue de Bouddha en marbre",
+    rubyEyeBuddha: "Bouddha aux Yeux de Rubis",
+    rubyEyeBuddhaDesc: "Une statue de Bouddha veneree aux yeux de rubis",
+    shinItzagawna: "Shin Itzagawna",
+    shinItzagawnaDesc: "Sanctuaire dedie a l'ermite Shin Itzagawna",
+    boBoAung: "Bo Bo Aung",
+    boBoAungDesc: "Sanctuaire du celebre alchimiste birman",
+    latpatlet: "Lat Pat Let",
+    latpatletDesc: "Zone traditionnelle d'offrandes",
+    spiritualSignificance: "Importance Spirituelle",
+    spiritualSignificanceDesc: "L'un des sites les plus sacres du monde bouddhiste",
+    culturalTip: "Conseil Culturel",
+    culturalTipDesc: "Marchez toujours dans le sens des aiguilles d'une montre",
+    safetyTips: "Conseils de Securite",
+    safetyTip1: "Gardez vos objets de valeur en securite",
+    safetyTip2: "Restez hydrate, surtout par temps chaud",
+    safetyTip3: "Respectez toutes les regles de la pagode",
+    accessibility: "Accessibilite",
+    accessibilityDesc: "Ascenseurs et escalators disponibles a toutes les entrees",
+    emergencyContacts: "Contacts d'Urgence",
+    immediateAssistance: "Assistance Immediate",
+    priorityAssistance: "Assistance Prioritaire",
+    touristPolice: "Police Touristique",
+    ambulance: "Ambulance",
+    fireDepartment: "Pompiers",
+    yangonHospital: "Hopital General de Yangon",
+    detailedEmergencyInfo: "Informations d'Urgence Detaillees",
+    foreignEmbassies: "Ambassades Etrangeres",
+    basicBurmese: "Phrases de Base en Birman",
+    askPlaceholder: "Posez votre question...",
+    findWay: "Trouver son Chemin",
+    practicalLogistics: "Logistique Pratique",
+    logisticsFacilitate: "Services pour faciliter votre visite",
+    carRentals: "Location de Voitures",
+    carRentalsDesc: "Services de location de voitures fiables a Yangon",
+    flightTickets: "Billets d'Avion",
+    flightTicketsDesc: "Reservez des vols nationaux et internationaux",
+    visaGuidance: "Guide Visa",
+    visaGuidanceDesc: "Informations sur les exigences de visa pour le Myanmar",
+    systemInstruction: "Ambassadeur",
+    systemInstructionDesc: "Votre guide personnel Shwedagon",
+    shwedagon_adhihtan_updated: "Mis a jour",
+  },
+  he: {
+    welcome: "ברוכים הבאים לפגודת שוודגון",
+    selectLang: "בחר שפה",
+    menu: "תפריט",
+    info: "מידע",
+    maps: "מפות",
+    phrases: "ביטויים",
+    places: "מקומות",
+    services: "שירותים",
+    emergency: "חירום",
+    ambassador: "שגריר",
+    about: "אודות",
+    goldenWonder: "הפלא הזהוב",
+    spiritualJourney: "התחל את המסע הרוחני שלך",
+    startJourney: "התחל מסע",
+    learnMore: "למד עוד",
+    moreInfoBtn: "מידע נוסף",
+    openingHours: "שעות פתיחה",
+    openingHoursDesc: "פתוח מדי יום מ-04:00 עד 22:00",
+    dressCode: "קוד לבוש",
+    dressCodeDesc: "הסר נעליים וגרביים לפני הכניסה",
+    entryPoints: "נקודות כניסה",
+    entryPointsDesc: "ארבע מדרגות מכוסות מצפון, דרום, מזרח ומערב",
+    visitorInfo: "מידע למבקרים",
+    aboutIntro: "פגודת שוודגון היא האתר הבודהיסטי הקדוש ביותר במיאנמר",
+    aboutHistory: "היסטוריה",
+    aboutRelics: "שרידים קדושים",
+    aboutFullDetail: "פגודת שוודגון מתנשאת ל-98 מטר על גבעת סינגוטרה ביאנגון. היא האתר הבודהיסטי הקדוש ביותר במיאנמר.",
+    goldenStupa: "סטופה הזהב",
+    goldenStupaDesc: "הסטופה הראשית מתנשאת ל-98 מטר, מכוסה בלוחות זהב",
+    mainStupa: "סטופה ראשית",
+    mainStupaDesc: "סטופה הזהב המרכזית מוקפת במקדשים קטנים",
+    keyShrines: "מקדשים עיקריים",
+    mahaGandhaBell: "פעמון מהא גנדה",
+    mahaGandhaBellDesc: "אחד הפעמונים הגדולים במיאנמר, יצוק ב-1779",
+    naungdawgyi: "פגודת נאונגדאוג'י",
+    naungdawgyiDesc: "פגודת האח הממוקמת בצפון",
+    sandawtwin: "פגודת סנדאוטווין",
+    sandawtwinDesc: "מכילה שרידי שיער קדושים",
+    pyadarshin: "פגודת פיאדרשין",
+    pyadarshinDesc: "ידועה בפסל בודהה המשיש היפה שלה",
+    rubyEyeBuddha: "בודהה עיני הרובי",
+    rubyEyeBuddhaDesc: "פסל בודהה מכובד עם עיני רובי",
+    shinItzagawna: "שין איצגאונה",
+    shinItzagawnaDesc: "מקדש המוקדש לנזיר שין איצגאונה",
+    boBoAung: "בו בו אונג",
+    boBoAungDesc: "מקדש האלכימאי המפורסם ממיאנמר",
+    latpatlet: "לאט פאט לאט",
+    latpatletDesc: "אזור הנדבות המסורתי",
+    spiritualSignificance: "משמעות רוחנית",
+    spiritualSignificanceDesc: "אחד האתרים הקדושים ביותר בעולם הבודהיסטי",
+    culturalTip: "טיפ תרבותי",
+    culturalTipDesc: "תמיד הלך עם כיוון השעון סביב הפגודה",
+    safetyTips: "טיפי בטיחות",
+    safetyTip1: "שמור על חפצי ערך שלך בכל עת",
+    safetyTip2: "הישאר לחות, במיוחד במזג אוויר חם",
+    safetyTip3: "פעל לפי כל כללי הפגודה",
+    accessibility: "נגישות",
+    accessibilityDesc: "מעליות ואסקלטורים זמינים בכל כניסות",
+    emergencyContacts: "אנשי קשר לחירום",
+    immediateAssistance: "סיוע מיידי",
+    priorityAssistance: "סיוע עדיפות",
+    touristPolice: "משטרת תיירות",
+    ambulance: "אמבולנס",
+    fireDepartment: "מכבי אש",
+    yangonHospital: "בית החולים הכללי של יאנגון",
+    detailedEmergencyInfo: "מידע חירום מפורט",
+    foreignEmbassies: "שגרירויות זרות",
+    basicBurmese: "ביטויי בורמזית בסיסיים",
+    askPlaceholder: "שאל את שאלתך...",
+    findWay: "מצא את הדרך",
+    practicalLogistics: "לוגיסטיקה מעשית",
+    logisticsFacilitate: "שירותים להקלת ביקורך",
+    carRentals: "השכרת רכבים",
+    carRentalsDesc: "שירותי השכרת רכב אמינים ביאנגון",
+    flightTickets: "כרטיסי טיסה",
+    flightTicketsDesc: "הזמן טיסות מקומיות ובינלאומיות",
+    visaGuidance: "הנחיות ויזה",
+    visaGuidanceDesc: "מידע על דרישות ויזה למיאנמר",
+    systemInstruction: "שגריר",
+    systemInstructionDesc: "המדריך האישי שלך לשוודגון",
+    shwedagon_adhihtan_updated: "עודכן",
+  },
   zh: {
     welcome: "欢迎来到瑞德贡大金塔",
     selectLang: "选择语言",
@@ -298,7 +358,7 @@ Photography is permitted throughout most of the complex. Flash photography may b
     aboutIntro: "瑞德贡大金塔是缅甸最神圣的佛教圣地",
     aboutHistory: "历史",
     aboutRelics: "圣物",
-    aboutFullDetail: "详细信息",
+    aboutFullDetail: "瑞德贡大金塔位于仰光信古达拉山上，高98米，是缅甸最神圣的佛教圣地，供奉着乔达摩佛的八根头发舍利。",
     goldenStupa: "金色佛塔",
     goldenStupaDesc: "主塔高98米，覆盖金箔",
     mainStupa: "主塔",
@@ -381,7 +441,7 @@ Photography is permitted throughout most of the complex. Flash photography may b
     aboutIntro: "シュエダゴン・パゴダはミャンマーで最も神聖な仏教の聖地です",
     aboutHistory: "歴史",
     aboutRelics: "聖遺物",
-    aboutFullDetail: "詳細",
+    aboutFullDetail: "シュエダゴン・パゴダはヤンゴンのシングッタラの丘に98メートルの高さでそびえ立つ、ミャンマーで最も神聖な仏教の聖地です。",
     goldenStupa: "黄金の仏塔",
     goldenStupaDesc: "主塔は98メートルの高さで金箔で覆われています",
     mainStupa: "主塔",
@@ -464,7 +524,7 @@ Photography is permitted throughout most of the complex. Flash photography may b
     aboutIntro: "쉐다곤 파고다는 미얀마에서 가장 신성한 불교 성지입니다",
     aboutHistory: "역사",
     aboutRelics: "성물",
-    aboutFullDetail: "전체 세부정보",
+    aboutFullDetail: "쉐다곤 파고다는 양곤 싱굿타라 언덕에 98미터 높이로 우뚝 서 있는 미얀마에서 가장 신성한 불교 성지입니다.",
     goldenStupa: "황금 탑",
     goldenStupaDesc: "주탑은 98미터 높이로 금박으로 덮여 있습니다",
     mainStupa: "주탑",
@@ -520,172 +580,6 @@ Photography is permitted throughout most of the complex. Flash photography may b
     systemInstructionDesc: "개인 쉐다곤 가이드",
     shwedagon_adhihtan_updated: "업데이트됨",
   },
-  fr: {
-    welcome: "Bienvenue à la Pagode Shwedagon",
-    selectLang: "Choisir la langue",
-    menu: "Menu",
-    info: "Informations",
-    maps: "Cartes",
-    phrases: "Phrases",
-    places: "Lieux",
-    services: "Services",
-    emergency: "Urgence",
-    ambassador: "Ambassadeur",
-    about: "À propos",
-    goldenWonder: "La Merveille Dorée",
-    spiritualJourney: "Commencez votre voyage spirituel",
-    startJourney: "Commencer",
-    learnMore: "En savoir plus",
-    moreInfoBtn: "Plus d'infos",
-    openingHours: "Heures d'ouverture",
-    openingHoursDesc: "Ouvert tous les jours de 4h à 22h",
-    dressCode: "Code vestimentaire",
-    dressCodeDesc: "Retirez chaussures et chaussettes avant d'entrer",
-    entryPoints: "Points d'entrée",
-    entryPointsDesc: "Quatre escaliers couverts au Nord, Sud, Est et Ouest",
-    visitorInfo: "Informations visiteurs",
-    aboutIntro: "La Pagode Shwedagon est le site bouddhiste le plus sacré du Myanmar",
-    aboutHistory: "Histoire",
-    aboutRelics: "Reliques sacrées",
-    aboutFullDetail: "Détails complets",
-    goldenStupa: "Stupa Doré",
-    goldenStupaDesc: "Le stupa principal s'élève à 98 mètres, recouvert de plaques d'or",
-    mainStupa: "Stupa Principal",
-    mainStupaDesc: "Le stupa doré central entouré de petits temples",
-    keyShrines: "Sanctuaires Principaux",
-    mahaGandhaBell: "Cloche Maha Ganda",
-    mahaGandhaBellDesc: "L'une des plus grandes cloches du Myanmar, fondue en 1779",
-    naungdawgyi: "Pagode Naungdawgyi",
-    naungdawgyiDesc: "La pagode frère située au nord",
-    sandawtwin: "Pagode Sandawtwin",
-    sandawtwinDesc: "Abrite des reliques de cheveux sacrés",
-    pyadarshin: "Pagode Pyadarshin",
-    pyadarshinDesc: "Connue pour sa belle statue de Bouddha en marbre",
-    rubyEyeBuddha: "Bouddha aux Yeux de Rubis",
-    rubyEyeBuddhaDesc: "Une statue de Bouddha vénérée aux yeux de rubis",
-    shinItzagawna: "Shin Itzagawna",
-    shinItzagawnaDesc: "Sanctuaire dédié à l'ermite Shin Itzagawna",
-    boBoAung: "Bo Bo Aung",
-    boBoAungDesc: "Sanctuaire du célèbre alchimiste birman",
-    latpatlet: "Lat Pat Let",
-    latpatletDesc: "Zone traditionnelle d'offrandes",
-    spiritualSignificance: "Importance Spirituelle",
-    spiritualSignificanceDesc: "L'un des sites les plus sacrés du monde bouddhiste",
-    culturalTip: "Conseil Culturel",
-    culturalTipDesc: "Marchez toujours dans le sens des aiguilles d'une montre",
-    safetyTips: "Conseils de Sécurité",
-    safetyTip1: "Gardez vos objets de valeur en sécurité",
-    safetyTip2: "Restez hydraté, surtout par temps chaud",
-    safetyTip3: "Respectez toutes les règles de la pagode",
-    accessibility: "Accessibilité",
-    accessibilityDesc: "Ascenseurs et escalators disponibles à toutes les entrées",
-    emergencyContacts: "Contacts d'Urgence",
-    immediateAssistance: "Assistance Immédiate",
-    priorityAssistance: "Assistance Prioritaire",
-    touristPolice: "Police Touristique",
-    ambulance: "Ambulance",
-    fireDepartment: "Pompiers",
-    yangonHospital: "Hôpital Général de Yangon",
-    detailedEmergencyInfo: "Informations d'Urgence Détaillées",
-    foreignEmbassies: "Ambassades Étrangères",
-    basicBurmese: "Phrases de Base en Birman",
-    askPlaceholder: "Posez votre question...",
-    findWay: "Trouver son Chemin",
-    practicalLogistics: "Logistique Pratique",
-    logisticsFacilitate: "Services pour faciliter votre visite",
-    carRentals: "Location de Voitures",
-    carRentalsDesc: "Services de location de voitures fiables à Yangon",
-    flightTickets: "Billets d'Avion",
-    flightTicketsDesc: "Réservez des vols nationaux et internationaux",
-    visaGuidance: "Guide Visa",
-    visaGuidanceDesc: "Informations sur les exigences de visa pour le Myanmar",
-    systemInstruction: "Ambassadeur",
-    systemInstructionDesc: "Votre guide personnel Shwedagon",
-    shwedagon_adhihtan_updated: "Mis à jour",
-  },
-  he: {
-    welcome: "ברוכים הבאים לפגודת שוודגון",
-    selectLang: "בחר שפה",
-    menu: "תפריט",
-    info: "מידע",
-    maps: "מפות",
-    phrases: "ביטויים",
-    places: "מקומות",
-    services: "שירותים",
-    emergency: "חירום",
-    ambassador: "שגריר",
-    about: "אודות",
-    goldenWonder: "הפלא הזהוב",
-    spiritualJourney: "התחל את המסע הרוחני שלך",
-    startJourney: "התחל מסע",
-    learnMore: "למד עוד",
-    moreInfoBtn: "מידע נוסף",
-    openingHours: "שעות פתיחה",
-    openingHoursDesc: "פתוח מדי יום מ-04:00 עד 22:00",
-    dressCode: "קוד לבוש",
-    dressCodeDesc: "הסר נעליים וגרביים לפני הכניסה",
-    entryPoints: "נקודות כניסה",
-    entryPointsDesc: "ארבע מדרגות מכוסות מצפון, דרום, מזרח ומערב",
-    visitorInfo: "מידע למבקרים",
-    aboutIntro: "פגודת שוודגון היא האתר הבודהיסטי הקדוש ביותר במיאנמר",
-    aboutHistory: "היסטוריה",
-    aboutRelics: "שרידים קדושים",
-    aboutFullDetail: "פרטים מלאים",
-    goldenStupa: "סטופה הזהב",
-    goldenStupaDesc: "הסטופה הראשית מתנשאת ל-98 מטר, מכוסה בלוחות זהב",
-    mainStupa: "סטופה ראשית",
-    mainStupaDesc: "סטופה הזהב המרכזית מוקפת במקדשים קטנים",
-    keyShrines: "מקדשים עיקריים",
-    mahaGandhaBell: "פעמון מהא גנדה",
-    mahaGandhaBellDesc: "אחד הפעמונים הגדולים במיאנמר, יצוק ב-1779",
-    naungdawgyi: "פגודת נאונגדאוג'י",
-    naungdawgyiDesc: "פגודת האח הממוקמת בצפון",
-    sandawtwin: "פגודת סנדאוטווין",
-    sandawtwinDesc: "מכילה שרידי שיער קדושים",
-    pyadarshin: "פגודת פיאדרשין",
-    pyadarshinDesc: "ידועה בפסל בודהה המשיש היפה שלה",
-    rubyEyeBuddha: "בודהה עיני הרובי",
-    rubyEyeBuddhaDesc: "פסל בודהה מכובד עם עיני רובי",
-    shinItzagawna: "שין איצגאונה",
-    shinItzagawnaDesc: "מקדש המוקדש לנזיר שין איצגאונה",
-    boBoAung: "בו בו אונג",
-    boBoAungDesc: "מקדש האלכימאי המפורסם ממיאנמר",
-    latpatlet: "לאט פאט לאט",
-    latpatletDesc: "אזור הנדבות המסורתי",
-    spiritualSignificance: "משמעות רוחנית",
-    spiritualSignificanceDesc: "אחד האתרים הקדושים ביותר בעולם הבודהיסטי",
-    culturalTip: "טיפ תרבותי",
-    culturalTipDesc: "תמיד הלך עם כיוון השעון סביב הפגודה",
-    safetyTips: "טיפי בטיחות",
-    safetyTip1: "שמור על חפצי ערך שלך בכל עת",
-    safetyTip2: "הישאר לחות, במיוחד במזג אוויר חם",
-    safetyTip3: "פעל לפי כל כללי הפגודה",
-    accessibility: "נגישות",
-    accessibilityDesc: "מעליות ואסקלטורים זמינים בכל כניסות",
-    emergencyContacts: "אנשי קשר לחירום",
-    immediateAssistance: "סיוע מיידי",
-    priorityAssistance: "סיוע עדיפות",
-    touristPolice: "משטרת תיירות",
-    ambulance: "אמבולנס",
-    fireDepartment: "מכבי אש",
-    yangonHospital: "בית החולים הכללי של יאנגון",
-    detailedEmergencyInfo: "מידע חירום מפורט",
-    foreignEmbassies: "שגרירויות זרות",
-    basicBurmese: "ביטויי בורמזית בסיסיים",
-    askPlaceholder: "שאל את שאלתך...",
-    findWay: "מצא את הדרך",
-    practicalLogistics: "לוגיסטיקה מעשית",
-    logisticsFacilitate: "שירותים להקלת ביקורך",
-    carRentals: "השכרת רכבים",
-    carRentalsDesc: "שירותי השכרת רכב אמינים ביאנגון",
-    flightTickets: "כרטיסי טיסה",
-    flightTicketsDesc: "הזמן טיסות מקומיות ובינלאומיות",
-    visaGuidance: "הנחיות ויזה",
-    visaGuidanceDesc: "מידע על דרישות ויזה למיאנמר",
-    systemInstruction: "שגריר",
-    systemInstructionDesc: "המדריך האישי שלך לשוודגון",
-    shwedagon_adhihtan_updated: "עודכן",
-  },
 };
 
 export const FOREIGN_EMBASSIES_INFO = `
@@ -694,7 +588,6 @@ export const FOREIGN_EMBASSIES_INFO = `
 ### United States Embassy
 - **Address:** 110 University Avenue, Kamayut Township, Yangon
 - **Phone:** +95 1 753 6509
-- **Emergency:** +95 1 753 6509
 
 ### United Kingdom Embassy
 - **Address:** 80 Strand Road, Yangon
@@ -723,6 +616,4 @@ export const FOREIGN_EMBASSIES_INFO = `
 ### Australia Embassy
 - **Address:** 88 Strand Road, Yangon
 - **Phone:** +95 1 251 809
-
-> For the most current embassy contact information, please visit the official embassy websites or contact them directly.
 `;
