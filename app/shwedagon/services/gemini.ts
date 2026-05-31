@@ -34,6 +34,6 @@ export async function chatWithAmbassador(
 }
 
 // Keep this export to avoid import errors in page.tsx
-export async function translateToMyanmar(text: string): Promise<string> {
+export async function translateToMyanmar(text: string, messages?: any[], langName?: string): Promise<string> {
   return text;
 }
