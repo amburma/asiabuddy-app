@@ -86,7 +86,7 @@ const Pagoda = ({ size = 24, className = "" }: { size?: number; className?: stri
 );
 
 // Types
-type Section = "ambassador" | "about" | "info" | "places" | "maps" | "services" | "emergency" | "phrases" | "menu" | "prayers" | "adhihtan";
+export type Section = "ambassador" | "about" | "info" | "places" | "maps" | "services" | "emergency" | "phrases" | "menu" | "prayers" | "adhihtan";
 
 interface Language {
   code: string;
