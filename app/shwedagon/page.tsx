@@ -1594,8 +1594,9 @@ function PhrasesSection({ t, lang, langName }: { t: (k: string) => string, lang:
     { id: "emergency", label: ui.categoryEmergency }
   ];
 
+  type MeaningKey = keyof typeof OFFLINE_PHRASES[0]['meanings'];
   const filteredPhrases = OFFLINE_PHRASES.filter(phrase => {
-    const meaning = phrase.meanings[lang as keyof typeof phrase.meanings] || phrase.meanings["en"];
+    const meaning = phrase.meanings[lang as MeaningKey] || phrase.meanings["en"];
     const matchesSearch = meaning.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           phrase.phonetic.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           phrase.script.includes(searchQuery);
