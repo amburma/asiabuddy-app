@@ -110,49 +110,6 @@ export default function Home() {
             </div>
           </Link>
 
-          {/* Shwedagon Card */}
-          <Link href="/shwedagon" className="group block">
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/8 backdrop-blur-xl p-7 transition-all duration-500 hover:border-amber-400/50 hover:bg-white/15 hover:-translate-y-1 hover:shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
-              
-              {/* Glow effect on hover */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-amber-400/10 to-transparent rounded-2xl" />
-
-              {/* Flag + Country */}
-              <div className="flex items-center gap-4 mb-4">
-                <span className="text-5xl drop-shadow-lg group-hover:scale-110 transition-transform duration-300 inline-block">
-                  🇲🇲
-                </span>
-                <div>
-                  <h2 className="text-xl font-bold text-white leading-none mb-1">
-                    Shwedagon
-                  </h2>
-                  <p className="text-xs text-amber-400/80 font-medium uppercase tracking-widest">
-                    The Golden Wonder
-                  </p>
-                </div>
-              </div>
-
-              {/* Divider */}
-              <div className="h-px bg-white/10 mb-4" />
-
-              {/* Description */}
-              <p className="text-sm text-white/55 leading-relaxed mb-5">
-                Sacred pagoda, spiritual rituals & Myanmar's golden heritage.
-              </p>
-
-              {/* CTA */}
-              <div className="flex items-center justify-between">
-                <span className="text-xs uppercase tracking-[0.2em] font-bold text-amber-400 group-hover:text-amber-300 transition-colors">
-                  Explore Guide
-                </span>
-                <div className="w-8 h-8 rounded-full bg-amber-400/20 flex items-center justify-center group-hover:bg-amber-400 transition-all duration-300">
-                  <span className="text-amber-400 group-hover:text-black text-sm font-bold transition-colors">→</span>
-                </div>
-              </div>
-            </div>
-          </Link>
-          */}
-
         </div>
 
         {/* Bottom select label */}
