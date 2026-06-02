@@ -1,0 +1,261 @@
+import { supabase } from '../config/supabase';
+
+export interface User {
+  telegram_id: number;
+  username?: string;
+  created_at: string;
+}
+
+export interface ChatHistory {
+  id: number;
+  telegram_id: number;
+  role: 'user' | 'model';
+  message_text: string;
+  country: string;
+  timestamp: string;
+}
+
+// User CRUD operations
+export async function createUser(telegramId: number, username?: string): Promise<User | null> {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .insert({ telegram_id: telegramId, username })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating user:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Unexpected error creating user:', error);
+    return null;
+  }
+}
+
+export async function getUser(telegramId: number): Promise<User | null> {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('telegram_id', telegramId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching user:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Unexpected error fetching user:', error);
+    return null;
+  }
+}
+
+export async function getOrCreateUser(telegramId: number, username?: string): Promise<User | null> {
+  try {
+    let user = await getUser(telegramId);
+    
+    if (!user) {
+      user = await createUser(telegramId, username);
+    }
+    
+    return user;
+  } catch (error) {
+    console.error('Unexpected error in getOrCreateUser:', error);
+    return null;
+  }
+}
+
+export async function updateUser(telegramId: number, username?: string): Promise<User | null> {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .update({ username })
+      .eq('telegram_id', telegramId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating user:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Unexpected error updating user:', error);
+    return null;
+  }
+}
+
+// Chat History CRUD operations
+export async function addChatMessage(
+  telegramId: number,
+  role: 'user' | 'model',
+  messageText: string,
+  country: string = 'thailand'
+): Promise<ChatHistory | null> {
+  try {
+    const { data, error } = await supabase
+      .from('chat_histories')
+      .insert({ telegram_id: telegramId, role, message_text: messageText, country })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error adding chat message:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Unexpected error adding chat message:', error);
+    return null;
+  }
+}
+
+export async function getChatHistory(
+  telegramId: number,
+  limit: number = 50,
+  country: string = 'thailand'
+): Promise<ChatHistory[]> {
+  try {
+    const { data, error } = await supabase
+      .from('chat_histories')
+      .select('*')
+      .eq('telegram_id', telegramId)
+      .eq('country', country)
+      .order('timestamp', { ascending: true })
+      .order('id', { ascending: true })
+      .limit(limit);
+
+    if (error) {
+      console.error('Error fetching chat history:', error);
+      return [];
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error('Unexpected error fetching chat history:', error);
+    return [];
+  }
+}
+
+export async function getRecentChatHistory(
+  telegramId: number,
+  limit: number = 10,
+  country: string = 'thailand'
+): Promise<ChatHistory[]> {
+  try {
+    const { data, error } = await supabase
+      .from('chat_histories')
+      .select('*')
+      .eq('telegram_id', telegramId)
+      .eq('country', country)
+      .order('timestamp', { ascending: true })
+      .order('id', { ascending: true })
+      .limit(limit);
+
+    if (error) {
+      console.error('Error fetching recent chat history:', error);
+      return [];
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error('Unexpected error fetching recent chat history:', error);
+    return [];
+  }
+}
+
+export async function deleteChatHistory(telegramId: number): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('chat_histories')
+      .delete()
+      .eq('telegram_id', telegramId);
+
+    if (error) {
+      console.error('Error deleting chat history:', error);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Unexpected error deleting chat history:', error);
+    return false;
+  }
+}
+
+// User Metrics
+export async function getUserMetrics(telegramId: number): Promise<{
+  totalMessages: number;
+  userMessages: number;
+  modelMessages: number;
+  firstMessageDate: string | null;
+  lastMessageDate: string | null;
+}> {
+  try {
+    const { data, error } = await supabase
+      .from('chat_histories')
+      .select('role, timestamp')
+      .eq('telegram_id', telegramId);
+
+    if (error) {
+      console.error('Error fetching user metrics:', error);
+      return {
+        totalMessages: 0,
+        userMessages: 0,
+        modelMessages: 0,
+        firstMessageDate: null,
+        lastMessageDate: null,
+      };
+    }
+
+    const messages = data || [];
+    const userMessages = messages.filter((m) => m.role === 'user').length;
+    const modelMessages = messages.filter((m) => m.role === 'model').length;
+    const firstMessageDate = messages.length > 0 ? messages[0].timestamp : null;
+    const lastMessageDate = messages.length > 0 ? messages[messages.length - 1].timestamp : null;
+
+    return {
+      totalMessages: messages.length,
+      userMessages,
+      modelMessages,
+      firstMessageDate,
+      lastMessageDate,
+    };
+  } catch (error) {
+    console.error('Unexpected error fetching user metrics:', error);
+    return {
+      totalMessages: 0,
+      userMessages: 0,
+      modelMessages: 0,
+      firstMessageDate: null,
+      lastMessageDate: null,
+    };
+  }
+}
+
+export async function getAllUsers(): Promise<User[]> {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching all users:', error);
+      return [];
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error('Unexpected error fetching all users:', error);
+    return [];
+  }
+}

@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
 import Script from 'next/script';
-import { Globe, Calendar } from 'lucide-react';
+import { Globe, Calendar, ArrowRight } from 'lucide-react';
+import FloatingBackButton from '@/components/FloatingBackButton';
 
 // ─── Language Config ───────────────────────────────────────
 const LANGUAGES = [
@@ -56,6 +57,109 @@ interface Post {
   created_at: string;
 }
 
+// ─── Hero Post ─────────────────────────────────────────────
+function HeroPost({ post }: { post: Post }) {
+  return (
+    <Link href={`/thailand/blog/${post.slug}`} className="group block mb-12">
+      <article className="relative rounded-3xl overflow-hidden h-[420px] md:h-[520px]">
+        {post.cover_image ? (
+          <img
+            src={post.cover_image}
+            alt={post.title}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#1a5c3a] to-[#0d2218]" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+          <span className="inline-block mb-4 text-[10px] uppercase tracking-[0.35em] font-bold text-[#d4a843] border border-[#d4a843]/40 rounded-full px-4 py-1">
+            Featured Story
+          </span>
+          <h2 className="text-2xl md:text-4xl font-bold text-white leading-snug mb-3 max-w-2xl group-hover:text-[#d4a843] transition-colors duration-300">
+            {post.title}
+          </h2>
+          {post.excerpt && (
+            <p className="text-white/60 text-sm max-w-xl leading-relaxed mb-5 line-clamp-2 hidden md:block">
+              {post.excerpt}
+            </p>
+          )}
+          <div className="flex items-center gap-5 text-white/40 text-[11px] uppercase tracking-widest font-medium">
+            <span className="flex items-center gap-1.5">
+              <Calendar size={11} />
+              {new Date(post.created_at).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric',
+              })}
+            </span>
+            <span className="w-1 h-1 rounded-full bg-white/20" />
+            <span className="text-[#d4a843] flex items-center gap-1.5 group-hover:gap-2.5 transition-all">
+              Read story <ArrowRight size={11} />
+            </span>
+          </div>
+        </div>
+      </article>
+    </Link>
+  );
+}
+
+// ─── Post Card ─────────────────────────────────────────────
+function PostCard({ post }: { post: Post }) {
+  return (
+    <Link href={`/thailand/blog/${post.slug}`} className="group block">
+      <article className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 h-full flex flex-col">
+        <div className="relative overflow-hidden aspect-[16/10] bg-[#f5f3ec]">
+          {post.cover_image ? (
+            <img
+              src={post.cover_image}
+              alt={post.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="text-4xl text-[#1a5c3a]/10">✦</span>
+            </div>
+          )}
+        </div>
+        <div className="p-5 flex flex-col flex-grow">
+          <h2 className="text-base font-bold text-[#1a5c3a] group-hover:text-[#c49a2e] transition-colors leading-snug mb-2 line-clamp-2">
+            {post.title}
+          </h2>
+          {post.excerpt && (
+            <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 flex-grow mb-4">
+              {post.excerpt}
+            </p>
+          )}
+          <div className="flex items-center justify-between pt-3 border-t border-gray-100 text-[10px] uppercase tracking-widest">
+            <span className="flex items-center gap-1.5 text-gray-300">
+              <Calendar size={10} />
+              {new Date(post.created_at).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'short', day: 'numeric',
+              })}
+            </span>
+            <span className="text-[#c49a2e] font-bold flex items-center gap-1 group-hover:gap-2 transition-all">
+              Read <ArrowRight size={10} />
+            </span>
+          </div>
+        </div>
+      </article>
+    </Link>
+  );
+}
+
+// ─── Skeleton Loader ───────────────────────────────────────
+function SkeletonCard() {
+  return (
+    <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 animate-pulse">
+      <div className="aspect-[16/10] bg-gray-100" />
+      <div className="p-5 space-y-3">
+        <div className="h-4 bg-gray-100 rounded-full w-3/4" />
+        <div className="h-3 bg-gray-100 rounded-full w-full" />
+        <div className="h-3 bg-gray-100 rounded-full w-2/3" />
+      </div>
+    </div>
+  );
+}
+
 // ─── Main Component ────────────────────────────────────────
 export default function ThailandBlogPage() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -63,7 +167,7 @@ export default function ThailandBlogPage() {
   const [activeLang, setActiveLang] = useState('en');
 
   useEffect(() => {
-async function fetchPosts() {
+    async function fetchPosts() {
       const { data } = await supabase
         .from('posts')
         .select('*')
@@ -75,9 +179,11 @@ async function fetchPosts() {
     fetchPosts();
   }, []);
 
+  const [hero, ...rest] = posts;
+
   return (
     <>
-      {/* ── Google Translate Widget (hidden) ── */}
+      {/* ── Google Translate (hidden) ── */}
       <div id="google_translate_element" className="hidden" />
       <Script
         src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
@@ -99,74 +205,126 @@ async function fetchPosts() {
         .goog-te-combo { visibility: hidden; position: absolute; }
       `}</style>
 
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen" style={{ background: '#faf9f5' }}>
 
         {/* ── Header ── */}
-        <header className="bg-white border-b border-gray-200 px-6 py-8 text-center">
-          <h1 className="text-3xl font-bold text-gray-800">Thailand Travel Blog</h1>
-          <p className="text-gray-500 mt-2">Tips, guides, and experiences from Thailand</p>
+        <header style={{ background: '#faf9f5' }} className="w-full">
+          <div className="max-w-5xl mx-auto px-6 md:px-10 pt-14 pb-8">
+            {/* Eyebrow */}
+            <div className="flex items-center justify-center gap-3 mb-5">
+              <span className="w-8 h-px" style={{ background: 'rgba(212,168,67,0.4)' }} />
+              <span className="text-[9px] uppercase tracking-[0.45em] font-bold" style={{ color: '#1a5c3a' }}>
+                AsiaBuddy — Thailand
+              </span>
+              <span className="w-8 h-px" style={{ background: 'rgba(212,168,67,0.4)' }} />
+            </div>
 
-          {/* Translation Buttons */}
-          <div className="flex items-center justify-center gap-2 mt-5">
-            <Globe size={13} className="text-gray-300" />
-            {LANGUAGES.map((lang) => (
-              <button
-                key={lang.code}
-                onClick={() => translateTo(lang.code, setActiveLang)}
-                title={lang.name}
-                className={`px-3 py-1.5 rounded-full text-[11px] font-bold tracking-wide transition-all border ${
-                  activeLang === lang.code
-                    ? 'bg-emerald-600 text-white border-emerald-600 shadow-sm'
-                    : 'bg-white text-gray-500 border-gray-200 hover:border-emerald-500 hover:text-emerald-600'
-                }`}
-              >
-                {lang.flag} {lang.label}
-              </button>
-            ))}
+            {/* Title */}
+            <div className="flex flex-col items-center text-center gap-4 mb-6">
+              <div>
+                <h1
+                  className="text-4xl sm:text-5xl md:text-7xl leading-none tracking-tight"
+                  style={{ fontFamily: 'Georgia, serif', color: '#1a5c3a' }}
+                >
+                  The Blog
+                </h1>
+                <p className="text-sm italic font-light mt-2" style={{ color: '#aaa', letterSpacing: '0.04em' }}>
+                  Stories, tips and guides from across Thailand
+                </p>
+              </div>
+
+              {/* Language selector */}
+              <div className="flex items-center justify-center gap-1.5 flex-wrap">
+                <Globe size={12} style={{ color: '#ccc' }} />
+                {LANGUAGES.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => translateTo(lang.code, setActiveLang)}
+                    title={lang.name}
+                    className="transition-all text-[10px] font-bold tracking-wide rounded-full px-3 py-1.5 border"
+                    style={
+                      activeLang === lang.code
+                        ? { background: '#1a5c3a', color: '#fff', borderColor: '#1a5c3a' }
+                        : { background: '#fff', color: '#888', borderColor: '#e5e5e5' }
+                    }
+                  >
+                    {lang.flag} {lang.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3">
+              <div className="flex-grow h-px" style={{ background: 'linear-gradient(to right, rgba(212,168,67,0.35), transparent)' }} />
+              <span style={{ color: 'rgba(212,168,67,0.4)', fontSize: 11 }}>✦</span>
+              <div className="w-12 h-px" style={{ background: 'rgba(212,168,67,0.15)' }} />
+            </div>
           </div>
         </header>
 
-        {/* ── Posts Grid ── */}
-        <main className="max-w-5xl mx-auto px-4 py-10">
+        {/* ── Content ── */}
+        <main className="max-w-5xl mx-auto px-4 pb-24">
           {loading ? (
-            <div className="flex justify-center py-20">
-              <div className="w-7 h-7 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+            <div className="space-y-6">
+              <div className="rounded-3xl overflow-hidden animate-pulse bg-gray-100 h-[420px]" />
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                {[1, 2, 3].map((i) => <SkeletonCard key={i} />)}
+              </div>
             </div>
           ) : posts.length === 0 ? (
-            <div className="text-center py-20 text-gray-400">
-              <p className="text-lg">Post မရှိသေးပါ။</p>
+            <div className="flex flex-col items-center justify-center py-32 text-center">
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mb-5" style={{ background: '#f0ede4' }}>
+                <span style={{ color: '#c49a2e', fontSize: 22 }}>✦</span>
+              </div>
+              <h3 className="text-xl mb-2" style={{ fontFamily: 'Georgia, serif', color: '#1a5c3a' }}>
+                Stories coming soon
+              </h3>
+              <p className="text-sm max-w-xs" style={{ color: '#bbb' }}>
+                Our writers are exploring Thailand. Check back shortly for insider stories and guides.
+              </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {posts.map((post) => (
-                <Link key={post.id} href={`/thailand/blog/${post.slug}`}>
-                  <article className="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer h-full">
-                    {post.cover_image && (
-                      <img
-                        src={post.cover_image}
-                        alt={post.title}
-                        className="w-full h-48 object-cover"
-                      />
-                    )}
-                    <div className="p-5 space-y-2">
-                      <h2 className="text-lg font-bold text-gray-800 line-clamp-2">{post.title}</h2>
-                      <p className="text-gray-500 text-sm line-clamp-3">{post.excerpt}</p>
-                      <div className="flex items-center justify-between pt-2">
-                        <span className="flex items-center gap-1 text-xs text-gray-400">
-                          <Calendar size={11} />
-                          {new Date(post.created_at).toLocaleDateString('en-US', {
-                            year: 'numeric', month: 'short', day: 'numeric',
-                          })}
-                        </span>
-                        <span className="text-xs text-emerald-600 font-medium">Read more →</span>
-                      </div>
-                    </div>
-                  </article>
-                </Link>
-              ))}
-            </div>
+            <>
+              {hero && <HeroPost post={hero} />}
+              {rest.length > 0 && (
+                <>
+                  <div className="flex items-center gap-4 mb-8">
+                    <span className="text-[9px] uppercase tracking-[0.4em] font-bold whitespace-nowrap" style={{ color: '#bbb' }}>
+                      More stories
+                    </span>
+                    <div className="flex-grow h-px" style={{ background: '#eee' }} />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {rest.map((post) => (
+                      <PostCard key={post.id} post={post} />
+                    ))}
+                  </div>
+                </>
+              )}
+            </>
           )}
         </main>
+
+        {/* ── Footer ── */}
+        <footer className="border-t bg-white" style={{ borderColor: '#f0ede4' }}>
+          <div className="max-w-5xl mx-auto px-6 py-6 flex items-center gap-3">
+            <span className="text-sm tracking-widest" style={{ fontFamily: 'Georgia, serif', color: '#1a5c3a' }}>
+              AsiaBuddy
+            </span>
+            <span className="w-px h-4" style={{ background: '#eee' }} />
+            <span className="text-[9px] uppercase tracking-widest" style={{ color: '#bbb' }}>
+              Thailand Travel Blog
+            </span>
+          </div>
+        </footer>
+
+        {/* ── Floating Back Button ── */}
+        <FloatingBackButton
+          href="https://asiabuddy.app/thailand"
+          label="Thailand Guide"
+        />
+
       </div>
     </>
   );

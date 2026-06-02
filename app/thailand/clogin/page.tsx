@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 
 export default function CLoginPage() {
@@ -11,16 +11,17 @@ export default function CLoginPage() {
   const router = useRouter();
 
   const handleLogin = async () => {
-    setLoading(true);
-    setError("");
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setError("Email သို့မဟုတ် Password မှားနေပါသည်။");
-    } else {
-      router.push("/thailand/admin");
-    }
-    setLoading(false);
-  };
+  setLoading(true);
+  setError("");
+  const supabase = createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) {
+    setError("Email သို့မဟုတ် Password မှားနေပါသည်။");
+  } else {
+    router.push("/thailand/admin");
+  }
+  setLoading(false);
+};
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
