@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, Bus, User, Loader2, Info, MessageSquare } from 'lucide-react';
+import { Send, Bus, User, Loader2, Info, MessageSquare, Calendar } from 'lucide-react';
 import { getConciergeResponse } from '../services/geminiService';
 import { ChatMessage, ThaiLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../i18n';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import HumanOperatorChat from './HumanOperatorChat';
 
 interface Props {
   language: ThaiLanguage;
@@ -17,6 +18,7 @@ export default function TransportChat({ language, destination }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showHumanChat, setShowHumanChat] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = uiT.transport || UI_TRANSLATIONS.EN.transport;
@@ -138,7 +140,31 @@ export default function TransportChat({ language, destination }: Props) {
             <Send size={14} />
           </button>
         </div>
+
+        {/* Book Now Button */}
+        <motion.button
+          onClick={() => setShowHumanChat(true)}
+          className="mt-3 w-full bg-gradient-to-r from-gold-deep to-amber-500 text-white rounded-xl py-2.5 px-3 flex items-center justify-center gap-2 hover:from-amber-600 hover:to-gold-soft transition-all shadow-lg hover:shadow-xl"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <Calendar size={16} className="flex-shrink-0" />
+          <div className="text-left">
+            <p className="text-xs font-bold uppercase tracking-wider">{commonT.bookNow}</p>
+            <p className="text-[9px] opacity-90">{commonT.bookNowSubtitle}</p>
+          </div>
+        </motion.button>
       </div>
+
+      {/* Human Operator Chat Modal */}
+      <AnimatePresence>
+        {showHumanChat && (
+          <HumanOperatorChat
+            language={language}
+            onClose={() => setShowHumanChat(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

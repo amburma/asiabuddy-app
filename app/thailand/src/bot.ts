@@ -3,6 +3,15 @@ import { getOrCreateUser, addChatMessage } from './lib/database';
 import { generateAIResponse } from './services/gemini';
 import { uploadTelegramFileToDrive } from './services/googleDrive';
 
+// Utility function to strip Markdown formatting for plain text output
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '$1')  // Remove bold (**text**)
+    .replace(/\*(.*?)\*/g, '$1')      // Remove italic (*text*)
+    .replace(/__(.*?)__/g, '$1')     // Remove bold (__text__)
+    .replace(/_(.*?)_/g, '$1');      // Remove italic (_text_)
+}
+
 // Initialize Telegram Bot
 const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN!);
 
@@ -99,10 +108,10 @@ bot.on('message:text', async (ctx) => {
     // Get AI response with chat history context
     const aiResponse = await generateAIResponse(telegramId, userMessage, country);
 
-    // Send AI response to user
-    await ctx.reply(aiResponse);
+    // Send AI response to user (strip Markdown for plain text)
+    await ctx.reply(stripMarkdown(aiResponse));
 
-    // Save AI response to Supabase
+    // Save AI response to Supabase (keep original Markdown)
     await addChatMessage(telegramId, 'model', aiResponse, country);
 
     console.log(`AI response sent to ${telegramId}`);
@@ -148,10 +157,10 @@ bot.on('message:photo', async (ctx) => {
         country
       );
 
-      // Send AI response to user
-      await ctx.reply(aiResponse);
+      // Send AI response to user (strip Markdown for plain text)
+      await ctx.reply(stripMarkdown(aiResponse));
 
-      // Save AI response to Supabase
+      // Save AI response to Supabase (keep original Markdown)
       await addChatMessage(telegramId, 'model', aiResponse, country);
     } else {
       await ctx.reply('Sorry, I encountered an error uploading your photo. Please try again.');
@@ -198,10 +207,10 @@ bot.on('message:document', async (ctx) => {
         country
       );
 
-      // Send AI response to user
-      await ctx.reply(aiResponse);
+      // Send AI response to user (strip Markdown for plain text)
+      await ctx.reply(stripMarkdown(aiResponse));
 
-      // Save AI response to Supabase
+      // Save AI response to Supabase (keep original Markdown)
       await addChatMessage(telegramId, 'model', aiResponse, country);
     } else {
       await ctx.reply('Sorry, I encountered an error uploading your document. Please try again.');

@@ -12,5 +12,13 @@
       "source": "/thailand",
       "destination": "https://asiabuddy-thailand-vite.vercel.app"
     }
-  ]
+  ],
+  "functions": {
+    "app/api/webhook/route.ts": {
+      "maxDuration": 30
+    },
+    "app/api/operator-webhook/route.ts": {
+      "maxDuration": 30
+    }
+  }
 }

@@ -1,42 +1,140 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { getRecentChatHistory, ChatHistory } from '../lib/database';
+import { getPricingDataForAI, getTourDataForAI, getPolicyDataForAI } from './googleSheets';
 
 // Initialize Gemini AI client
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
+// Cache data to avoid repeated API calls
+let cachedPricingData: string | null = null;
+let pricingDataCacheTime: number = 0;
+const PRICING_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
+
+let cachedTourData: string | null = null;
+let tourDataCacheTime: number = 0;
+const TOUR_CACHE_DURATION = 60 * 60 * 1000; // 1 hour
+
+let cachedPolicyData: string | null = null;
+let policyDataCacheTime: number = 0;
+const POLICY_CACHE_DURATION = 60 * 60 * 1000; // 1 hour
+
+/**
+ * Get pricing data with caching
+ * @returns Pricing data string
+ */
+async function getPricingDataWithCache(): Promise<string> {
+  const now = Date.now();
+  
+  // Return cached data if still valid
+  if (cachedPricingData && (now - pricingDataCacheTime) < PRICING_CACHE_DURATION) {
+    return cachedPricingData;
+  }
+
+  // Fetch fresh pricing data
+  try {
+    cachedPricingData = await getPricingDataForAI();
+    pricingDataCacheTime = now;
+    return cachedPricingData;
+  } catch (error) {
+    console.error('Error fetching pricing data:', error);
+    // Return cached data even if expired, or empty string if no cache
+    return cachedPricingData || '';
+  }
+}
+
+/**
+ * Get tour data with caching
+ * @returns Tour data string
+ */
+async function getTourDataWithCache(): Promise<string> {
+  const now = Date.now();
+  
+  // Return cached data if still valid
+  if (cachedTourData && (now - tourDataCacheTime) < TOUR_CACHE_DURATION) {
+    return cachedTourData;
+  }
+
+  // Fetch fresh tour data
+  try {
+    cachedTourData = await getTourDataForAI();
+    tourDataCacheTime = now;
+    return cachedTourData;
+  } catch (error) {
+    console.error('Error fetching tour data:', error);
+    // Return cached data even if expired, or empty string if no cache
+    return cachedTourData || '';
+  }
+}
+
+/**
+ * Get policy data with caching
+ * @returns Policy data string
+ */
+async function getPolicyDataWithCache(): Promise<string> {
+  const now = Date.now();
+  
+  // Return cached data if still valid
+  if (cachedPolicyData && (now - policyDataCacheTime) < POLICY_CACHE_DURATION) {
+    return cachedPolicyData;
+  }
+
+  // Fetch fresh policy data
+  try {
+    cachedPolicyData = await getPolicyDataForAI();
+    policyDataCacheTime = now;
+    return cachedPolicyData;
+  } catch (error) {
+    console.error('Error fetching policy data:', error);
+    // Return cached data even if expired, or empty string if no cache
+    return cachedPolicyData || '';
+  }
+}
+
 // Dynamic system instruction generator based on country
 function getSystemInstruction(country: string): string {
   const countryInstructions: Record<string, string> = {
-    thailand: `You are a Professional Digital Concierge for AsiaBuddy, a premium travel and concierge service specializing in Thailand.
+    thailand: `# Windsurf System Prompt: AsiaBuddy Travel Bot Core Engine
 
-Your Role:
-- Act as a knowledgeable, friendly, and professional concierge for Thailand
-- Provide expert travel advice, recommendations, and assistance for Thailand
-- Help users with travel planning, local insights, cultural information, and practical tips
-- Maintain a warm, welcoming, and service-oriented demeanor
-- Be proactive in anticipating user needs and offering helpful suggestions
+## 🤖 1. AI Persona & Role
+You are an expert, 24/7 Live Chat Tour Operator for AsiaBuddy.app. Your goal is to provide exceptional, human-like travel guidance and convert inquiries into sales by helping travelers plan smooth, stress-free trips to Asia (with a special focus on Thailand). Your tone must never be robotic. Always respond as a polite, friendly, empathetic, and experienced travel service provider.
 
-Your Expertise:
-- Deep knowledge of Thailand destinations (Bangkok, Chiang Mai, Phuket, Pattaya, etc.)
-- Understanding of Thai culture, customs, and etiquette
-- Information about Thai attractions, restaurants, hotels, transportation, and activities
-- Practical travel tips for Thailand (visa requirements, weather, best times to visit, etc.)
-- Knowledge of Thai cuisine, festivals, and local experiences
-- Ability to provide personalized recommendations based on user preferences
+## 👥 2. Target Audience
+Travelers visiting Asia who are facing real-time difficulties with logistics, language, transportation, or accommodation, and desire a seamless, hassle-free trip.
 
-Communication Style:
-- Professional yet warm and approachable
-- Clear, concise, and helpful responses
-- Use appropriate formatting for readability
-- Ask clarifying questions when needed to provide better assistance
-- Always prioritize the user's needs and satisfaction
+## 🎛️ 3. Thinking State Rule
+Whenever a loading, processing, or thinking state must be displayed, you must strictly output the following text in the Target Language:
+* "ThaiGuide is thinking..."
+* CRITICAL: Never display "AI is thinking..." or any other variation.
 
-Guidelines:
-- Be accurate and up-to-date with information about Thailand
-- If uncertain, acknowledge limitations and suggest alternatives
-- Respect Thai cultural sensitivities
-- Maintain confidentiality of user information
-- Provide balanced and unbiased recommendations`,
+## 🛡️ 4. Scope & Honesty Policy
+* Travel Scope: You may only answer questions related to Thailand Travel and Tourism, Culture, Transportation, Accommodation, Entrance Fees, Rentals, Tickets, and related travel automation questions.
+* Out-of-Scope Handling: If a user asks an unrelated question (e.g., "Tell me about Japan's economy"), politely decline in the Target Language.
+* Honesty Rule: Do not attempt to answer questions if you do not know the information. Respond honestly instead. Provide only 100% accurate, up-to-date service details and pricing. If uncertain, verify via internal data/search before responding. Always cite the Reference/Source.
+
+## 🌐 5. Language & Translation Policy
+* Target Language: The primary target language for user interaction is Burmese. All final responses must maintain a friendly, warm, and professional Burmese conversational tone throughout the interaction.
+* Translation Rule: If the user writes in a language other than Burmese, translate the meaning into Burmese and continue responding in Burmese while strictly maintaining the structured response format defined below.
+
+## 🎯 6. Core Objectives
+* Sales-Driven yet Human: Never sound like a robotic sales agent. Be helpful, deeply empathetic, and polite. Guide the customer through solutions naturally.
+* Cost-Efficient & Accurate: Keep responses concise, direct, and highly relevant to optimize token usage.
+* High Engagement: Use relevant emojis appropriately throughout the text to maintain user attention and scannability.
+
+## 📋 7. Chat Response Rules & Structure (The Invisible Flow)
+Every response must flow naturally as a single, cohesive message. 
+* CRITICAL CONSTRAINT: Do NOT show these structural headers (Hook, Problem, Benefit, Offer, CTA) to the customer. They must remain completely invisible.
+
+1. Hook: A warm, engaging opening with relevant emojis to catch the customer's attention.
+2. Problem: Empathetically acknowledge the specific travel difficulty or pain point they are facing.
+3. Benefit: Present a clear, practical solution that directly resolves their problem.
+4. Offer: Naturally introduce AsiaBuddy's specific service or package as the ultimate solution.
+5. CTA (Call to Action): Guide the customer on the immediate next step to close the sale (e.g., "Would you like me to book this option for you now?").
+
+## 🛠️ 8. Formatting Requirements
+* Layout: Use standard Markdown for clarity.
+* Bolding: Use bolding for key terms, core prices, and essential options.
+* Lists: Use clear bullet points for comparing travel options.
+* Scannability: Keep the message structure tight, professional, and easy to read at a glance.`,
 
     singapore: `You are a Professional Digital Concierge for AsiaBuddy, a premium travel and concierge service specializing in Singapore.
 
@@ -163,10 +261,36 @@ export async function generateAIResponse(
     // Get chat history from Supabase
     const chatHistory: ChatHistory[] = await getRecentChatHistory(telegramId, 10, country);
 
+    // Get pricing, tour, and policy data if country is Thailand
+    let pricingData = '';
+    let tourData = '';
+    let policyData = '';
+    
+    if (country === 'thailand') {
+      pricingData = await getPricingDataWithCache();
+      tourData = await getTourDataWithCache();
+      policyData = await getPolicyDataWithCache();
+    }
+
+    // Build system instruction with all context data
+    let systemInstruction = getSystemInstruction(country);
+    
+    if (pricingData) {
+      systemInstruction += `\n\n${pricingData}\n\nWhen users ask about pricing, rates, costs, or fees, use the above pricing data to provide accurate information. If the specific pricing information is not available in the data, inform the user that you don't have current pricing for that item and suggest they contact AsiaBuddy directly for the most accurate quote.`;
+    }
+    
+    if (tourData) {
+      systemInstruction += `\n\n${tourData}\n\nWhen users ask about tours, itineraries, or travel packages, use the above tour itinerary data to provide detailed information. If specific tour information is not available, suggest they contact AsiaBuddy for personalized tour planning.`;
+    }
+    
+    if (policyData) {
+      systemInstruction += `\n\n${policyData}\n\nWhen users ask about cancellation policies, booking rules, hotel policies, or refund terms, use the above policy data to provide accurate information. Always inform users about important cancellation deadlines and fees.`;
+    }
+
     // Initialize the model with generation config
     const model = genAI.getGenerativeModel({
       model: 'gemini-2.5-flash-lite',
-      systemInstruction: getSystemInstruction(country),
+      systemInstruction: systemInstruction,
       generationConfig: {
         maxOutputTokens: 1000,
         temperature: 0.7,

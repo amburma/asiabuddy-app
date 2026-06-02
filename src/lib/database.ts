@@ -15,6 +15,26 @@ export interface ChatHistory {
   timestamp: string;
 }
 
+export interface Booking {
+  id: string;
+  telegram_id: number;
+  tour_type: 'tour' | 'flight' | 'car' | 'taxi';
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  details: Record<string, any>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Invoice {
+  id: string;
+  booking_id: string;
+  amount: number;
+  status: 'unpaid' | 'paid';
+  pdf_url?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 // User CRUD operations
 export async function createUser(telegramId: number, username?: string): Promise<User | null> {
   try {
@@ -257,5 +277,193 @@ export async function getAllUsers(): Promise<User[]> {
   } catch (error) {
     console.error('Unexpected error fetching all users:', error);
     return [];
+  }
+}
+
+// Booking CRUD operations
+export async function createBooking(
+  telegramId: number,
+  tourType: 'tour' | 'flight' | 'car' | 'taxi',
+  details: Record<string, any>
+): Promise<Booking | null> {
+  try {
+    const { data, error } = await supabase
+      .from('bookings')
+      .insert({
+        telegram_id: telegramId,
+        tour_type: tourType,
+        status: 'pending',
+        details
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating booking:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Unexpected error creating booking:', error);
+    return null;
+  }
+}
+
+export async function getBooking(bookingId: string): Promise<Booking | null> {
+  try {
+    const { data, error } = await supabase
+      .from('bookings')
+      .select('*')
+      .eq('id', bookingId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching booking:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Unexpected error fetching booking:', error);
+    return null;
+  }
+}
+
+export async function getUserBookings(telegramId: number): Promise<Booking[]> {
+  try {
+    const { data, error } = await supabase
+      .from('bookings')
+      .select('*')
+      .eq('telegram_id', telegramId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching user bookings:', error);
+      return [];
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error('Unexpected error fetching user bookings:', error);
+    return [];
+  }
+}
+
+export async function updateBookingStatus(
+  bookingId: string,
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed'
+): Promise<Booking | null> {
+  try {
+    const { data, error } = await supabase
+      .from('bookings')
+      .update({ status })
+      .eq('id', bookingId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating booking status:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Unexpected error updating booking status:', error);
+    return null;
+  }
+}
+
+// Invoice CRUD operations
+export async function createInvoice(
+  bookingId: string,
+  amount: number,
+  pdfUrl?: string
+): Promise<Invoice | null> {
+  try {
+    const { data, error } = await supabase
+      .from('invoices')
+      .insert({
+        booking_id: bookingId,
+        amount,
+        status: 'unpaid',
+        pdf_url: pdfUrl
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error creating invoice:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Unexpected error creating invoice:', error);
+    return null;
+  }
+}
+
+export async function getInvoice(invoiceId: string): Promise<Invoice | null> {
+  try {
+    const { data, error } = await supabase
+      .from('invoices')
+      .select('*')
+      .eq('id', invoiceId)
+      .single();
+
+    if (error) {
+      console.error('Error fetching invoice:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Unexpected error fetching invoice:', error);
+    return null;
+  }
+}
+
+export async function getBookingInvoices(bookingId: string): Promise<Invoice[]> {
+  try {
+    const { data, error } = await supabase
+      .from('invoices')
+      .select('*')
+      .eq('booking_id', bookingId)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching booking invoices:', error);
+      return [];
+    }
+
+    return data || [];
+  } catch (error) {
+    console.error('Unexpected error fetching booking invoices:', error);
+    return [];
+  }
+}
+
+export async function updateInvoiceStatus(
+  invoiceId: string,
+  status: 'unpaid' | 'paid'
+): Promise<Invoice | null> {
+  try {
+    const { data, error } = await supabase
+      .from('invoices')
+      .update({ status })
+      .eq('id', invoiceId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating invoice status:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Unexpected error updating invoice status:', error);
+    return null;
   }
 }

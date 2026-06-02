@@ -4,9 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sparkles } from "lucide-react";
 import Footer from "./Footer";
 
-type Section = string;
-
-export default function PrayersSection({ t, langCode, setActiveSection }: { t: (k: string) => string, langCode: string, setActiveSection: (s: Section) => void }) {
+export default function PrayersSection({ t, langCode, setActiveSection }: { t: (k: string) => string, langCode: string, setActiveSection: (s: string) => void }) {
   const prayers = [
     {
       title: "Itipiso (The Nine Attributes of the Buddha)",

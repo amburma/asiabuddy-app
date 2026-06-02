@@ -1,11 +1,8 @@
 import InstallBanner from './components/InstallBanner';
-import InstallBanner from './components/InstallBanner';
 import IOSInstallBanner from './components/IOSInstallBanner';
 import MarkdownRenderer from './components/MarkdownRenderer';
 import GuideModal from './components/GuideModal';
-import InstallBanner from './components/InstallBanner';
 import { useState, useEffect } from 'react';
-import InstallBanner from './components/InstallBanner';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThaiLanguage } from './types';
 import EmergencyBanner from './components/EmergencyBanner';
@@ -28,7 +25,7 @@ import { VAT_REFUND_GUIDE } from './data/vatRefundGuide';
 import { VISA_GUIDE } from './data/visaGuide';
 import { TRAVEL_STYLE_GUIDE } from './data/travelStyleGuide';
 import { SHOPPING_GUIDE_MARKDOWN } from './data/shoppingGuide';
-import { Compass, MessageSquare, Map as MapIcon, ShieldCheck, Languages, Info, X, Bus, ChevronRight, Check, AlertCircle, Receipt, FileCheck, Menu, Grid, MessageCircle, Home, Utensils, Plane, Ticket, Stethoscope, Music, ShoppingBag, Calculator, Gavel, Briefcase, Phone, Mail, Globe, Facebook } from 'lucide-react';
+import { Compass, MessageSquare, Map as MapIcon, ShieldCheck, Languages, Info, X, Bus, ChevronRight, Check, AlertCircle, Receipt, FileCheck, Menu, Grid, MessageCircle, Home, Utensils, Plane, Ticket, Stethoscope, Music, ShoppingBag, Calculator, Gavel, Briefcase, Phone, Mail, Globe, Facebook, Calendar } from 'lucide-react';
 import TripPlannerChat from './components/TripPlannerChat';
 import MedicalChat from './components/MedicalChat';
 import NightlifeChat from './components/NightlifeChat';
@@ -39,6 +36,7 @@ import PhrasesChat from './components/PhrasesChat';
 import EtiquetteGuide from './components/EtiquetteGuide';
 import LawsGuide from './components/LawsGuide';
 import { TripChecklist } from './components/TripChecklist';
+import BookingWebForm from './components/BookingWebForm';
 
 export default function App() {
   const [language, setLanguage] = useState<ThaiLanguage>(() => {
@@ -67,6 +65,7 @@ export default function App() {
   const [showNightlifeModal, setShowNightlifeModal] = useState(false);
   const [showShoppingModal, setShowShoppingModal] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
+  const [showWebFormModal, setShowWebFormModal] = useState(false);
   const [showCurrencyModal, setShowCurrencyModal] = useState(false);
   const [showPhrasesModal, setShowPhrasesModal] = useState(false);
   const [showEtiquetteModal, setShowEtiquetteModal] = useState(false);
@@ -389,66 +388,74 @@ useEffect(() => {
 </GuideModal>
 
       <div className="mt-20">
-        <EmergencyBanner 
-          title={t.emergency} 
-          policeLabel={t.touristPolice} 
-          assistanceLabel={t.assistance} 
-        />
+        {/* Book Now Button — opens Web Form Modal */}
+        <motion.button
+          onClick={() => setShowWebFormModal(true)}
+          className="w-full max-w-4xl mx-auto bg-gradient-to-r from-gold-deep to-amber-500 text-white rounded-xl py-4 px-6 flex items-center justify-center gap-4 hover:from-amber-600 hover:to-gold-soft transition-all shadow-lg hover:shadow-xl"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <Calendar size={20} className="flex-shrink-0" />
+          <div className="text-left">
+            <p className="text-base font-bold uppercase tracking-wider">{t.chat?.bookNow || 'Book Now'}</p>
+            <p className="text-xs opacity-90">{t.chat?.bookNowSubtitle || 'Connect with a Human Operator'}</p>
+          </div>
+        </motion.button>
       </div>
 
       {/* Footer */}
       <footer className="bg-white border-t border-gray-100 py-12 md:py-20 mt-20">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="md:col-span-2 space-y-6">
-            <div>
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col items-center space-y-6">
+            <div className="text-center">
               <h3 className="text-2xl mb-1 text-gold-deep">ThaiGuide</h3>
               <p className="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-700">{(t.footer || UI_TRANSLATIONS.EN.footer).by}</p>
             </div>
-            <p className="text-sm text-gray-800 font-light max-w-sm italic">
+            <p className="text-sm text-gray-800 font-light max-w-sm italic text-center">
               {(t.footer || UI_TRANSLATIONS.EN.footer).tagline}
             </p>
             <div className="flex items-center gap-5 pt-2">
-              <a 
-                href="https://www.facebook.com/asiabuddyapp/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110" 
+              <a
+                href="https://www.facebook.com/asiabuddyapp/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110"
                 id="footer-facebook"
               >
                 <Facebook size={18} />
               </a>
-              <a 
-                href="https://m.me/asiabuddyapp" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110" 
+              <a
+                href="https://m.me/asiabuddyapp"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110"
                 id="footer-messenger"
               >
                 <MessageCircle size={18} />
               </a>
-              <a 
-                href="https://wa.me/+491793956759" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110" 
+              <a
+                href="https://wa.me/+491793956759"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110"
                 id="footer-whatsapp"
               >
                 <MessageSquare size={18} />
               </a>
-              <a 
-                href="mailto:asiabuddyapp@gmail.com" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110" 
+              <a
+                href="mailto:asiabuddyapp@gmail.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110"
                 id="footer-email"
               >
                 <Mail size={18} />
               </a>
-              <a 
-                href="https://asiabuddy.app/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110" 
+              <a
+                href="https://asiabuddy.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gold-deep hover:text-sacred-green transition-all hover:scale-110"
                 id="footer-website"
               >
                 <Globe size={18} />
@@ -468,6 +475,13 @@ useEffect(() => {
             <span className="hover:text-gold-deep cursor-pointer transition-colors">{(t.footer || UI_TRANSLATIONS.EN.footer).culturalGuide}</span>
           </div>
         </div>
+
+        {/* Emergency & Safety Advice Bar at absolute bottom of footer */}
+        <EmergencyBanner
+          title={t.emergency}
+          policeLabel={t.touristPolice}
+          assistanceLabel={t.assistance}
+        />
       </footer>
 
       {/* Floating Concierge Icon */}
@@ -490,6 +504,16 @@ useEffect(() => {
           <span className="text-[8px] opacity-70">{uiT.chat?.digitalHelp || 'Digital Help'}</span>
         </div>
       </button>
+
+      {/* Booking Web Form Modal */}
+      <AnimatePresence>
+        {showWebFormModal && (
+          <BookingWebForm 
+            language={language} 
+            onClose={() => setShowWebFormModal(false)} 
+          />
+        )}
+      </AnimatePresence>
 
       {/* Global Information Modal */}
 <GuideModal
@@ -1096,10 +1120,9 @@ useEffect(() => {
             onClose={() => setShowChecklist(false)} 
           />
         )}
-      <InstallBanner language={language} />
       </AnimatePresence>
-    <InstallBanner language={language} />
-          <IOSInstallBanner language={language} />
+      <InstallBanner language={language} />
+      <IOSInstallBanner language={language} />
     </div>
   );
 }

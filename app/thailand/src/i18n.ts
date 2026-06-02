@@ -190,7 +190,9 @@ const ENGLISH_UI = {
     ],
     "statusActive": "Concierge Active",
     "processing": "ThaiGuide is thinking...",
-    "safe": "Safe travels!"
+    "safe": "Safe travels!",
+    "bookNow": "Book Now",
+    "bookNowSubtitle": "Connect with a Human Operator"
   },
   "footer": {
     "by": "AsiaBuddy Services",
@@ -509,7 +511,9 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     ],
     "statusActive": "คอนเซียร์จทำงานอยู่",
     "processing": "ThaiGuide กำลังคิด...",
-    "safe": "Safe travels!"
+    "safe": "Safe travels!",
+    "bookNow": "จองเลย",
+    "bookNowSubtitle": "เชื่อมต่อกับเจ้าหน้าที่มนุษย์"
   },
   "footer": {
     "by": "ความเป็นเลิศทางวัฒนธรรมไทย • บริการ AsiaBuddy",
@@ -819,7 +823,9 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     ],
     "statusActive": "ဝန်ဆောင်မှုပေးရန် အဆင်သင့်ရှိသည်",
     "processing": "ThaiGuide စဉ်းစားနေသည်...",
-    "safe": "Safe travels!"
+    "safe": "Safe travels!",
+    "bookNow": "ဘွတ်ကင်လုပ်ပါ",
+    "bookNowSubtitle": "လူသားလက်ထောက်နှင့် ချိတ်ဆက်ပါ"
   },
   "footer": {
     "by": "ထိုင်းယဉ်ကျေးမှု ထူးချွန်မှု • AsiaBuddy ဝန်ဆောင်မှုများ",
@@ -1129,7 +1135,9 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     ],
     "statusActive": "Conserje Activo",
     "processing": "ThaiGuide está pensando...",
-    "safe": "¡Buen viaje!"
+    "safe": "¡Buen viaje!",
+    "bookNow": "Reservar Ahora",
+    "bookNowSubtitle": "Conectar con un Operador Humano"
   },
   "footer": {
     "by": "Excelencia Cultural Tailandesa • Servicios AsiaBuddy",
@@ -1439,7 +1447,9 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     ],
     "statusActive": "Concierge Activo",
     "processing": "ThaiGuide réfléchit...",
-    "safe": "Bon voyage !"
+    "safe": "Bon voyage !",
+    "bookNow": "Réserver Maintenant",
+    "bookNowSubtitle": "Connecter avec un Opérateur Humain"
   },
   "footer": {
     "by": "Excellence Culturelle Thaïlandaise • Services AsiaBuddy",
@@ -1749,7 +1759,9 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     ],
     "statusActive": "Concierge Aktiv",
     "processing": "ThaiGuide überlegt...",
-    "safe": "Gute Reise!"
+    "safe": "Gute Reise!",
+    "bookNow": "Jetzt Buchen",
+    "bookNowSubtitle": "Mit einem menschlichen Mitarbeiter verbinden"
   },
   "footer": {
     "by": "Thailändische kulturelle Exzellenz • AsiaBuddy Services",

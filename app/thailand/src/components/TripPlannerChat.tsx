@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, MapPin, Calendar, Users, Home, DollarSign, Heart, FileText, Loader2, MessageSquare, ChevronRight, RefreshCcw } from 'lucide-react';
+import { Send, MapPin, Calendar, Users, Home, DollarSign, Heart, FileText, Loader2, MessageSquare, ChevronRight, RefreshCcw, Calendar as CalendarIcon } from 'lucide-react';
 import { getConciergeResponse } from '../services/geminiService';
 import { ChatMessage, ThaiLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../i18n';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import HumanOperatorChat from './HumanOperatorChat';
 
 interface Props {
   language: ThaiLanguage;
@@ -38,6 +39,7 @@ export default function TripPlannerChat({ language }: Props) {
   });
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showHumanChat, setShowHumanChat] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = UI_TRANSLATIONS[language]?.chat || UI_TRANSLATIONS.EN.chat;
@@ -339,6 +341,17 @@ export default function TripPlannerChat({ language }: Props) {
                 >
                   <RefreshCcw size={14} /> {l.restart}
                 </button>
+
+                {/* Book Now Button */}
+                <motion.button
+                  onClick={() => setShowHumanChat(true)}
+                  className="w-full py-3 bg-gradient-to-r from-gold-deep to-amber-500 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:from-amber-600 hover:to-gold-soft transition-all shadow-lg hover:shadow-xl"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <CalendarIcon size={14} className="flex-shrink-0" />
+                  <span>{t.bookNow}</span>
+                </motion.button>
               </div>
             )}
           </div>
@@ -365,6 +378,16 @@ export default function TripPlannerChat({ language }: Props) {
         >
           {renderStep()}
         </motion.div>
+      </AnimatePresence>
+
+      {/* Human Operator Chat Modal */}
+      <AnimatePresence>
+        {showHumanChat && (
+          <HumanOperatorChat
+            language={language}
+            onClose={() => setShowHumanChat(false)}
+          />
+        )}
       </AnimatePresence>
     </div>
   );

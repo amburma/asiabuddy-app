@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, Bot, User, Loader2, Info } from 'lucide-react';
+import { Send, Bot, User, Loader2, Info, Calendar } from 'lucide-react';
 import { getConciergeResponse } from '../services/geminiService';
 import { ChatMessage, ThaiLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../i18n';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import HumanOperatorChat from './HumanOperatorChat';
 
 interface Props {
   language: ThaiLanguage;
@@ -16,6 +17,7 @@ export default function ConciergeChat({ language }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showHumanChat, setShowHumanChat] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = uiT.chat || UI_TRANSLATIONS.EN.chat;
@@ -139,11 +141,17 @@ export default function ConciergeChat({ language }: Props) {
             <Send size={18} />
           </button>
         </div>
-        <div className="mt-3 flex items-center gap-2 opacity-40">
-           <Info size={10} />
-           <p className="text-[9px] uppercase tracking-tighter font-bold">{t.safe}</p>
-        </div>
       </div>
+
+      {/* Human Operator Chat Modal */}
+      <AnimatePresence>
+        {showHumanChat && (
+          <HumanOperatorChat
+            language={language}
+            onClose={() => setShowHumanChat(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

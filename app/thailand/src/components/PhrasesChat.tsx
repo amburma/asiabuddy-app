@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Volume2, Send, MessageSquare, Sparkles, User, Bot, Loader2, Play } from 'lucide-react';
+import { Volume2, Send, MessageSquare, Sparkles, User, Bot, Loader2, Play, Calendar } from 'lucide-react';
 import { ESSENTIAL_PHRASES, TRAVELER_TIPS } from '../data/phrasesData';
 import { SUPPORTED_LANGUAGES, ThaiLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../i18n';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
-
 import { getConciergeResponse } from '../services/geminiService';
+import HumanOperatorChat from './HumanOperatorChat';
 
 interface Props {
   language: ThaiLanguage;
@@ -26,6 +26,7 @@ export default function PhrasesChat({ language }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [showHumanChat, setShowHumanChat] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const phrases = ESSENTIAL_PHRASES[language] || ESSENTIAL_PHRASES['EN'];
@@ -174,7 +175,7 @@ export default function PhrasesChat({ language }: Props) {
                     <Sparkles size={32} />
                   </div>
                   <p className="text-[11px] text-gray-500 leading-relaxed uppercase tracking-widest font-medium">
-		{uiT.tools?.phrasesEmptyText || 'Ask anything about Thai phrases and language.'}
+		Ask anything about Thai phrases and language.
                   </p>
                   <div className="flex flex-wrap justify-center gap-2">
                     {suggestedQuestions.map((q, idx) => (
@@ -264,6 +265,20 @@ export default function PhrasesChat({ language }: Props) {
                   <Send size={16} />
                 </button>
               </div>
+
+              {/* Book Now Button */}
+              <motion.button
+                onClick={() => setShowHumanChat(true)}
+                className="mt-3 w-full bg-gradient-to-r from-gold-deep to-amber-500 text-white rounded-xl py-2.5 px-3 flex items-center justify-center gap-2 hover:from-amber-600 hover:to-gold-soft transition-all shadow-lg hover:shadow-xl"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Calendar size={16} className="flex-shrink-0" />
+                <div className="text-left">
+                  <p className="text-xs font-bold uppercase tracking-wider">{uiT.chat?.bookNow}</p>
+                  <p className="text-[9px] opacity-90">{uiT.chat?.bookNowSubtitle}</p>
+                </div>
+              </motion.button>
             </div>
           </div>
           <p className="text-[9px] text-gray-400 text-center uppercase tracking-widest font-bold">
@@ -271,6 +286,16 @@ export default function PhrasesChat({ language }: Props) {
           </p>
         </div>
       </div>
+
+      {/* Human Operator Chat Modal */}
+      <AnimatePresence>
+        {showHumanChat && (
+          <HumanOperatorChat
+            language={language}
+            onClose={() => setShowHumanChat(false)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
