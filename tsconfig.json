@@ -34,8 +34,6 @@
   "next-env.d.ts",
   "app/*.ts",
   "app/*.tsx",
-  "app/shwedagon/**/*.ts",
-  "app/shwedagon/**/*.tsx",
   ".next/types/**/*.ts",
   ".next/dev/types/**/*.ts",
   "**/*.ts",
