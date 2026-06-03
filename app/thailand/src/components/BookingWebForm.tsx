@@ -9,6 +9,57 @@ import {
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Language = 'EN' | 'TH' | 'MM' | 'ES' | 'FR' | 'DE';
+
+const LANGUAGE_MAP: Record<Language, {
+  name: string;
+  greeting: string;
+  errorMsg: string;
+  thinkingText: string;
+  outOfScope: string;
+}> = {
+  EN: {
+    name: 'English',
+    greeting: 'Hello! I would like to travel to Thailand.',
+    errorMsg: '❌ Something went wrong. Please try again.',
+    thinkingText: 'ThaiGuide is thinking',
+    outOfScope: 'Sorry, I can only assist with Thailand travel.',
+  },
+  MM: {
+    name: 'Burmese (မြန်မာဘာသာ)',
+    greeting: 'မင်္ဂလာပါ။ ကျွန်တော်/မ ထိုင်းနိုင်ငံ ခရီးသွားချင်ပါတယ်။',
+    errorMsg: '❌ တစ်ခုခု မှားယွင်းသွားပါတယ်။ ခဏနေပြီး ထပ်ကြိုးစားကြည့်ပါ။',
+    thinkingText: 'ThaiGuide စဉ်းစားနေသည်',
+    outOfScope: 'ထိုင်းခရီးစဉ်နှင့် သက်ဆိုင်သောမေးခွန်းများသာ ဖြေဆိုနိုင်ပါသည်။',
+  },
+  TH: {
+    name: 'Thai (ภาษาไทย)',
+    greeting: 'สวัสดีครับ ผมอยากไปเที่ยวประเทศไทย',
+    errorMsg: '❌ เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
+    thinkingText: 'ThaiGuide กำลังคิด',
+    outOfScope: 'ขออภัย ฉันช่วยได้เฉพาะเรื่องการท่องเที่ยวไทยเท่านั้น',
+  },
+  ES: {
+    name: 'Spanish (Español)',
+    greeting: 'Hola, me gustaría viajar a Tailandia.',
+    errorMsg: '❌ Algo salió mal. Por favor, inténtalo de nuevo.',
+    thinkingText: 'ThaiGuide está pensando',
+    outOfScope: 'Lo siento, solo puedo ayudar con viajes a Tailandia.',
+  },
+  FR: {
+    name: 'French (Français)',
+    greeting: 'Bonjour, je voudrais voyager en Thaïlande.',
+    errorMsg: '❌ Une erreur est survenue. Veuillez réessayer.',
+    thinkingText: 'ThaiGuide réfléchit',
+    outOfScope: 'Désolé, je ne peux aider que pour les voyages en Thaïlande.',
+  },
+  DE: {
+    name: 'German (Deutsch)',
+    greeting: 'Hallo, ich möchte nach Thailand reisen.',
+    errorMsg: '❌ Etwas ist schiefgelaufen. Bitte versuche es erneut.',
+    thinkingText: 'ThaiGuide denkt nach',
+    outOfScope: 'Entschuldigung, ich kann nur bei Thailand-Reisen helfen.',
+  },
+};
 type ServiceKey = 'tour' | 'flight' | 'hotel' | 'car' | 'tickets';
 type SocialKey  = 'Viber' | 'Telegram' | 'WhatsApp' | 'Line';
 type ChatRole   = 'user' | 'assistant';
@@ -35,48 +86,57 @@ const SERVICES: { key: ServiceKey; label: string; icon: React.ReactNode }[] = [
 ];
 
 // ─── Gemini System Prompt ─────────────────────────────────────────────────────
-const SYSTEM_PROMPT = `
-You are an expert, 24/7 Live Chat Tour Operator for AsiaBuddy.app. Your goal is to provide exceptional, human-like travel guidance and convert inquiries into sales by helping travelers plan smooth, stress-free trips to Asia (with a special focus on Thailand). Your tone must never be robotic. Always respond as a polite, friendly, empathetic, and experienced travel service provider.
+function getSystemPrompt(language: Language): string {
+  const lang = LANGUAGE_MAP[language];
+  return `
+You are an expert, 24/7 Live Chat Tour Operator for AsiaBuddy.app.
+Your goal is to provide exceptional, human-like travel guidance 
+and convert inquiries into sales by helping travelers plan 
+smooth, stress-free trips to Thailand.
 
-TARGET AUDIENCE: Travelers visiting Asia who are facing real-time difficulties with logistics, language, transportation, or accommodation, and desire a seamless, hassle-free trip.
+CRITICAL LANGUAGE RULE:
+- Target Language: ${lang.name}
+- You MUST respond ONLY in ${lang.name} at all times.
+- NEVER mix languages or switch to another language.
+- If the user writes in any other language, understand it 
+  but ALWAYS reply in ${lang.name} only.
 
-THINKING STATE RULE: Whenever a loading, processing, or thinking state must be displayed, you must strictly output the following text in the Target Language: "ThaiGuide is thinking..." — CRITICAL: Never display "AI is thinking..." or any other variation.
+THINKING STATE RULE:
+- When loading, display exactly: "${lang.thinkingText}..."
+- NEVER display "AI is thinking..." or any other variation.
 
 SCOPE & HONESTY POLICY:
-- Travel Scope: You may only answer questions related to Thailand Travel and Tourism, Culture, Transportation, Accommodation, Entrance Fees, Rentals, Tickets, and related travel automation questions.
-- Out-of-Scope Handling: If a user asks an unrelated question, politely decline in Burmese.
-- Honesty Rule: Do not attempt to answer questions if you do not know the information. Provide only 100% accurate, up-to-date service details and pricing. If uncertain, say so honestly. Always cite the Reference/Source.
-
-LANGUAGE & TRANSLATION POLICY:
-- Target Language: Burmese (မြန်မာဘာသာ). All final responses must maintain a friendly, warm, and professional Burmese conversational tone.
-- Translation Rule: If the user writes in a language other than Burmese, translate the meaning into Burmese and continue responding in Burmese.
+- Answer ONLY questions related to Thailand Travel, Tourism, 
+  Culture, Transportation, Accommodation, Entrance Fees, 
+  Rentals, and Tickets.
+- Out-of-Scope: Politely decline in ${lang.name}.
+- Honesty: Never guess. If uncertain, say so honestly.
 
 CORE OBJECTIVES:
-- Sales-Driven yet Human: Never sound like a robotic sales agent. Be helpful, deeply empathetic, and polite.
-- Cost-Efficient & Accurate: Keep responses concise, direct, and highly relevant.
-- High Engagement: Use relevant emojis appropriately throughout the text.
+- Be helpful, empathetic, and polite. Never robotic.
+- Keep responses concise and relevant.
+- Use appropriate emojis throughout.
 
-CHAT RESPONSE RULES & STRUCTURE (The Invisible Flow):
-Every response must flow naturally as a single, cohesive message. CRITICAL CONSTRAINT: Do NOT show these structural headers to the customer. They must remain completely invisible.
-1. Hook: A warm, engaging opening with relevant emojis.
-2. Problem: Empathetically acknowledge the specific travel difficulty or pain point.
-3. Benefit: Present a clear, practical solution that directly resolves their problem.
-4. Offer: Naturally introduce AsiaBuddy's specific service or package as the ultimate solution.
-5. CTA (Call to Action): Guide the customer on the immediate next step to close the sale.
+RESPONSE STRUCTURE (Invisible to customer):
+1. Hook: Warm opening with emojis
+2. Problem: Acknowledge their travel difficulty
+3. Benefit: Present a clear practical solution
+4. Offer: Introduce AsiaBuddy service naturally
+5. CTA: Guide to next step
 
-FORMATTING REQUIREMENTS:
-- Use standard Markdown for clarity.
-- Use bolding for key terms, core prices, and essential options.
-- Use clear bullet points for comparing travel options.
-- Keep the message structure tight, professional, and easy to read at a glance.
-
-IMPORTANT — When the user seems ready to book or has asked enough questions, naturally suggest they click the "ဆက်လက်မှာကြမည်" (Proceed to Book) button that appears below the chat. Do this organically as part of your CTA — never force it.
+FORMATTING:
+- Use Markdown for clarity
+- Bold key terms and prices
+- Bullet points for options
+- When user seems ready to book, naturally suggest 
+  clicking the "Proceed to Book" button below the chat.
 `.trim();
+}
 
 // ─── Gemini API call ──────────────────────────────────────────────────────────
-async function callGemini(history: ChatMessage[], userText: string): Promise<string> {
-  const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-  if (!apiKey) throw new Error('GEMINI_API_KEY missing');
+async function callGemini(history: ChatMessage[], userText: string, language: Language = 'EN'): Promise<string> {
+  const apiKey = process.env.NEXT_PUBLIC_GEMINI_PRO_API_KEY;
+  if (!apiKey) throw new Error('GEMINI_PRO_API_KEY missing');
 
   // Build contents array for Gemini
   const contents = [
@@ -93,7 +153,7 @@ async function callGemini(history: ChatMessage[], userText: string): Promise<str
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        systemInstruction: { parts: [{ text: getSystemPrompt(language) }] },
         contents,
         generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
       }),
@@ -131,12 +191,13 @@ export default function BookingWebForm({ language = 'EN', onClose }: Props) {
     (async () => {
       setAiLoading(true);
       try {
-        const greeting = await callGemini([], 'မင်္ဂလာပါ။ ကျွန်တော်/မ ထိုင်းနိုင်ငံ ခရီးသွားချင်ပါတယ်။');
+        const lang = LANGUAGE_MAP[language];
+        const greeting = await callGemini([], lang.greeting, language);
         setMessages([{ role: 'assistant', text: greeting }]);
       } catch {
         setMessages([{
           role: 'assistant',
-          text: '🌺 မင်္ဂလာပါ! AsiaBuddy.app မှ ကြိုဆိုပါတယ်။ ထိုင်းနိုင်ငံ ခရီးစဉ်နှင့် ပတ်သက်၍ ဘာများ ကူညီပေးရမလဲ? 😊',
+          text: LANGUAGE_MAP[language].greeting,
         }]);
       } finally {
         setAiLoading(false);
@@ -157,12 +218,12 @@ export default function BookingWebForm({ language = 'EN', onClose }: Props) {
     setMessages((prev) => [...prev, userMsg]);
     setAiLoading(true);
     try {
-      const reply = await callGemini(messages, text);
+      const reply = await callGemini(messages, text, language);
       setMessages((prev) => [...prev, { role: 'assistant', text: reply }]);
     } catch {
       setMessages((prev) => [...prev, {
         role: 'assistant',
-        text: '❌ တစ်ခုခု မှားယွင်းသွားပါတယ်။ ခဏနေပြီး ထပ်ကြိုးစားကြည့်ပါ။',
+        text: LANGUAGE_MAP[language].errorMsg,
       }]);
     } finally {
       setAiLoading(false);
@@ -314,7 +375,7 @@ export default function BookingWebForm({ language = 'EN', onClose }: Props) {
                       🌺
                     </div>
                     <div className="bg-white border border-amber-100/60 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm flex items-center gap-1.5">
-                      <span className="text-[10px] text-emerald-700 font-medium italic mr-1">ThaiGuide is thinking</span>
+                      <span className="text-[10px] text-emerald-700 font-medium italic mr-1">{LANGUAGE_MAP[language].thinkingText}</span>
                       {[0, 1, 2].map((d) => (
                         <motion.span
                           key={d}
