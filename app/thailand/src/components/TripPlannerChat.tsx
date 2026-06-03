@@ -342,16 +342,6 @@ export default function TripPlannerChat({ language }: Props) {
                   <RefreshCcw size={14} /> {l.restart}
                 </button>
 
-                {/* Book Now Button */}
-                <motion.button
-                  onClick={() => setShowHumanChat(true)}
-                  className="w-full py-3 bg-gradient-to-r from-gold-deep to-amber-500 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2 hover:from-amber-600 hover:to-gold-soft transition-all shadow-lg hover:shadow-xl"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <CalendarIcon size={14} className="flex-shrink-0" />
-                  <span>{t.bookNow}</span>
-                </motion.button>
               </div>
             )}
           </div>
