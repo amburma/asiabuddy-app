@@ -1,4 +1,4 @@
-import { supabase } from '../src/config/supabase';
+import { supabase } from './supabase';
 
 export interface User {
   telegram_id: number;
