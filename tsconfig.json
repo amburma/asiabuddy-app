@@ -32,15 +32,18 @@
   },
   "include": [
   "next-env.d.ts",
-  "app/*.ts",
-  "app/*.tsx",
+  "app/**/*.ts",
+  "app/**/*.tsx",
+  "components/**/*.ts",
+  "components/**/*.tsx",
+  "lib/**/*.ts",
   ".next/types/**/*.ts",
-  ".next/dev/types/**/*.ts",
-  "**/*.ts",
-  "**/*.tsx"
+  ".next/dev/types/**/*.ts"
 ],
   "exclude": [
     "node_modules",
-    "app/thailand"
+    "app/thailand",
+    "src",
+    "src/**/*"
   ]
 }

@@ -28,7 +28,7 @@ interface Post {
 }
 
 async function getPosts(): Promise<Post[]> {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data, error } = await supabase
     .from('posts')
     .select('id, title, slug, excerpt, cover_image, category, published_at, read_time')

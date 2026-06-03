@@ -1,18 +1,23 @@
-import { webhookCallback } from 'grammy';
-import bot from '../../../src/bot';
-import { operatorBot } from '../../../src/bot';
+import { Bot, webhookCallback } from 'grammy';
+import { NextRequest, NextResponse } from 'next/server';
 
-// Create webhook handler for customer bot
-const customerHandler = webhookCallback(bot, 'std/http');
+let customerHandler: ((req: NextRequest) => Promise<NextResponse>) | null = null;
 
-// Create webhook handler for operator bot
-const operatorHandler = webhookCallback(operatorBot, 'std/http');
-
-// Export GET and POST handlers for Vercel (Customer Bot)
-export async function GET(req: Request) {
-  return customerHandler(req);
+function getCustomerHandler() {
+  if (!customerHandler) {
+    const bot = new Bot(process.env.TELEGRAM_BOT_TOKEN!);
+    const cb = webhookCallback(bot, 'std/http');
+    customerHandler = async (req: NextRequest) => {
+      return cb(req) as Promise<NextResponse>;
+    };
+  }
+  return customerHandler!;
 }
 
-export async function POST(req: Request) {
-  return customerHandler(req);
+export async function GET(req: NextRequest) {
+  return getCustomerHandler()(req);
+}
+
+export async function POST(req: NextRequest) {
+  return getCustomerHandler()(req);
 }

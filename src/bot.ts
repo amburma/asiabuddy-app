@@ -1,8 +1,8 @@
 import { Bot, GrammyError, InputFile } from 'grammy';
-import { getOrCreateUser, addChatMessage, createBooking, getUserBookings, updateBookingStatus, getBooking } from './lib/database';
+import { getOrCreateUser, addChatMessage, createBooking, getUserBookings, updateBookingStatus, getBooking } from '../lib/database';
 import { generateAIResponse } from './services/gemini';
 import { uploadTelegramFileToDrive } from './services/googleDrive';
-import { generateInvoicePDF } from './services/pdfGenerator';
+import { generateInvoicePDF } from '../lib/pdfGenerator';
 
 // Utility function to strip Markdown formatting for plain text output
 function stripMarkdown(text: string): string {
@@ -151,11 +151,11 @@ Feel free to ask me anything about your travel plans!
 `;
 
 // /start command handler — handles deep-link payload
-bot.start(async (ctx) => {
+bot.command('start', async (ctx) => {
   try {
     const telegramId = ctx.from!.id;
     const username = ctx.from!.username;
-    const payload = ctx.startPayload; // Will receive "book"
+    const payload = ctx.match; // Will receive "book"
     const lang = ctx.from?.language_code || 'en';
 
     // Get or create user in Supabase

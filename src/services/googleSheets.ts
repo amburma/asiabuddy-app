@@ -440,7 +440,7 @@ export async function getThailandPolicyData(): Promise<Record<string, string>> {
     // Dynamically import pdf-parse to avoid requiring it if not used
     let pdfParse: any;
     try {
-      pdfParse = (await import('pdf-parse')).default;
+      pdfParse = await import('pdf-parse');
     } catch (error) {
       console.error('pdf-parse package not found. Please install it with: npm install pdf-parse');
       throw new Error('pdf-parse package is required for reading PDF files');

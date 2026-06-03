@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+app/thailand/node_modules/
 /.pnp
 .pnp.*
 .yarn/*

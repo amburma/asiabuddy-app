@@ -46,7 +46,7 @@ export async function generateMetadata({
       title: `${data.title} – AsiaBuddy Thailand`,
       description: data.excerpt ?? undefined,
       images: data.cover_image ? [data.cover_image] : [],
-      url: `https://asiabuddy.app/thailand/thailand-destination/${params.slug}`,
+      url: `https://asiabuddy.app/thailand/thailand-destination/${slug}`,
     },
   }
 }
