@@ -25,7 +25,7 @@ import { VAT_REFUND_GUIDE } from './data/vatRefundGuide';
 import { VISA_GUIDE } from './data/visaGuide';
 import { TRAVEL_STYLE_GUIDE } from './data/travelStyleGuide';
 import { SHOPPING_GUIDE_MARKDOWN } from './data/shoppingGuide';
-import { Compass, MessageSquare, Map as MapIcon, ShieldCheck, Languages, Info, X, Bus, ChevronRight, Check, AlertCircle, Receipt, FileCheck, Menu, Grid, MessageCircle, Home, Utensils, Plane, Ticket, Stethoscope, Music, ShoppingBag, Calculator, Gavel, Briefcase, Phone, Mail, Globe, Facebook, Calendar } from 'lucide-react';
+import { Compass, MessageSquare, Map as MapIcon, ShieldCheck, Languages, Info, X, Bus, ChevronRight, Check, AlertCircle, Receipt, FileCheck, FileText, Menu, Grid, MessageCircle, Home, Utensils, Plane, Ticket, Stethoscope, Music, ShoppingBag, Calculator, Gavel, Briefcase, Phone, Mail, Globe, Facebook, Calendar } from 'lucide-react';
 import TripPlannerChat from './components/TripPlannerChat';
 import MedicalChat from './components/MedicalChat';
 import NightlifeChat from './components/NightlifeChat';
@@ -390,7 +390,14 @@ useEffect(() => {
       <div className="mt-20">
         {/* Book Now Button — opens Web Form Modal */}
         <motion.button
-          onClick={() => setShowWebFormModal(true)}
+          onClick={() => {
+            const isTelegram = /Telegram/i.test(navigator.userAgent);
+            if (isTelegram) {
+              window.open('https://t.me/asiabuddy_bot?start=book', '_blank');
+            } else {
+              setShowWebFormModal(true);
+            }
+          }}
           className="w-full max-w-4xl mx-auto bg-gradient-to-r from-gold-deep to-amber-500 text-white rounded-xl py-4 px-6 flex items-center justify-center gap-4 hover:from-amber-600 hover:to-gold-soft transition-all shadow-lg hover:shadow-xl"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -414,6 +421,11 @@ useEffect(() => {
             <p className="text-sm text-gray-800 font-light max-w-sm italic text-center">
               {(t.footer || UI_TRANSLATIONS.EN.footer).tagline}
             </p>
+            <div className="flex items-center gap-6 pt-2 text-[10px] uppercase tracking-widest font-bold text-gray-500">
+              <a href="/thailand/tour" className="hover:text-gold-deep transition-colors">Tours</a>
+              <a href="/thailand/blog" className="hover:text-gold-deep transition-colors">Blog</a>
+              <a href="/thailand/destination" className="hover:text-gold-deep transition-colors">Destinations</a>
+            </div>
             <div className="flex items-center gap-5 pt-2">
               <a
                 href="https://www.facebook.com/asiabuddyapp/"
@@ -849,6 +861,32 @@ useEffect(() => {
               </div>
 
               <div className="mt-auto p-8 bg-sacred-bg/50 border-t border-gold-soft/10">
+                <div className="mb-4">
+                  <p className="text-[9px] uppercase font-bold tracking-[0.3em] text-gray-400 mb-3">Discover</p>
+                  <div className="grid gap-1">
+                    <a href="/thailand/tour" onClick={() => setShowMenu(false)}
+                      className="flex items-center gap-3 p-3 rounded-2xl hover:bg-gold-soft/10 text-gray-700 transition-all border border-transparent hover:border-gold-soft/20">
+                      <div className="w-7 h-7 rounded-lg bg-sacred-bg flex items-center justify-center text-gold-deep">
+                        <MapIcon size={14} />
+                      </div>
+                      <span className="text-xs font-bold uppercase tracking-widest">Tour Packages</span>
+                    </a>
+                    <a href="/thailand/blog" onClick={() => setShowMenu(false)}
+                      className="flex items-center gap-3 p-3 rounded-2xl hover:bg-gold-soft/10 text-gray-700 transition-all border border-transparent hover:border-gold-soft/20">
+                      <div className="w-7 h-7 rounded-lg bg-sacred-bg flex items-center justify-center text-gold-deep">
+                        <FileText size={14} />
+                      </div>
+                      <span className="text-xs font-bold uppercase tracking-widest">Travel Blog</span>
+                    </a>
+                    <a href="/thailand/destination" onClick={() => setShowMenu(false)}
+                      className="flex items-center gap-3 p-3 rounded-2xl hover:bg-gold-soft/10 text-gray-700 transition-all border border-transparent hover:border-gold-soft/20">
+                      <div className="w-7 h-7 rounded-lg bg-sacred-bg flex items-center justify-center text-gold-deep">
+                        <Compass size={14} />
+                      </div>
+                      <span className="text-xs font-bold uppercase tracking-widest">Destinations</span>
+                    </a>
+                  </div>
+                </div>
                 <p className="text-[8px] uppercase tracking-widest text-gray-400 font-bold mb-2">{uiT.tools?.serviceMinded || 'Service Minded'}</p>
                 <div className="flex items-center gap-3 text-gold-deep">
                   <ShieldCheck size={18} />
