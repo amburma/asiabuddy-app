@@ -18,7 +18,7 @@ export interface ChatHistory {
 export interface Booking {
   id: string;
   telegram_id?: number;
-  tour_type: 'tour' | 'flight' | 'car' | 'taxi';
+  tour_type: 'tour' | 'flight' | 'car' | 'taxi' | 'hotel' | 'tickets';
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
   details: Record<string, any>;
   created_at: string;
@@ -287,7 +287,7 @@ export async function getAllUsers(): Promise<User[]> {
 // Booking CRUD operations
 export async function createBooking(
   telegramId: number | null,
-  tourType: 'tour' | 'flight' | 'car' | 'taxi',
+  tourType: 'tour' | 'flight' | 'car' | 'taxi' | 'hotel' | 'tickets',
   details: Record<string, any>,
   options?: {
     customerName?: string;

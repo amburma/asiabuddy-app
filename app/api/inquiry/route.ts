@@ -41,12 +41,13 @@ export async function POST(req: NextRequest) {
 
   // ── 2. Save booking to Supabase ─────────────────────────────────────────────
   // Determine tour_type from services (use first service as primary)
-  const tourTypeMapping: Record<string, 'tour' | 'flight' | 'car' | 'taxi'> = {
+  const tourTypeMapping: Record<string, string> = {
     tour: 'tour',
     flight: 'flight',
-    hotel: 'tour',
+    hotel: 'hotel',
     car: 'car',
-    tickets: 'tour',
+    taxi: 'taxi',
+    tickets: 'tickets',
   };
   const primaryService = services[0];
   const tourType = tourTypeMapping[primaryService] || 'tour';
@@ -58,20 +59,40 @@ export async function POST(req: NextRequest) {
     qa,
   };
 
-  const booking = await createBooking(
-    null, // No telegram_id for web inquiries
+  const bookingParams = {
+    telegram_id: null, // No telegram_id for web inquiries
     tourType,
     bookingDetails,
-    {
+    customerInfo: {
       customerName: name,
       customerPhone: phone,
       customerEmail: email,
-      source: 'web',
+      source: 'web' as const,
     }
-  );
+  };
+
+  console.log('[inquiry] createBooking parameters:', JSON.stringify(bookingParams, null, 2));
+
+  let booking;
+  try {
+    booking = await createBooking(
+      bookingParams.telegram_id,
+      bookingParams.tourType,
+      bookingParams.bookingDetails,
+      bookingParams.customerInfo
+    );
+    console.log('[inquiry] Booking created successfully:', JSON.stringify(booking, null, 2));
+  } catch (err) {
+    console.error('[inquiry] createBooking error details:', JSON.stringify(err, null, 2));
+    console.error('[inquiry] createBooking error stack:', err instanceof Error ? err.stack : 'No stack trace');
+    return NextResponse.json(
+      { error: 'Failed to create booking', details: err },
+      { status: 500, headers: corsHeaders }
+    );
+  }
 
   if (!booking) {
-    console.error('[inquiry] Failed to create booking in Supabase');
+    console.error('[inquiry] Failed to create booking in Supabase (returned null/undefined)');
     return NextResponse.json(
       { error: 'Failed to create booking' },
       { status: 500, headers: corsHeaders }
@@ -128,10 +149,10 @@ export async function POST(req: NextRequest) {
 
   // ── 4. Send to Telegram Operator Group ────────────────────────────────────
   const BOT_TOKEN = process.env.OPERATOR_BOT_TOKEN;
-  const CHAT_ID   = process.env.GROUP_CHAT_ID;
+  const CHAT_ID   = process.env.OPERATOR_GROUP_CHAT_ID;
 
   if (!BOT_TOKEN || !CHAT_ID) {
-    console.error('[inquiry] Missing OPERATOR_BOT_TOKEN or GROUP_CHAT_ID env vars');
+    console.error('[inquiry] Missing OPERATOR_BOT_TOKEN or OPERATOR_GROUP_CHAT_ID env vars');
     return NextResponse.json(
       { error: 'Server configuration error' },
       { status: 500, headers: corsHeaders }
@@ -184,7 +205,7 @@ export async function POST(req: NextRequest) {
   });
 
   // Await only in serverless-safe way (edge runtime allows this)
-  await sendPromise;
+  void sendPromise;
 
   return NextResponse.json({ ok: true }, { status: 200, headers: corsHeaders });
 }
