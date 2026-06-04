@@ -1,7 +1,7 @@
 import { ThaiLanguage } from "../types";
 
 // API endpoint for chat requests
-const API_ENDPOINT = "/api/web-chat";
+const API_ENDPOINT = "https://asiabuddy.app/api/web-chat";
 
 function getLanguageName(code: ThaiLanguage): string {
   const map: Record<string, string> = {
