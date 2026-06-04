@@ -1,12 +1,3 @@
 {
-  "rewrites": [
-    {
-      "source": "/thailand",
-      "destination": "https://asiabuddy-thailand-vite-fsvgrviw7-amburmas-projects.vercel.app"
-    },
-    {
-      "source": "/thailand/:path*",
-      "destination": "https://asiabuddy-thailand-vite-fsvgrviw7-amburmas-projects.vercel.app/:path*"
-    }
-  ]
+  "framework": "nextjs"
 }
