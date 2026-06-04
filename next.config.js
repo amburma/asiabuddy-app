@@ -8,12 +8,12 @@ const nextConfig = {
     return [
       {
         source: '/thailand',
-        destination: 'https://asiabuddy-thailand-vite-fsvgrviw7-amburmas-projects.vercel.app',
+        destination: 'https://thailand.asiabuddy.app',
         permanent: false,
       },
       {
         source: '/thailand/:path*',
-        destination: 'https://asiabuddy-thailand-vite-fsvgrviw7-amburmas-projects.vercel.app/:path*',
+        destination: 'https://thailand.asiabuddy.app/:path*',
         permanent: false,
       },
     ]
