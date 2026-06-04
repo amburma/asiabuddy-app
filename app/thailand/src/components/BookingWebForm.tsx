@@ -135,8 +135,8 @@ FORMATTING:
 
 // ─── Gemini API call ──────────────────────────────────────────────────────────
 async function callGemini(history: ChatMessage[], userText: string, language: Language = 'EN'): Promise<string> {
-  const apiKey = process.env.NEXT_PUBLIC_GEMINI_PRO_API_KEY;
-  if (!apiKey) throw new Error('GEMINI_PRO_API_KEY missing');
+  const apiKey = import.meta.env.VITE_GEMINI_PRO_API_KEY;
+  if (!apiKey) throw new Error('VITE_GEMINI_PRO_API_KEY missing');
 
   // Build contents array for Gemini
   const contents = [
@@ -250,7 +250,7 @@ export default function BookingWebForm({ language = 'EN', onClose }: Props) {
         .map((m) => `${m.role === 'user' ? 'Customer' : 'AsiaBuddy'}: ${m.text}`)
         .join('\n');
 
-      const res = await fetch('/api/inquiry', {
+      const res = await fetch('https://asiabuddy.app/api/inquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...form, chatSummary, qa: [] }),
