@@ -1,24 +1,12 @@
 {
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
-  "framework": "nextjs",
   "rewrites": [
-    {
-      "source": "/thailand/:path*",
-      "destination": "https://asiabuddy-thailand-vite.vercel.app/:path*"
-    },
     {
       "source": "/thailand",
       "destination": "https://asiabuddy-thailand-vite.vercel.app"
-    }
-  ],
-  "functions": {
-    "app/api/webhook/route.ts": {
-      "maxDuration": 30
     },
-    "app/api/operator-webhook/route.ts": {
-      "maxDuration": 30
+    {
+      "source": "/thailand/:path*",
+      "destination": "https://asiabuddy-thailand-vite.vercel.app/:path*"
     }
-  }
+  ]
 }

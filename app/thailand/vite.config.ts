@@ -4,14 +4,14 @@ import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
-  base: '/thailand/',
+  base: '/',
   plugins: [
     react(),
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      base: '/thailand/',
-      scope: '/thailand/',
+      base: '/',
+      scope: '/',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         navigateFallback: null,
@@ -48,21 +48,21 @@ export default defineConfig({
         name: 'ThaiGuide \u2013 Thailand Travel Guide',
         short_name: 'ThaiGuide',
         description: 'Your complete Thailand travel companion by AsiaBuddy Services',
-        start_url: '/thailand/',
-        scope: '/thailand/',
+        start_url: '/',
+        scope: '/',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',
         theme_color: '#B59410',
         icons: [
           {
-            src: '/thailand/icons/icon-192x192.png',
+            src: '/icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'maskable any',
           },
           {
-            src: '/thailand/icons/icon-512x512.png',
+            src: '/icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable any',
