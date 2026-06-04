@@ -1,6 +1,6 @@
 import { Bot, GrammyError } from 'grammy';
 import { getOrCreateUser, addChatMessage } from './lib/database';
-import { generateAIResponse } from './services/gemini';
+import { generateAIResponse } from '../../../src/services/gemini';
 import { uploadTelegramFileToDrive } from './services/googleDrive';
 
 // Utility function to strip Markdown formatting for plain text output

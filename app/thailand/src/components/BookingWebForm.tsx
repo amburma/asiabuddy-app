@@ -85,88 +85,26 @@ const SERVICES: { key: ServiceKey; label: string; icon: React.ReactNode }[] = [
   { key: 'tickets', label: 'Attraction Tickets', icon: <Ticket size={15} /> },
 ];
 
-// ─── Gemini System Prompt ─────────────────────────────────────────────────────
-function getSystemPrompt(language: Language): string {
-  const lang = LANGUAGE_MAP[language];
-  return `
-You are an expert, 24/7 Live Chat Tour Operator for AsiaBuddy.app.
-Your goal is to provide exceptional, human-like travel guidance 
-and convert inquiries into sales by helping travelers plan 
-smooth, stress-free trips to Thailand.
+// ─── Backend API call for inquiry submission ───────────────────────────────────
+async function submitInquiry(formData: FormData, chatSummary: string): Promise<boolean> {
+  const response = await fetch('https://asiabuddy.app/api/inquiry', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      ...formData,
+      chatSummary,
+      qa: [],
+    }),
+  });
 
-CRITICAL LANGUAGE RULE:
-- Target Language: ${lang.name}
-- You MUST respond ONLY in ${lang.name} at all times.
-- NEVER mix languages or switch to another language.
-- If the user writes in any other language, understand it 
-  but ALWAYS reply in ${lang.name} only.
-
-THINKING STATE RULE:
-- When loading, display exactly: "${lang.thinkingText}..."
-- NEVER display "AI is thinking..." or any other variation.
-
-SCOPE & HONESTY POLICY:
-- Answer ONLY questions related to Thailand Travel, Tourism, 
-  Culture, Transportation, Accommodation, Entrance Fees, 
-  Rentals, and Tickets.
-- Out-of-Scope: Politely decline in ${lang.name}.
-- Honesty: Never guess. If uncertain, say so honestly.
-
-CORE OBJECTIVES:
-- Be helpful, empathetic, and polite. Never robotic.
-- Keep responses concise and relevant.
-- Use appropriate emojis throughout.
-
-RESPONSE STRUCTURE (Invisible to customer):
-1. Hook: Warm opening with emojis
-2. Problem: Acknowledge their travel difficulty
-3. Benefit: Present a clear practical solution
-4. Offer: Introduce AsiaBuddy service naturally
-5. CTA: Guide to next step
-
-FORMATTING:
-- Use Markdown for clarity
-- Bold key terms and prices
-- Bullet points for options
-- When user seems ready to book, naturally suggest 
-  clicking the "Proceed to Book" button below the chat.
-`.trim();
-}
-
-// ─── Gemini API call ──────────────────────────────────────────────────────────
-async function callGemini(history: ChatMessage[], userText: string, language: Language = 'EN'): Promise<string> {
-  const apiKey = import.meta.env.VITE_GEMINI_PRO_API_KEY;
-  if (!apiKey) throw new Error('VITE_GEMINI_PRO_API_KEY missing');
-
-  // Build contents array for Gemini
-  const contents = [
-    ...history.map((m) => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.text }],
-    })),
-    { role: 'user', parts: [{ text: userText }] },
-  ];
-
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite-preview-06-17:generateContent?key=${apiKey}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: getSystemPrompt(language) }] },
-        contents,
-        generationConfig: { temperature: 0.7, maxOutputTokens: 1024 },
-      }),
-    }
-  );
-
-  if (!res.ok) {
-    const err = await res.text();
-    throw new Error(`Gemini error: ${err}`);
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Inquiry submission failed');
   }
 
-  const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '...';
+  return true;
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
@@ -186,23 +124,10 @@ export default function BookingWebForm({ language = 'EN', onClose }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef  = useRef<HTMLInputElement>(null);
 
-  // Opening greeting from AI on mount
+  // Opening greeting on mount (static message, no AI call)
   useEffect(() => {
-    (async () => {
-      setAiLoading(true);
-      try {
-        const lang = LANGUAGE_MAP[language];
-        const greeting = await callGemini([], lang.greeting, language);
-        setMessages([{ role: 'assistant', text: greeting }]);
-      } catch {
-        setMessages([{
-          role: 'assistant',
-          text: LANGUAGE_MAP[language].greeting,
-        }]);
-      } finally {
-        setAiLoading(false);
-      }
-    })();
+    const lang = LANGUAGE_MAP[language];
+    setMessages([{ role: 'assistant', text: lang.greeting }]);
   }, []);
 
   // Auto-scroll
@@ -216,19 +141,17 @@ export default function BookingWebForm({ language = 'EN', onClose }: Props) {
     setInput('');
     const userMsg: ChatMessage = { role: 'user', text };
     setMessages((prev) => [...prev, userMsg]);
+    
+    // Simple auto-reply for booking form (no AI call)
     setAiLoading(true);
-    try {
-      const reply = await callGemini(messages, text, language);
-      setMessages((prev) => [...prev, { role: 'assistant', text: reply }]);
-    } catch {
+    setTimeout(() => {
       setMessages((prev) => [...prev, {
         role: 'assistant',
-        text: LANGUAGE_MAP[language].errorMsg,
+        text: 'Thank you for your message! Please proceed to fill in your booking details below.',
       }]);
-    } finally {
       setAiLoading(false);
       setTimeout(() => inputRef.current?.focus(), 100);
-    }
+    }, 500);
   };
 
   // Form validation
