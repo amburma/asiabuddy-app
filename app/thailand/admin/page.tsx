@@ -5,6 +5,8 @@ import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { LogOut, Plus, List, Eye, Trash2, Pencil, X } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 // ─── Types ─────────────────────────────────────────────────────
 type TabType = 'blog' | 'destination' | 'tour';
 type ModeType = 'create' | 'manage';
@@ -35,6 +37,22 @@ export default function AdminPage() {
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
 
+  // ── Auth check ──
+  useEffect(() => {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+    supabase.auth.getSession().then(({ data: { session } }: any) => {
+      if (!session) {
+        router.push('/thailand/clogin');
+      } else {
+        setUser(session.user);
+        setLoading(false);
+      }
+    });
+  }, []);
+
   // ── Blog fields ──
   const [blogTitle, setBlogTitle] = useState('');
   const [blogContent, setBlogContent] = useState('');
@@ -61,7 +79,7 @@ export default function AdminPage() {
 
   // ── Auth check ──
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }: any) => {
       if (!session) {
         router.push('/thailand/clogin');
       } else {

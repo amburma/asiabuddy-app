@@ -17,12 +17,16 @@ export interface ChatHistory {
 
 export interface Booking {
   id: string;
-  telegram_id: number;
+  telegram_id?: number;
   tour_type: 'tour' | 'flight' | 'car' | 'taxi';
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
   details: Record<string, any>;
   created_at: string;
   updated_at: string;
+  customer_name?: string;
+  customer_phone?: string;
+  customer_email?: string;
+  source?: 'telegram' | 'web';
 }
 
 export interface Invoice {
@@ -282,9 +286,15 @@ export async function getAllUsers(): Promise<User[]> {
 
 // Booking CRUD operations
 export async function createBooking(
-  telegramId: number,
+  telegramId: number | null,
   tourType: 'tour' | 'flight' | 'car' | 'taxi',
-  details: Record<string, any>
+  details: Record<string, any>,
+  options?: {
+    customerName?: string;
+    customerPhone?: string;
+    customerEmail?: string;
+    source?: 'telegram' | 'web';
+  }
 ): Promise<Booking | null> {
   try {
     const { data, error } = await supabase
@@ -293,7 +303,11 @@ export async function createBooking(
         telegram_id: telegramId,
         tour_type: tourType,
         status: 'pending',
-        details
+        details,
+        customer_name: options?.customerName,
+        customer_phone: options?.customerPhone,
+        customer_email: options?.customerEmail,
+        source: options?.source || 'telegram'
       })
       .select()
       .single();

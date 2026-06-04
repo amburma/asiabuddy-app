@@ -2,18 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { addChatMessage, getRecentChatHistory } from '../../../src/lib/database';
 import { generateAIResponse } from '../../../src/services/gemini';
 
-/**
- * Handle OPTIONS preflight request for CORS
- */
-export async function OPTIONS(request: NextRequest) {
-  return new NextResponse(null, {
-    status: 200,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
-    },
-  });
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export async function OPTIONS() {
+  return new Response(null, { status: 204, headers: corsHeaders });
 }
 
 /**
@@ -28,14 +24,7 @@ export async function POST(request: NextRequest) {
     if (!message || !sessionId) {
       return NextResponse.json(
         { error: 'Message and sessionId are required' },
-        { 
-          status: 400,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
-          },
-        }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -60,14 +49,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { response: aiResponse },
-      { 
-        status: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
-        },
-      }
+      { status: 200, headers: corsHeaders }
     );
 
   } catch (error: any) {
@@ -80,27 +62,13 @@ export async function POST(request: NextRequest) {
     ) {
       return NextResponse.json(
         { error: 'Daily usage limit reached. Please try again tomorrow. 🙏' },
-        { 
-          status: 429,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
-          },
-        }
+        { status: 429, headers: corsHeaders }
       );
     }
 
     return NextResponse.json(
       { error: 'Something went wrong. Please try again. 🙏' },
-      { 
-        status: 500,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
-        },
-      }
+      { status: 500, headers: corsHeaders }
     );
   }
 }
@@ -116,14 +84,7 @@ export async function GET(request: NextRequest) {
     if (!sessionId) {
       return NextResponse.json(
         { error: 'sessionId is required' },
-        { 
-          status: 400,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
-          },
-        }
+        { status: 400, headers: corsHeaders }
       );
     }
 
@@ -135,28 +96,14 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(
       { history: chatHistory },
-      { 
-        status: 200,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
-        },
-      }
+      { status: 200, headers: corsHeaders }
     );
 
   } catch (error: any) {
     console.error('Get chat history error:', error);
     return NextResponse.json(
       { error: 'Something went wrong. Please try again. 🙏' },
-      { 
-        status: 500,
-        headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type',
-        },
-      }
+      { status: 500, headers: corsHeaders }
     );
   }
 }

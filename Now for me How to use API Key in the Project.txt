@@ -1,0 +1,33 @@
+		Next.js Project (asiabuddy-app-main)
+# AI
+GEMINI_API_KEY=
+GEMINI_PRO_API_KEY=
+ 
+# Supabase (Public - Frontend)
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+ 
+# Supabase (Private - Backend)
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+ 
+SUPABASE_SERVICE_ROLE_KEY=
+ 
+# Telegram Bots
+TELEGRAM_BOT_TOKEN=
+OPERATOR_BOT_TOKEN=
+TELEGRAM_ADMIN_BOT_TOKEN=
+ 
+ 
+# Google
+GOOGLE_DRIVE_FOLDER_ID=
+GOOGLE_SERVICE_ACCOUNT_JSON=
+ 
+# Environment
+NODE_ENV=
+
+		Vite Project (asiabuddy-thailand-vite)
+# AI
+GEMINI_API_KEY=
+GEMINI_PRO_API_KEY=

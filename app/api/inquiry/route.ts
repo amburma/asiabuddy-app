@@ -1,4 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createBooking } from '@/lib/database';
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
+export async function OPTIONS() {
+  return new Response(null, { status: 204, headers: corsHeaders });
+}
 
 // POST /api/inquiry
 // Receives web inquiry form data and forwards a formatted alert
@@ -18,17 +29,59 @@ export async function POST(req: NextRequest) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: corsHeaders });
   }
 
   const { name, phone, email, socials, services, otherService, qa } = body;
 
   // Basic validation
   if (!name || !phone || !services?.length) {
-    return NextResponse.json({ error: 'Missing required fields' }, { status: 422 });
+    return NextResponse.json({ error: 'Missing required fields' }, { status: 422, headers: corsHeaders });
   }
 
-  // ── 2. Build Telegram message ──────────────────────────────────────────────
+  // ── 2. Save booking to Supabase ─────────────────────────────────────────────
+  // Determine tour_type from services (use first service as primary)
+  const tourTypeMapping: Record<string, 'tour' | 'flight' | 'car' | 'taxi'> = {
+    tour: 'tour',
+    flight: 'flight',
+    hotel: 'tour',
+    car: 'car',
+    tickets: 'tour',
+  };
+  const primaryService = services[0];
+  const tourType = tourTypeMapping[primaryService] || 'tour';
+
+  const bookingDetails = {
+    socials,
+    services,
+    otherService,
+    qa,
+  };
+
+  const booking = await createBooking(
+    null, // No telegram_id for web inquiries
+    tourType,
+    bookingDetails,
+    {
+      customerName: name,
+      customerPhone: phone,
+      customerEmail: email,
+      source: 'web',
+    }
+  );
+
+  if (!booking) {
+    console.error('[inquiry] Failed to create booking in Supabase');
+    return NextResponse.json(
+      { error: 'Failed to create booking' },
+      { status: 500, headers: corsHeaders }
+    );
+  }
+
+  const bookingIdShort = booking.id.slice(-8);
+  console.log(`[inquiry] Booking created: ${booking.id} (${bookingIdShort})`);
+
+  // ── 3. Build Telegram message ──────────────────────────────────────────────
   const serviceLabels: Record<string, string> = {
     tour: '🗺️ Tour Package',
     flight: '✈️ Flight Ticket',
@@ -69,10 +122,11 @@ export async function POST(req: NextRequest) {
     qaSection +
     otherSection +
     `\n\n━━━━━━━━━━━━━━━━━━\n` +
+    `🆔 *Booking ID:* ${bookingIdShort}\n` +
     `⏰ Received at: ${new Date().toUTCString()}\n` +
-    `🌐 Source: AsiaBuddy Web Inquiry (No Telegram)`;
+    `🌐 Source: AsiaBuddy Web Inquiry`;
 
-  // ── 3. Send to Telegram Operator Group ────────────────────────────────────
+  // ── 4. Send to Telegram Operator Group ────────────────────────────────────
   const BOT_TOKEN = process.env.OPERATOR_BOT_TOKEN;
   const CHAT_ID   = process.env.GROUP_CHAT_ID;
 
@@ -80,7 +134,7 @@ export async function POST(req: NextRequest) {
     console.error('[inquiry] Missing OPERATOR_BOT_TOKEN or GROUP_CHAT_ID env vars');
     return NextResponse.json(
       { error: 'Server configuration error' },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 
@@ -92,9 +146,19 @@ export async function POST(req: NextRequest) {
     chat_id: CHAT_ID,
     text: message,
     parse_mode: 'Markdown',
-    // Inline button: quick reply link back to the customer if they have Telegram
+    // Inline buttons: Approve/Reject and quick reply link
     reply_markup: {
       inline_keyboard: [
+        [
+          {
+            text: '✅ Approve',
+            callback_data: `approve_${booking.id}`,
+          },
+          {
+            text: '❌ Reject',
+            callback_data: `reject_${booking.id}`,
+          },
+        ],
         [
           {
             text: '📞 Call / Reply Customer',
@@ -122,5 +186,5 @@ export async function POST(req: NextRequest) {
   // Await only in serverless-safe way (edge runtime allows this)
   await sendPromise;
 
-  return NextResponse.json({ ok: true }, { status: 200 });
+  return NextResponse.json({ ok: true }, { status: 200, headers: corsHeaders });
 }
