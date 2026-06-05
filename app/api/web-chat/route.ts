@@ -19,7 +19,7 @@ export async function OPTIONS() {
  */
 export async function POST(request: NextRequest) {
   try {
-    const { message, sessionId } = await request.json();
+    const { message, sessionId, systemInstruction } = await request.json();
 
     if (!message || !sessionId) {
       return NextResponse.json(
@@ -40,7 +40,11 @@ export async function POST(request: NextRequest) {
     await addChatMessage(telegramId, 'user', message, country);
 
     // Get AI response with chat history context for Thailand
-    const aiResponse = await generateAIResponse(telegramId, message, country);
+    const finalInstruction = systemInstruction 
+      ? `${systemInstruction}\n\nCRITICAL LANGUAGE RULE: Detect the language of the user's message and respond ONLY in that exact language. If user writes in English, respond in English. If Burmese, respond in Burmese. If German, respond in German. NEVER respond in Thai unless the user writes in Thai first.` 
+      : undefined;
+
+    const aiResponse = await generateAIResponse(telegramId, message, country, finalInstruction);
 
     // Save AI response to Supabase with country='thailand'
     await addChatMessage(telegramId, 'model', aiResponse, country);

@@ -5,6 +5,7 @@ import { ChatMessage, ThaiLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../i18n';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import { getConciergeResponse } from '../services/geminiService';
 
 interface Props {
   language: ThaiLanguage;
@@ -36,14 +37,11 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
 
-    // Simulate human operator response delay
-    setTimeout(() => {
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: 'Thank you for your message. A human operator will be with you shortly to assist with your booking request.' 
-      }]);
-      setIsLoading(false);
-    }, 1500);
+    // Get AI response for human operator chat
+    const contextPrompt = 'You are a human operator providing premium support for a travel booking service. You are helping customers with their booking requests, answering questions, and providing personalized assistance. Be professional, helpful, and friendly. Respond in the same language as the customer.';
+    const response = await getConciergeResponse(contextPrompt, messages, language);
+    setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+    setIsLoading(false);
   };
 
   return (

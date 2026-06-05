@@ -43,8 +43,9 @@ export async function getConciergeResponse(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message,
-        sessionId,
+        message: message,
+        sessionId: sessionId,
+        systemInstruction: systemContext
       }),
     });
 
