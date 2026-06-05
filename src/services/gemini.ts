@@ -249,8 +249,8 @@ export async function generateAIResponse(
     const text = response.text();
 
     return text;
-  } catch (error) {
-    console.error('Error generating AI response:', error);
+  } catch (error: any) {
+    console.error('Error generating AI response — Full error:', JSON.stringify(error?.message || error));
     
     // Return user-friendly fallback message
     return 'Sorry, I couldn\'t process that. Please try rephrasing your request!';
