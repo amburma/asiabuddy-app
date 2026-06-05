@@ -225,7 +225,7 @@ export async function POST(req: NextRequest) {
   });
 
   // Await only in serverless-safe way (edge runtime allows this)
-  void sendPromise;
+  await sendPromise;
 
   return NextResponse.json({ ok: true }, { status: 200, headers: corsHeaders });
 }
