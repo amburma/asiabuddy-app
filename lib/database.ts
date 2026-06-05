@@ -1,4 +1,4 @@
-import { supabase } from './supabase';
+import { getSupabase, getSupabaseAdmin } from './supabase';
 
 export interface User {
   telegram_id: number;
@@ -42,7 +42,7 @@ export interface Invoice {
 // User CRUD operations
 export async function createUser(telegramId: number, username?: string): Promise<User | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('users')
       .insert({ telegram_id: telegramId, username })
       .select()
@@ -62,7 +62,7 @@ export async function createUser(telegramId: number, username?: string): Promise
 
 export async function getUser(telegramId: number): Promise<User | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('users')
       .select('*')
       .eq('telegram_id', telegramId)
@@ -97,7 +97,7 @@ export async function getOrCreateUser(telegramId: number, username?: string): Pr
 
 export async function updateUser(telegramId: number, username?: string): Promise<User | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('users')
       .update({ username })
       .eq('telegram_id', telegramId)
@@ -124,7 +124,7 @@ export async function addChatMessage(
   country: string = 'thailand'
 ): Promise<ChatHistory | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('chat_histories')
       .insert({ telegram_id: telegramId, role, message_text: messageText, country })
       .select()
@@ -148,7 +148,7 @@ export async function getChatHistory(
   country: string = 'thailand'
 ): Promise<ChatHistory[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('chat_histories')
       .select('*')
       .eq('telegram_id', telegramId)
@@ -175,7 +175,7 @@ export async function getRecentChatHistory(
   country: string = 'thailand'
 ): Promise<ChatHistory[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('chat_histories')
       .select('*')
       .eq('telegram_id', telegramId)
@@ -198,7 +198,7 @@ export async function getRecentChatHistory(
 
 export async function deleteChatHistory(telegramId: number): Promise<boolean> {
   try {
-    const { error } = await supabase
+    const { error } = await getSupabase()
       .from('chat_histories')
       .delete()
       .eq('telegram_id', telegramId);
@@ -224,7 +224,7 @@ export async function getUserMetrics(telegramId: number): Promise<{
   lastMessageDate: string | null;
 }> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('chat_histories')
       .select('role, timestamp')
       .eq('telegram_id', telegramId);
@@ -267,7 +267,7 @@ export async function getUserMetrics(telegramId: number): Promise<{
 
 export async function getAllUsers(): Promise<User[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('users')
       .select('*')
       .order('created_at', { ascending: false });
@@ -297,7 +297,7 @@ export async function createBooking(
   }
 ): Promise<Booking | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabaseAdmin()
       .from('bookings')
       .insert({
         telegram_id: telegramId,
@@ -326,7 +326,7 @@ export async function createBooking(
 
 export async function getBooking(bookingId: string): Promise<Booking | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('bookings')
       .select('*')
       .eq('id', bookingId)
@@ -346,7 +346,7 @@ export async function getBooking(bookingId: string): Promise<Booking | null> {
 
 export async function getUserBookings(telegramId: number): Promise<Booking[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('bookings')
       .select('*')
       .eq('telegram_id', telegramId)
@@ -369,7 +369,7 @@ export async function updateBookingStatus(
   status: 'pending' | 'confirmed' | 'cancelled' | 'completed'
 ): Promise<Booking | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('bookings')
       .update({ status })
       .eq('id', bookingId)
@@ -395,7 +395,7 @@ export async function createInvoice(
   pdfUrl?: string
 ): Promise<Invoice | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('invoices')
       .insert({
         booking_id: bookingId,
@@ -420,7 +420,7 @@ export async function createInvoice(
 
 export async function getInvoice(invoiceId: string): Promise<Invoice | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('invoices')
       .select('*')
       .eq('id', invoiceId)
@@ -440,7 +440,7 @@ export async function getInvoice(invoiceId: string): Promise<Invoice | null> {
 
 export async function getBookingInvoices(bookingId: string): Promise<Invoice[]> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('invoices')
       .select('*')
       .eq('booking_id', bookingId)
@@ -463,7 +463,7 @@ export async function updateInvoiceStatus(
   status: 'unpaid' | 'paid'
 ): Promise<Invoice | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await getSupabase()
       .from('invoices')
       .update({ status })
       .eq('id', invoiceId)

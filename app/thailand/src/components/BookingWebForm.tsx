@@ -142,16 +142,24 @@ export default function BookingWebForm({ language = 'EN', onClose }: Props) {
     const userMsg: ChatMessage = { role: 'user', text };
     setMessages((prev) => [...prev, userMsg]);
     
-    // Simple auto-reply for booking form (no AI call)
+    // Simple echo response - no API call
     setAiLoading(true);
-    setTimeout(() => {
+    try {
+      await new Promise(resolve => setTimeout(resolve, 500));
       setMessages((prev) => [...prev, {
         role: 'assistant',
         text: 'Thank you for your message! Please proceed to fill in your booking details below.',
       }]);
+    } catch (error: any) {
+      console.error('Chat error:', error);
+      setMessages((prev) => [...prev, {
+        role: 'assistant',
+        text: LANGUAGE_MAP[language].errorMsg,
+      }]);
+    } finally {
       setAiLoading(false);
       setTimeout(() => inputRef.current?.focus(), 100);
-    }, 500);
+    }
   };
 
   // Form validation

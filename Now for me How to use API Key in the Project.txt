@@ -1,33 +1,65 @@
-		Next.js Project (asiabuddy-app-main)
+		Next.js Next နှင့် Vite မှာ ထည့်သွင်းအသုံးပြုထားသော API Key များ
+အောက်ဖော်ပြပါ Lists အတိုင်း Vercel ပေါ်တွင် Next.js နှင့် Vite ဟူ၍ သီးခြားစီခွဲသိမ်းထားပါသည်။
 # AI
 GEMINI_API_KEY=
 GEMINI_PRO_API_KEY=
- 
+VITE_GEMINI_PRO_API_KEY= (Vite Only )
+
 # Supabase (Public - Frontend)
 NEXT_PUBLIC_SUPABASE_URL=
+
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
- 
+
 # Supabase (Private - Backend)
 SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_URL=
+
+VITE_SUPABASE_URL= (Vite Only)
+
+
 SUPABASE_ANON_KEY=
+
 SUPABASE_SERVICE_ROLE_KEY=
- 
-SUPABASE_SERVICE_ROLE_KEY=
- 
+
 # Telegram Bots
 TELEGRAM_BOT_TOKEN=
 OPERATOR_BOT_TOKEN=
 TELEGRAM_ADMIN_BOT_TOKEN=
- 
- 
+
+
 # Google
 GOOGLE_DRIVE_FOLDER_ID=
-GOOGLE_SERVICE_ACCOUNT_JSON=
- 
+
+GMAIL_USER=
+GMAIL_APP_PASSWORD=
+ADMIN_EMAIL=
+
 # Environment
 NODE_ENV=
 
-		Vite Project (asiabuddy-thailand-vite)
-# AI
-GEMINI_API_KEY=
-GEMINI_PRO_API_KEY=
+
+GEMINI_API_KEY= အသုံးပြုမည့် Chat Box များ
+AccommodationChat.tsx
+ConciergeChat.tsx
+FoodChat.tsx
+HumanOperatorChat.tsx
+MedicalChat.tsx
+NightlifeChat.tsx
+PhrasesChat.tsx
+ShoppingChat.tsx
+TransportChat.tsx
+TripPlannerChat.tsx
+
+
+Customer က Book Now နှိပ်သည်
+         ↓
+Operator ရဲ့ Telegram Group ထဲ Alert ရောက်လာသည်
+         ↓
+Operator က [Approve ✅] ကိုသာ နှိပ်သည်
+         ↓
+Customer ဆီ PDF Invoice အလိုအလျောက် ရောက်သည်
+Operator မလုပ်ရတာများ:
+
+PDF ကိုယ်တိုင် ဆောက်စရာ မလို
+Customer ကို manually message ပို့စရာ မလို
+ဘယ် system မှ login ဝင်စရာ မလို

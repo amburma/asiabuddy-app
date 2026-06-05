@@ -15,6 +15,7 @@ export async function OPTIONS() {
 // Receives web inquiry form data and forwards a formatted alert
 // to the Telegram Operator Group using OPERATOR_BOT_TOKEN + GROUP_CHAT_ID.
 export async function POST(req: NextRequest) {
+  console.log('INQUIRY HIT', req.body);
   // ── 1. Parse body ──────────────────────────────────────────────────────────
   let body: {
     name: string;
@@ -24,15 +25,16 @@ export async function POST(req: NextRequest) {
     services: string[];
     otherService?: string;
     qa: { question: string; answer: string }[];
+    chatSummary?: string;
   };
 
   try {
     body = await req.json();
-  } catch {
+  } catch (error) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: corsHeaders });
   }
 
-  const { name, phone, email, socials, services, otherService, qa } = body;
+  const { name, phone, email, socials, services, otherService, qa, chatSummary } = body;
 
   // Basic validation
   if (!name || !phone || !services?.length) {
@@ -41,7 +43,7 @@ export async function POST(req: NextRequest) {
 
   // ── 2. Save booking to Supabase ─────────────────────────────────────────────
   // Determine tour_type from services (use first service as primary)
-  const tourTypeMapping: Record<string, string> = {
+  const tourTypeMapping: Record<string, 'tour' | 'flight' | 'car' | 'taxi' | 'hotel' | 'tickets'> = {
     tour: 'tour',
     flight: 'flight',
     hotel: 'hotel',
@@ -50,25 +52,33 @@ export async function POST(req: NextRequest) {
     tickets: 'tickets',
   };
   const primaryService = services[0];
-  const tourType = tourTypeMapping[primaryService] || 'tour';
+  const tourType = tourTypeMapping[primaryService] ?? 'tour';
 
   const bookingDetails = {
     socials,
     services,
     otherService,
     qa,
+    chatSummary,
   };
 
-  const bookingParams = {
-    telegram_id: null, // No telegram_id for web inquiries
-    tourType,
+  const customerInfo = {
+    customerName: name,
+    customerPhone: phone,
+    customerEmail: email,
+    source: 'web' as const,
+  };
+
+  const bookingParams: {
+    telegram_id: null;
+    tourType: 'tour' | 'flight' | 'car' | 'taxi' | 'hotel' | 'tickets';
+    bookingDetails: typeof bookingDetails;
+    customerInfo: typeof customerInfo;
+  } = {
+    telegram_id: null,
+    tourType: tourType as 'tour' | 'flight' | 'car' | 'taxi' | 'hotel' | 'tickets',
     bookingDetails,
-    customerInfo: {
-      customerName: name,
-      customerPhone: phone,
-      customerEmail: email,
-      source: 'web' as const,
-    }
+    customerInfo,
   };
 
   console.log('[inquiry] createBooking parameters:', JSON.stringify(bookingParams, null, 2));
@@ -79,7 +89,12 @@ export async function POST(req: NextRequest) {
       bookingParams.telegram_id,
       bookingParams.tourType,
       bookingParams.bookingDetails,
-      bookingParams.customerInfo
+      {
+        customerName: bookingParams.customerInfo.customerName,
+        customerPhone: bookingParams.customerInfo.customerPhone,
+        customerEmail: bookingParams.customerInfo.customerEmail,
+        source: bookingParams.customerInfo.source,
+      }
     );
     console.log('[inquiry] Booking created successfully:', JSON.stringify(booking, null, 2));
   } catch (err) {
@@ -132,6 +147,10 @@ export async function POST(req: NextRequest) {
     ? `\n\n💬 *Other Request*\n   ${otherService}`
     : '';
 
+  const chatSection = chatSummary
+    ? `\n\n💬 *Chat History*\n${chatSummary}`
+    : '';
+
   const message =
     `🔔 *New Web Inquiry — AsiaBuddy*\n` +
     `━━━━━━━━━━━━━━━━━━\n\n` +
@@ -142,6 +161,7 @@ export async function POST(req: NextRequest) {
     `🛎️ *Services Requested:*\n   • ${serviceList}` +
     qaSection +
     otherSection +
+    chatSection +
     `\n\n━━━━━━━━━━━━━━━━━━\n` +
     `🆔 *Booking ID:* ${bookingIdShort}\n` +
     `⏰ Received at: ${new Date().toUTCString()}\n` +

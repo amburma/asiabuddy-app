@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, Plane, User, Loader2, Info, MessageSquare, Receipt, Car, Bus, Ticket, Calendar } from 'lucide-react';
-import { getConciergeResponse } from '../services/geminiService';
 import { ChatMessage, ThaiLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../i18n';
 import ReactMarkdown from 'react-markdown';
@@ -43,33 +42,45 @@ export default function BookingChat({ language }: Props) {
       parts: [{ text: m.content }]
     }));
 
-    // Strict requirements prompt
-    const contextPrompt = `You are a specialized Booking Assistant for Thailand. 
-    You strictly ONLY provide information about:
-    1. Car rentals
-    2. Bus tickets
-    3. Flight tickets
-    4. Attraction entrance fees
-    
-    If the user asks about anything else, politely refocus them on these 4 categories.
-    
-    IMPORTANT RULES:
-    - All price information provided MUST be presented as estimates only.
-    - Start or include this note: "${t.estimateNotice}"
-    - Every single response MUST end with this mandatory disclaimer: "${t.disclaimer}"
-    
-    The user is asking: ${userMessage}`;
-    
-    const response = await getConciergeResponse(contextPrompt, history, language);
-    
-    // Safety check: ensure disclaimer is there if the model fails to include it (though prompt should handle it)
-    let finalResponse = response;
-    if (!finalResponse.includes(t.disclaimer)) {
-        finalResponse += `\n\n${t.disclaimer}`;
-    }
+    try {
+      const response = await fetch('https://asiabuddy.app/api/booking-chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: userMessage,
+          history,
+          language,
+          bookingContext: 'thailand',
+        }),
+      });
 
-    setMessages(prev => [...prev, { role: 'assistant', content: finalResponse }]);
-    setIsLoading(false);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'API request failed');
+      }
+
+      const data = await response.json();
+      let finalResponse = data.response || "I apologize, but I am unable to provide information at this time.";
+      
+      // Safety check: ensure disclaimer is there if the model fails to include it
+      if (!finalResponse.includes(t.disclaimer)) {
+        finalResponse += `\n\n${t.disclaimer}`;
+      }
+
+      setMessages(prev => [...prev, { role: 'assistant', content: finalResponse }]);
+    } catch (error: any) {
+      console.error('Booking chat error:', error);
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: language === 'MM'
+          ? 'တစ်ခုခု မှားယွင်းသွားပါတယ်။ ခဏနေပြီး ထပ်ကြိုးစားကြည့်ပါ။ 🙏'
+          : 'Something went wrong. Please try again shortly. 🙏'
+      }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

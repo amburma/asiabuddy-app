@@ -1,7 +1,8 @@
 import { Bot, webhookCallback, InputFile } from 'grammy';
-import { getBooking, updateBookingStatus, createInvoice } from '@/lib/database';
-import { generateInvoicePDF } from '@/lib/pdfGenerator';
+import { getBooking, updateBookingStatus } from '@/lib/database';
+import { generateAndUploadInvoicePDF } from '@/lib/pdfGenerator';
 import { sendInvoiceEmail } from '@/lib/emailService';
+import { getSupabaseAdmin } from '@/lib/supabase';
 
 let operatorBot: Bot | null = null;
 let customerBot: Bot | null = null;
@@ -38,9 +39,18 @@ function getHandler() {
         }
 
         await updateBookingStatus(bookingId, 'confirmed');
-        await createInvoice(bookingId, 0);
 
-        const pdfBuffer = await generateInvoicePDF({ booking, amount: 0, customerName: booking.customer_name });
+        const { buffer: pdfBuffer, driveUrl: pdfUrl } = await generateAndUploadInvoicePDF({ booking, amount: 0, customerName: booking.customer_name });
+        
+        const supabaseAdmin = getSupabaseAdmin();
+        await supabaseAdmin
+          .from('invoices')
+          .insert({
+            booking_id: bookingId,
+            amount: 0,
+            status: 'unpaid',
+            pdf_url: pdfUrl || null
+          });
 
         // Check if this is a web inquiry (has customer_email) or telegram booking
         if (booking.source === 'web' && booking.customer_email) {

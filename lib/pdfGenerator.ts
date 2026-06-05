@@ -1,5 +1,6 @@
 import PDFDocument from 'pdfkit';
 import { Booking } from './database';
+import { uploadTelegramFileToDrive } from '../src/services/googleDrive';
 
 interface InvoiceData {
   booking: Booking;
@@ -7,14 +8,27 @@ interface InvoiceData {
   customerName?: string;
 }
 
-export async function generateInvoicePDF(invoiceData: InvoiceData): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
+export async function generateInvoicePDF(invoiceData: InvoiceData): Promise<{ buffer: Buffer; driveUrl: string }> {
+  return new Promise(async (resolve, reject) => {
     try {
       const doc = new PDFDocument({ margin: 50, size: 'A4' });
       const chunks: Buffer[] = [];
 
       doc.on('data', (chunk) => chunks.push(chunk));
-      doc.on('end', () => resolve(Buffer.concat(chunks)));
+      doc.on('end', async () => {
+        const buffer = Buffer.concat(chunks);
+        const bookingIdShort = invoiceData.booking.id.slice(-8);
+        const fileName = `invoice_${bookingIdShort}.pdf`;
+        
+        const driveUrl = await uploadTelegramFileToDrive(
+          buffer,
+          fileName,
+          'application/pdf',
+          'thailand'
+        );
+        
+        resolve({ buffer, driveUrl: driveUrl || '' });
+      });
       doc.on('error', reject);
 
       // Header
@@ -81,4 +95,9 @@ export async function generateInvoicePDF(invoiceData: InvoiceData): Promise<Buff
       reject(error);
     }
   });
+}
+
+export async function generateAndUploadInvoicePDF(invoiceData: InvoiceData): Promise<{ buffer: Buffer; driveUrl: string | null }> {
+  const { buffer, driveUrl } = await generateInvoicePDF(invoiceData);
+  return { buffer, driveUrl: driveUrl || null };
 }
