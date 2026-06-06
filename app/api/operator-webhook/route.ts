@@ -42,6 +42,7 @@ function getHandler() {
           await ctx.answerCallbackQuery({ text: '❌ Booking not found.' });
           return;
         }
+        console.log("BOOKING SOURCE:", booking.source, "BOOKING DATA:", JSON.stringify(booking));
 
         console.log("[APPROVE] Updating booking status to confirmed...");
         await updateBookingStatus(bookingId, 'confirmed');
