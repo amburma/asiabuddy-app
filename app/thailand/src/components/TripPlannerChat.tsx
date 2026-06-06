@@ -112,8 +112,9 @@ export default function TripPlannerChat({ language }: Props) {
     - Interest: ${plan.primaryInterest}
     - Special Requirements: ${plan.specialRequirements}
     
-    Format the response as a clear day-by-day plan with specific recommendations for dining and transport. 
-    Respond strictly in ${language}.`;
+    Format the response as a clear day-by-day plan with specific recommendations for dining and transport.
+
+ABSOLUTE LANGUAGE RULE: Detect the language of the user's message above and respond EXCLUSIVELY in that same language. If user writes in Burmese, respond in Burmese. If English, respond in English. If German, respond in German. If Thai, respond in Thai. NEVER default to English or Thai.`;
 
     const response = await getConciergeResponse(prompt, [], language);
     setMessages([{ role: 'assistant', content: response }]);

@@ -38,7 +38,9 @@ export default function NightlifeChat({ language }: Props) {
     setIsLoading(true);
 
     try {
-      const prompt = `You are a specialist in Thailand's nightlife, clubs, and bars. ${text}`;
+      const prompt = `You are a specialist in Thailand's nightlife, clubs, and bars. ${text}
+
+ABSOLUTE LANGUAGE RULE: Detect the language of the user's message above and respond EXCLUSIVELY in that same language. If user writes in Burmese, respond in Burmese. If English, respond in English. If German, respond in German. If Thai, respond in Thai. NEVER default to English or Thai.`;
       
       const mappedHistory: { role: 'user' | 'model', parts: { text: string }[] }[] = messages.map(m => ({
         role: m.role === 'user' ? 'user' : 'model',

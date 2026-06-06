@@ -41,7 +41,11 @@ export default function ConciergeChat({ language }: Props) {
       parts: [{ text: m.content }]
     }));
 
-    const response = await getConciergeResponse(userMessage, history, language);
+    const contextPrompt = `You are a helpful travel concierge for Thailand. ${userMessage}
+
+ABSOLUTE LANGUAGE RULE: Detect the language of the user's message above and respond EXCLUSIVELY in that same language. If user writes in Burmese, respond in Burmese. If English, respond in English. If German, respond in German. If Thai, respond in Thai. NEVER default to English or Thai.`;
+    
+    const response = await getConciergeResponse(contextPrompt, history, language);
     setMessages(prev => [...prev, { role: 'assistant', content: response }]);
     setIsLoading(false);
   };

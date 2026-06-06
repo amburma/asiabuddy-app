@@ -2,7 +2,6 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { getRecentChatHistory, ChatHistory } from '../lib/database';
 import { getPricingDataForAI, getTourDataForAI, getPolicyDataForAI } from './googleSheets';
 
-let _keyIndex = 0;
 function getNextApiKey(): string {
   const keys = [
     process.env.GEMINI_API_KEY_1,
@@ -10,9 +9,7 @@ function getNextApiKey(): string {
     process.env.GEMINI_API_KEY_3,
   ].filter(Boolean) as string[];
   if (keys.length === 0) throw new Error('No Gemini API keys configured');
-  const key = keys[_keyIndex % keys.length];
-  _keyIndex++;
-  return key;
+  return keys[Math.floor(Math.random() * keys.length)];
 }
 
 // Cache data to avoid repeated API calls
