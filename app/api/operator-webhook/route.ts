@@ -1,4 +1,4 @@
-import { Bot, webhookCallback, InputFile } from 'grammy';
+import { Bot, InputFile } from 'grammy';
 import { getBooking, updateBookingStatus } from '@/lib/database';
 import { generateAndUploadInvoicePDF } from '@/lib/pdfGenerator';
 import { sendInvoiceEmail } from '@/lib/emailService';
@@ -6,28 +6,13 @@ import { getSupabaseAdmin } from '@/lib/supabase';
 
 let operatorBot: Bot | null = null;
 let customerBot: Bot | null = null;
-let handler: any = null;
 
 function getOperatorBot(): Bot {
   if (!operatorBot) {
     operatorBot = new Bot(process.env.OPERATOR_BOT_TOKEN!);
-  }
-  return operatorBot;
-}
-
-function getCustomerBot(): Bot {
-  if (!customerBot) {
-    customerBot = new Bot(process.env.TELEGRAM_BOT_TOKEN!);
-  }
-  return customerBot;
-}
-
-function getHandler() {
-  if (!handler) {
-    const bot = getOperatorBot();
 
     // ✅ Approve
-    bot.callbackQuery(/^approve_(.+)$/, async (ctx) => {
+    operatorBot.callbackQuery(/^approve_(.+)$/, async (ctx) => {
       const bookingId = ctx.match[1];
       console.log("[APPROVE] Callback received for booking:", bookingId);
       try {
@@ -181,7 +166,7 @@ function getHandler() {
     });
 
     // ❌ Reject
-    bot.callbackQuery(/^reject_(.+)$/, async (ctx) => {
+    operatorBot.callbackQuery(/^reject_(.+)$/, async (ctx) => {
       const bookingId = ctx.match[1];
       try {
         await ctx.answerCallbackQuery({ text: 'Rejected.' });
@@ -212,14 +197,26 @@ function getHandler() {
         console.error('Rejection error:', err);
       }
     });
-
-    handler = webhookCallback(bot, 'std/http');
   }
-  return handler;
+  return operatorBot;
+}
+
+function getCustomerBot(): Bot {
+  if (!customerBot) {
+    customerBot = new Bot(process.env.TELEGRAM_BOT_TOKEN!);
+  }
+  return customerBot;
 }
 
 export async function POST(req: Request) {
   console.log("WEBHOOK HANDLER ENTERED", Date.now());
-  return getHandler()(req);
+  try {
+    const bot = getOperatorBot();
+    const body = await req.json();
+    await bot.handleUpdate(body);
+    return new Response('OK', { status: 200 });
+  } catch (err) {
+    console.error("WEBHOOK ERROR:", err);
+    return new Response('Error', { status: 500 });
+  }
 }
-export async function GET(req: Request)  { return getHandler()(req); }
