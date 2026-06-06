@@ -212,6 +212,7 @@ export async function POST(req: Request) {
   console.log("WEBHOOK HANDLER ENTERED", Date.now());
   try {
     const bot = getOperatorBot();
+    await bot.init();
     const body = await req.json();
     await bot.handleUpdate(body);
     return new Response('OK', { status: 200 });
