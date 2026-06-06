@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import 'jspdf-autotable';
+import { autoTable } from 'jspdf-autotable';
 
 // ==========================================
 // AsiaBuddy Logo (Base64 — PNG)
@@ -169,7 +169,7 @@ export function generateInvoicePDF(
     item.price > 0 ? `EUR ${(item.qty * item.price).toFixed(2)}` : '—',
   ]);
 
-  (doc as any).autoTable({
+  autoTable(doc, {
     startY: 100,
     head: [['#', 'Item Description', 'Qty', 'Unit Price', 'Total']],
     body: tableBody,
@@ -193,7 +193,7 @@ export function generateInvoicePDF(
   });
 
   // ── Summary ───────────────────────────────────────────
-  const finalY = (doc as any).lastAutoTable.finalY + 10;
+  const finalY = (doc as any).lastAutoTable?.finalY + 10 || 150;
 
   if (subtotal > 0) {
     doc.setFont('Helvetica', 'normal');
