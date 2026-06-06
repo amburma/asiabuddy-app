@@ -218,5 +218,8 @@ function getHandler() {
   return handler;
 }
 
-export async function POST(req: Request) { return getHandler()(req); }
+export async function POST(req: Request) {
+  console.log("WEBHOOK HANDLER ENTERED", Date.now());
+  return getHandler()(req);
+}
 export async function GET(req: Request)  { return getHandler()(req); }
