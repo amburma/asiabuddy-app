@@ -28,6 +28,8 @@ function getOperatorBot(): Bot {
           return;
         }
         console.log("BOOKING SOURCE:", booking.source, "BOOKING DATA:", JSON.stringify(booking));
+        console.log("BOOKING SOURCE CHECK:", booking.source);
+        console.log("BOOKING EMAIL CHECK:", booking.customer_email);
 
         console.log("[APPROVE] Updating booking status to confirmed...");
         await updateBookingStatus(bookingId, 'confirmed');
@@ -50,6 +52,8 @@ function getOperatorBot(): Bot {
         console.log("[APPROVE] Invoice inserted into Supabase");
 
         // Check if this is a web inquiry (has customer_email) or telegram booking
+        console.log("ENTERING BRANCH: web with email check");
+        console.log("CONDITION (booking.source === 'web' && booking.customer_email):", booking.source === 'web' && booking.customer_email);
         if (booking.source === 'web' && booking.customer_email) {
           // Send email for web inquiries
           const gmailUser = process.env.GMAIL_USER;
@@ -79,6 +83,8 @@ function getOperatorBot(): Bot {
 
           console.log(`Booking ${bookingId} approved. Invoice sent via email to ${booking.customer_email}`);
         } else if (booking.source === 'web' && !booking.customer_email) {
+          console.log("ENTERING BRANCH: web without email check");
+          console.log("CONDITION (booking.source === 'web' && !booking.customer_email):", booking.source === 'web' && !booking.customer_email);
           // No email provided - send special alert to operator group
           const socialHandles = booking.details?.socials?.[0] || 'Not provided';
           const alertMessage =
@@ -105,6 +111,8 @@ function getOperatorBot(): Bot {
 
           console.log(`Booking ${bookingId} approved. No email provided. Manual contact alert sent.`);
         } else if (booking.telegram_id) {
+          console.log("ENTERING BRANCH: telegram check");
+          console.log("CONDITION (booking.telegram_id):", booking.telegram_id);
           // Send via Telegram for telegram bookings
           console.log("[APPROVE] Sending invoice document to customer (telegram)...");
           await getCustomerBot().api.sendDocument(
@@ -128,6 +136,7 @@ function getOperatorBot(): Bot {
 
           console.log(`Booking ${bookingId} approved. Invoice sent to ${booking.telegram_id}`);
         } else {
+          console.log("ENTERING BRANCH: no contact method");
           console.log("[APPROVE] Editing message text (no contact)...");
           await ctx.editMessageText(
             (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — No contact method available.',
@@ -138,6 +147,8 @@ function getOperatorBot(): Bot {
 
         // PHASE 4: Ops Handover - forward booking summary to @asiabuddy_bot ops group
         const opsGroupChatId = process.env.OPS_GROUP_CHAT_ID || process.env.OPERATOR_GROUP_CHAT_ID;
+        console.log("ENTERING BRANCH: ops handover check");
+        console.log("CONDITION (opsGroupChatId):", opsGroupChatId);
         if (opsGroupChatId) {
           const handoverMessage =
             `📋 <b>New Booking — Ops Handover</b>\n\n` +
@@ -175,11 +186,15 @@ function getOperatorBot(): Bot {
         const booking = await getBooking(bookingId);
         if (booking) {
           // Check if this is a web inquiry or telegram booking
+          console.log("ENTERING BRANCH: reject web with email check");
+          console.log("CONDITION (booking.source === 'web' && booking.customer_email):", booking.source === 'web' && booking.customer_email);
           if (booking.source === 'web' && booking.customer_email) {
             // For web inquiries, we could send an email rejection notification
             // For now, just log it since email rejection notification is not required
             console.log(`Web booking ${bookingId} rejected. Customer email: ${booking.customer_email}`);
           } else if (booking.telegram_id) {
+            console.log("ENTERING BRANCH: reject telegram check");
+            console.log("CONDITION (booking.telegram_id):", booking.telegram_id);
             // Send via Telegram for telegram bookings
             await getCustomerBot().api.sendMessage(
               booking.telegram_id,
