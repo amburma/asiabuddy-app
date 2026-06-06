@@ -213,7 +213,9 @@ export async function POST(req: Request) {
   try {
     const bot = getOperatorBot();
     await bot.init();
-    const body = await req.json();
+    const text = await req.text();
+    console.log("RAW BODY:", text);
+    const body = JSON.parse(text);
     console.log("UPDATE RECEIVED:", JSON.stringify(body));
     await bot.handleUpdate(body);
     return new Response('OK', { status: 200 });
