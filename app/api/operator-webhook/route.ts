@@ -212,25 +212,15 @@ export async function POST(req: Request) {
   console.log("WEBHOOK HANDLER ENTERED", Date.now());
   try {
     const body = await req.json();
-    console.log("UPDATE RECEIVED:", JSON.stringify(body));
+    console.log("UPDATE RECEIVED:", JSON.stringify(body).substring(0, 100));
     
-    // Return 200 immediately so Telegram doesn't timeout
-    const response = new Response('OK', { status: 200 });
+    const bot = getOperatorBot();
+    await bot.init();
+    await bot.handleUpdate(body);
     
-    // Process in background
-    (async () => {
-      try {
-        const bot = getOperatorBot();
-        await bot.init();
-        await bot.handleUpdate(body);
-      } catch (err) {
-        console.error("WEBHOOK PROCESSING ERROR:", err);
-      }
-    })();
-    
-    return response;
+    return new Response('OK', { status: 200 });
   } catch (err) {
     console.error("WEBHOOK ERROR:", err);
-    return new Response('Error', { status: 500 });
+    return new Response('OK', { status: 200 });
   }
 }
