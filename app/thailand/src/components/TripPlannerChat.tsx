@@ -114,7 +114,14 @@ export default function TripPlannerChat({ language }: Props) {
     
     Format the response as a clear day-by-day plan with specific recommendations for dining and transport.
 
-ABSOLUTE LANGUAGE RULE: Detect the language of the user's message above and respond EXCLUSIVELY in that same language. If user writes in Burmese, respond in Burmese. If English, respond in English. If German, respond in German. If Thai, respond in Thai. NEVER default to English or Thai.`;
+LANGUAGE RULE: The user has selected '${language}' as their preferred language. You MUST respond exclusively in that language:
+- MM = Burmese/Myanmar
+- EN = English
+- TH = Thai
+- DE = German
+- ES = Spanish
+- FR = French
+NEVER switch languages regardless of what language the user types in.`;
 
     const response = await getConciergeResponse(prompt, [], language);
     setMessages([{ role: 'assistant', content: response }]);

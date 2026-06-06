@@ -45,7 +45,14 @@ export default function ShoppingChat({ language }: Props) {
 
     const contextPrompt = `You are a specialized Thailand Shopping concierge. Help the traveler with specific shopping advice (Luxury malls, night markets like Jodd Fairs, Chatuchak strategies, VAT refund process, bargaining etiquette, etc.). ${userMessage}
 
-ABSOLUTE LANGUAGE RULE: Detect the language of the user's message above and respond EXCLUSIVELY in that same language. If user writes in Burmese, respond in Burmese. If English, respond in English. If German, respond in German. If Thai, respond in Thai. NEVER default to English or Thai.`;
+LANGUAGE RULE: The user has selected '${language}' as their preferred language. You MUST respond exclusively in that language:
+- MM = Burmese/Myanmar
+- EN = English
+- TH = Thai
+- DE = German
+- ES = Spanish
+- FR = French
+NEVER switch languages regardless of what language the user types in.`;
     
     const response = await getConciergeResponse(contextPrompt, history, language);
     setMessages(prev => [...prev, { role: 'assistant', content: response }]);

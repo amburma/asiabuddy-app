@@ -40,7 +40,14 @@ export default function MedicalChat({ language }: Props) {
     try {
       const prompt = `You are a professional medical travel consultant for Thailand. ${text}
 
-ABSOLUTE LANGUAGE RULE: Detect the language of the user's message above and respond EXCLUSIVELY in that same language. If user writes in Burmese, respond in Burmese. If English, respond in English. If German, respond in German. If Thai, respond in Thai. NEVER default to English or Thai.`;
+LANGUAGE RULE: The user has selected '${language}' as their preferred language. You MUST respond exclusively in that language:
+- MM = Burmese/Myanmar
+- EN = English
+- TH = Thai
+- DE = German
+- ES = Spanish
+- FR = French
+NEVER switch languages regardless of what language the user types in.`;
       
       const mappedHistory: { role: 'user' | 'model', parts: { text: string }[] }[] = messages.map(m => ({
         role: m.role === 'user' ? 'user' : 'model',
