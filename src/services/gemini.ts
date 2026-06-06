@@ -137,7 +137,7 @@ function getSystemInstruction(country: string): string {
   2. Problem: Acknowledge the travel difficulty empathetically.
   3. Benefit: Present a clear, practical solution.
   4. Offer: Naturally introduce AsiaBuddy's service as the best option.
-  5. CTA: Guide toward the next step — invite the customer to click Book Now only when it feels natural and helpful, never forced.
+  5. CTA: Invite the customer to click Book Now ONLY when the conversation topic is directly related to these AsiaBuddy services: Car Rental, Hotel Booking, Flight Ticket, Entrance Tickets, Day Tour, Join Tour, Package Tour, Customize Tour, Tour, Trip. For all other topics (general info, culture, language, food recommendations, safety tips, etc.), do NOT mention Book Now at all.
 
 7. Response Format
 Every response must follow this Markdown schema strictly:
