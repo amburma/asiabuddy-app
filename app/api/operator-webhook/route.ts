@@ -210,10 +210,15 @@ function getCustomerBot(): Bot {
 
 export async function POST(req: Request) {
   console.log("WEBHOOK HANDLER ENTERED", Date.now());
+  console.log("CONTENT TYPE:", req.headers.get('content-type'));
+  console.log("METHOD:", req.method);
+  const clone = req.clone();
+  const text = await clone.text();
+  console.log("BODY LENGTH:", text.length);
+  console.log("BODY PREVIEW:", text.substring(0, 200));
   try {
     const bot = getOperatorBot();
     await bot.init();
-    const text = await req.text();
     console.log("RAW BODY:", text);
     const body = JSON.parse(text);
     console.log("UPDATE RECEIVED:", JSON.stringify(body));
