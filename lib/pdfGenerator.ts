@@ -1,4 +1,4 @@
-import PDFDocument from 'pdfkit';
+import jsPDF from 'jspdf';
 import { Booking } from './database';
 import { uploadTelegramFileToDrive } from '../src/services/googleDrive';
 
@@ -9,92 +9,102 @@ interface InvoiceData {
 }
 
 export async function generateInvoicePDF(invoiceData: InvoiceData): Promise<{ buffer: Buffer; driveUrl: string }> {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const doc = new PDFDocument({ margin: 50, size: 'A4' });
-      const chunks: Buffer[] = [];
+  const doc = new jsPDF();
+  const bookingIdShort = invoiceData.booking.id.slice(-8);
 
-      doc.on('data', (chunk) => chunks.push(chunk));
-      doc.on('end', async () => {
-        const buffer = Buffer.concat(chunks);
-        const bookingIdShort = invoiceData.booking.id.slice(-8);
-        const fileName = `invoice_${bookingIdShort}.pdf`;
-        
-        const driveUrl = await uploadTelegramFileToDrive(
-          buffer,
-          fileName,
-          'application/pdf',
-          'thailand'
-        );
-        
-        resolve({ buffer, driveUrl: driveUrl || '' });
-      });
-      doc.on('error', reject);
+  // Header
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('AsiaBuddy', 20, 20);
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Digital Concierge Services', 20, 30);
+  doc.setFontSize(10);
+  doc.text('Invoice', 20, 40);
 
-      // Header
-      doc.fontSize(20).font('Helvetica-Bold').text('AsiaBuddy', 50, 50);
-      doc.fontSize(12).font('Helvetica').text('Digital Concierge Services', 50, 75);
-      doc.fontSize(10).text('Invoice', 50, 95);
+  // Invoice details
+  doc.setFontSize(10);
+  doc.text(`Invoice #: INV-${bookingIdShort}`, 140, 20);
+  doc.text(`Date: ${new Date().toLocaleDateString()}`, 140, 30);
+  doc.text(`Booking ID: ${bookingIdShort}`, 140, 40);
 
-      // Invoice details
-      const bookingIdShort = invoiceData.booking.id.slice(-8);
-      doc.fontSize(10).text(`Invoice #: INV-${bookingIdShort}`, 400, 50);
-      doc.text(`Date: ${new Date().toLocaleDateString()}`, 400, 65);
-      doc.text(`Booking ID: ${bookingIdShort}`, 400, 80);
+  // Line
+  doc.line(20, 50, 190, 50);
 
-      // Line
-      doc.moveTo(50, 120).lineTo(550, 120).stroke();
+  // Customer Information
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Bill To:', 20, 60);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Telegram ID: ${invoiceData.booking.telegram_id}`, 20, 70);
+  if (invoiceData.customerName) {
+    doc.text(`Name: ${invoiceData.customerName}`, 20, 80);
+  }
 
-      // Customer Information
-      doc.fontSize(12).font('Helvetica-Bold').text('Bill To:', 50, 140);
-      doc.fontSize(10).font('Helvetica').text(`Telegram ID: ${invoiceData.booking.telegram_id}`, 50, 160);
-      if (invoiceData.customerName) {
-        doc.text(`Name: ${invoiceData.customerName}`, 50, 175);
-      }
+  // Service Details
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Service Details:', 20, 95);
+  
+  const serviceEmoji = invoiceData.booking.tour_type === 'tour' ? 'Tour' :
+                      invoiceData.booking.tour_type === 'flight' ? 'Flight' :
+                      invoiceData.booking.tour_type === 'car' ? 'Car' : 'Taxi';
+  
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Service Type: ${serviceEmoji}`, 20, 105);
+  doc.text(`Status: ${invoiceData.booking.status.toUpperCase()}`, 20, 115);
+  doc.text(`Booking Date: ${new Date(invoiceData.booking.created_at).toLocaleDateString()}`, 20, 125);
 
-      // Service Details
-      doc.fontSize(12).font('Helvetica-Bold').text('Service Details:', 50, 210);
-      
-      const serviceEmoji = invoiceData.booking.tour_type === 'tour' ? '🎫' :
-                          invoiceData.booking.tour_type === 'flight' ? '✈️' :
-                          invoiceData.booking.tour_type === 'car' ? '🚗' : '🚕';
-      
-      doc.fontSize(10).font('Helvetica');
-      doc.text(`Service Type: ${serviceEmoji} ${invoiceData.booking.tour_type.toUpperCase()}`, 50, 230);
-      doc.text(`Status: ${invoiceData.booking.status.toUpperCase()}`, 50, 245);
-      doc.text(`Booking Date: ${new Date(invoiceData.booking.created_at).toLocaleDateString()}`, 50, 260);
+  // Booking Details
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Booking Details:', 20, 140);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  
+  const details = invoiceData.booking.details;
+  let detailY = 150;
+  
+  if (details.user_input) {
+    const splitText = doc.splitTextToSize(`Request: ${details.user_input}`, 170);
+    doc.text(splitText, 20, detailY);
+    detailY += splitText.length * 5 + 10;
+  }
 
-      // Booking Details
-      doc.fontSize(12).font('Helvetica-Bold').text('Booking Details:', 50, 290);
-      doc.fontSize(10).font('Helvetica');
-      
-      const details = invoiceData.booking.details;
-      let detailY = 310;
-      
-      if (details.user_input) {
-        doc.text(`Request: ${details.user_input}`, 50, detailY, { width: 450 });
-        detailY += 40;
-      }
+  // Amount section
+  doc.line(20, detailY, 190, detailY);
+  
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Amount Due:', 140, detailY + 10);
+  doc.setFontSize(16);
+  doc.text(`$${invoiceData.amount.toFixed(2)}`, 140, detailY + 20);
 
-      // Amount section
-      doc.moveTo(50, detailY + 20).lineTo(550, detailY + 20).stroke();
-      
-      doc.fontSize(12).font('Helvetica-Bold').text('Amount Due:', 400, detailY + 30);
-      doc.fontSize(16).font('Helvetica-Bold').text(`$${invoiceData.amount.toFixed(2)}`, 400, detailY + 50);
+  // Footer
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.text(
+    'Thank you for choosing AsiaBuddy! For questions, contact us via Telegram.',
+    105,
+    280,
+    { align: 'center' }
+  );
 
-      // Footer
-      doc.fontSize(8).font('Helvetica').text(
-        'Thank you for choosing AsiaBuddy! For questions, contact us via Telegram.',
-        50,
-        doc.page.height - 50,
-        { align: 'center' }
-      );
-
-      doc.end();
-    } catch (error) {
-      reject(error);
-    }
-  });
+  const pdfBytes = doc.output('arraybuffer');
+  const buffer = Buffer.from(pdfBytes);
+  
+  const fileName = `invoice_${bookingIdShort}.pdf`;
+  
+  const driveUrl = await uploadTelegramFileToDrive(
+    buffer,
+    fileName,
+    'application/pdf',
+    'thailand'
+  );
+  
+  return { buffer, driveUrl: driveUrl || '' };
 }
 
 export async function generateAndUploadInvoicePDF(invoiceData: InvoiceData): Promise<{ buffer: Buffer; driveUrl: string | null }> {
