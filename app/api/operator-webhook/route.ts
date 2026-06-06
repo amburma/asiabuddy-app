@@ -210,20 +210,25 @@ function getCustomerBot(): Bot {
 
 export async function POST(req: Request) {
   console.log("WEBHOOK HANDLER ENTERED", Date.now());
-  console.log("CONTENT TYPE:", req.headers.get('content-type'));
-  console.log("METHOD:", req.method);
-  const clone = req.clone();
-  const text = await clone.text();
-  console.log("BODY LENGTH:", text.length);
-  console.log("BODY PREVIEW:", text.substring(0, 200));
   try {
-    const bot = getOperatorBot();
-    await bot.init();
-    console.log("RAW BODY:", text);
-    const body = JSON.parse(text);
+    const body = await req.json();
     console.log("UPDATE RECEIVED:", JSON.stringify(body));
-    await bot.handleUpdate(body);
-    return new Response('OK', { status: 200 });
+    
+    // Return 200 immediately so Telegram doesn't timeout
+    const response = new Response('OK', { status: 200 });
+    
+    // Process in background
+    (async () => {
+      try {
+        const bot = getOperatorBot();
+        await bot.init();
+        await bot.handleUpdate(body);
+      } catch (err) {
+        console.error("WEBHOOK PROCESSING ERROR:", err);
+      }
+    })();
+    
+    return response;
   } catch (err) {
     console.error("WEBHOOK ERROR:", err);
     return new Response('Error', { status: 500 });
