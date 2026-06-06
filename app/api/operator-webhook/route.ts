@@ -36,8 +36,8 @@ function getOperatorBot(): Bot {
         console.log("[APPROVE] Booking status updated");
 
         console.log("[APPROVE] Generating and uploading invoice PDF...");
-        const { buffer: pdfBuffer, driveUrl: pdfUrl } = await generateAndUploadInvoicePDF({ booking, amount: 0, customerName: booking.customer_name });
-        console.log("[APPROVE] PDF generated and uploaded, URL:", pdfUrl);
+        const { buffer, driveUrl } = await generateAndUploadInvoicePDF(booking);
+        console.log("[APPROVE] PDF generated and uploaded, URL:", driveUrl);
         
         console.log("[APPROVE] Inserting invoice into Supabase...");
         const supabaseAdmin = getSupabaseAdmin();
@@ -47,7 +47,7 @@ function getOperatorBot(): Bot {
             booking_id: bookingId,
             amount: 0,
             status: 'unpaid',
-            pdf_url: pdfUrl || null
+            pdf_url: driveUrl || null
           });
         console.log("[APPROVE] Invoice inserted into Supabase");
 
@@ -69,7 +69,7 @@ function getOperatorBot(): Bot {
             salesEmail,
             adminEmail,
             bookingId,
-            pdfBuffer,
+            pdfBuffer: buffer,
             customerName: booking.customer_name,
           });
           console.log("[APPROVE] Invoice email sent");
@@ -117,7 +117,7 @@ function getOperatorBot(): Bot {
           console.log("[APPROVE] Sending invoice document to customer (telegram)...");
           await getCustomerBot().api.sendDocument(
             booking.telegram_id,
-            new InputFile(pdfBuffer, `invoice_${bookingId.slice(-8)}.pdf`),
+            new InputFile(buffer, `invoice_${bookingId.slice(-8)}.pdf`),
             {
               caption:
                 `✅ Booking confirmed!\n` +
