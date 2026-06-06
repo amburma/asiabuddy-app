@@ -443,7 +443,7 @@ export default function BookingWebForm({ language = 'EN', onClose }: Props) {
                 </div>
               )}
 
-              <button onClick={handleSubmit} disabled={submitting}
+              <button type="button" onClick={handleSubmit} disabled={submitting}
                 className="w-full py-3.5 rounded-2xl font-bold uppercase tracking-widest text-sm text-white flex items-center justify-center gap-2 transition-all disabled:opacity-60 shadow-lg"
                 style={{ background: 'linear-gradient(135deg, #1a3a2a 0%, #2d5a3d 100%)' }}>
                 {submitting

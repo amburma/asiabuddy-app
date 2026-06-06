@@ -296,6 +296,7 @@ export async function createBooking(
     source?: 'telegram' | 'web';
   }
 ): Promise<Booking | null> {
+  console.log("CREATE BOOKING CALLED", Date.now());
   try {
     const { data, error } = await getSupabaseAdmin()
       .from('bookings')
@@ -311,6 +312,8 @@ export async function createBooking(
       })
       .select()
       .single();
+
+    console.log("INSERT RESULT", JSON.stringify(error), JSON.stringify(data));
 
     if (error) {
       console.error('Error creating booking:', error);

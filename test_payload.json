@@ -1,1 +1,14 @@
-{"name":"Test User","phone":"+1234567890","services":["tour"]}
+{
+  "chatHistory": [
+    {
+      "role": "user",
+      "content": "I want to book a tour"
+    }
+  ],
+  "contactDetails": {
+    "name": "Test User",
+    "phone": "1234567890",
+    "email": "test@example.com",
+    "socialHandles": "@testuser"
+  }
+}

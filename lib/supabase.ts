@@ -16,6 +16,7 @@ export function getSupabaseAdmin(): SupabaseClient {
   if (!supabaseAdminInstance) {
     const supabaseUrl = process.env.SUPABASE_URL!;
     const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+    console.log('[Supabase Admin] Initializing with URL:', supabaseUrl);
     supabaseAdminInstance = createClient(supabaseUrl, serviceRoleKey, {
       auth: {
         autoRefreshToken: false,

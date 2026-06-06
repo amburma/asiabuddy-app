@@ -14,18 +14,28 @@ export async function OPTIONS() {
 // POST /api/inquiry
 // Receives web inquiry form data and forwards a formatted alert
 // to the Telegram Operator Group using OPERATOR_BOT_TOKEN + GROUP_CHAT_ID.
+// Also accepts HumanOperatorChat format with chatHistory and contactDetails.
 export async function POST(req: NextRequest) {
+  console.log('INQUIRY CALLED', Date.now());
   console.log('INQUIRY HIT', req.body);
   // ── 1. Parse body ──────────────────────────────────────────────────────────
   let body: {
-    name: string;
-    phone: string;
+    name?: string;
+    phone?: string;
     email?: string;
-    socials: string[];
-    services: string[];
+    socials?: string[];
+    services?: string[];
     otherService?: string;
-    qa: { question: string; answer: string }[];
+    qa?: { question: string; answer: string }[];
     chatSummary?: string;
+    // New format from HumanOperatorChat
+    chatHistory?: { role: string; content: string }[];
+    contactDetails?: {
+      name: string;
+      phone: string;
+      email?: string;
+      socialHandles?: string;
+    };
   };
 
   try {
@@ -34,11 +44,41 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: corsHeaders });
   }
 
-  const { name, phone, email, socials, services, otherService, qa, chatSummary } = body;
+  // Detect which format is being used
+  const isHumanOperatorChatFormat = body.chatHistory && body.contactDetails;
+
+  let name: string;
+  let phone: string;
+  let email: string | undefined;
+  let socials: string[];
+  let services: string[] = [];
+  let otherService: string | undefined;
+  let qa: { question: string; answer: string }[] = [];
+  let chatSummary: string | undefined;
+
+  if (isHumanOperatorChatFormat) {
+    // New format from HumanOperatorChat
+    name = body.contactDetails!.name;
+    phone = body.contactDetails!.phone;
+    email = body.contactDetails!.email;
+    socials = body.contactDetails!.socialHandles ? [body.contactDetails!.socialHandles] : [];
+    services = ['tour']; // Default to tour for human operator chat
+    chatSummary = body.chatHistory?.map(msg => `${msg.role}: ${msg.content}`).join('\n\n');
+  } else {
+    // Existing web form format
+    name = body.name!;
+    phone = body.phone!;
+    email = body.email;
+    socials = body.socials || [];
+    services = body.services || [];
+    otherService = body.otherService;
+    qa = body.qa || [];
+    chatSummary = body.chatSummary;
+  }
 
   // Basic validation
-  if (!name || !phone || !services?.length) {
-    return NextResponse.json({ error: 'Missing required fields' }, { status: 422, headers: corsHeaders });
+  if (!name || !phone) {
+    return NextResponse.json({ error: 'Missing required fields (name and phone)' }, { status: 422, headers: corsHeaders });
   }
 
   // ── 2. Save booking to Supabase ─────────────────────────────────────────────
@@ -83,6 +123,7 @@ export async function POST(req: NextRequest) {
 
   console.log('[inquiry] createBooking parameters:', JSON.stringify(bookingParams, null, 2));
 
+  console.log('CHECKPOINT: Before Supabase insert');
   let booking;
   try {
     booking = await createBooking(
@@ -96,6 +137,7 @@ export async function POST(req: NextRequest) {
         source: bookingParams.customerInfo.source,
       }
     );
+    console.log('CHECKPOINT: After Supabase insert');
     console.log('[inquiry] Booking created successfully:', JSON.stringify(booking, null, 2));
   } catch (err) {
     console.error('[inquiry] createBooking error details:', JSON.stringify(err, null, 2));
@@ -211,6 +253,7 @@ export async function POST(req: NextRequest) {
   };
 
   // Fire-and-forget to avoid Vercel 30-second timeout on slow network
+  console.log('CHECKPOINT: Before Telegram API call');
   const sendPromise = fetch(telegramUrl, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -226,6 +269,7 @@ export async function POST(req: NextRequest) {
 
   // Await only in serverless-safe way (edge runtime allows this)
   await sendPromise;
+  console.log('CHECKPOINT: After Telegram API call');
 
   return NextResponse.json({ ok: true }, { status: 200, headers: corsHeaders });
 }
