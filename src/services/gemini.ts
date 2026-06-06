@@ -2,8 +2,18 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { getRecentChatHistory, ChatHistory } from '../lib/database';
 import { getPricingDataForAI, getTourDataForAI, getPolicyDataForAI } from './googleSheets';
 
-// Initialize Gemini AI client
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+let _keyIndex = 0;
+function getNextApiKey(): string {
+  const keys = [
+    process.env.GEMINI_API_KEY_1,
+    process.env.GEMINI_API_KEY_2,
+    process.env.GEMINI_API_KEY_3,
+  ].filter(Boolean) as string[];
+  if (keys.length === 0) throw new Error('No Gemini API keys configured');
+  const key = keys[_keyIndex % keys.length];
+  _keyIndex++;
+  return key;
+}
 
 // Cache data to avoid repeated API calls
 let cachedPricingData: string | null = null;
@@ -192,6 +202,7 @@ export async function generateAIResponse(
   systemInstruction?: string
 ): Promise<string> {
   try {
+    const genAI = new GoogleGenerativeAI(getNextApiKey());
     // Get chat history from Supabase
     const chatHistory: ChatHistory[] = await getRecentChatHistory(telegramId, 10, country);
 
@@ -268,6 +279,7 @@ export async function generateAIResponseWithoutContext(
   country: string = 'thailand'
 ): Promise<string> {
   try {
+    const genAI = new GoogleGenerativeAI(getNextApiKey());
     // Initialize the model with generation config
     const model = genAI.getGenerativeModel({
       model: 'gemini-2.5-flash-lite',
