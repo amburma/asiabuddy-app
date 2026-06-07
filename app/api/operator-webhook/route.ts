@@ -19,172 +19,166 @@ function getOperatorBot(): Bot {
         console.log("[APPROVE] Answering callback query...");
         await ctx.answerCallbackQuery({ text: '⏳ Processing...' });
         console.log("[APPROVE] Callback query answered");
+
+        console.log("[APPROVE] Fetching booking...");
+        const booking = await getBooking(bookingId);
+        console.log("[APPROVE] Booking fetched:", booking ? "found" : "not found");
+        if (!booking) {
+          await ctx.answerCallbackQuery({ text: '❌ Booking not found.' });
+          return;
+        }
+        console.log("BOOKING SOURCE:", booking.source, "BOOKING DATA:", JSON.stringify(booking));
+        console.log("BOOKING SOURCE CHECK:", booking.source);
+        console.log("BOOKING EMAIL CHECK:", booking.customer_email);
+
+        console.log("[APPROVE] Updating booking status to confirmed...");
+        await updateBookingStatus(bookingId, 'confirmed');
+        console.log("[APPROVE] Booking status updated");
+
+        console.log("[APPROVE] Generating and uploading invoice PDF...");
+        const customerLanguage = (booking.details?.language as string) || 'en';
+        const { buffer, driveUrl } = await generateAndUploadInvoicePDF(booking, customerLanguage);
+        console.log("[APPROVE] PDF generated and uploaded, URL:", driveUrl);
         
-        // Run all processing in background — do not await here
-        setImmediate(async () => {
-          try {
-            console.log("[APPROVE] Fetching booking...");
-            const booking = await getBooking(bookingId);
-            console.log("[APPROVE] Booking fetched:", booking ? "found" : "not found");
-            if (!booking) {
-              await ctx.answerCallbackQuery({ text: '❌ Booking not found.' });
-              return;
-            }
-            console.log("BOOKING SOURCE:", booking.source, "BOOKING DATA:", JSON.stringify(booking));
-            console.log("BOOKING SOURCE CHECK:", booking.source);
-            console.log("BOOKING EMAIL CHECK:", booking.customer_email);
+        console.log("[APPROVE] Inserting invoice into Supabase...");
+        const supabaseAdmin = getSupabaseAdmin();
+        await supabaseAdmin
+          .from('invoices')
+          .insert({
+            booking_id: bookingId,
+            amount: 0,
+            status: 'unpaid',
+            pdf_url: driveUrl || null
+          });
+        console.log("[APPROVE] Invoice inserted into Supabase");
 
-            console.log("[APPROVE] Updating booking status to confirmed...");
-            await updateBookingStatus(bookingId, 'confirmed');
-            console.log("[APPROVE] Booking status updated");
-
-            console.log("[APPROVE] Generating and uploading invoice PDF...");
-            const customerLanguage = (booking.details?.language as string) || 'en';
-            const { buffer, driveUrl } = await generateAndUploadInvoicePDF(booking, customerLanguage);
-            console.log("[APPROVE] PDF generated and uploaded, URL:", driveUrl);
-            
-            console.log("[APPROVE] Inserting invoice into Supabase...");
-            const supabaseAdmin = getSupabaseAdmin();
-            await supabaseAdmin
-              .from('invoices')
-              .insert({
-                booking_id: bookingId,
-                amount: 0,
-                status: 'unpaid',
-                pdf_url: driveUrl || null
-              });
-            console.log("[APPROVE] Invoice inserted into Supabase");
-
-            // Check if this is a web inquiry (has customer_email) or telegram booking
-            console.log("ENTERING BRANCH: web with email check");
-            console.log("CONDITION (booking.source === 'web' && booking.customer_email):", booking.source === 'web' && booking.customer_email);
-            if (booking.source === 'web' && booking.customer_email) {
-              // Send email for web inquiries
-              const gmailUser = process.env.GMAIL_USER;
-              if (!gmailUser) {
-                throw new Error('GMAIL_USER environment variable is not set');
-              }
-              const salesEmail = process.env.SALES_EMAIL || gmailUser;
-              const adminEmail = process.env.ADMIN_EMAIL || gmailUser;
-
-              // Email - independent try-catch
-              try {
-                console.log("[APPROVE] Sending invoice email...");
-                await sendInvoiceEmail({
-                  customerEmail: booking.customer_email,
-                  salesEmail,
-                  adminEmail,
-                  bookingId,
-                  pdfBuffer: buffer,
-                  customerName: booking.customer_name,
-                  customerLanguage,
-                });
-                console.log("[APPROVE] Email sent successfully");
-              } catch (emailErr) {
-                console.error('[APPROVE] Email failed:', emailErr);
-              }
-
-              console.log("[APPROVE] Editing message text (web with email)...");
-              await ctx.editMessageText(
-                (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — Invoice sent via email.',
-                { parse_mode: 'HTML' }
-              );
-              console.log("[APPROVE] Message text edited (web with email)");
-
-              console.log(`Booking ${bookingId} approved. Invoice sent via email to ${booking.customer_email}`);
-            } else if (booking.source === 'web' && !booking.customer_email) {
-              console.log("ENTERING BRANCH: web without email check");
-              console.log("CONDITION (booking.source === 'web' && !booking.customer_email):", booking.source === 'web' && !booking.customer_email);
-              // No email provided - send special alert to operator group
-              const socialHandles = booking.details?.socials?.[0] || 'Not provided';
-              const alertMessage =
-                `⚠️ <b>No email provided. Manually contact customer:</b>\n\n` +
-                `👤 <b>Name:</b> ${booking.customer_name || 'N/A'}\n` +
-                `📞 <b>Phone:</b> ${booking.customer_phone || 'N/A'}\n` +
-                `💬 <b>Social:</b> ${socialHandles}\n` +
-                `🆔 <b>Booking ID:</b> ...${bookingId.slice(-8)}`;
-
-              console.log("[APPROVE] Sending alert to operator group (web no email)...");
-              await getOperatorBot().api.sendMessage(
-                process.env.OPERATOR_GROUP_CHAT_ID!,
-                alertMessage,
-                { parse_mode: 'HTML' }
-              );
-              console.log("[APPROVE] Alert sent to operator group (web no email)");
-
-              console.log("[APPROVE] Editing message text (web no email)...");
-              await ctx.editMessageText(
-                (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — No email. Manual contact alert sent.',
-                { parse_mode: 'HTML' }
-              );
-              console.log("[APPROVE] Message text edited (web no email)");
-
-              console.log(`Booking ${bookingId} approved. No email provided. Manual contact alert sent.`);
-            } else if (booking.telegram_id) {
-              console.log("ENTERING BRANCH: telegram check");
-              console.log("CONDITION (booking.telegram_id):", booking.telegram_id);
-              // Send via Telegram for telegram bookings
-              console.log("[APPROVE] Sending invoice document to customer (telegram)...");
-              await getCustomerBot().api.sendDocument(
-                booking.telegram_id,
-                new InputFile(buffer, `invoice_${bookingId.slice(-8)}.pdf`),
-                {
-                  caption:
-                    `✅ Booking confirmed!\n` +
-                    `📋 ID: ...${bookingId.slice(-8)}\n\n` +
-                    `Thank you for choosing AsiaBuddy! 🌟`,
-                }
-              );
-              console.log("[APPROVE] Invoice document sent to customer (telegram)");
-
-              console.log("[APPROVE] Editing message text (telegram)...");
-              await ctx.editMessageText(
-                (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — Invoice sent to customer.',
-                { parse_mode: 'HTML' }
-              );
-              console.log("[APPROVE] Message text edited (telegram)");
-
-              console.log(`Booking ${bookingId} approved. Invoice sent to ${booking.telegram_id}`);
-            } else {
-              console.log("ENTERING BRANCH: no contact method");
-              console.log("[APPROVE] Editing message text (no contact)...");
-              await ctx.editMessageText(
-                (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — No contact method available.',
-                { parse_mode: 'HTML' }
-              );
-              console.log("[APPROVE] Message text edited (no contact)");
-            }
-
-            // PHASE 4: Ops Handover - forward booking summary to @asiabuddy_bot ops group
-            const opsGroupChatId = process.env.OPS_GROUP_CHAT_ID || process.env.OPERATOR_GROUP_CHAT_ID;
-            console.log("ENTERING BRANCH: ops handover check");
-            console.log("CONDITION (opsGroupChatId):", opsGroupChatId);
-            if (opsGroupChatId) {
-              const handoverMessage =
-                `📋 <b>New Booking — Ops Handover</b>\n\n` +
-                `🆔 <b>Booking ID:</b> ...${bookingId.slice(-8)}\n` +
-                `👤 <b>Name:</b> ${booking.customer_name || 'N/A'} | 📞 <b>Phone:</b> ${booking.customer_phone || 'N/A'}\n` +
-                `📧 <b>Email:</b> ${booking.customer_email || 'Not provided'}\n` +
-                `✅ <b>Status:</b> Confirmed`;
-
-              try {
-                console.log("[APPROVE] Sending ops handover message...");
-                console.log('[OPS] opsGroupChatId:', opsGroupChatId);
-                console.log('[OPS] bot token prefix:', process.env.TELEGRAM_BOT_TOKEN?.slice(0, 10));
-                await getCustomerBot().api.sendMessage(
-                  opsGroupChatId,
-                  handoverMessage,
-                  { parse_mode: 'HTML' }
-                );
-                console.log(`[APPROVE] Ops handover sent for booking ${bookingId}`);
-              } catch (error) {
-                console.error('[APPROVE] Failed to send ops handover:', error);
-              }
-            }
-          } catch (e) {
-            console.error("[APPROVE] Background processing error:", e);
+        // Check if this is a web inquiry (has customer_email) or telegram booking
+        console.log("ENTERING BRANCH: web with email check");
+        console.log("CONDITION (booking.source === 'web' && booking.customer_email):", booking.source === 'web' && booking.customer_email);
+        if (booking.source === 'web' && booking.customer_email) {
+          // Send email for web inquiries
+          const gmailUser = process.env.GMAIL_USER;
+          if (!gmailUser) {
+            throw new Error('GMAIL_USER environment variable is not set');
           }
-        });
+          const salesEmail = process.env.SALES_EMAIL || gmailUser;
+          const adminEmail = process.env.ADMIN_EMAIL || gmailUser;
+
+          // Email - independent try-catch
+          try {
+            console.log("[APPROVE] Sending invoice email...");
+            await sendInvoiceEmail({
+              customerEmail: booking.customer_email,
+              salesEmail,
+              adminEmail,
+              bookingId,
+              pdfBuffer: buffer,
+              customerName: booking.customer_name,
+              customerLanguage,
+            });
+            console.log("[APPROVE] Email sent successfully");
+          } catch (emailErr) {
+            console.error('[APPROVE] Email failed:', emailErr);
+          }
+
+          console.log("[APPROVE] Editing message text (web with email)...");
+          await ctx.editMessageText(
+            (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — Invoice sent via email.',
+            { parse_mode: 'HTML' }
+          );
+          console.log("[APPROVE] Message text edited (web with email)");
+
+          console.log(`Booking ${bookingId} approved. Invoice sent via email to ${booking.customer_email}`);
+        } else if (booking.source === 'web' && !booking.customer_email) {
+          console.log("ENTERING BRANCH: web without email check");
+          console.log("CONDITION (booking.source === 'web' && !booking.customer_email):", booking.source === 'web' && !booking.customer_email);
+          // No email provided - send special alert to operator group
+          const socialHandles = booking.details?.socials?.[0] || 'Not provided';
+          const alertMessage =
+            `⚠️ <b>No email provided. Manually contact customer:</b>\n\n` +
+            `👤 <b>Name:</b> ${booking.customer_name || 'N/A'}\n` +
+            `📞 <b>Phone:</b> ${booking.customer_phone || 'N/A'}\n` +
+            `💬 <b>Social:</b> ${socialHandles}\n` +
+            `🆔 <b>Booking ID:</b> ...${bookingId.slice(-8)}`;
+
+          console.log("[APPROVE] Sending alert to operator group (web no email)...");
+          await getOperatorBot().api.sendMessage(
+            process.env.OPERATOR_GROUP_CHAT_ID!,
+            alertMessage,
+            { parse_mode: 'HTML' }
+          );
+          console.log("[APPROVE] Alert sent to operator group (web no email)");
+
+          console.log("[APPROVE] Editing message text (web no email)...");
+          await ctx.editMessageText(
+            (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — No email. Manual contact alert sent.',
+            { parse_mode: 'HTML' }
+          );
+          console.log("[APPROVE] Message text edited (web no email)");
+
+          console.log(`Booking ${bookingId} approved. No email provided. Manual contact alert sent.`);
+        } else if (booking.telegram_id) {
+          console.log("ENTERING BRANCH: telegram check");
+          console.log("CONDITION (booking.telegram_id):", booking.telegram_id);
+          // Send via Telegram for telegram bookings
+          console.log("[APPROVE] Sending invoice document to customer (telegram)...");
+          await getCustomerBot().api.sendDocument(
+            booking.telegram_id,
+            new InputFile(buffer, `invoice_${bookingId.slice(-8)}.pdf`),
+            {
+              caption:
+                `✅ Booking confirmed!\n` +
+                `📋 ID: ...${bookingId.slice(-8)}\n\n` +
+                `Thank you for choosing AsiaBuddy! 🌟`,
+            }
+          );
+          console.log("[APPROVE] Invoice document sent to customer (telegram)");
+
+          console.log("[APPROVE] Editing message text (telegram)...");
+          await ctx.editMessageText(
+            (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — Invoice sent to customer.',
+            { parse_mode: 'HTML' }
+          );
+          console.log("[APPROVE] Message text edited (telegram)");
+
+          console.log(`Booking ${bookingId} approved. Invoice sent to ${booking.telegram_id}`);
+        } else {
+          console.log("ENTERING BRANCH: no contact method");
+          console.log("[APPROVE] Editing message text (no contact)...");
+          await ctx.editMessageText(
+            (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — No contact method available.',
+            { parse_mode: 'HTML' }
+          );
+          console.log("[APPROVE] Message text edited (no contact)");
+        }
+
+        // PHASE 4: Ops Handover - forward booking summary to @asiabuddy_bot ops group
+        const opsGroupChatId = process.env.OPS_GROUP_CHAT_ID || process.env.OPERATOR_GROUP_CHAT_ID;
+        console.log("ENTERING BRANCH: ops handover check");
+        console.log("CONDITION (opsGroupChatId):", opsGroupChatId);
+        if (opsGroupChatId) {
+          const handoverMessage =
+            `📋 <b>New Booking — Ops Handover</b>\n\n` +
+            `🆔 <b>Booking ID:</b> ...${bookingId.slice(-8)}\n` +
+            `👤 <b>Name:</b> ${booking.customer_name || 'N/A'} | 📞 <b>Phone:</b> ${booking.customer_phone || 'N/A'}\n` +
+            `📧 <b>Email:</b> ${booking.customer_email || 'Not provided'}\n` +
+            `✅ <b>Status:</b> Confirmed`;
+
+          try {
+            console.log("[APPROVE] Sending ops handover message...");
+            console.log('[OPS] opsGroupChatId:', opsGroupChatId);
+            console.log('[OPS] bot token prefix:', process.env.TELEGRAM_BOT_TOKEN?.slice(0, 10));
+            await getCustomerBot().api.sendMessage(
+              opsGroupChatId,
+              handoverMessage,
+              { parse_mode: 'HTML' }
+            );
+            console.log(`[APPROVE] Ops handover sent for booking ${bookingId}`);
+          } catch (error) {
+            console.error('[APPROVE] Failed to send ops handover:', error);
+          }
+        }
+
       } catch (err) {
         console.error('Approval error:', err);
         await ctx.answerCallbackQuery({ text: '❌ Error. Check logs.' });
