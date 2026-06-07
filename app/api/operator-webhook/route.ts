@@ -161,6 +161,8 @@ function getOperatorBot(): Bot {
 
           try {
             console.log("[APPROVE] Sending ops handover message...");
+            console.log('[OPS] opsGroupChatId:', opsGroupChatId);
+            console.log('[OPS] bot token prefix:', process.env.TELEGRAM_BOT_TOKEN?.slice(0, 10));
             await getCustomerBot().api.sendMessage(
               opsGroupChatId,
               handoverMessage,
