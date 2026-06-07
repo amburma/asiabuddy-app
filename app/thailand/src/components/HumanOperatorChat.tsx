@@ -76,6 +76,29 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
 
     setIsSubmitting(true);
 
+    // Detect language from last 3 user messages
+    const userMessages = messages
+      .filter(m => m.role === 'user')
+      .slice(-3)
+      .map(m => m.content)
+      .join(' ');
+
+    // Simple detection: check for Thai characters
+    const hasThai = /[\u0E00-\u0E7F]/.test(userMessages);
+    const hasChinese = /[\u4E00-\u9FFF]/.test(userMessages);
+    const hasJapanese = /[\u3040-\u30FF]/.test(userMessages);
+    const hasKorean = /[\uAC00-\uD7AF]/.test(userMessages);
+    const hasArabic = /[\u0600-\u06FF]/.test(userMessages);
+    const hasMyanmar = /[\u1000-\u109F]/.test(userMessages);
+
+    let detectedLanguage = 'en';
+    if (hasThai) detectedLanguage = 'th';
+    else if (hasChinese) detectedLanguage = 'zh';
+    else if (hasJapanese) detectedLanguage = 'ja';
+    else if (hasKorean) detectedLanguage = 'ko';
+    else if (hasArabic) detectedLanguage = 'ar';
+    else if (hasMyanmar) detectedLanguage = 'my';
+
     try {
       const response = await fetch('https://asiabuddy.app/api/inquiry', {
         method: 'POST',
@@ -90,7 +113,7 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
             email: contactDetails.email,
             socialHandles: contactDetails.socialHandles
           },
-          language: language
+          language: detectedLanguage
         }),
       });
 
