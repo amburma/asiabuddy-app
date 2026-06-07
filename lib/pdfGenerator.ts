@@ -72,6 +72,34 @@ export function generateInvoicePDF(
   items?: InvoiceItem[]
 ): Buffer {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const enLabels = {
+    invoice: 'Invoice',
+    bookingId: 'Booking ID',
+    date: 'Date',
+    customerName: 'Customer Name',
+    service: 'Service',
+    amount: 'Amount',
+    total: 'Total',
+    thankYou: 'Thank you for choosing AsiaBuddy.',
+    terms: 'Terms & Conditions',
+    paymentNote: 'Payment is due within 24 hours of booking confirmation.',
+    cancellation: 'Cancellations made 48 hours before the tour are fully refundable.'
+  };
+
+  const thLabels = {
+    invoice: 'ใบแจ้งหนี้',
+    bookingId: 'รหัสการจอง',
+    date: 'วันที่',
+    customerName: 'ชื่อลูกค้า',
+    service: 'บริการ',
+    amount: 'จำนวนเงิน',
+    total: 'ยอดรวม',
+    thankYou: 'ขอบคุณที่เลือกใช้บริการ AsiaBuddy',
+    terms: 'ข้อกำหนดและเงื่อนไข',
+    paymentNote: 'กรุณาชำระเงินภายใน 24 ชั่วโมงหลังยืนยันการจอง',
+    cancellation: 'การยกเลิกก่อน 48 ชั่วโมงจะได้รับเงินคืนเต็มจำนวน'
+  };
+
   const supportedLanguages: Record<string, typeof enLabels> = { en: enLabels, th: thLabels };
 const primaryLabels = supportedLanguages[customerLanguage] ?? enLabels;
   const isEnglish = customerLanguage === 'en' || !supportedLanguages[customerLanguage];
