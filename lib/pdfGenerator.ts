@@ -116,6 +116,8 @@ export function generateInvoicePDF(
 
   const logoDataUrl = `data:image/png;base64,${LOGO_BASE64}`;
 
+  console.log('[pdf] logoDataUrl length:', logoDataUrl?.length ?? 0);
+
   // ── Watermark ────────────────────────────────────────
   doc.saveGraphicsState();
   const gState = new (doc as any).GState({ opacity: 0.04, 'fill-opacity': 0.04 });
