@@ -240,11 +240,7 @@ export async function POST(req: Request) {
     
     const bot = getOperatorBot();
     await bot.init();
-    
-    // Return 200 immediately — process in background
-    bot.handleUpdate(body).catch(err => {
-      console.error("WEBHOOK BACKGROUND ERROR:", err);
-    });
+    await bot.handleUpdate(body);
     
     return new Response('OK', { status: 200 });
   } catch (err) {
