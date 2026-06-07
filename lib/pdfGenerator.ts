@@ -251,6 +251,8 @@ export function generateInvoicePDF(
   }
 
   
+  const pageH = doc.internal.pageSize.height;
+
   // ── Bilingual Rendering ─────────────────────────────────
   if (!isEnglish) {
     // Render primary language invoice first
@@ -269,7 +271,6 @@ export function generateInvoicePDF(
   }
 
   // ── Footer ────────────────────────────────────────────
-  const pageH = doc.internal.pageSize.height;
 
   doc.setDrawColor(230, 230, 230);
   doc.setLineWidth(0.3);
