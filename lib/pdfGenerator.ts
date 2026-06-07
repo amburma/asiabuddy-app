@@ -118,8 +118,9 @@ export function generateInvoicePDF(
 
   // ── Watermark ────────────────────────────────────────
   doc.saveGraphicsState();
-  (doc as any).setGState(new (doc as any).GState({ opacity: 0.04 }));
-  doc.addImage(logoDataUrl, 'PNG', 55, 98, 100, 100, undefined, 'FAST');
+  const gState = new (doc as any).GState({ opacity: 0.04, 'fill-opacity': 0.04 });
+  (doc as any).setGState(gState);
+  doc.addImage(logoDataUrl, 'PNG', 105, 148.5, 300, 300, 'watermark', 'FAST');
   doc.restoreGraphicsState();
 
   // ── Header: Logo + Company name ───────────────────────
