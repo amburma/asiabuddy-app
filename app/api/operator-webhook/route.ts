@@ -64,17 +64,22 @@ function getOperatorBot(): Bot {
           const salesEmail = process.env.SALES_EMAIL || gmailUser;
           const adminEmail = process.env.ADMIN_EMAIL || gmailUser;
 
-          console.log("[APPROVE] Sending invoice email...");
-          await sendInvoiceEmail({
-            customerEmail: booking.customer_email,
-            salesEmail,
-            adminEmail,
-            bookingId,
-            pdfBuffer: buffer,
-            customerName: booking.customer_name,
-            customerLanguage,
-          });
-          console.log("[APPROVE] Invoice email sent");
+          // Email - independent try-catch
+          try {
+            console.log("[APPROVE] Sending invoice email...");
+            await sendInvoiceEmail({
+              customerEmail: booking.customer_email,
+              salesEmail,
+              adminEmail,
+              bookingId,
+              pdfBuffer: buffer,
+              customerName: booking.customer_name,
+              customerLanguage,
+            });
+            console.log("[APPROVE] Email sent successfully");
+          } catch (emailErr) {
+            console.error('[APPROVE] Email failed:', emailErr);
+          }
 
           console.log("[APPROVE] Editing message text (web with email)...");
           await ctx.editMessageText(
