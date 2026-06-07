@@ -120,8 +120,7 @@ export function generateInvoicePDF(
 
   // ── Watermark ────────────────────────────────────────
   doc.saveGraphicsState();
-  const gState = new (doc as any).GState({ opacity: 0.04, 'fill-opacity': 0.04 });
-  (doc as any).setGState(gState);
+  (doc as any).setGState((doc as any).GState({ opacity: 0.04 }));
   doc.addImage(logoDataUrl, 'PNG', 105, 148.5, 300, 300, 'watermark', 'FAST');
   doc.restoreGraphicsState();
 
