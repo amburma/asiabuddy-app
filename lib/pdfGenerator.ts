@@ -296,7 +296,7 @@ export function generateInvoicePDF(
 
 // ==========================================
 // generateAndUploadInvoicePDF
-// (wraps the above + optional Google Drive upload)
+// (wraps the above + Supabase Storage upload)
 // ==========================================
 export async function generateAndUploadInvoicePDF(
   booking: BookingData,
@@ -307,40 +307,35 @@ export async function generateAndUploadInvoicePDF(
 
   const buffer = generateInvoicePDF(booking, invoiceNo, undefined, customerLanguage);
 
-  // Google Drive upload (optional — only when env vars present)
+  // Supabase Storage upload
   let driveUrl: string | null = null;
   try {
-    if (
-      process.env.GOOGLE_SERVICE_ACCOUNT_JSON &&
-      process.env.GOOGLE_DRIVE_FOLDER_ID
-    ) {
-      const { google }  = await import('googleapis');
-      const { Readable } = await import('stream');
+    const { createClient } = await import('@supabase/supabase-js');
 
-      const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
-      const auth = new google.auth.GoogleAuth({
-        credentials,
-        scopes: ['https://www.googleapis.com/auth/drive'],
-      });
-      const drive = google.drive({ version: 'v3', auth });
+    const supabase = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
 
-      const readable = new Readable();
-      readable.push(buffer);
-      readable.push(null);
-
-      const res = await drive.files.create({
-        requestBody: {
-          name:    `Invoice_${invoiceNo}.pdf`,
-          parents: [process.env.GOOGLE_DRIVE_FOLDER_ID],
-        },
-        media: { mimeType: 'application/pdf', body: readable },
-        fields: 'id,webViewLink',
+    const fileName = `invoices/${booking.id}_${Date.now()}.pdf`;
+    const { data, error } = await supabase.storage
+      .from('invoices')
+      .upload(fileName, buffer, {
+        contentType: 'application/pdf',
+        upsert: true
       });
 
-      driveUrl = res.data.webViewLink ?? null;
+    if (error) {
+      console.error('Error uploading file to Supabase Storage:', error);
+    } else {
+      const { data: urlData } = supabase.storage
+        .from('invoices')
+        .getPublicUrl(fileName);
+
+      driveUrl = urlData.publicUrl;
     }
   } catch (err) {
-    console.error('Error uploading file to Google Drive:', err);
+    console.error('Error uploading file to Supabase Storage:', err);
   }
 
   return { buffer, driveUrl };
