@@ -36,7 +36,8 @@ function getOperatorBot(): Bot {
         console.log("[APPROVE] Booking status updated");
 
         console.log("[APPROVE] Generating and uploading invoice PDF...");
-        const { buffer, driveUrl } = await generateAndUploadInvoicePDF(booking);
+        const customerLanguage = (booking.details?.language as string) || 'en';
+        const { buffer, driveUrl } = await generateAndUploadInvoicePDF(booking, customerLanguage);
         console.log("[APPROVE] PDF generated and uploaded, URL:", driveUrl);
         
         console.log("[APPROVE] Inserting invoice into Supabase...");
@@ -71,6 +72,7 @@ function getOperatorBot(): Bot {
             bookingId,
             pdfBuffer: buffer,
             customerName: booking.customer_name,
+            customerLanguage,
           });
           console.log("[APPROVE] Invoice email sent");
 

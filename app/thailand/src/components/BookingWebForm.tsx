@@ -184,7 +184,7 @@ export default function BookingWebForm({ language = 'EN', onClose }: Props) {
       const res = await fetch('https://asiabuddy.app/api/inquiry', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, chatSummary, qa: [] }),
+        body: JSON.stringify({ ...form, chatSummary, qa: [], language }),
       });
       if (!res.ok) throw new Error();
       setStep('success');

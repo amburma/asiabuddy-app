@@ -89,7 +89,8 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
             phone: contactDetails.phone,
             email: contactDetails.email,
             socialHandles: contactDetails.socialHandles
-          }
+          },
+          language: language
         }),
       });
 

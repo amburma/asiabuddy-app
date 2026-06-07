@@ -72,6 +72,9 @@ export function generateInvoicePDF(
   items?: InvoiceItem[]
 ): Buffer {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const primaryLabels = supportedLanguages[customerLanguage] ?? enLabels;
+  const isEnglish = customerLanguage === 'en' || !supportedLanguages[customerLanguage];
+
 
   const lineItems: InvoiceItem[] = items ?? buildItems(booking);
   const customer: CustomerInfo = {
@@ -100,13 +103,13 @@ export function generateInvoicePDF(
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(8);
   doc.setTextColor(...colors.textLight);
-  doc.text('ASIABUDDY SERVICES', 45, 27);
+  doc.text('Travel Services', 45, 27);
 
   // ── Header: Invoice title + meta ─────────────────────
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(24);
   doc.setTextColor(...colors.accent);
-  doc.text('INVOICE', 195, 22, { align: 'right' });
+  doc.text(primaryLabels.invoice, 195, 22, { align: 'right' });
 
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(10);
@@ -115,7 +118,7 @@ export function generateInvoicePDF(
   const today   = new Date().toLocaleDateString('en-US');
   const dueDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US');
 
-  doc.text(`Invoice No : ${invoiceNo}`, 195, 30, { align: 'right' });
+  doc.text(`${primaryLabels.invoice} No : ${invoiceNo}`, 195, 30, { align: 'right' });
   doc.text(`Date       : ${today}`,     195, 35, { align: 'right' });
   doc.text(`Due Date   : ${dueDate}`,   195, 40, { align: 'right' });
 
@@ -217,6 +220,24 @@ export function generateInvoicePDF(
     doc.text(`EUR ${grandTotal.toFixed(2)}`, 195, finalY + 14, { align: 'right' });
   }
 
+  
+  // ── Bilingual Rendering ─────────────────────────────────
+  if (!isEnglish) {
+    // Render primary language invoice first
+    // (already rendered above with primaryLabels)
+    
+    // Add divider
+    doc.setDrawColor(...colors.accent);
+    doc.setLineWidth(0.5);
+    doc.line(15, pageH - 35, 195, pageH - 35);
+    
+    // Add English section header
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(...colors.primary);
+    doc.text('English Version', 105, pageH - 30, { align: 'center' });
+  }
+
   // ── Footer ────────────────────────────────────────────
   const pageH = doc.internal.pageSize.height;
 
@@ -227,13 +248,13 @@ export function generateInvoicePDF(
   doc.setFont('Helvetica', 'italic');
   doc.setFontSize(10);
   doc.setTextColor(...colors.primary);
-  doc.text('Thank you for your business!', 105, pageH - 18, { align: 'center' });
+  doc.text(primaryLabels.thankYou, 105, pageH - 18, { align: 'center' });
 
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(7);
   doc.setTextColor(...colors.textLight);
   doc.text(
-    'AsiaBuddy Services • Eisenbahnstraße 2b, 48341 Altenberge, Germany • Tourist Police: 1155',
+    'AsiaBuddy • Eisenbahnstraße 2b, 48341 Altenberge, Germany',
     105, pageH - 12, { align: 'center' }
   );
 
@@ -247,12 +268,13 @@ export function generateInvoicePDF(
 // (wraps the above + optional Google Drive upload)
 // ==========================================
 export async function generateAndUploadInvoicePDF(
-  booking: BookingData
+  booking: BookingData,
+  customerLanguage: string = 'en'
 ): Promise<{ buffer: Buffer; driveUrl: string | null }> {
   const shortId  = (booking.id ?? 'UNKNOWN').slice(-8).toUpperCase();
   const invoiceNo = `AB-${shortId}`;
 
-  const buffer = generateInvoicePDF(booking, invoiceNo);
+  const buffer = generateInvoicePDF(booking, invoiceNo, undefined, customerLanguage);
 
   // Google Drive upload (optional — only when env vars present)
   let driveUrl: string | null = null;

@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
     otherService?: string;
     qa?: { question: string; answer: string }[];
     chatSummary?: string;
+    language?: string;
     // New format from HumanOperatorChat
     chatHistory?: { role: string; content: string }[];
     contactDetails?: {
@@ -55,6 +56,7 @@ export async function POST(req: NextRequest) {
   let otherService: string | undefined;
   let qa: { question: string; answer: string }[] = [];
   let chatSummary: string | undefined;
+  let language: string | undefined;
 
   if (isHumanOperatorChatFormat) {
     // New format from HumanOperatorChat
@@ -64,6 +66,7 @@ export async function POST(req: NextRequest) {
     socials = body.contactDetails!.socialHandles ? [body.contactDetails!.socialHandles] : [];
     services = ['tour']; // Default to tour for human operator chat
     chatSummary = body.chatHistory?.map(msg => `${msg.role}: ${msg.content}`).join('\n\n');
+    language = body.language;
   } else {
     // Existing web form format
     name = body.name!;
@@ -74,6 +77,7 @@ export async function POST(req: NextRequest) {
     otherService = body.otherService;
     qa = body.qa || [];
     chatSummary = body.chatSummary;
+    language = body.language;
   }
 
   // Basic validation
@@ -100,6 +104,7 @@ export async function POST(req: NextRequest) {
     otherService,
     qa,
     chatSummary,
+    language: language || 'en',
   };
 
   const customerInfo = {
