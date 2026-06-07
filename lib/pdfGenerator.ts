@@ -72,7 +72,8 @@ export function generateInvoicePDF(
   items?: InvoiceItem[]
 ): Buffer {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const primaryLabels = supportedLanguages[customerLanguage] ?? enLabels;
+  const supportedLanguages: Record<string, typeof enLabels> = { en: enLabels, th: thLabels };
+const primaryLabels = supportedLanguages[customerLanguage] ?? enLabels;
   const isEnglish = customerLanguage === 'en' || !supportedLanguages[customerLanguage];
 
 
