@@ -69,7 +69,8 @@ function buildItems(booking: BookingData): InvoiceItem[] {
 export function generateInvoicePDF(
   booking: BookingData,
   invoiceNo: string,
-  items?: InvoiceItem[]
+  items?: InvoiceItem[],
+  customerLanguage: string = 'en'
 ): Buffer {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const enLabels = {
@@ -101,7 +102,7 @@ export function generateInvoicePDF(
   };
 
   const supportedLanguages: Record<string, typeof enLabels> = { en: enLabels, th: thLabels };
-const primaryLabels = supportedLanguages[customerLanguage] ?? enLabels;
+  const primaryLabels = supportedLanguages[customerLanguage] ?? enLabels;
   const isEnglish = customerLanguage === 'en' || !supportedLanguages[customerLanguage];
 
 
