@@ -67,6 +67,7 @@ export async function POST(req: NextRequest) {
     services = ['tour']; // Default to tour for human operator chat
     chatSummary = body.chatHistory?.map(msg => `${msg.role}: ${msg.content}`).join('\n\n');
     language = body.language;
+    console.log('[INQUIRY] Detected language:', language);
   } else {
     // Existing web form format
     name = body.name!;
@@ -78,6 +79,7 @@ export async function POST(req: NextRequest) {
     qa = body.qa || [];
     chatSummary = body.chatSummary;
     language = body.language;
+    console.log('[INQUIRY] Detected language:', language);
   }
 
   // Basic validation
@@ -106,6 +108,7 @@ export async function POST(req: NextRequest) {
     chatSummary,
     language: language || 'en',
   };
+  console.log('[INQUIRY] bookingDetails.language:', language || 'en');
 
   const customerInfo = {
     customerName: name,
@@ -217,6 +220,9 @@ export async function POST(req: NextRequest) {
   // ── 4. Send to Telegram Operator Group ────────────────────────────────────
   const BOT_TOKEN = process.env.OPERATOR_BOT_TOKEN;
   const CHAT_ID   = process.env.OPERATOR_GROUP_CHAT_ID;
+
+  console.log('[inquiry] BOT_TOKEN exists:', !!BOT_TOKEN);
+  console.log('[inquiry] CHAT_ID value:', CHAT_ID);
 
   if (!BOT_TOKEN || !CHAT_ID) {
     console.error('[inquiry] Missing OPERATOR_BOT_TOKEN or OPERATOR_GROUP_CHAT_ID env vars');
