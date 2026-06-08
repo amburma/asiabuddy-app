@@ -240,6 +240,7 @@ function getOperatorBot(): Bot {
               pdfBuffer: buffer,
               customerName: booking.customer_name,
               chatSummary: booking.details?.chatSummary,
+              customerLanguage: booking.details?.language?.toLowerCase(),
             });
             console.log("[APPROVE] Email sent successfully - took", Date.now() - t15, "ms");
           } catch (emailErr) {

@@ -8,6 +8,22 @@ interface SendInvoiceEmailParams {
   pdfBuffer: Buffer;
   customerName?: string;
   chatSummary?: string;
+  customerLanguage?: string;
+}
+
+
+// Helper function to format chat summary with proper styling
+function formatChatSummary(chatSummary: string): string {
+  const lines = chatSummary.split('\n').filter(line => line.trim());
+  return lines.map(line => {
+    if (line.startsWith('AsiaBuddy:')) {
+      return `<p style="font-weight: bold; margin: 8px 0;">${line}</p>`;
+    } else if (line.startsWith('Customer:')) {
+      return `<p style="font-weight: normal; margin: 8px 0;">${line}</p>`;
+    } else {
+      return `<p style="margin: 8px 0;">${line}</p>`;
+    }
+  }).join('');
 }
 
 // Create Gmail SMTP transporter
@@ -35,41 +51,89 @@ function createTransporter() {
 }
 
 export async function sendInvoiceEmail(params: SendInvoiceEmailParams): Promise<void> {
-  const { customerEmail, salesEmail, adminEmail, bookingId, pdfBuffer, customerName, chatSummary } = params;
+  const { customerEmail, salesEmail, adminEmail, bookingId, pdfBuffer, customerName, chatSummary, customerLanguage } = params;
   const transporter = createTransporter();
   const bookingIdShort = bookingId.slice(-8);
 
-  // Email to customer
-  const customerSubject = `Your AsiaBuddy Invoice - Booking #${bookingIdShort}`;
+  // Language detection from booking data
+  const lang = customerLanguage?.toLowerCase() || 'en';
+  const isEnglish = lang === 'en';
+
+  // Email to customer - bilingual subject
+  const subjectTranslations: Record<string, string> = {
+    th: `ใบแจ้งหนี้ของคุณ / Your Invoice - AsiaBuddy Booking #${bookingIdShort}`,
+    mm: `သင့်ပြေစာ / Your Invoice - AsiaBuddy Booking #${bookingIdShort}`,
+    es: `Su Factura / Your Invoice - AsiaBuddy Booking #${bookingIdShort}`,
+    fr: `Votre Facture / Your Invoice - AsiaBuddy Booking #${bookingIdShort}`,
+    de: `Ihre Rechnung / Your Invoice - AsiaBuddy Booking #${bookingIdShort}`,
+    en: `Your AsiaBuddy Invoice - Booking #${bookingIdShort}`,
+  };
+  const customerSubject = subjectTranslations[lang] || subjectTranslations.en;
   
-  let customerHtmlBody = `
-    <p>Dear ${customerName || 'Customer'},</p>
-    <p>Thank you for choosing AsiaBuddy.</p>
-    <p>Your booking has been confirmed. Please find your invoice attached.</p>
-    <p><strong>Booking ID:</strong> ${bookingIdShort}<br>
-    <strong>Invoice #:</strong> INV-${bookingIdShort}</p>
-  `;
+  let customerHtmlBody = '';
+
+  // Bilingual greeting translations
+  const greetingTranslations: Record<string, { native: string; english: string }> = {
+    th: { native: 'สวัสดีครับ/ค่ะ', english: 'Hello' },
+    mm: { native: 'မင်္ဂလာပါ', english: 'Hello' },
+    es: { native: 'Hola', english: 'Hello' },
+    fr: { native: 'Bonjour', english: 'Hello' },
+    de: { native: 'Hallo', english: 'Hello' },
+    en: { native: 'Hello', english: 'Hello' },
+  };
+  const greeting = greetingTranslations[lang] || greetingTranslations.en;
+
+  if (isEnglish) {
+    // English only for English customers
+    customerHtmlBody += `
+      <p>Dear ${customerName || 'Customer'},</p>
+      <p>Thank you for choosing AsiaBuddy.</p>
+      <p>Your booking has been confirmed. Please find your invoice attached.</p>
+      <p><strong>Booking ID:</strong> ${bookingIdShort}<br>
+      <strong>Invoice #:</strong> INV-${bookingIdShort}</p>
+    `;
+  } else {
+    // Bilingual content for non-English customers
+    customerHtmlBody += `
+      <p>${greeting.native} ${customerName || 'Customer'} / ${greeting.english} ${customerName || 'Customer'},</p>
+      <p>Thank you for choosing AsiaBuddy.</p>
+      <p>Your booking has been confirmed. Please find your invoice attached.</p>
+      <p><strong>Booking ID:</strong> ${bookingIdShort}<br>
+      <strong>Invoice #:</strong> INV-${bookingIdShort}</p>
+    `;
+  }
 
   // Add Chat Summary section if available
   if (chatSummary) {
     customerHtmlBody += `
       <hr style="margin: 20px 0;">
       <p><strong>Chat Summary:</strong></p>
-      <p style="white-space: pre-wrap; font-family: monospace; font-size: 14px; background-color: #f5f5f5; padding: 10px; border-radius: 5px;">${chatSummary}</p>
+      <div style="font-family: monospace; font-size: 14px; background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
+        ${formatChatSummary(chatSummary)}
+      </div>
     `;
   }
 
-  customerHtmlBody += `
-    <p>If you have any questions, please don't hesitate to contact us.</p>
-    <p>Best regards,<br>AsiaBuddy Team</p>
-  `;
+  if (isEnglish) {
+    customerHtmlBody += `
+      <p>If you have any questions, please don't hesitate to contact us.</p>
+      <p>Best regards,<br>AsiaBuddy Team</p>
+    `;
+  } else {
+    customerHtmlBody += `
+      <p>If you have any questions, please don't hesitate to contact us.</p>
+      <p>Best regards,<br>AsiaBuddy Team</p>
+    `;
+  }
 
   const customerMailOptions = {
     from: `"AsiaBuddy Bookings" <${process.env.GMAIL_USER}>`,
     replyTo: process.env.SALES_EMAIL || process.env.GMAIL_USER,
     to: customerEmail,
     subject: customerSubject,
-    text: `Dear ${customerName || 'Customer'},\n\nThank you for choosing AsiaBuddy.\n\nYour booking has been confirmed. Please find your invoice attached.\n\nBooking ID: ${bookingIdShort}\nInvoice #: INV-${bookingIdShort}\n\n${chatSummary ? `Chat Summary:\n${chatSummary}\n\n` : ''}If you have any questions, please don't hesitate to contact us.\n\nBest regards,\nAsiaBuddy Team`,
+    text: isEnglish
+      ? `Dear ${customerName || 'Customer'},\n\nThank you for choosing AsiaBuddy.\n\nYour booking has been confirmed. Please find your invoice attached.\n\nBooking ID: ${bookingIdShort}\nInvoice #: INV-${bookingIdShort}\n\n${chatSummary ? `Chat Summary:\n${chatSummary}\n\n` : ''}If you have any questions, please don't hesitate to contact us.\n\nBest regards,\nAsiaBuddy Team`
+      : `${greeting.native} ${customerName || 'Customer'} / ${greeting.english} ${customerName || 'Customer'}\n\nThank you for choosing AsiaBuddy.\n\nYour booking has been confirmed. Please find your invoice attached.\n\nBooking ID: ${bookingIdShort}\nInvoice #: INV-${bookingIdShort}\n\n${chatSummary ? `Chat Summary:\n${chatSummary}\n\n` : ''}If you have any questions, please don't hesitate to contact us.\n\nBest regards,\nAsiaBuddy Team`,
     html: customerHtmlBody,
     attachments: [
       {
