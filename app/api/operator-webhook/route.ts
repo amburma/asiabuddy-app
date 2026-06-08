@@ -153,7 +153,7 @@ function getOperatorBot(): Bot {
         }
 
         // PHASE 4: Ops Handover - forward booking summary to @asiabuddy_bot ops group
-        const opsGroupChatId = process.env.OPS_GROUP_CHAT_ID || process.env.OPERATOR_GROUP_CHAT_ID;
+        const opsGroupChatId = process.env.OPS_GROUP_CHAT_ID;
         console.log("ENTERING BRANCH: ops handover check");
         console.log("CONDITION (opsGroupChatId):", opsGroupChatId);
         if (opsGroupChatId) {
