@@ -240,8 +240,14 @@ export function generateInvoicePDF(
     doc.setTextColor(...colors.textDark);
 
     const maxWidth = 165;
-    const splitText = doc.splitTextToSize(chatSummary, maxWidth);
-    doc.text(splitText, 15, pageH - 35);
+    const lines = chatSummary.split('\n');
+    let currentY = pageH - 35;
+    
+    lines.forEach((line) => {
+      const splitLine = doc.splitTextToSize(line, maxWidth);
+      doc.text(splitLine, 15, currentY);
+      currentY += (splitLine.length * 4) + 2;
+    });
   }
 
   // ── Footer ────────────────────────────────────────────
