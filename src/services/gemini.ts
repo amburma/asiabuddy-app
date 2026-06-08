@@ -115,8 +115,8 @@ function getSystemInstruction(country: string): string {
 - Never default to Thai or any fixed language unless the user writes in Thai.
 
 4. Thinking State Rule
-- Never display any thinking state text including ThaiGuide is thinking... or any variation.
-- Process silently and respond directly.
+- When displaying a loading or thinking state, output exactly: "ThaiGuide is thinking..." — translated into the user's detected language.
+- CRITICAL: Never display "AI is thinking..." or any other variation.
 
 5. Token & Cost Optimization Rules
 - Every response must provide only the core, direct answer to the user's specific question.
