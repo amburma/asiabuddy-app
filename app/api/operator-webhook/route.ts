@@ -91,11 +91,11 @@ function getOperatorBot(): Bot {
           const salesEmail = process.env.SALES_EMAIL || gmailUser;
           const adminEmail = process.env.ADMIN_EMAIL || gmailUser;
 
-          // Email - independent try-catch
+          // Email - fire-and-forget (do not await)
           try {
-            console.log("[APPROVE] Sending invoice email...");
+            console.log("[APPROVE] Sending invoice email (fire-and-forget)...");
             const t6 = Date.now();
-            await sendInvoiceEmail({
+            sendInvoiceEmail({
               customerEmail: booking.customer_email,
               salesEmail,
               adminEmail,
@@ -103,10 +103,13 @@ function getOperatorBot(): Bot {
               pdfBuffer: buffer,
               customerName: booking.customer_name,
               customerLanguage,
+            }).then(() => {
+              console.log("[APPROVE] Email sent successfully - took", Date.now() - t6, "ms");
+            }).catch((emailErr) => {
+              console.error('[APPROVE] Email failed:', emailErr);
             });
-            console.log("[APPROVE] Email sent successfully - took", Date.now() - t6, "ms");
           } catch (emailErr) {
-            console.error('[APPROVE] Email failed:', emailErr);
+            console.error('[APPROVE] Email setup failed:', emailErr);
           }
 
           console.log("[APPROVE] Editing message text (web with email)...");
@@ -199,8 +202,8 @@ function getOperatorBot(): Bot {
             `📧 <b>Email:</b> ${booking.customer_email || 'Not provided'}\n` +
             `✅ <b>Status:</b> Confirmed`;
 
-          // Fetch and include chat history if telegram_id is available
-          if (booking.telegram_id) {
+          // Fetch and include chat history
+          if (booking.source === 'telegram' && booking.telegram_id) {
             try {
               console.log("[APPROVE] Fetching chat history for telegram_id:", booking.telegram_id);
               const t13 = Date.now();
@@ -221,6 +224,10 @@ function getOperatorBot(): Bot {
             } catch (historyError) {
               console.error('[APPROVE] Failed to fetch chat history:', historyError);
             }
+          } else if (booking.source === 'web' && booking.details?.chatSummary) {
+            // Use chatSummary for web bookings
+            console.log("[APPROVE] Using chatSummary for web booking");
+            handoverMessage += `\n\n💬 <b>Chat Summary:</b>\n${booking.details.chatSummary}`;
           }
 
           try {
