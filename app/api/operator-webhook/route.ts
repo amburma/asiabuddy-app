@@ -1,11 +1,31 @@
 import { Bot, InputFile } from 'grammy';
-import { getBooking, updateBookingStatus } from '@/lib/database';
+import { getBooking, updateBookingStatus, getChatHistory } from '@/lib/database';
 import { generateAndUploadInvoicePDF } from '@/lib/pdfGenerator';
 import { sendInvoiceEmail } from '@/lib/emailService';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
 let operatorBot: Bot | null = null;
 let customerBot: Bot | null = null;
+
+// Helper function to handle supergroup migration errors
+async function sendMessageWithMigrationRetry(
+  bot: Bot,
+  chatId: string | number,
+  text: string,
+  options?: any
+): Promise<void> {
+  try {
+    await bot.api.sendMessage(chatId, text, options);
+  } catch (error: any) {
+    // Check if error is due to group migration to supergroup
+    if (error?.parameters?.migrate_to_chat_id) {
+      console.log('[MIGRATION] Group migrated to supergroup, retrying with new chat_id:', error.parameters.migrate_to_chat_id);
+      await bot.api.sendMessage(error.parameters.migrate_to_chat_id, text, options);
+    } else {
+      throw error;
+    }
+  }
+}
 
 function getOperatorBot(): Bot {
   if (!operatorBot) {
@@ -102,7 +122,8 @@ function getOperatorBot(): Bot {
             `🆔 <b>Booking ID:</b> ...${bookingId.slice(-8)}`;
 
           console.log("[APPROVE] Sending alert to operator group (web no email)...");
-          await getOperatorBot().api.sendMessage(
+          await sendMessageWithMigrationRetry(
+            getOperatorBot(),
             process.env.OPERATOR_GROUP_CHAT_ID!,
             alertMessage,
             { parse_mode: 'HTML' }
@@ -157,18 +178,40 @@ function getOperatorBot(): Bot {
         console.log("ENTERING BRANCH: ops handover check");
         console.log("CONDITION (opsGroupChatId):", opsGroupChatId);
         if (opsGroupChatId) {
-          const handoverMessage =
+          let handoverMessage =
             `📋 <b>New Booking — Ops Handover</b>\n\n` +
             `🆔 <b>Booking ID:</b> ...${bookingId.slice(-8)}\n` +
             `👤 <b>Name:</b> ${booking.customer_name || 'N/A'} | 📞 <b>Phone:</b> ${booking.customer_phone || 'N/A'}\n` +
             `📧 <b>Email:</b> ${booking.customer_email || 'Not provided'}\n` +
             `✅ <b>Status:</b> Confirmed`;
 
+          // Fetch and include chat history if telegram_id is available
+          if (booking.telegram_id) {
+            try {
+              console.log("[APPROVE] Fetching chat history for telegram_id:", booking.telegram_id);
+              const chatHistory = await getChatHistory(booking.telegram_id, 50, 'thailand');
+              if (chatHistory && chatHistory.length > 0) {
+                console.log(`[APPROVE] Found ${chatHistory.length} chat history messages`);
+                handoverMessage += `\n\n💬 <b>Chat History:</b>\n`;
+                chatHistory.forEach((msg, index) => {
+                  const role = msg.role === 'user' ? '👤' : '🤖';
+                  const text = msg.message_text.substring(0, 200) + (msg.message_text.length > 200 ? '...' : '');
+                  handoverMessage += `${role} ${text}\n`;
+                });
+              } else {
+                console.log("[APPROVE] No chat history found");
+              }
+            } catch (historyError) {
+              console.error('[APPROVE] Failed to fetch chat history:', historyError);
+            }
+          }
+
           try {
             console.log("[APPROVE] Sending ops handover message...");
             console.log('[OPS] opsGroupChatId:', opsGroupChatId);
             console.log('[OPS] bot token prefix:', process.env.TELEGRAM_BOT_TOKEN?.slice(0, 10));
-            await getCustomerBot().api.sendMessage(
+            await sendMessageWithMigrationRetry(
+              getCustomerBot(),
               opsGroupChatId,
               handoverMessage,
               { parse_mode: 'HTML' }
