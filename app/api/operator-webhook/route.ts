@@ -37,12 +37,16 @@ function getOperatorBot(): Bot {
       console.log("[APPROVE] Callback received for booking:", bookingId);
       try {
         console.log("[APPROVE] Answering callback query...");
+        const t1 = Date.now();
         await ctx.answerCallbackQuery({ text: '⏳ Processing...' });
-        console.log("[APPROVE] Callback query answered");
+        console.log("[APPROVE] Callback query answered - took", Date.now() - t1, "ms");
 
         console.log("[APPROVE] Fetching booking...");
+        const t2 = Date.now();
         const booking = await getBooking(bookingId);
-        console.log("[APPROVE] Booking fetched:", booking ? "found" : "not found");
+        console.log("[APPROVE] Booking fetched - took", Date.now() - t2, "ms:", booking ? "found" : "not found");
+        console.log("[APPROVE] BOOKING OBJECT:", JSON.stringify(booking));
+        console.log("[APPROVE] BOOKING TELEGRAM_ID:", booking?.telegram_id);
         if (!booking) {
           await ctx.answerCallbackQuery({ text: '❌ Booking not found.' });
           return;
@@ -52,15 +56,18 @@ function getOperatorBot(): Bot {
         console.log("BOOKING EMAIL CHECK:", booking.customer_email);
 
         console.log("[APPROVE] Updating booking status to confirmed...");
+        const t3 = Date.now();
         await updateBookingStatus(bookingId, 'confirmed');
-        console.log("[APPROVE] Booking status updated");
+        console.log("[APPROVE] Booking status updated - took", Date.now() - t3, "ms");
 
         console.log("[APPROVE] Generating and uploading invoice PDF...");
+        const t4 = Date.now();
         const customerLanguage = (booking.details?.language as string) || 'en';
         const { buffer, driveUrl } = await generateAndUploadInvoicePDF(booking, customerLanguage);
-        console.log("[APPROVE] PDF generated and uploaded, URL:", driveUrl);
+        console.log("[APPROVE] PDF generated and uploaded - took", Date.now() - t4, "ms, URL:", driveUrl);
         
         console.log("[APPROVE] Inserting invoice into Supabase...");
+        const t5 = Date.now();
         const supabaseAdmin = getSupabaseAdmin();
         await supabaseAdmin
           .from('invoices')
@@ -70,7 +77,7 @@ function getOperatorBot(): Bot {
             status: 'unpaid',
             pdf_url: driveUrl || null
           });
-        console.log("[APPROVE] Invoice inserted into Supabase");
+        console.log("[APPROVE] Invoice inserted into Supabase - took", Date.now() - t5, "ms");
 
         // Check if this is a web inquiry (has customer_email) or telegram booking
         console.log("ENTERING BRANCH: web with email check");
@@ -87,6 +94,7 @@ function getOperatorBot(): Bot {
           // Email - independent try-catch
           try {
             console.log("[APPROVE] Sending invoice email...");
+            const t6 = Date.now();
             await sendInvoiceEmail({
               customerEmail: booking.customer_email,
               salesEmail,
@@ -96,17 +104,18 @@ function getOperatorBot(): Bot {
               customerName: booking.customer_name,
               customerLanguage,
             });
-            console.log("[APPROVE] Email sent successfully");
+            console.log("[APPROVE] Email sent successfully - took", Date.now() - t6, "ms");
           } catch (emailErr) {
             console.error('[APPROVE] Email failed:', emailErr);
           }
 
           console.log("[APPROVE] Editing message text (web with email)...");
+          const t7 = Date.now();
           await ctx.editMessageText(
             (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — Invoice sent via email.',
             { parse_mode: 'HTML' }
           );
-          console.log("[APPROVE] Message text edited (web with email)");
+          console.log("[APPROVE] Message text edited (web with email) - took", Date.now() - t7, "ms");
 
           console.log(`Booking ${bookingId} approved. Invoice sent via email to ${booking.customer_email}`);
         } else if (booking.source === 'web' && !booking.customer_email) {
@@ -122,20 +131,22 @@ function getOperatorBot(): Bot {
             `🆔 <b>Booking ID:</b> ...${bookingId.slice(-8)}`;
 
           console.log("[APPROVE] Sending alert to operator group (web no email)...");
+          const t8 = Date.now();
           await sendMessageWithMigrationRetry(
             getOperatorBot(),
             process.env.OPERATOR_GROUP_CHAT_ID!,
             alertMessage,
             { parse_mode: 'HTML' }
           );
-          console.log("[APPROVE] Alert sent to operator group (web no email)");
+          console.log("[APPROVE] Alert sent to operator group (web no email) - took", Date.now() - t8, "ms");
 
           console.log("[APPROVE] Editing message text (web no email)...");
+          const t9 = Date.now();
           await ctx.editMessageText(
             (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — No email. Manual contact alert sent.',
             { parse_mode: 'HTML' }
           );
-          console.log("[APPROVE] Message text edited (web no email)");
+          console.log("[APPROVE] Message text edited (web no email) - took", Date.now() - t9, "ms");
 
           console.log(`Booking ${bookingId} approved. No email provided. Manual contact alert sent.`);
         } else if (booking.telegram_id) {
@@ -143,6 +154,7 @@ function getOperatorBot(): Bot {
           console.log("CONDITION (booking.telegram_id):", booking.telegram_id);
           // Send via Telegram for telegram bookings
           console.log("[APPROVE] Sending invoice document to customer (telegram)...");
+          const t10 = Date.now();
           await getCustomerBot().api.sendDocument(
             booking.telegram_id,
             new InputFile(buffer, `invoice_${bookingId.slice(-8)}.pdf`),
@@ -153,24 +165,26 @@ function getOperatorBot(): Bot {
                 `Thank you for choosing AsiaBuddy! 🌟`,
             }
           );
-          console.log("[APPROVE] Invoice document sent to customer (telegram)");
+          console.log("[APPROVE] Invoice document sent to customer (telegram) - took", Date.now() - t10, "ms");
 
           console.log("[APPROVE] Editing message text (telegram)...");
+          const t11 = Date.now();
           await ctx.editMessageText(
             (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — Invoice sent to customer.',
             { parse_mode: 'HTML' }
           );
-          console.log("[APPROVE] Message text edited (telegram)");
+          console.log("[APPROVE] Message text edited (telegram) - took", Date.now() - t11, "ms");
 
           console.log(`Booking ${bookingId} approved. Invoice sent to ${booking.telegram_id}`);
         } else {
           console.log("ENTERING BRANCH: no contact method");
           console.log("[APPROVE] Editing message text (no contact)...");
+          const t12 = Date.now();
           await ctx.editMessageText(
             (ctx.msg?.text ?? '') + '\n\n✅ <b>APPROVED</b> — No contact method available.',
             { parse_mode: 'HTML' }
           );
-          console.log("[APPROVE] Message text edited (no contact)");
+          console.log("[APPROVE] Message text edited (no contact) - took", Date.now() - t12, "ms");
         }
 
         // PHASE 4: Ops Handover - forward booking summary to @asiabuddy_bot ops group
@@ -189,7 +203,10 @@ function getOperatorBot(): Bot {
           if (booking.telegram_id) {
             try {
               console.log("[APPROVE] Fetching chat history for telegram_id:", booking.telegram_id);
+              const t13 = Date.now();
               const chatHistory = await getChatHistory(booking.telegram_id, 50, 'thailand');
+              console.log("[APPROVE] getChatHistory() returned - took", Date.now() - t13, "ms");
+              console.log("[APPROVE] getChatHistory() result - messages count:", chatHistory?.length || 0);
               if (chatHistory && chatHistory.length > 0) {
                 console.log(`[APPROVE] Found ${chatHistory.length} chat history messages`);
                 handoverMessage += `\n\n💬 <b>Chat History:</b>\n`;
@@ -210,13 +227,14 @@ function getOperatorBot(): Bot {
             console.log("[APPROVE] Sending ops handover message...");
             console.log('[OPS] opsGroupChatId:', opsGroupChatId);
             console.log('[OPS] bot token prefix:', process.env.TELEGRAM_BOT_TOKEN?.slice(0, 10));
+            const t14 = Date.now();
             await sendMessageWithMigrationRetry(
               getCustomerBot(),
               opsGroupChatId,
               handoverMessage,
               { parse_mode: 'HTML' }
             );
-            console.log(`[APPROVE] Ops handover sent for booking ${bookingId}`);
+            console.log(`[APPROVE] Ops handover sent for booking ${bookingId} - took`, Date.now() - t14, "ms");
           } catch (error) {
             console.error('[APPROVE] Failed to send ops handover:', error);
           }
