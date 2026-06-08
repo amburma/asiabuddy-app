@@ -93,7 +93,7 @@ function getOperatorBot(): Bot {
 
           // Email - fire-and-forget (do not await)
           try {
-            console.log("[APPROVE] Sending invoice email (fire-and-forget)...");
+            console.log("[EMAIL] Sending email to: " + booking.customer_email);
             const t6 = Date.now();
             sendInvoiceEmail({
               customerEmail: booking.customer_email,
@@ -105,8 +105,8 @@ function getOperatorBot(): Bot {
               customerLanguage,
             }).then(() => {
               console.log("[APPROVE] Email sent successfully - took", Date.now() - t6, "ms");
-            }).catch((emailErr) => {
-              console.error('[APPROVE] Email failed:', emailErr);
+            }).catch((error) => {
+              console.log("[EMAIL] Failed: " + error.message);
             });
           } catch (emailErr) {
             console.error('[APPROVE] Email setup failed:', emailErr);
