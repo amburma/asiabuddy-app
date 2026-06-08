@@ -79,39 +79,13 @@ function getOperatorBot(): Bot {
           });
         console.log("[APPROVE] Invoice inserted into Supabase - took", Date.now() - t5, "ms");
 
+        // Track if this is a web booking with email for sending after ops handover
+        const isWebWithEmail = booking.source === 'web' && booking.customer_email;
+
         // Check if this is a web inquiry (has customer_email) or telegram booking
         console.log("ENTERING BRANCH: web with email check");
         console.log("CONDITION (booking.source === 'web' && booking.customer_email):", booking.source === 'web' && booking.customer_email);
-        if (booking.source === 'web' && booking.customer_email) {
-          // Send email for web inquiries
-          const gmailUser = process.env.GMAIL_USER;
-          if (!gmailUser) {
-            throw new Error('GMAIL_USER environment variable is not set');
-          }
-          const salesEmail = process.env.SALES_EMAIL || gmailUser;
-          const adminEmail = process.env.ADMIN_EMAIL || gmailUser;
-
-          // Email - fire-and-forget (do not await)
-          try {
-            console.log("[EMAIL] Sending email to: " + booking.customer_email);
-            const t6 = Date.now();
-            sendInvoiceEmail({
-              customerEmail: booking.customer_email,
-              salesEmail,
-              adminEmail,
-              bookingId,
-              pdfBuffer: buffer,
-              customerName: booking.customer_name,
-              customerLanguage,
-            }).then(() => {
-              console.log("[APPROVE] Email sent successfully - took", Date.now() - t6, "ms");
-            }).catch((error) => {
-              console.log("[EMAIL] Failed: " + error.message);
-            });
-          } catch (emailErr) {
-            console.error('[APPROVE] Email setup failed:', emailErr);
-          }
-
+        if (isWebWithEmail) {
           console.log("[APPROVE] Editing message text (web with email)...");
           const t7 = Date.now();
           await ctx.editMessageText(
@@ -244,6 +218,33 @@ function getOperatorBot(): Bot {
             console.log(`[APPROVE] Ops handover sent for booking ${bookingId} - took`, Date.now() - t14, "ms");
           } catch (error) {
             console.error('[APPROVE] Failed to send ops handover:', error);
+          }
+        }
+
+        // Send email for web bookings with email (after user response and ops handover)
+        if (isWebWithEmail) {
+          const gmailUser = process.env.GMAIL_USER;
+          if (!gmailUser) {
+            throw new Error('GMAIL_USER environment variable is not set');
+          }
+          const salesEmail = process.env.SALES_EMAIL || gmailUser;
+          const adminEmail = process.env.ADMIN_EMAIL || gmailUser;
+
+          try {
+            console.log("[EMAIL] Sending email to: " + booking.customer_email);
+            const t15 = Date.now();
+            await sendInvoiceEmail({
+              customerEmail: booking.customer_email!,
+              salesEmail,
+              adminEmail,
+              bookingId,
+              pdfBuffer: buffer,
+              customerName: booking.customer_name,
+              customerLanguage,
+            });
+            console.log("[APPROVE] Email sent successfully - took", Date.now() - t15, "ms");
+          } catch (emailErr) {
+            console.error('[APPROVE] Email failed:', emailErr);
           }
         }
 
