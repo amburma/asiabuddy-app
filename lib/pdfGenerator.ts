@@ -69,48 +69,16 @@ function buildItems(booking: BookingData): InvoiceItem[] {
 export function generateInvoicePDF(
   booking: BookingData,
   invoiceNo: string,
-  items?: InvoiceItem[],
-  customerLanguage: string = 'en'
+  items?: InvoiceItem[]
 ): Buffer {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const enLabels = {
-    invoice: 'Invoice',
-    bookingId: 'Booking ID',
-    date: 'Date',
-    customerName: 'Customer Name',
-    service: 'Service',
-    amount: 'Amount',
-    total: 'Total',
-    thankYou: 'Thank you for choosing AsiaBuddy.',
-    terms: 'Terms & Conditions',
-    paymentNote: 'Payment is due within 24 hours of booking confirmation.',
-    cancellation: 'Cancellations made 48 hours before the tour are fully refundable.'
-  };
-
-  const thLabels = {
-    invoice: 'ใบแจ้งหนี้',
-    bookingId: 'รหัสการจอง',
-    date: 'วันที่',
-    customerName: 'ชื่อลูกค้า',
-    service: 'บริการ',
-    amount: 'จำนวนเงิน',
-    total: 'ยอดรวม',
-    thankYou: 'ขอบคุณที่เลือกใช้บริการ AsiaBuddy',
-    terms: 'ข้อกำหนดและเงื่อนไข',
-    paymentNote: 'กรุณาชำระเงินภายใน 24 ชั่วโมงหลังยืนยันการจอง',
-    cancellation: 'การยกเลิกก่อน 48 ชั่วโมงจะได้รับเงินคืนเต็มจำนวน'
-  };
-
-  const supportedLanguages: Record<string, typeof enLabels> = { en: enLabels, th: thLabels };
-  const primaryLabels = supportedLanguages[customerLanguage] ?? enLabels;
-  const isEnglish = customerLanguage === 'en' || !supportedLanguages[customerLanguage];
 
 
   const lineItems: InvoiceItem[] = items ?? buildItems(booking);
   const customer: CustomerInfo = {
     name:    booking.customer_name  ?? 'N/A',
     phone:   booking.customer_phone ?? 'N/A',
-    email:   booking.customer_email,
+    email:   booking.customer_email ?? 'N/A',
     address: ''
   };
 
@@ -141,7 +109,7 @@ export function generateInvoicePDF(
   doc.setFont('Helvetica', 'bold');
   doc.setFontSize(24);
   doc.setTextColor(...colors.accent);
-  doc.text(primaryLabels.invoice, 195, 22, { align: 'right' });
+  doc.text('Invoice', 195, 22, { align: 'right' });
 
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(10);
@@ -150,7 +118,7 @@ export function generateInvoicePDF(
   const today   = new Date().toLocaleDateString('en-US');
   const dueDate = new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US');
 
-  doc.text(`${primaryLabels.invoice} No : ${invoiceNo}`, 195, 30, { align: 'right' });
+  doc.text(`Invoice No : ${invoiceNo}`, 195, 30, { align: 'right' });
   doc.text(`Date       : ${today}`,     195, 35, { align: 'right' });
   doc.text(`Due Date   : ${dueDate}`,   195, 40, { align: 'right' });
 
@@ -255,21 +223,25 @@ export function generateInvoicePDF(
   
   const pageH = doc.internal.pageSize.height;
 
-  // ── Bilingual Rendering ─────────────────────────────────
-  if (!isEnglish) {
-    // Render primary language invoice first
-    // (already rendered above with primaryLabels)
-    
-    // Add divider
-    doc.setDrawColor(...colors.accent);
-    doc.setLineWidth(0.5);
-    doc.line(15, pageH - 35, 195, pageH - 35);
-    
-    // Add English section header
+  // ── Chat Summary Section ───────────────────────────────
+  const chatSummary = booking.details?.chatSummary;
+  if (chatSummary) {
+    doc.setDrawColor(230, 230, 230);
+    doc.setLineWidth(0.3);
+    doc.line(15, pageH - 45, 195, pageH - 45);
+
     doc.setFont('Helvetica', 'bold');
     doc.setFontSize(10);
     doc.setTextColor(...colors.primary);
-    doc.text('English Version', 105, pageH - 30, { align: 'center' });
+    doc.text('Chat Summary:', 15, pageH - 40);
+
+    doc.setFont('Helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.setTextColor(...colors.textDark);
+
+    const maxWidth = 165;
+    const splitText = doc.splitTextToSize(chatSummary, maxWidth);
+    doc.text(splitText, 15, pageH - 35);
   }
 
   // ── Footer ────────────────────────────────────────────
@@ -281,7 +253,7 @@ export function generateInvoicePDF(
   doc.setFont('Helvetica', 'italic');
   doc.setFontSize(10);
   doc.setTextColor(...colors.primary);
-  doc.text(primaryLabels.thankYou, 105, pageH - 18, { align: 'center' });
+  doc.text('Thank you for choosing AsiaBuddy.', 105, pageH - 18, { align: 'center' });
 
   doc.setFont('Helvetica', 'normal');
   doc.setFontSize(7);
@@ -301,13 +273,12 @@ export function generateInvoicePDF(
 // (wraps the above + Supabase Storage upload)
 // ==========================================
 export async function generateAndUploadInvoicePDF(
-  booking: BookingData,
-  customerLanguage: string = 'en'
+  booking: BookingData
 ): Promise<{ buffer: Buffer; driveUrl: string | null }> {
   const shortId  = (booking.id ?? 'UNKNOWN').slice(-8).toUpperCase();
   const invoiceNo = `AB-${shortId}`;
 
-  const buffer = generateInvoicePDF(booking, invoiceNo, undefined, customerLanguage);
+  const buffer = generateInvoicePDF(booking, invoiceNo, undefined);
 
   // Supabase Storage upload
   let driveUrl: string | null = null;
