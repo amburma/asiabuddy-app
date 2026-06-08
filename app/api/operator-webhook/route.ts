@@ -62,7 +62,6 @@ function getOperatorBot(): Bot {
 
         console.log("[APPROVE] Generating and uploading invoice PDF...");
         const t4 = Date.now();
-        const customerLanguage = ((booking.details?.language as string) || 'en').toLowerCase();
         const { buffer, driveUrl } = await generateAndUploadInvoicePDF(booking);
         console.log("[APPROVE] PDF generated and uploaded - took", Date.now() - t4, "ms, URL:", driveUrl);
         
@@ -240,7 +239,7 @@ function getOperatorBot(): Bot {
               bookingId,
               pdfBuffer: buffer,
               customerName: booking.customer_name,
-              customerLanguage,
+              chatSummary: booking.details?.chatSummary,
             });
             console.log("[APPROVE] Email sent successfully - took", Date.now() - t15, "ms");
           } catch (emailErr) {

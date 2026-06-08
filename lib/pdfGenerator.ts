@@ -223,33 +223,6 @@ export function generateInvoicePDF(
   
   const pageH = doc.internal.pageSize.height;
 
-  // ── Chat Summary Section ───────────────────────────────
-  const chatSummary = booking.details?.chatSummary;
-  if (chatSummary) {
-    doc.setDrawColor(230, 230, 230);
-    doc.setLineWidth(0.3);
-    doc.line(15, pageH - 45, 195, pageH - 45);
-
-    doc.setFont('Helvetica', 'bold');
-    doc.setFontSize(10);
-    doc.setTextColor(...colors.primary);
-    doc.text('Chat Summary:', 15, pageH - 40);
-
-    doc.setFont('Helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.setTextColor(...colors.textDark);
-
-    const maxWidth = 165;
-    const lines = chatSummary.split('\n');
-    let currentY = pageH - 35;
-    
-    lines.forEach((line) => {
-      const splitLine = doc.splitTextToSize(line, maxWidth);
-      doc.text(splitLine, 15, currentY);
-      currentY += (splitLine.length * 4) + 2;
-    });
-  }
-
   // ── Footer ────────────────────────────────────────────
 
   doc.setDrawColor(230, 230, 230);
