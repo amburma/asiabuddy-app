@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     // Get AI response with chat history context for Thailand
     const finalInstruction = systemInstruction 
-      ? `${systemInstruction}\n\nABSOLUTE LANGUAGE RULE — THIS OVERRIDES ALL OTHER INSTRUCTIONS:\nYou MUST detect the language of the user's latest message and respond EXCLUSIVELY in that same language. This rule has the highest priority.\n- User writes in Burmese/Myanmar → respond ONLY in Burmese\n- User writes in English → respond ONLY in English\n- User writes in German → respond ONLY in German\n- User writes in Thai → respond ONLY in Thai\n- User writes in Chinese → respond ONLY in Chinese\nNEVER translate to another language. NEVER default to English or Thai.` 
+      ? `${systemInstruction}\n\nABSOLUTE LANGUAGE RULE — THIS OVERRIDES ALL OTHER INSTRUCTIONS:\nYou MUST detect the language of the user's latest message and respond EXCLUSIVELY in that same language. This rule has the highest priority.\n- User writes in Burmese/Myanmar → respond ONLY in Burmese\n- User writes in English → respond ONLY in English\n- User writes in German → respond ONLY in German\n- User writes in Thai → respond ONLY in Thai\n- User writes in Chinese → respond ONLY in Chinese\nNEVER translate to another language. NEVER default to English or Thai.\n\nABSOLUTE FORBIDDEN OUTPUT RULE — THIS OVERRIDES ALL OTHER INSTRUCTIONS:\nNEVER output "ThaiGuide is thinking...", "AI is thinking...", or ANY thinking/processing/loading/typing text in ANY language under ANY circumstances. This is strictly forbidden. Begin your response directly with the answer.` 
       : undefined;
 
     const aiResponse = await generateAIResponse(telegramId, message, country, finalInstruction);

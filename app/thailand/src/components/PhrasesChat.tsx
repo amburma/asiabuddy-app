@@ -248,9 +248,6 @@ NEVER switch languages regardless of what language the user types in.`;
                   </div>
                   <div className="p-4 rounded-2xl bg-white border border-gray-100 flex items-center gap-2">
                     <Loader2 size={14} className="animate-spin text-gold-deep" />
-                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">
-                      {uiT.chat.processing || 'ThaiGuide is thinking...'}
-                    </span>
                   </div>
                 </div>
               )}
@@ -274,7 +271,16 @@ NEVER switch languages regardless of what language the user types in.`;
                   <Send size={16} />
                 </button>
               </div>
-
+              {messages.filter(m => m.role === 'bot').length > 0 && (
+                <div className="mt-2 text-center">
+                  <button
+                    onClick={() => setShowHumanChat(true)}
+                    className="text-xs text-gold-deep font-semibold hover:underline"
+                  >
+                    Book Now
+                  </button>
+                </div>
+              )}
             </div>
           </div>
           <p className="text-[9px] text-gray-400 text-center uppercase tracking-widest font-bold">

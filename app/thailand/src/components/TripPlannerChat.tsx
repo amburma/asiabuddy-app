@@ -324,7 +324,6 @@ NEVER switch languages regardless of what language the user types in.`;
             {isLoading ? (
                <div className="py-12 flex flex-col items-center gap-4 text-center">
                  <Loader2 size={32} className="animate-spin text-gold-deep" />
-                 <p className="text-xs font-bold uppercase tracking-widest text-gold-deep">{t.processing || l.generating}</p>
                </div>
             ) : (
               <div className="space-y-4">
@@ -349,6 +348,14 @@ NEVER switch languages regardless of what language the user types in.`;
                 >
                   <RefreshCcw size={14} /> {l.restart}
                 </button>
+                {messages.filter(m => m.role === 'assistant').length > 0 && (
+                  <button
+                    onClick={() => setShowHumanChat(true)}
+                    className="w-full py-3 bg-gold-deep text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2"
+                  >
+                    Book Now
+                  </button>
+                )}
 
               </div>
             )}

@@ -167,7 +167,6 @@ export default function BookingChat({ language }: Props) {
           <div className="flex justify-start">
             <div className="bg-white border border-gray-100 rounded-2xl p-4 rounded-tl-none flex items-center gap-3 shadow-sm">
               <Loader2 size={14} className="animate-spin text-gold-deep" />
-              <span className="text-[10px] uppercase font-bold tracking-[0.2em] text-gray-400">{commonT.processing || 'ThaiGuide is thinking...'}</span>
             </div>
           </div>
         )}

@@ -189,7 +189,6 @@ const ENGLISH_UI = {
       "Emergency contact numbers?"
     ],
     "statusActive": "Concierge Active",
-    "processing": "ThaiGuide is thinking...",
     "safe": "Safe travels!",
     "bookNow": "Book Now",
     "bookNowSubtitle": "Connect with a Human Operator"
@@ -510,7 +509,6 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "เบอร์ติดต่อฉุกเฉินมีอะไรบ้าง?"
     ],
     "statusActive": "คอนเซียร์จทำงานอยู่",
-    "processing": "ThaiGuide กำลังคิด...",
     "safe": "Safe travels!",
     "bookNow": "จองเลย",
     "bookNowSubtitle": "เชื่อมต่อกับเจ้าหน้าที่มนุษย์"
@@ -822,7 +820,6 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "အရေးပေါ် ဆက်သွယ်ရန် နံပါတ်များက ဘာတွေလဲ?"
     ],
     "statusActive": "ဝန်ဆောင်မှုပေးရန် အဆင်သင့်ရှိသည်",
-    "processing": "ThaiGuide စဉ်းစားနေသည်...",
     "safe": "Safe travels!",
     "bookNow": "ဘွတ်ကင်လုပ်ပါ",
     "bookNowSubtitle": "လူသားလက်ထောက်နှင့် ချိတ်ဆက်ပါ"
@@ -1134,7 +1131,6 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "¿Cuáles son los números de emergencia?"
     ],
     "statusActive": "Conserje Activo",
-    "processing": "ThaiGuide está pensando...",
     "safe": "¡Buen viaje!",
     "bookNow": "Reservar Ahora",
     "bookNowSubtitle": "Conectar con un Operador Humano"
@@ -1446,7 +1442,6 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "Quels sont les numéros d'urgence ?"
     ],
     "statusActive": "Concierge Activo",
-    "processing": "ThaiGuide réfléchit...",
     "safe": "Bon voyage !",
     "bookNow": "Réserver Maintenant",
     "bookNowSubtitle": "Connecter avec un Opérateur Humain"
@@ -1758,7 +1753,6 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "Notfall-Kontaktnummern?"
     ],
     "statusActive": "Concierge Aktiv",
-    "processing": "ThaiGuide überlegt...",
     "safe": "Gute Reise!",
     "bookNow": "Jetzt Buchen",
     "bookNowSubtitle": "Mit einem menschlichen Mitarbeiter verbinden"

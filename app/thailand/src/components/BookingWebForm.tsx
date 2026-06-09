@@ -14,49 +14,42 @@ const LANGUAGE_MAP: Record<Language, {
   name: string;
   greeting: string;
   errorMsg: string;
-  thinkingText: string;
   outOfScope: string;
 }> = {
   EN: {
     name: 'English',
     greeting: 'Hello! I would like to travel to Thailand.',
     errorMsg: '❌ Something went wrong. Please try again.',
-    thinkingText: 'ThaiGuide is thinking',
     outOfScope: 'Sorry, I can only assist with Thailand travel.',
   },
   MM: {
     name: 'Burmese (မြန်မာဘာသာ)',
     greeting: 'မင်္ဂလာပါ။ ကျွန်တော်/မ ထိုင်းနိုင်ငံ ခရီးသွားချင်ပါတယ်။',
     errorMsg: '❌ တစ်ခုခု မှားယွင်းသွားပါတယ်။ ခဏနေပြီး ထပ်ကြိုးစားကြည့်ပါ။',
-    thinkingText: 'ThaiGuide စဉ်းစားနေသည်',
     outOfScope: 'ထိုင်းခရီးစဉ်နှင့် သက်ဆိုင်သောမေးခွန်းများသာ ဖြေဆိုနိုင်ပါသည်။',
   },
   TH: {
     name: 'Thai (ภาษาไทย)',
     greeting: 'สวัสดีครับ ผมอยากไปเที่ยวประเทศไทย',
     errorMsg: '❌ เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง',
-    thinkingText: 'ThaiGuide กำลังคิด',
     outOfScope: 'ขออภัย ฉันช่วยได้เฉพาะเรื่องการท่องเที่ยวไทยเท่านั้น',
   },
   ES: {
     name: 'Spanish (Español)',
     greeting: 'Hola, me gustaría viajar a Tailandia.',
     errorMsg: '❌ Algo salió mal. Por favor, inténtalo de nuevo.',
-    thinkingText: 'ThaiGuide está pensando',
     outOfScope: 'Lo siento, solo puedo ayudar con viajes a Tailandia.',
   },
   FR: {
     name: 'French (Français)',
     greeting: 'Bonjour, je voudrais voyager en Thaïlande.',
     errorMsg: '❌ Une erreur est survenue. Veuillez réessayer.',
-    thinkingText: 'ThaiGuide réfléchit',
     outOfScope: 'Désolé, je ne peux aider que pour les voyages en Thaïlande.',
   },
   DE: {
     name: 'German (Deutsch)',
     greeting: 'Hallo, ich möchte nach Thailand reisen.',
     errorMsg: '❌ Etwas ist schiefgelaufen. Bitte versuche es erneut.',
-    thinkingText: 'ThaiGuide denkt nach',
     outOfScope: 'Entschuldigung, ich kann nur bei Thailand-Reisen helfen.',
   },
 };
@@ -306,7 +299,6 @@ export default function BookingWebForm({ language = 'EN', onClose }: Props) {
                       🌺
                     </div>
                     <div className="bg-white border border-amber-100/60 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm flex items-center gap-1.5">
-                      <span className="text-[10px] text-emerald-700 font-medium italic mr-1">{LANGUAGE_MAP[language].thinkingText}</span>
                       {[0, 1, 2].map((d) => (
                         <motion.span
                           key={d}

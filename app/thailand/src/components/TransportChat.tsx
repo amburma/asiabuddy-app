@@ -124,7 +124,6 @@ NEVER switch languages regardless of what language the user types in.`;
           <div className="flex justify-start">
             <div className="bg-white border border-gray-100 rounded-2xl p-3 rounded-tl-none flex items-center gap-2">
               <Loader2 size={12} className="animate-spin text-gold-deep" />
-              <span className="text-[9px] uppercase font-bold tracking-widest text-gray-400">{commonT.processing || 'ThaiGuide is thinking...'}</span>
             </div>
           </div>
         )}
@@ -149,7 +148,16 @@ NEVER switch languages regardless of what language the user types in.`;
             <Send size={14} />
           </button>
         </div>
-
+        {messages.filter(m => m.role === 'assistant').length > 0 && (
+          <div className="mt-2 text-center">
+            <button
+              onClick={() => setShowHumanChat(true)}
+              className="text-xs text-gold-deep font-semibold hover:underline"
+            >
+              Book Now
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Human Operator Chat Modal */}

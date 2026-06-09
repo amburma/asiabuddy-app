@@ -7,7 +7,6 @@ import { ChatMessage, ThaiLanguage } from '../types';
 import { UI_TRANSLATIONS } from '../i18n';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
-import { getConciergeResponse } from '../services/geminiService';
 
 interface Props {
   language: ThaiLanguage;
@@ -23,8 +22,40 @@ interface ContactDetails {
 
 export default function HumanOperatorChat({ language, onClose }: Props) {
   const uiT = useMemo(() => UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN, [language]);
+
+  const welcomeMessages: Record<string, { greeting: string; disclaimer: string }> = {
+    en: {
+      greeting: "👋 Hello! I'm your AsiaBuddy operator. How can I help with your booking today?",
+      disclaimer: "💬 Your chat history will be saved while this session is open. Once closed, a new session will begin. To follow up on a booking, contact us via the details at the bottom of the app."
+    },
+    mm: {
+      greeting: "👋 မင်္ဂလာပါ။ AsiaBuddy Operator ပါ။ ဘာကူညီပေးရမလဲ။",
+      disclaimer: "💬 ဤ Session ဖွင့်နေစဉ် Chat History သိမ်းဆည်းထားမည်။ ပိတ်လိုက်သည်နှင့် Session အသစ်စတင်မည်။ Booking အကြောင်း ဆက်သွယ်လိုပါက App အောက်ခြေရှိ Contact Details မှတဆင့် ဆက်သွယ်ပါ။"
+    },
+    th: {
+      greeting: "👋 สวัสดีครับ! ผมเป็นผู้ดูแล AsiaBuddy ครับ วันนี้ต้องการความช่วยเหลืออะไรครับ?",
+      disclaimer: "💬 ประวัติการสนทนาจะถูกบันทึกตลอดเซสชันนี้ เมื่อปิดแล้วจะเริ่มเซสชันใหม่ หากต้องการติดตามการจอง กรุณาติดต่อเราผ่านรายละเอียดที่ด้านล่างของแอป"
+    },
+    de: {
+      greeting: "👋 Hallo! Ich bin Ihr AsiaBuddy-Operator. Wie kann ich Ihnen heute bei Ihrer Buchung helfen?",
+      disclaimer: "💬 Ihr Chat-Verlauf wird während dieser Sitzung gespeichert. Nach dem Schließen beginnt eine neue Sitzung. Für Rückfragen zu einer Buchung kontaktieren Sie uns über die Details unten in der App."
+    },
+    fr: {
+      greeting: "👋 Bonjour! Je suis votre opérateur AsiaBuddy. Comment puis-je vous aider aujourd'hui?",
+      disclaimer: "💬 Votre historique de chat sera sauvegardé pendant cette session. Une fois fermée, une nouvelle session commencera. Pour un suivi de réservation, contactez-nous via les coordonnées en bas de l'application."
+    },
+    es: {
+      greeting: "👋 ¡Hola! Soy su operador de AsiaBuddy. ¿En qué puedo ayudarle hoy?",
+      disclaimer: "💬 Su historial de chat se guardará durante esta sesión. Al cerrar, comenzará una nueva sesión. Para hacer seguimiento de una reserva, contáctenos a través de los detalles en la parte inferior de la app."
+    }
+  };
+
+  const langKey = (language || 'en').toLowerCase().slice(0, 2);
+  const welcome = welcomeMessages[langKey] || welcomeMessages['en'];
+
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'assistant', content: 'Hello! I\'m your human operator. How can I help you with your booking today?' }
+    { role: 'assistant', content: welcome.greeting },
+    { role: 'assistant', content: welcome.disclaimer }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -37,6 +68,7 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
     socialHandles: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [agreedToShare, setAgreedToShare] = useState(false);
 
   const t = uiT.chat || UI_TRANSLATIONS.EN.chat;
 
@@ -54,17 +86,33 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
 
-    // Get AI response for human operator chat
-    const contextPrompt = 'You are a human operator providing premium support for a travel booking service. You are helping customers with their booking requests, answering questions, and providing personalized assistance. Be professional, helpful, and friendly. Respond in the same language as the customer.';
-    
-    // Convert ChatMessage format to expected format for getConciergeResponse
-    const history = messages.map(msg => ({
-      role: (msg.role === 'assistant' ? 'model' : 'user') as 'user' | 'model',
+    // Convert ChatMessage format to Gemini format
+    const chatHistory = messages.map(msg => ({
+      role: msg.role === 'assistant' ? 'model' : msg.role,
       parts: [{ text: msg.content }]
     }));
+
+    const response = await fetch('https://asiabuddy.app/api/booking-chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: userMessage,
+        history: chatHistory,
+        language: language
+      })
+    });
+    const data = await response.json();
+    const botReply = data.response;
     
-    const response = await getConciergeResponse(contextPrompt, history, language);
-    setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+    // Check for [SHOW_CONTACT_FORM] trigger
+    const showContactFormTrigger = '[SHOW_CONTACT_FORM]';
+    let displayResponse = botReply;
+    if (botReply.includes(showContactFormTrigger)) {
+      displayResponse = botReply.replace(showContactFormTrigger, '');
+      setShowContactForm(true);
+    }
+    
+    setMessages(prev => [...prev, { role: 'assistant', content: displayResponse }]);
     setIsLoading(false);
   };
 
@@ -127,6 +175,7 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
       }]);
       setShowContactForm(false);
       setContactDetails({ name: '', phone: '', email: '', socialHandles: '' });
+      setAgreedToShare(false);
     } catch (error) {
       console.error('Error submitting contact form:', error);
       setMessages(prev => [...prev, { 
@@ -192,7 +241,6 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
             <div className="flex justify-start">
               <div className="bg-white border border-gray-200 rounded-2xl p-4 rounded-tl-none flex items-center gap-2">
                 <Loader2 size={14} className="animate-spin text-gold-deep" />
-                <span className="text-[10px] uppercase font-bold tracking-widest text-gray-400">Operator is typing...</span>
               </div>
             </div>
           )}
@@ -219,14 +267,6 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
           </div>
           <div className="mt-2 text-center">
             <p className="text-[10px] text-gray-400">Average response time: 2-5 minutes</p>
-          </div>
-          <div className="mt-3 text-center">
-            <button
-              onClick={() => setShowContactForm(true)}
-              className="text-xs text-gold-deep font-semibold hover:underline"
-            >
-              Ready to book? Submit your contact details
-            </button>
           </div>
         </div>
       </motion.div>
@@ -329,10 +369,26 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
                   </p>
                 </div>
 
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="agreement"
+                    checked={agreedToShare}
+                    onChange={(e) => setAgreedToShare(e.target.checked)}
+                    className="mt-1 w-4 h-4 text-gold-deep border-gray-300 rounded focus:ring-gold-soft cursor-pointer"
+                  />
+                  <label
+                    htmlFor="agreement"
+                    className="text-xs text-gray-700 leading-relaxed cursor-pointer"
+                  >
+                    I understand that my chat history and contact details above will be shared with the operator. Only the information discussed so far will be included — any messages sent after this point will not be shared.
+                  </label>
+                </div>
+
                 <button
                   type="button"
                   onClick={handleContactFormSubmit}
-                  disabled={isSubmitting || !contactDetails.name.trim() || !contactDetails.phone.trim()}
+                  disabled={!agreedToShare || isSubmitting || !contactDetails.name.trim() || !contactDetails.phone.trim()}
                   className="w-full py-3 bg-gold-deep text-white font-semibold rounded-lg hover:bg-gold-soft transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? (
