@@ -118,7 +118,7 @@ async function getPolicyDataWithCache(): Promise<string> {
 }
 
 // Dynamic system instruction generator based on country
-function getSystemInstruction(country: string): string {
+export function getSystemInstruction(country: string): string {
   return `
 # System Prompt: ThaiGuide (AsiaBuddy.app)
 
