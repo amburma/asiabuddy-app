@@ -163,7 +163,10 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
           phone: contactDetails.phone,
           email: contactDetails.email,
           socialHandle: contactDetails.socialHandles,
-          chatHistory: messages,
+          chatHistory: messages.filter((_, index) => {
+            const firstUserIndex = messages.findIndex(m => m.role === 'user');
+            return index >= firstUserIndex;
+          }),
           agreedToShare: true,
           source: 'HumanOperatorChat',
           sourceChatBox: 'AccommodationChat'

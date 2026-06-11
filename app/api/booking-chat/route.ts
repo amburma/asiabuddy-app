@@ -162,10 +162,14 @@ we can get back to you as soon as possible."
         );
       }
       console.error('DEBUG history received:', JSON.stringify(history?.slice(0, 3)));
-      const cleanHistory = (history ?? []).filter((_item: unknown, i: number, arr: Array<{role: string}>) => {
-        const firstUserIndex = arr.findIndex((m: {role: string}) => m.role === 'user');
-        return i >= firstUserIndex;
-      });
+      const cleanHistory = (history ?? []).reduce(
+        (acc: Array<{ role: string; parts: Array<{ text: string }> }>, curr: { role: string; parts: Array<{ text: string }> }) => {
+          if (acc.length === 0 && curr.role !== 'user') return acc;
+          acc.push(curr);
+          return acc;
+        },
+        []
+      );
       const chat = model.startChat({ history: cleanHistory });
       const result = await chat.sendMessage(message);
       responseText = result.response.text();
