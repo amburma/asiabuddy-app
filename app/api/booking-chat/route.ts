@@ -161,6 +161,7 @@ we can get back to you as soon as possible."
           { status: 400, headers: corsHeaders }
         );
       }
+      console.error('DEBUG history received:', JSON.stringify(history?.slice(0, 3)));
       const cleanHistory = (history ?? []).filter((_item: unknown, i: number, arr: Array<{role: string}>) => {
         const firstUserIndex = arr.findIndex((m: {role: string}) => m.role === 'user');
         return i >= firstUserIndex;
