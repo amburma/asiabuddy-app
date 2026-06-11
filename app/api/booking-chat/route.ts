@@ -200,6 +200,7 @@ we can get back to you as soon as possible."
     );
 
   } catch (error: any) {
+    console.error('booking-chat error:', error instanceof Error ? error.message : error);
     console.error('booking-chat full error:', JSON.stringify({
       message: error.message,
       stack: error.stack,
