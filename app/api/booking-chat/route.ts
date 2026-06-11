@@ -140,7 +140,7 @@ we can get back to you as soon as possible."
 
     // Initialize the model with Gemini Pro
     const model = genAI.getGenerativeModel({
-      model: 'gemini-2.0-flash-001',
+      model: 'gemini-2.5-flash',
       systemInstruction: systemPrompt,
       generationConfig: {
         maxOutputTokens: 1000,
