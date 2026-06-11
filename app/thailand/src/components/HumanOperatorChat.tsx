@@ -73,6 +73,48 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
 
   const t = uiT.chat || UI_TRANSLATIONS.EN.chat;
 
+  const getFormNoticeText = (lang: string) => {
+    switch(lang) {
+      case 'mm':
+      case 'my':
+        return {
+          notice: 'ဆက်လက်မတိုင်မီ သတိပြုပါ — ဤ Session မှ သင်၏ Chat မှတ်တမ်းနှင့် အောက်ပါ ဆက်သွယ်ရေးအချက်အလက်များကို Operator သို့ပေးပို့မည်။ ယခုအချိန်အထိ Chat တွင် မျှဝေထားသည့် အချက်အလက်များသာ ပါဝင်မည် — ဤနောက် ရိုက်ထည့်သည့်အရာများ မပါဝင်ပါ။',
+          agree: 'ကျွန်တော်/ကျွန်မ၏ Chat မှတ်တမ်းနှင့် ဆက်သွယ်ရေးအချက်အလက်များကို Operator နှင့် မျှဝေရန် သဘောတူပါသည်။'
+        };
+      case 'th':
+        return {
+          notice: 'ก่อนดำเนินการต่อ โปรดทราบว่า ประวัติการสนทนาและข้อมูลติดต่อของคุณจะถูกส่งให้ผู้ดำเนินการ',
+          agree: 'ฉันยินยอมให้แชร์ประวัติการสนทนาและข้อมูลติดต่อกับผู้ดำเนินการ'
+        };
+      case 'de':
+        return {
+          notice: 'Bevor wir fortfahren: Ihr Chat-Verlauf und Ihre Kontaktdaten werden an unseren Operator gesendet.',
+          agree: 'Ich stimme zu, meinen Chat-Verlauf und meine Kontaktdaten mit dem Operator zu teilen.'
+        };
+      default:
+        return {
+          notice: 'Before we proceed, please note: your chat history from this session and your contact details below will be sent to our operator. Only the information shared in this chat so far will be included — nothing you type after this point.',
+          agree: 'I agree to share my chat history and contact details with the operator.'
+        };
+    }
+  };
+
+  // Detect language from the last user message
+  const detectedLanguage = (() => {
+    const lastUserMessage = [...messages].reverse().find(m => m.role === 'user');
+    if (lastUserMessage) {
+      const text = lastUserMessage.content;
+      // Simple language detection based on character ranges
+      if (/[\u1000-\u109F]/.test(text)) return 'mm'; // Myanmar
+      if (/[\u0E00-\u0E7F]/.test(text)) return 'th'; // Thai
+      if (/[äöüÄÖÜß]/.test(text)) return 'de'; // German
+    }
+    // Fallback to prop language
+    return (language || 'en').toLowerCase().slice(0, 2);
+  })();
+
+  const formNoticeText = getFormNoticeText(detectedLanguage);
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -310,7 +352,7 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
                 {/* Consent Notice - Always shown first */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="text-sm text-blue-900 leading-relaxed">
-                    Before we proceed, please note: your chat history from this session and your contact details below will be sent to our operator. Only the information shared in this chat so far will be included — nothing you type after this point.
+                    {formNoticeText.notice}
                   </p>
                 </div>
 
@@ -330,7 +372,7 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
                     htmlFor="agreement"
                     className="text-sm text-gray-700 leading-relaxed cursor-pointer"
                   >
-                    I agree to share my chat history and contact details with the operator.
+                    {formNoticeText.agree}
                   </label>
                 </div>
 
