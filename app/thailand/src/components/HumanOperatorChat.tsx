@@ -115,6 +115,20 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
 
   const formNoticeText = getFormNoticeText(detectedLanguage);
 
+  const getSubmitConfirmationText = (lang: string) => {
+    switch(lang) {
+      case 'mm':
+      case 'my':
+        return 'လူကြီးမင်း၏ Request သည် AsiaBuddy Operator ထံ ရောက်ရှိသွားပါပြီ။ လူကြီးမင်း၏ Email (သို့) Social Media အကောင့်များအား Operator များမှ ၂၄ နာရီအတွင်း ပြန်လည်ဆက်သွယ်လာခြင်း မရှိခဲ့ပါက App ထဲရှိ Contact Detail အတိုင်း Follow up လုပ်ပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည်။';
+      case 'th':
+        return 'คำขอของคุณถูกส่งถึง AsiaBuddy Operator แล้ว หากไม่ได้รับการติดต่อกลับภายใน 24 ชั่วโมง กรุณาติดตามผ่านช่องทาง Contact ในแอป';
+      case 'de':
+        return 'Ihre Anfrage ist beim AsiaBuddy Operator eingegangen. Falls Sie innerhalb von 24 Stunden keine Antwort erhalten, kontaktieren Sie uns bitte über die Kontaktdaten in der App.';
+      default:
+        return 'Your request has been received by AsiaBuddy Operator. If you do not hear back within 24 hours, please follow up using the Contact details in the App.';
+    }
+  };
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -204,14 +218,14 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
           name: contactDetails.name,
           phone: contactDetails.phone,
           email: contactDetails.email,
-          socialHandle: contactDetails.socialHandles,
-          chatHistory: messages.filter((_, index) => {
-            const firstUserIndex = messages.findIndex(m => m.role === 'user');
-            return index >= firstUserIndex;
-          }),
+          socialHandle: contactDetails.socialHandles || 'Not provided',
+          chatHistory: messages
+            .filter(m => m.role === 'user' || m.role === 'model')
+            .map(m => `${m.role === 'user' ? 'Customer' : 'Operator'}: ${m.content}`)
+            .join('\n'),
           agreedToShare: true,
           source: 'HumanOperatorChat',
-          sourceChatBox: 'AccommodationChat'
+          sourceChatBox: sourceChatBox || 'HumanOperatorChat'
         }),
       });
 
@@ -221,7 +235,7 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
 
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: 'Thank you! Your details have been sent to our operator. We will contact you shortly.' 
+        content: getSubmitConfirmationText(detectedLanguage)
       }]);
       setShowContactForm(false);
       setContactDetails({ name: '', phone: '', email: '', socialHandles: '' });
@@ -449,18 +463,35 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Telegram / WhatsApp / Viber / Messenger (optional)
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Preferred Contact Apps (optional)
                         </label>
-                        <div className="relative">
-                          <MessageCircle size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                          <input
-                            type="text"
-                            value={contactDetails.socialHandles}
-                            onChange={(e) => setContactDetails({ ...contactDetails, socialHandles: e.target.value })}
-                            placeholder="Your social handle"
-                            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold-soft focus:border-transparent"
-                          />
+                        <div className="grid grid-cols-2 gap-2">
+                          {['Viber', 'Line', 'Telegram', 'WhatsApp'].map((app) => (
+                            <label key={app} className="flex items-center gap-2 cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={contactDetails.socialHandles?.includes(app) ?? false}
+                                onChange={(e) => {
+                                  const current = contactDetails.socialHandles
+                                    ? contactDetails.socialHandles.split(',').map((s: string) => s.trim()).filter(Boolean)
+                                    : [];
+                                  const updated = e.target.checked
+                                    ? [...current, app]
+                                    : current.filter((s: string) => s !== app);
+                                  setContactDetails({ ...contactDetails, socialHandles: updated.join(', ') });
+                                }}
+                                className="w-4 h-4 accent-yellow-500"
+                              />
+                              <span className="text-sm text-gray-700">{app}</span>
+                            </label>
+                          ))}
+                        </div>
+                        <p className="text-xs text-gray-500 mt-2">
+                          We will contact you via the phone number you provided above.
+                        </p>
+                        <div className="mt-3 p-3 bg-blue-50 rounded-lg text-xs text-gray-600">
+                          <strong>Messenger:</strong> Visit <a href="https://m.me/asiabuddyapp" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">m.me/asiabuddyapp</a> and send <strong>"Follow up"</strong> to follow up on your inquiry.
                         </div>
                       </div>
 
