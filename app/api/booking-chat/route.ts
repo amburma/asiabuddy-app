@@ -161,13 +161,11 @@ we can get back to you as soon as possible."
           { status: 400, headers: corsHeaders }
         );
       }
-      // Filter out leading 'model' or 'assistant' messages to ensure first message is 'user'
-      let filteredHistory = history;
-      const firstUserIndex = history.findIndex((h: any) => h.role === 'user');
-      if (firstUserIndex > 0) {
-        filteredHistory = history.slice(firstUserIndex);
-      }
-      const chat = model.startChat({ history: filteredHistory });
+      const cleanHistory = (history ?? []).filter((_, i, arr) => {
+        const firstUserIndex = arr.findIndex(m => m.role === 'user');
+        return i >= firstUserIndex;
+      });
+      const chat = model.startChat({ history: cleanHistory });
       const result = await chat.sendMessage(message);
       responseText = result.response.text();
     } else {
