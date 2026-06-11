@@ -2,14 +2,34 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { getRecentChatHistory, ChatHistory } from '../lib/database';
 import { getPricingDataForAI, getTourDataForAI, getPolicyDataForAI } from './googleSheets';
 
-function getNextApiKey(): string {
+let currentKeyIndex = 0;
+
+function getApiKeys(): string[] {
   const keys = [
     process.env.GEMINI_API_KEY_1,
     process.env.GEMINI_API_KEY_2,
     process.env.GEMINI_API_KEY_3,
   ].filter(Boolean) as string[];
   if (keys.length === 0) throw new Error('No Gemini API keys configured');
-  return keys[Math.floor(Math.random() * keys.length)];
+  return keys;
+}
+
+function getNextApiKey(excludeIndices: Set<number> = new Set()): string {
+  const keys = getApiKeys();
+  
+  // Find next available key that hasn't been tried
+  let attempts = 0;
+  while (attempts < keys.length) {
+    if (!excludeIndices.has(currentKeyIndex)) {
+      const key = keys[currentKeyIndex];
+      currentKeyIndex = (currentKeyIndex + 1) % keys.length;
+      return key;
+    }
+    currentKeyIndex = (currentKeyIndex + 1) % keys.length;
+    attempts++;
+  }
+  
+  throw new Error('All API keys exhausted');
 }
 
 // Cache data to avoid repeated API calls
@@ -191,6 +211,28 @@ function mapChatHistoryToGeminiFormat(chatHistory: ChatHistory[]): Array<{ role:
 }
 
 /**
+ * Check if error is a quota error (429 or RESOURCE_EXHAUSTED)
+ */
+function isQuotaError(error: any): boolean {
+  const errorMessage = error?.message || String(error);
+  return errorMessage.includes('429') || 
+         errorMessage.includes('RESOURCE_EXHAUSTED') ||
+         errorMessage.includes('quota') ||
+         errorMessage.includes('rate limit');
+}
+
+/**
+ * Check if response text indicates quota exhaustion
+ */
+function isQuotaResponseText(text: string): boolean {
+  const lower = text.toLowerCase();
+  return lower.includes("couldn't process") ||
+         lower.includes("unable to process") ||
+         lower.includes("try rephrasing") ||
+         lower.includes("cannot process your request");
+}
+
+/**
  * Generate AI response using Gemini 2.5 Flash Lite with chat history context
  * @param telegramId - User's Telegram ID
  * @param userMessage - Current user message
@@ -204,71 +246,101 @@ export async function generateAIResponse(
   country: string = 'thailand',
   systemInstruction?: string
 ): Promise<string> {
-  try {
-    const genAI = new GoogleGenerativeAI(getNextApiKey());
-    // Get chat history from Supabase
-    const chatHistory: ChatHistory[] = await getRecentChatHistory(telegramId, 10, country);
+  const triedKeyIndices = new Set<number>();
+  const keys = getApiKeys();
+  
+  // Get chat history from Supabase (fetch once, reuse for all retries)
+  const chatHistory: ChatHistory[] = await getRecentChatHistory(telegramId, 10, country);
 
-    // Get pricing, tour, and policy data if country is Thailand
-    let pricingData = '';
-    let tourData = '';
-    let policyData = '';
-    
-    if (country === 'thailand') {
-      pricingData = await getPricingDataWithCache();
-      tourData = await getTourDataWithCache();
-      policyData = await getPolicyDataWithCache();
-    }
+  // Get pricing, tour, and policy data if country is Thailand (fetch once, reuse for all retries)
+  let pricingData = '';
+  let tourData = '';
+  let policyData = '';
+  
+  if (country === 'thailand') {
+    pricingData = await getPricingDataWithCache();
+    tourData = await getTourDataWithCache();
+    policyData = await getPolicyDataWithCache();
+  }
 
-    // Build system instruction with all context data
-    let instruction = systemInstruction || getSystemInstruction(country);
-    
-    if (pricingData) {
-      instruction += `\n\n${pricingData}\n\nWhen users ask about pricing, rates, costs, or fees, use the above pricing data to provide accurate information. If the specific pricing information is not available in the data, inform the user that you don't have current pricing for that item and suggest they contact AsiaBuddy directly for the most accurate quote.`;
-    }
-    
-    if (tourData) {
-      instruction += `\n\n${tourData}\n\nWhen users ask about tours, itineraries, or travel packages, use the above tour itinerary data to provide detailed information. If specific tour information is not available, suggest they contact AsiaBuddy for personalized tour planning.`;
-    }
-    
-    if (policyData) {
-      instruction += `\n\n${policyData}\n\nWhen users ask about cancellation policies, booking rules, hotel policies, or refund terms, use the above policy data to provide accurate information. Always inform users about important cancellation deadlines and fees.`;
-    }
+  // Build system instruction with all context data (build once, reuse for all retries)
+  let instruction = systemInstruction || getSystemInstruction(country);
+  
+  if (pricingData) {
+    instruction += `\n\n${pricingData}\n\nWhen users ask about pricing, rates, costs, or fees, use the above pricing data to provide accurate information. If the specific pricing information is not available in the data, inform the user that you don't have current pricing for that item and suggest they contact AsiaBuddy directly for the most accurate quote.`;
+  }
+  
+  if (tourData) {
+    instruction += `\n\n${tourData}\n\nWhen users ask about tours, itineraries, or travel packages, use the above tour itinerary data to provide detailed information. If specific tour information is not available, suggest they contact AsiaBuddy for personalized tour planning.`;
+  }
+  
+  if (policyData) {
+    instruction += `\n\n${policyData}\n\nWhen users ask about cancellation policies, booking rules, hotel policies, or refund terms, use the above policy data to provide accurate information. Always inform users about important cancellation deadlines and fees.`;
+  }
 
-    // Initialize the model with generation config
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash-lite',
-      systemInstruction: instruction,
-      generationConfig: {
-        maxOutputTokens: 1000,
-        temperature: 0.7,
-      },
-    });
-
-    // If there's chat history, use startChat with history
-    if (chatHistory.length > 0) {
-      const geminiHistory = mapChatHistoryToGeminiFormat(chatHistory);
-      const chat = model.startChat({ history: geminiHistory });
+  // Try each available key
+  for (let attempt = 0; attempt < keys.length; attempt++) {
+    try {
+      const apiKey = getNextApiKey(triedKeyIndices);
+      triedKeyIndices.add((currentKeyIndex - 1 + keys.length) % keys.length);
       
-      const result = await chat.sendMessage(userMessage);
+      const genAI = new GoogleGenerativeAI(apiKey);
+
+      // Initialize the model with generation config
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-2.5-flash-lite',
+        systemInstruction: instruction,
+        generationConfig: {
+          maxOutputTokens: 1000,
+          temperature: 0.7,
+        },
+      });
+
+      // If there's chat history, use startChat with history
+      if (chatHistory.length > 0) {
+        const geminiHistory = mapChatHistoryToGeminiFormat(chatHistory);
+        const chat = model.startChat({ history: geminiHistory });
+        
+        const result = await chat.sendMessage(userMessage);
+        const response = result.response;
+        const text = response.text();
+        
+        if (isQuotaResponseText(text)) {
+          console.log('Quota response text detected, retrying with next key...');
+          continue;
+        }
+        
+        return text;
+      }
+
+      // If no history, use simple generateContent
+      const result = await model.generateContent(userMessage);
       const response = result.response;
       const text = response.text();
-      
+
+      if (isQuotaResponseText(text)) {
+        console.log('Quota response text detected, retrying with next key...');
+        continue;
+      }
+
       return text;
+    } catch (error: any) {
+      console.error(`Error generating AI response with key attempt ${attempt + 1}/${keys.length}:`, JSON.stringify(error?.message || error));
+      
+      // If it's a quota error, try next key
+      if (isQuotaError(error)) {
+        console.log('Quota error detected, retrying with next key...');
+        continue;
+      }
+      
+      // If it's not a quota error, throw immediately
+      throw error;
     }
-
-    // If no history, use simple generateContent
-    const result = await model.generateContent(userMessage);
-    const response = result.response;
-    const text = response.text();
-
-    return text;
-  } catch (error: any) {
-    console.error('Error generating AI response — Full error:', JSON.stringify(error?.message || error));
-    
-    // Return user-friendly fallback message
-    return 'Sorry, I couldn\'t process that. Please try rephrasing your request!';
   }
+  
+  // All keys exhausted
+  console.error('All API keys exhausted for generateAIResponse');
+  return 'Server အရမ်း Busy ဖြစ်နေလို့ ခဏနေမှ ပြန်အသုံးပြုပေးပါ။ Respond in the same language the user was using in this conversation.';
 }
 
 /**
@@ -281,28 +353,54 @@ export async function generateAIResponseWithoutContext(
   userMessage: string,
   country: string = 'thailand'
 ): Promise<string> {
-  try {
-    const genAI = new GoogleGenerativeAI(getNextApiKey());
-    // Initialize the model with generation config
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-2.5-flash-lite',
-      systemInstruction: getSystemInstruction(country),
-      generationConfig: {
-        maxOutputTokens: 1000,
-        temperature: 0.7,
-      },
-    });
+  const triedKeyIndices = new Set<number>();
+  const keys = getApiKeys();
+  const instruction = getSystemInstruction(country);
+  
+  // Try each available key
+  for (let attempt = 0; attempt < keys.length; attempt++) {
+    try {
+      const apiKey = getNextApiKey(triedKeyIndices);
+      triedKeyIndices.add((currentKeyIndex - 1 + keys.length) % keys.length);
+      
+      const genAI = new GoogleGenerativeAI(apiKey);
+      
+      // Initialize the model with generation config
+      const model = genAI.getGenerativeModel({
+        model: 'gemini-2.5-flash-lite',
+        systemInstruction: instruction,
+        generationConfig: {
+          maxOutputTokens: 1000,
+          temperature: 0.7,
+        },
+      });
 
-    // Generate response
-    const result = await model.generateContent(userMessage);
-    const response = result.response;
-    const text = response.text();
+      // Generate response
+      const result = await model.generateContent(userMessage);
+      const response = result.response;
+      const text = response.text();
 
-    return text;
-  } catch (error) {
-    console.error('Error generating AI response without context:', error);
-    
-    // Return user-friendly fallback message
-    return 'Sorry, I couldn\'t process that. Please try rephrasing your request!';
+      if (isQuotaResponseText(text)) {
+        console.log('Quota response text detected, retrying with next key...');
+        continue;
+      }
+
+      return text;
+    } catch (error: any) {
+      console.error(`Error generating AI response without context with key attempt ${attempt + 1}/${keys.length}:`, JSON.stringify(error?.message || error));
+      
+      // If it's a quota error, try next key
+      if (isQuotaError(error)) {
+        console.log('Quota error detected, retrying with next key...');
+        continue;
+      }
+      
+      // If it's not a quota error, throw immediately
+      throw error;
+    }
   }
+  
+  // All keys exhausted
+  console.error('All API keys exhausted for generateAIResponseWithoutContext');
+  return 'Server အရမ်း Busy ဖြစ်နေလို့ ခဏနေမှ ပြန်အသုံးပြုပေးပါ။ Respond in the same language the user was using in this conversation.';
 }

@@ -44,8 +44,7 @@ export async function getConciergeResponse(
       },
       body: JSON.stringify({
         message: message,
-        sessionId: sessionId,
-        systemInstruction: systemContext
+        sessionId: sessionId
       }),
     });
 
@@ -58,11 +57,11 @@ export async function getConciergeResponse(
     }
 
     const data = await response.json();
-    return data.response || "I apologize, but I am unable to provide information at this time.";
+    return data.response || "Server အရမ်း Busy ဖြစ်နေလို့ ခဏနေမှ ပြန်အသုံးပြုပေးပါ။";
   } catch (error: any) {
     console.error("Concierge Chat Error:", error);
     return language === "MM"
       ? "\u1021\u1001\u1000\u103A\u1021\u101C\u102C\u1038 \u1016\u103C\u1031\u1006\u102D\u102F\u1014\u102D\u102F\u1004\u103A\u101B\u1014\u103A\u1015\u102B\u104B \ud83d\ude4f"
-      : "Something went wrong. Please try again shortly. \ud83d\ude4f";
+      : "Server အရမ်း Busy ဖြစ်နေလို့ ခဏနေမှ ပြန်အသုံးပြုပေးပါ။";
   }
 }

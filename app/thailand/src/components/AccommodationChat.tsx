@@ -45,15 +45,13 @@ export default function AccommodationChat({ language }: Props) {
 
     const contextPrompt = `You are a specialized accommodation concierge for Thailand. Help the traveler with specific advice about hotels (1-5 stars), guesthouses, hostels, and booking platforms like Agoda. Answer this: ${userMessage}
 
-LANGUAGE RULE: The user has selected '${language}' as their preferred language. You MUST respond exclusively in that language:
-- MM = Burmese/Myanmar
-- EN = English
-- TH = Thai
-- DE = German
-- ES = Spanish
-- FR = French
-NEVER switch languages regardless of what language the user types in.`;
-    
+RESPONSE RULES — MANDATORY:
+1. Direct answers only. No intro sentences like 'Hello! I am ThaiGuide...'. Go straight to the answer.
+2. No filler. No repetition. No restating the question.
+3. Maximum 3 follow-up suggestions only if relevant.
+4. Never list your own capabilities unless asked.
+5. Out-of-scope question → one sentence decline in user's language only. Nothing else.`;
+
     const response = await getConciergeResponse(contextPrompt, history, language);
     setMessages(prev => [...prev, { role: 'assistant', content: response }]);
     setIsLoading(false);

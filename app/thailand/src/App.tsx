@@ -37,6 +37,7 @@ import EtiquetteGuide from './components/EtiquetteGuide';
 import LawsGuide from './components/LawsGuide';
 import { TripChecklist } from './components/TripChecklist';
 import BookingWebForm from './components/BookingWebForm';
+import HumanOperatorChat from './components/HumanOperatorChat';
 
 export default function App() {
   const [language, setLanguage] = useState<ThaiLanguage>(() => {
@@ -66,6 +67,7 @@ export default function App() {
   const [showShoppingModal, setShowShoppingModal] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showWebFormModal, setShowWebFormModal] = useState(false);
+  const [showHumanOperatorChat, setShowHumanOperatorChat] = useState(false);
   const [showCurrencyModal, setShowCurrencyModal] = useState(false);
   const [showPhrasesModal, setShowPhrasesModal] = useState(false);
   const [showEtiquetteModal, setShowEtiquetteModal] = useState(false);
@@ -388,14 +390,14 @@ useEffect(() => {
 </GuideModal>
 
       <div className="mt-20">
-        {/* Book Now Button — opens Web Form Modal */}
+        {/* Book Now Button — opens HumanOperatorChat */}
         <motion.button
           onClick={() => {
             const isTelegram = /Telegram/i.test(navigator.userAgent);
             if (isTelegram) {
               window.open('https://t.me/asiabuddy_bot?start=book', '_blank');
             } else {
-              setShowWebFormModal(true);
+              setShowHumanOperatorChat(true);
             }
           }}
           className="w-full max-w-4xl mx-auto bg-gradient-to-r from-gold-deep to-amber-500 text-white rounded-xl py-4 px-6 flex items-center justify-center gap-4 hover:from-amber-600 hover:to-gold-soft transition-all shadow-lg hover:shadow-xl"
@@ -520,9 +522,19 @@ useEffect(() => {
       {/* Booking Web Form Modal */}
       <AnimatePresence>
         {showWebFormModal && (
-          <BookingWebForm 
-            language={language} 
-            onClose={() => setShowWebFormModal(false)} 
+          <BookingWebForm
+            language={language}
+            onClose={() => setShowWebFormModal(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Human Operator Chat Modal */}
+      <AnimatePresence>
+        {showHumanOperatorChat && (
+          <HumanOperatorChat
+            language={language}
+            onClose={() => setShowHumanOperatorChat(false)}
           />
         )}
       </AnimatePresence>

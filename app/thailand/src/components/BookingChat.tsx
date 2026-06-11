@@ -43,7 +43,7 @@ export default function BookingChat({ language }: Props) {
     }));
 
     try {
-      const response = await fetch('https://asiabuddy.app/api/booking-chat', {
+      const response = await fetch('http://localhost:3001/api/booking-chat', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

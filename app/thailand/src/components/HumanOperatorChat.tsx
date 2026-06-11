@@ -69,6 +69,7 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [agreedToShare, setAgreedToShare] = useState(false);
+  const [validationErrors, setValidationErrors] = useState<{ name?: string; phone?: string }>({});
 
   const t = uiT.chat || UI_TRANSLATIONS.EN.chat;
 
@@ -92,60 +93,64 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
       parts: [{ text: msg.content }]
     }));
 
-    const response = await fetch('https://asiabuddy.app/api/booking-chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: userMessage,
-        history: chatHistory,
-        language: language
-      })
+    const validHistory = chatHistory.filter((_, index) => {
+      const firstUserIndex = chatHistory.findIndex(m => m.role === 'user');
+      return index >= firstUserIndex;
     });
-    const data = await response.json();
-    const botReply = data.response;
-    
-    // Check for [SHOW_CONTACT_FORM] trigger
-    const showContactFormTrigger = '[SHOW_CONTACT_FORM]';
-    let displayResponse = botReply;
-    if (botReply.includes(showContactFormTrigger)) {
-      displayResponse = botReply.replace(showContactFormTrigger, '');
-      setShowContactForm(true);
+
+    try {
+      const response = await fetch('http://localhost:3001/api/booking-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: userMessage,
+          history: validHistory,
+          language: language
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to get response');
+      }
+
+      const data = await response.json();
+      const botReply = data.response;
+
+      // Check for [SHOW_CONTACT_FORM] trigger
+      const showContactFormTrigger = '[SHOW_CONTACT_FORM]';
+      let displayResponse = botReply;
+      if (botReply.includes(showContactFormTrigger)) {
+        displayResponse = botReply.replace(showContactFormTrigger, '');
+        setShowContactForm(true);
+      }
+
+      setMessages(prev => [...prev, { role: 'assistant', content: displayResponse }]);
+    } catch (error) {
+      console.error('Error sending message:', error);
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' }]);
+    } finally {
+      setIsLoading(false);
     }
-    
-    setMessages(prev => [...prev, { role: 'assistant', content: displayResponse }]);
-    setIsLoading(false);
   };
 
   const handleContactFormSubmit = async () => {
-    if (!contactDetails.name.trim() || !contactDetails.phone.trim()) {
-      alert('Please fill in the required fields (Name and Phone)');
+    // Validate required fields
+    const errors: { name?: string; phone?: string } = {};
+    if (!contactDetails.name.trim()) {
+      errors.name = 'Name is required';
+    }
+    if (!contactDetails.phone.trim()) {
+      errors.phone = 'Phone is required';
+    }
+    
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
       return;
     }
 
+    setValidationErrors({});
     setIsSubmitting(true);
-
-    // Detect language from last 3 user messages
-    const userMessages = messages
-      .filter(m => m.role === 'user')
-      .slice(-3)
-      .map(m => m.content)
-      .join(' ');
-
-    // Simple detection: check for Thai characters
-    const hasThai = /[\u0E00-\u0E7F]/.test(userMessages);
-    const hasChinese = /[\u4E00-\u9FFF]/.test(userMessages);
-    const hasJapanese = /[\u3040-\u30FF]/.test(userMessages);
-    const hasKorean = /[\uAC00-\uD7AF]/.test(userMessages);
-    const hasArabic = /[\u0600-\u06FF]/.test(userMessages);
-    const hasMyanmar = /[\u1000-\u109F]/.test(userMessages);
-
-    let detectedLanguage = 'en';
-    if (hasThai) detectedLanguage = 'th';
-    else if (hasChinese) detectedLanguage = 'zh';
-    else if (hasJapanese) detectedLanguage = 'ja';
-    else if (hasKorean) detectedLanguage = 'ko';
-    else if (hasArabic) detectedLanguage = 'ar';
-    else if (hasMyanmar) detectedLanguage = 'my';
 
     try {
       const response = await fetch('https://asiabuddy.app/api/inquiry', {
@@ -154,14 +159,14 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          name: contactDetails.name,
+          phone: contactDetails.phone,
+          email: contactDetails.email,
+          socialHandle: contactDetails.socialHandles,
           chatHistory: messages,
-          contactDetails: {
-            name: contactDetails.name,
-            phone: contactDetails.phone,
-            email: contactDetails.email,
-            socialHandles: contactDetails.socialHandles
-          },
-          language: detectedLanguage
+          agreedToShare: true,
+          source: 'HumanOperatorChat',
+          sourceChatBox: 'AccommodationChat'
         }),
       });
 
@@ -171,7 +176,7 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
 
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: 'Thank you! Your contact details have been submitted. Our team will review your request and get back to you shortly.' 
+        content: 'Thank you! Your details have been sent to our operator. We will contact you shortly.' 
       }]);
       setShowContactForm(false);
       setContactDetails({ name: '', phone: '', email: '', socialHandles: '' });
@@ -180,7 +185,7 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
       console.error('Error submitting contact form:', error);
       setMessages(prev => [...prev, { 
         role: 'assistant', 
-        content: 'Sorry, there was an error submitting your details. Please try again.' 
+        content: 'Something went wrong. Please try again or contact us directly.' 
       }]);
     } finally {
       setIsSubmitting(false);
@@ -202,8 +207,8 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
               <Headphones size={20} />
             </div>
             <div>
-              <h4 className="text-sm font-bold uppercase tracking-widest leading-none mb-1">Human Operator</h4>
-              <p className="text-[10px] opacity-90 font-medium tracking-tight">1-on-1 Live Chat</p>
+              <h4 className="text-sm font-bold uppercase tracking-widest leading-none mb-1">AsiaBuddy Concierge</h4>
+              <p className="text-[10px] opacity-90 font-medium tracking-tight">🟢 Online · 24/7 Live Support</p>
             </div>
           </div>
           <button
@@ -299,107 +304,139 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
               </div>
 
               <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Name <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <UserIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="text"
-                      value={contactDetails.name}
-                      onChange={(e) => setContactDetails({ ...contactDetails, name: e.target.value })}
-                      placeholder="Your full name"
-                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold-soft focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="tel"
-                      value={contactDetails.phone}
-                      onChange={(e) => setContactDetails({ ...contactDetails, phone: e.target.value })}
-                      placeholder="Your phone number"
-                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold-soft focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email (optional)
-                  </label>
-                  <div className="relative">
-                    <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="email"
-                      value={contactDetails.email}
-                      onChange={(e) => setContactDetails({ ...contactDetails, email: e.target.value })}
-                      placeholder="Your email address"
-                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold-soft focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Social Handles (optional)
-                  </label>
-                  <div className="relative">
-                    <MessageCircle size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input
-                      type="text"
-                      value={contactDetails.socialHandles}
-                      onChange={(e) => setContactDetails({ ...contactDetails, socialHandles: e.target.value })}
-                      placeholder="Telegram / Viber / WhatsApp / Messenger / Facebook"
-                      className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold-soft focus:border-transparent"
-                    />
-                  </div>
-                </div>
-
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                  <p className="text-xs text-amber-800 leading-relaxed">
-                    <strong>Note:</strong> If you provide an email, your invoice will be sent automatically. If you leave the email blank, we will send the invoice via your provided social contact/messaging handles.
+                {/* Consent Notice - Always shown first */}
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="text-sm text-blue-900 leading-relaxed">
+                    Before we proceed, please note: your chat history from this session and your contact details below will be sent to our operator. Only the information shared in this chat so far will be included — nothing you type after this point.
                   </p>
                 </div>
 
+                {/* Checkbox - Must be checked before form fields appear */}
                 <div className="flex items-start gap-3">
                   <input
                     type="checkbox"
                     id="agreement"
                     checked={agreedToShare}
-                    onChange={(e) => setAgreedToShare(e.target.checked)}
+                    onChange={(e) => {
+                      setAgreedToShare(e.target.checked);
+                      setValidationErrors({});
+                    }}
                     className="mt-1 w-4 h-4 text-gold-deep border-gray-300 rounded focus:ring-gold-soft cursor-pointer"
                   />
                   <label
                     htmlFor="agreement"
-                    className="text-xs text-gray-700 leading-relaxed cursor-pointer"
+                    className="text-sm text-gray-700 leading-relaxed cursor-pointer"
                   >
-                    I understand that my chat history and contact details above will be shared with the operator. Only the information discussed so far will be included — any messages sent after this point will not be shared.
+                    I agree to share my chat history and contact details with the operator.
                   </label>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={handleContactFormSubmit}
-                  disabled={!agreedToShare || isSubmitting || !contactDetails.name.trim() || !contactDetails.phone.trim()}
-                  className="w-full py-3 bg-gold-deep text-white font-semibold rounded-lg hover:bg-gold-soft transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 size={16} className="animate-spin" />
-                      Submitting...
-                    </>
-                  ) : (
-                    'Submit Details'
-                  )}
-                </button>
+                {/* Form Fields - Only visible after checkbox is checked */}
+                {agreedToShare && (
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="space-y-4"
+                    >
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Full Name <span className="text-red-500">*</span>
+                        </label>
+                        <div className="relative">
+                          <UserIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                          <input
+                            type="text"
+                            value={contactDetails.name}
+                            onChange={(e) => {
+                              setContactDetails({ ...contactDetails, name: e.target.value });
+                              if (validationErrors.name) setValidationErrors({ ...validationErrors, name: undefined });
+                            }}
+                            placeholder="Your full name"
+                            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold-soft focus:border-transparent"
+                          />
+                        </div>
+                        {validationErrors.name && (
+                          <p className="mt-1 text-xs text-red-600">{validationErrors.name}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Phone Number <span className="text-red-500">*</span>
+                        </label>
+                        <div className="relative">
+                          <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                          <input
+                            type="tel"
+                            value={contactDetails.phone}
+                            onChange={(e) => {
+                              setContactDetails({ ...contactDetails, phone: e.target.value });
+                              if (validationErrors.phone) setValidationErrors({ ...validationErrors, phone: undefined });
+                            }}
+                            placeholder="Your phone number"
+                            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold-soft focus:border-transparent"
+                          />
+                        </div>
+                        {validationErrors.phone && (
+                          <p className="mt-1 text-xs text-red-600">{validationErrors.phone}</p>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Email (optional)
+                        </label>
+                        <div className="relative">
+                          <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                          <input
+                            type="email"
+                            value={contactDetails.email}
+                            onChange={(e) => setContactDetails({ ...contactDetails, email: e.target.value })}
+                            placeholder="Your email address"
+                            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold-soft focus:border-transparent"
+                          />
+                        </div>
+                        <p className="mt-1 text-xs text-gray-500">
+                          If you provide an email, your invoice will be sent automatically. If you leave it blank, we will contact you via your social handle.
+                        </p>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Telegram / WhatsApp / Viber / Messenger (optional)
+                        </label>
+                        <div className="relative">
+                          <MessageCircle size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                          <input
+                            type="text"
+                            value={contactDetails.socialHandles}
+                            onChange={(e) => setContactDetails({ ...contactDetails, socialHandles: e.target.value })}
+                            placeholder="Your social handle"
+                            className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-gold-soft focus:border-transparent"
+                          />
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleContactFormSubmit}
+                        disabled={isSubmitting}
+                        className="w-full py-3 bg-gold-deep text-white font-semibold rounded-lg hover:bg-gold-soft transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 size={16} className="animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          'Submit'
+                        )}
+                      </button>
+                    </motion.div>
+                  </AnimatePresence>
+                )}
               </div>
             </motion.div>
           </motion.div>

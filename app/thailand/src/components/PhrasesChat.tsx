@@ -60,18 +60,7 @@ export default function PhrasesChat({ language }: Props) {
         parts: [{ text: m.content }] 
       }));
 
-      const systemContext = `Thai phrases, audio, and pronunciation guide
-
-LANGUAGE RULE: The user has selected '${language}' as their preferred language. You MUST respond exclusively in that language:
-- MM = Burmese/Myanmar
-- EN = English
-- TH = Thai
-- DE = German
-- ES = Spanish
-- FR = French
-NEVER switch languages regardless of what language the user types in.`;
-
-      const text = await getConciergeResponse(userMessage, history, language, systemContext);
+      const text = await getConciergeResponse(userMessage, history, language);
       
       const thaiMatch = text.match(/[\u0E00-\u0E7F]+/);
       const pronMatch = text.match(/\[(.*?)\]/);

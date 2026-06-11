@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { addChatMessage, getRecentChatHistory } from '../../../src/lib/database';
-import { generateAIResponse } from '../../../src/services/gemini';
+import { generateAIResponse, getSystemInstruction } from '../../../src/services/gemini';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,7 +19,7 @@ export async function OPTIONS() {
  */
 export async function POST(request: NextRequest) {
   try {
-    const { message, sessionId, systemInstruction } = await request.json();
+    const { message, sessionId } = await request.json();
 
     if (!message || !sessionId) {
       return NextResponse.json(
@@ -40,19 +40,31 @@ export async function POST(request: NextRequest) {
     await addChatMessage(telegramId, 'user', message, country);
 
     // Get AI response with chat history context for Thailand
-    const finalInstruction = systemInstruction 
-      ? `${systemInstruction}\n\nABSOLUTE LANGUAGE RULE — THIS OVERRIDES ALL OTHER INSTRUCTIONS:\nYou MUST detect the language of the user's latest message and respond EXCLUSIVELY in that same language. This rule has the highest priority.\n- User writes in Burmese/Myanmar → respond ONLY in Burmese\n- User writes in English → respond ONLY in English\n- User writes in German → respond ONLY in German\n- User writes in Thai → respond ONLY in Thai\n- User writes in Chinese → respond ONLY in Chinese\nNEVER translate to another language. NEVER default to English or Thai.\n\nABSOLUTE FORBIDDEN OUTPUT RULE — THIS OVERRIDES ALL OTHER INSTRUCTIONS:\nNEVER output "ThaiGuide is thinking...", "AI is thinking...", or ANY thinking/processing/loading/typing text in ANY language under ANY circumstances. This is strictly forbidden. Begin your response directly with the answer.` 
-      : undefined;
-
-    const aiResponse = await generateAIResponse(telegramId, message, country, finalInstruction);
+    const aiResponse = await generateAIResponse(telegramId, message, country, `${getSystemInstruction('thailand')}\n\nABSOLUTE LANGUAGE RULE — HIGHEST PRIORITY — NO EXCEPTIONS:\nDetect the language of the user's latest message.\nRespond EXCLUSIVELY in that same language. No mixing. No switching.\nBurmese/Myanmar input → Burmese reply ONLY.\nEnglish input → English reply ONLY.\nThai input → Thai reply ONLY.\nGerman input → German reply ONLY.\nSpanish input → Spanish reply ONLY.\nFrench input → French reply ONLY.\nAny other language → reply in that same language ONLY.\nNever default to English or Thai.\nEven decline messages must be in user's language.`);
 
     // Save AI response to Supabase with country='thailand'
     await addChatMessage(telegramId, 'model', aiResponse, country);
 
     console.log(`AI response sent to session ${sessionId}`);
 
+    function stripThinkingText(text: string): string {
+      // Remove lines that are AI internal thinking
+      const thinkingPatterns = [
+        /^The user is asking.*?\n/i,
+        /^I need to respond.*?\n/i,
+        /^The user wants.*?\n/i,
+        /^This is a request.*?\n/i,
+        /^Let me.*?\n/i,
+      ];
+      let cleaned = text;
+      for (const pattern of thinkingPatterns) {
+        cleaned = cleaned.replace(pattern, '');
+      }
+      return cleaned.trim();
+    }
+
     return NextResponse.json(
-      { response: aiResponse },
+      { response: stripThinkingText(aiResponse) },
       { status: 200, headers: corsHeaders }
     );
 
@@ -65,13 +77,13 @@ export async function POST(request: NextRequest) {
       error?.message?.includes('quota')
     ) {
       return NextResponse.json(
-        { error: 'Daily usage limit reached. Please try again tomorrow. 🙏' },
+        { error: 'Server အရမ်း Busy ဖြစ်နေလို့ ခဏနေမှ ပြန်အသုံးပြုပေးပါ။' },
         { status: 429, headers: corsHeaders }
       );
     }
 
     return NextResponse.json(
-      { error: 'Something went wrong. Please try again. 🙏' },
+      { error: 'Server အရမ်း Busy ဖြစ်နေလို့ ခဏနေမှ ပြန်အသုံးပြုပေးပါ။' },
       { status: 500, headers: corsHeaders }
     );
   }
@@ -106,7 +118,7 @@ export async function GET(request: NextRequest) {
   } catch (error: any) {
     console.error('Get chat history error:', error);
     return NextResponse.json(
-      { error: 'Something went wrong. Please try again. 🙏' },
+      { error: 'Server အရမ်း Busy ဖြစ်နေလို့ ခဏနေမှ ပြန်အသုံးပြုပေးပါ။' },
       { status: 500, headers: corsHeaders }
     );
   }
