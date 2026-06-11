@@ -29,6 +29,7 @@ export async function POST(request: Request) {
 
     // Initialize Gemini AI with server-side API key
     const apiKey = process.env.GEMINI_PRO_API_KEY;
+    console.error('DEBUG apiKey exists:', !!apiKey, 'key length:', apiKey?.length ?? 0);
     if (!apiKey) {
       console.error('GEMINI_PRO_API_KEY is not configured');
       return NextResponse.json(
@@ -199,8 +200,11 @@ we can get back to you as soon as possible."
     );
 
   } catch (error: any) {
-    console.error('Booking chat error:', error);
-    console.log('Full error object:', JSON.stringify(error, null, 2));
+    console.error('booking-chat full error:', JSON.stringify({
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    }, null, 2));
 
     if (
       error?.message?.includes('429') ||
