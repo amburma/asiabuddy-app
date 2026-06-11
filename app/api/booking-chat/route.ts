@@ -161,8 +161,8 @@ we can get back to you as soon as possible."
           { status: 400, headers: corsHeaders }
         );
       }
-      const cleanHistory = (history ?? []).filter((_, i, arr) => {
-        const firstUserIndex = arr.findIndex(m => m.role === 'user');
+      const cleanHistory = (history ?? []).filter((_item: unknown, i: number, arr: Array<{role: string}>) => {
+        const firstUserIndex = arr.findIndex((m: {role: string}) => m.role === 'user');
         return i >= firstUserIndex;
       });
       const chat = model.startChat({ history: cleanHistory });
