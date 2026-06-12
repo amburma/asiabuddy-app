@@ -224,8 +224,7 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
             .map(m => `${m.role === 'user' ? 'Customer' : 'Operator'}: ${m.content}`)
             .join('\n'),
           agreedToShare: true,
-          source: 'HumanOperatorChat',
-          sourceChatBox: sourceChatBox || 'HumanOperatorChat'
+          source: 'HumanOperatorChat'
         }),
       });
 
@@ -362,7 +361,7 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
                 </button>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-4 overflow-y-auto max-h-[70vh]">
                 {/* Consent Notice - Always shown first */}
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <p className="text-sm text-blue-900 leading-relaxed">
@@ -494,26 +493,29 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
                           <strong>Messenger:</strong> Visit <a href="https://m.me/asiabuddyapp" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">m.me/asiabuddyapp</a> and send <strong>"Follow up"</strong> to follow up on your inquiry.
                         </div>
                       </div>
-
-                      <button
-                        type="button"
-                        onClick={handleContactFormSubmit}
-                        disabled={isSubmitting}
-                        className="w-full py-3 bg-gold-deep text-white font-semibold rounded-lg hover:bg-gold-soft transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <Loader2 size={16} className="animate-spin" />
-                            Submitting...
-                          </>
-                        ) : (
-                          'Submit'
-                        )}
-                      </button>
                     </motion.div>
                   </AnimatePresence>
                 )}
               </div>
+
+              {/* Submit Button - Outside scrollable container to ensure visibility */}
+              {agreedToShare && (
+                <button
+                  type="button"
+                  onClick={handleContactFormSubmit}
+                  disabled={isSubmitting}
+                  className="w-full py-3 bg-gold-deep text-white font-semibold rounded-lg hover:bg-gold-soft transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    'Submit'
+                  )}
+                </button>
+              )}
             </motion.div>
           </motion.div>
         )}

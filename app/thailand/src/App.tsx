@@ -38,6 +38,7 @@ import LawsGuide from './components/LawsGuide';
 import { TripChecklist } from './components/TripChecklist';
 import BookingWebForm from './components/BookingWebForm';
 import HumanOperatorChat from './components/HumanOperatorChat';
+import CookieBanner from './components/CookieBanner';
 
 export default function App() {
   const [language, setLanguage] = useState<ThaiLanguage>(() => {
@@ -1173,6 +1174,7 @@ useEffect(() => {
       </AnimatePresence>
       <InstallBanner language={language} />
       <IOSInstallBanner language={language} />
+      <CookieBanner />
     </div>
   );
 }
