@@ -32,9 +32,9 @@ export default function CookieBanner() {
     document.head.appendChild(script);
 
     // Initialize gtag
-    window.dataLayer = window.dataLayer || [];
+    (window as any).dataLayer = (window as any).dataLayer || [];
     function gtag(...args: any[]) {
-      window.dataLayer.push(args);
+      (window as any).dataLayer.push(args);
     }
     gtag('js', new Date());
     gtag('config', 'G-LQG7W22K0F');
