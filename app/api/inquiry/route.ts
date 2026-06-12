@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createBooking } from '@/lib/database';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -64,10 +65,62 @@ export async function POST(req: NextRequest) {
     phone = body.contactDetails!.phone;
     email = body.contactDetails!.email;
     socials = body.contactDetails!.socialHandles ? [body.contactDetails!.socialHandles] : [];
-    services = ['tour']; // Default to tour for human operator chat
-    chatSummary = body.chatHistory?.map(msg => `${msg.role}: ${msg.content}`).join('\n\n');
+    
+    // Extract services from chat history by looking for keywords
+    const chatHistory = body.chatHistory || [];
+    const userMessages = chatHistory.filter((msg: { role: string; content: string }) => msg.role === 'user').map((msg: { content: string }) => msg.content.toLowerCase());
+    const allText = userMessages.join(' ');
+    
+    // Generate AI summary of chat history if available
+    if (chatHistory && chatHistory.length > 0) {
+      try {
+        const apiKey = process.env.GEMINI_PRO_API_KEY;
+        console.log('[inquiry] API key present:', !!apiKey);
+        if (apiKey) {
+          const genAI = new GoogleGenerativeAI(apiKey);
+          const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+          
+          const systemPrompt = 'You are a summarization assistant. Summarize the following chat conversation into clear bullet points. Focus on: what the customer wants, services mentioned, dates/locations if any, budget if mentioned, and any special requests. Be concise. Use the same language as the conversation.';
+          
+          const chatText = chatHistory
+            .map((msg: { role: string; content: string }) => `${msg.role}: ${msg.content}`)
+            .join('\n\n');
+          
+          const result = await model.generateContent(`${systemPrompt}\n\n${chatText}`);
+          chatSummary = result.response.text();
+          console.log('[inquiry] Gemini summary length:', chatSummary?.length);
+        }
+      } catch (error) {
+        chatSummary = 'Chat summary unavailable.';
+      }
+    }
+    
+    // Detect services based on keywords
+    const detectedServices: string[] = [];
+    if (allText.includes('tour') || allText.includes('package') || allText.includes('trip') || allText.includes('itinerary')) {
+      detectedServices.push('tour');
+    }
+    if (allText.includes('flight') || allText.includes('airplane') || allText.includes('airport')) {
+      detectedServices.push('flight');
+    }
+    if (allText.includes('hotel') || allText.includes('accommodation') || allText.includes('stay') || allText.includes('room')) {
+      detectedServices.push('hotel');
+    }
+    if (allText.includes('car') || allText.includes('rental') || allText.includes('driver')) {
+      detectedServices.push('car');
+    }
+    if (allText.includes('taxi') || allText.includes('transfer') || allText.includes('pickup')) {
+      detectedServices.push('taxi');
+    }
+    if (allText.includes('ticket') || allText.includes('attraction') || allText.includes('activity') || allText.includes('show')) {
+      detectedServices.push('tickets');
+    }
+    
+    services = detectedServices.length > 0 ? detectedServices : ['tour'];
+    
     language = body.language;
     console.log('[INQUIRY] Detected language:', language);
+    console.log('[INQUIRY] Detected services:', services);
   } else {
     // Existing web form format
     name = body.name!;
@@ -198,7 +251,7 @@ export async function POST(req: NextRequest) {
     : '';
 
   const chatSection = chatSummary
-    ? `\n\n💬 *Chat History*\n${chatSummary}`
+    ? `\n\n� *Chat Summary*\n${chatSummary}`
     : '';
 
   const message =
@@ -234,11 +287,16 @@ export async function POST(req: NextRequest) {
 
   const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
+  const MAX_LENGTH = 3800;
+  const safeMessage = message.length > MAX_LENGTH
+    ? message.substring(0, MAX_LENGTH) + '\n\n⚠️ Message truncated.'
+    : message;
+
   // Return 200 to client immediately (Vercel serverless timeout safety)
   // Then fire the Telegram request in the background.
   const telegramPayload = {
     chat_id: CHAT_ID,
-    text: message,
+    text: safeMessage,
     parse_mode: 'Markdown',
     // Inline buttons: Approve/Reject and quick reply link
     reply_markup: {

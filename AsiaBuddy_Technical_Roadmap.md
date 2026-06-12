@@ -92,7 +92,7 @@ HumanOperatorChat  ← (triggered by Book Now button)
     getConciergeResponse() via geminiService.ts
          ↓
     https://asiabuddy.app/api/booking-chat
-         ↓  [model: gemini-2.0-flash]
+         ↓  [model: gemini-2.5-flash]
     GEMINI_PRO_API_KEY (Pay-as-you-go)
 ```
 
@@ -103,7 +103,7 @@ HumanOperatorChat  ← (triggered by Book Now button)
 | Route | Model | API Key | Purpose |
 |-------|-------|---------|---------|
 | `/api/web-chat` | `gemini-2.5-flash-lite` | `GEMINI_API_KEY_1/2/3` (rotation) | Info chat (9 boxes) |
-| `/api/booking-chat` | `gemini-2.0-flash` | `GEMINI_PRO_API_KEY` | HumanOperatorChat (negotiate) |
+| `/api/booking-chat` | `gemini-2.5-flash` | `GEMINI_PRO_API_KEY` | HumanOperatorChat (negotiate) |
 
 ### Free Tier Key Rotation Strategy
 
@@ -424,6 +424,7 @@ git push origin main
 | Approve took 40+ seconds | sendInvoiceEmail() was awaited before ops handover | Moved email to after ops handover + ctx.editMessageText |
 | Email not sending on Vercel | Fire-and-forget email killed when Vercel function ended | Changed back to await — placed after ops handover so Telegram responds fast |
 | Chat history missing in Ops handover | Web bookings have telegram_id=null — getChatHistory() returned nothing | Use booking.details.chatSummary for web bookings instead |
+| HumanOperatorChat flow | Phase 1-4 fully implemented | ✅ Completed — June 2026 |
 
 ---
 
@@ -458,3 +459,11 @@ J:\My Drive\AsiaBuddy_App\Thailand\
 - AI reads _AI_Knowledge_Base only (not individual service folders)
 - Google Sheets API integration: pending
 - AI negotiation + Contact Form trigger: pending
+
+---
+
+## 🔜 နောက်ဆက်တွဲ
+
+- Cookie Consent Banner — GDPR compliance update
+  (Decline button equal styling, Privacy Policy GDPR fields: 
+  data controller, user rights, retention period)
