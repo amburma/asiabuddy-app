@@ -26,6 +26,7 @@ export default function PhrasesChat({ language }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [showBookNow, setShowBookNow] = useState(false);
   const [showHumanChat, setShowHumanChat] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -50,6 +51,7 @@ export default function PhrasesChat({ language }: Props) {
     const userMessage = messageText || input.trim();
     if (!userMessage) return;
 
+    setShowBookNow(false);
     if (!messageText) setInput('');
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     isTyping || setIsTyping(true);
@@ -71,8 +73,36 @@ export default function PhrasesChat({ language }: Props) {
         thai: thaiMatch ? thaiMatch[0] : undefined,
         pronunciation: pronMatch ? pronMatch[1] : undefined
       }]);
+      
+      const keywords = [
+        // English
+        'hotel', 'tour', 'flight', 'ticket', 'car rental', 'airport transfer',
+        'day tour', 'join tour', 'package tour', 'customize tour', 'vip tour', 'entrance ticket',
+        // Myanmar
+        'ဟိုတယ်', 'ခရီးစဉ်', 'လေယာဉ်', 'လက်မှတ်', 'ကားငှား', 'လေဆိပ်ပို့',
+        'တစ်နေ့ခရီး', 'ပက်ကေ့ခ်ျ', 'ကားအငှား',
+        // Thai
+        'โรงแรม', 'ทัวร์', 'เที่ยวบิน', 'ตั๋ว', 'เช่ารถ', 'รับส่งสนามบิน',
+        // Chinese
+        '酒店', '旅游', '航班', '门票', '租车', '机场接送',
+        // Japanese
+        'ホテル', 'ツアー', 'フライト', 'チケット', 'レンタカー', '空港送迎',
+        // Korean
+        '호텔', '투어', '항공편', '티켓', '렌터카', '공항 픽업',
+        // German
+        'hotel', 'tour', 'flug', 'ticket', 'mietwagen', 'flughafentransfer',
+        // French
+        'hôtel', 'tour', 'vol', 'billet', 'location de voiture', 'transfert aéroport',
+        // Spanish
+        'hotel', 'tour', 'vuelo', 'entrada', 'alquiler de coche', 'traslado aeropuerto'
+      ];
+      const responseLower = text.toLowerCase();
+      const hasKeyword = keywords.some(keyword => responseLower.includes(keyword));
+      if (hasKeyword) {
+        setShowBookNow(true);
+      }
     } catch (error) {
-      console.error('Chat error:', error);
+      setMessages(prev => [...prev, { role: 'bot', content: 'Sorry, something went wrong. Please try again.' }]);
     } finally {
       setIsTyping(false);
     }
@@ -260,15 +290,13 @@ export default function PhrasesChat({ language }: Props) {
                   <Send size={16} />
                 </button>
               </div>
-              {messages.filter(m => m.role === 'bot').length > 0 && (
-                <div className="mt-2 text-center">
-                  <button
-                    onClick={() => setShowHumanChat(true)}
-                    className="text-xs text-gold-deep font-semibold hover:underline"
-                  >
-                    Book Now
-                  </button>
-                </div>
+              {showBookNow && (
+                <button
+                  onClick={() => setShowHumanChat(true)}
+                  className="mt-3 w-full bg-[#22c55e] text-white font-semibold py-3 px-4 rounded-xl hover:bg-[#16a34a] transition-colors"
+                >
+                  📅 Book Now
+                </button>
               )}
             </div>
           </div>

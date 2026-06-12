@@ -215,16 +215,16 @@ export default function HumanOperatorChat({ language, onClose }: Props) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: contactDetails.name,
-          phone: contactDetails.phone,
-          email: contactDetails.email,
-          socialHandle: contactDetails.socialHandles || 'Not provided',
-          chatHistory: messages
-            .filter(m => m.role === 'user' || m.role === 'model')
-            .map(m => `${m.role === 'user' ? 'Customer' : 'Operator'}: ${m.content}`)
-            .join('\n'),
+          contactDetails: {
+            name: contactDetails.name,
+            phone: contactDetails.phone,
+            email: contactDetails.email,
+            socialHandles: contactDetails.socialHandles || 'Not provided',
+          },
+          chatHistory: messages.filter(m => m.role === 'user' || m.role === 'assistant'),
           agreedToShare: true,
-          source: 'HumanOperatorChat'
+          source: 'HumanOperatorChat',
+          language: language
         }),
       });
 

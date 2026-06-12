@@ -17,6 +17,7 @@ export default function FoodChat({ language }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showBookNow, setShowBookNow] = useState(false);
   const [showHumanChat, setShowHumanChat] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -33,6 +34,7 @@ export default function FoodChat({ language }: Props) {
     const userMessage = customMessage || input.trim();
     if (!userMessage || isLoading) return;
 
+    setShowBookNow(false);
     if (!customMessage) setInput('');
     
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
@@ -52,8 +54,40 @@ RESPONSE RULES — MANDATORY:
 4. Never list your own capabilities unless asked.
 5. Out-of-scope question → one sentence decline in user's language only. Nothing else.`;
 
-    const response = await getConciergeResponse(contextPrompt, history, language);
-    setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+    try {
+      const response = await getConciergeResponse(contextPrompt, history, language);
+      setMessages(prev => [...prev, { role: 'assistant', content: response }]);
+      
+      const keywords = [
+        // English
+        'hotel', 'tour', 'flight', 'ticket', 'car rental', 'airport transfer',
+        'day tour', 'join tour', 'package tour', 'customize tour', 'vip tour', 'entrance ticket',
+        // Myanmar
+        'ဟိုတယ်', 'ခရီးစဉ်', 'လေယာဉ်', 'လက်မှတ်', 'ကားငှား', 'လေဆိပ်ပို့',
+        'တစ်နေ့ခရီး', 'ပက်ကေ့ခ်ျ', 'ကားအငှား',
+        // Thai
+        'โรงแรม', 'ทัวร์', 'เที่ยวบิน', 'ตั๋ว', 'เช่ารถ', 'รับส่งสนามบิน',
+        // Chinese
+        '酒店', '旅游', '航班', '门票', '租车', '机场接送',
+        // Japanese
+        'ホテル', 'ツアー', 'フライト', 'チケット', 'レンタカー', '空港送迎',
+        // Korean
+        '호텔', '투어', '항공편', '티켓', '렌터카', '공항 픽업',
+        // German
+        'hotel', 'tour', 'flug', 'ticket', 'mietwagen', 'flughafentransfer',
+        // French
+        'hôtel', 'tour', 'vol', 'billet', 'location de voiture', 'transfert aéroport',
+        // Spanish
+        'hotel', 'tour', 'vuelo', 'entrada', 'alquiler de coche', 'traslado aeropuerto'
+      ];
+      const responseLower = response.toLowerCase();
+      const hasKeyword = keywords.some(keyword => responseLower.includes(keyword));
+      if (hasKeyword) {
+        setShowBookNow(true);
+      }
+    } catch (error) {
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' }]);
+    }
     setIsLoading(false);
   };
 
@@ -144,15 +178,13 @@ RESPONSE RULES — MANDATORY:
             <Send size={14} />
           </button>
         </div>
-        {messages.filter(m => m.role === 'assistant').length > 0 && (
-          <div className="mt-2 text-center">
-            <button
-              onClick={() => setShowHumanChat(true)}
-              className="text-xs text-gold-deep font-semibold hover:underline"
-            >
-              Book Now
-            </button>
-          </div>
+        {showBookNow && (
+          <button
+            onClick={() => setShowHumanChat(true)}
+            className="mt-3 w-full bg-[#22c55e] text-white font-semibold py-3 px-4 rounded-xl hover:bg-[#16a34a] transition-colors"
+          >
+            📅 Book Now
+          </button>
         )}
       </div>
 
