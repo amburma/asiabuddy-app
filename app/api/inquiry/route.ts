@@ -78,7 +78,7 @@ export async function POST(req: NextRequest) {
         console.log('[inquiry] API key present:', !!apiKey);
         if (apiKey) {
           const genAI = new GoogleGenerativeAI(apiKey);
-          const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+          const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
           
           const systemPrompt = 'You are a summarization assistant. Summarize the following chat conversation into clear bullet points. Focus on: what the customer wants, services mentioned, dates/locations if any, budget if mentioned, and any special requests. Be concise. Use the same language as the conversation.';
           
