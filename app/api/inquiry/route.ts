@@ -255,7 +255,7 @@ export async function POST(req: NextRequest) {
     : '';
 
   const chatSection = chatSummary
-    ? `\n\n� *Chat Summary*\n${chatSummary}`
+    ? `\n\n� *Chat Summary*\n${chatSummary.replace(/[_*[\]()~`>#+=|{}.!-]/g, '\\$&')}`
     : '';
 
   const message =
