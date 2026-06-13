@@ -83,14 +83,18 @@ export async function POST(req: NextRequest) {
           const systemPrompt = 'You are a summarization assistant. Summarize the following chat conversation into clear bullet points. Focus on: what the customer wants, services mentioned, dates/locations if any, budget if mentioned, and any special requests. Be concise. Use the same language as the conversation.';
           
           const chatText = chatHistory
-            .map((msg: { role: string; content: string }) => `${msg.role}: ${msg.content}`)
+            .map((msg: any) => {
+              const text = msg.content || msg.parts?.[0]?.text || '';
+              return `${msg.role}: ${text}`;
+            })
             .join('\n\n');
           
           const result = await model.generateContent(`${systemPrompt}\n\n${chatText}`);
           chatSummary = result.response.text();
           console.log('[inquiry] Gemini summary length:', chatSummary?.length);
         }
-      } catch (error) {
+      } catch (error: any) {
+        console.error('[inquiry] Gemini summary error:', error?.message || error);
         chatSummary = 'Chat summary unavailable.';
       }
     }
