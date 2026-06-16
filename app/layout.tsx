@@ -1,23 +1,10 @@
-import { Playfair_Display, Inter } from 'next/font/google';
-import './globals.css';
-import CookieBanner from '@/components/shared/CookieBanner';
-
-const playfair = Playfair_Display({ 
-  subsets: ['latin'], 
-  variable: '--font-playfair',
-  style: ['italic', 'normal'],
-  weight: ['400', '700', '900']
-});
-
-const inter = Inter({ 
-  subsets: ['latin'], 
-  variable: '--font-inter' 
-});
+import './globals.css'
+import CookieBanner from '@/components/shared/CookieBanner'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${inter.variable}`}>
-      <body className="font-sans antialiased">{children}<CookieBanner /></body>
+    <html lang="en">
+      <body>{children}<CookieBanner /></body>
     </html>
-  );
+  )
 }

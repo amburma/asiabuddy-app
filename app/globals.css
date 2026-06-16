@@ -1,28 +1,63 @@
-/* ၁။ ပြင်ပမှ ခေါ်ယူမည့် Google Fonts (@import) များကို ဖိုင်၏ ထိပ်ဆုံးတွင် အရင်ထားရပါမည် */
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Cinzel:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap');
 
-/* ၂။ ထို့နောက်မှ Tailwind core engine ကို ခေါ်ယူရပါမည် */
 @import "tailwindcss";
 
-/* ၃။ Tailwind v4 ၏ Theme customization ကို သတ်မှတ်ရပါမည် */
 @theme {
-  --color-sacred-bg: #FDFCF0;
-  --color-sacred-green: #2D4A3E;
+  /* Sacred Aesthetic Palette */
   --color-gold-deep: #D4AF37;
+  --color-gold-soft: #E5C27F;
   --color-gold-light: #F4E7B5;
-  --color-gold-soft: #d4b94a;
+  --color-sacred-cream: #FDFBF7;
+  --color-sacred-green: #2D4F3C;
+  --color-sacred-bg: #FCFAEF;
+
+  /* Dark Mode */
+  --color-dark-base: #121212;
+  --color-dark-surface: #1E1E1E;
+  --color-dark-accent: #48CAE4;
+  --color-dark-text: #E9ECEF;
+
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Inter", sans-serif;
 }
 
-/* ၄။ Global Base CSS Styling များကို အောက်ဆုံးတွင် ထားရှိရပါမည် */
-* { 
-  margin: 0; 
-  padding: 0; 
-  box-sizing: border-box; 
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: var(--color-sacred-bg);
+    color: #1a1a1a;
+    font-family: 'Inter', sans-serif;
+    @apply antialiased selection:bg-gold-soft/30;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-serif text-sacred-green font-bold;
+  }
 }
 
-body {
-  background-color: var(--color-sacred-bg);
-  color: var(--color-sacred-green);
-  font-family: 'Inter', sans-serif;
-  /* သင် ဆက်လက်ရေးသားလိုသော body style များကို ဒီနေရာတွင် ဆက်ရေးနိုင်ပါသည် */
+.sacred-gradient {
+  background: linear-gradient(135deg, #FCFAEF 0%, #F5F1D5 100%);
+}
+
+.gold-border {
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.shadow-sacred {
+  box-shadow: 0 4px 20px rgba(45, 79, 60, 0.05);
+}
+
+.glass-card {
+  @apply bg-white rounded-2xl;
+  border: 1px solid rgba(229, 194, 127, 0.4);
+  box-shadow: 0 4px 20px rgba(45, 79, 60, 0.05);
+}
+
+.btn-primary {
+  @apply bg-gold-deep text-white px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-sacred-green hover:shadow-lg disabled:opacity-50;
 }

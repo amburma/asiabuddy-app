@@ -2,10 +2,31 @@ import { Bot, InputFile } from 'grammy';
 import { getBooking, updateBookingStatus, getChatHistory } from '@/lib/database';
 import { generateAndUploadInvoicePDF } from '@/lib/pdfGenerator';
 import { sendInvoiceEmail } from '@/lib/emailService';
-import { getSupabaseAdmin } from '@/lib/supabase';
+import { getSupabaseAdmin, getSupabase } from '@/lib/supabase';
 
 let operatorBot: Bot | null = null;
 let customerBot: Bot | null = null;
+
+// Helper function to get target chat ID based on salesperson_id
+async function getTargetChatId(salespersonId: string | null | undefined): Promise<string | number> {
+  if (!salespersonId) {
+    return process.env.OPERATOR_GROUP_CHAT_ID!;
+  }
+
+  try {
+    const supabase = getSupabase();
+    const { data: salesperson } = await supabase
+      .from('salespersons')
+      .select('telegram_id')
+      .eq('id', salespersonId)
+      .single();
+
+    return salesperson?.telegram_id ?? process.env.OPERATOR_GROUP_CHAT_ID!;
+  } catch (error) {
+    console.error('[getTargetChatId] Error fetching salesperson:', error);
+    return process.env.OPERATOR_GROUP_CHAT_ID!;
+  }
+}
 
 // Helper function to handle supergroup migration errors
 async function sendMessageWithMigrationRetry(
@@ -108,9 +129,10 @@ function getOperatorBot(): Bot {
 
           console.log("[APPROVE] Sending alert to operator group (web no email)...");
           const t8 = Date.now();
+          const targetChatId = await getTargetChatId(booking.salesperson_id);
           await sendMessageWithMigrationRetry(
             getOperatorBot(),
-            process.env.OPERATOR_GROUP_CHAT_ID!,
+            targetChatId,
             alertMessage,
             { parse_mode: 'HTML' }
           );

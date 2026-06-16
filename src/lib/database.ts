@@ -117,12 +117,24 @@ export async function addChatMessage(
   telegramId: number,
   role: 'user' | 'model',
   messageText: string,
-  country: string = 'thailand'
+  country: string = 'thailand',
+  salespersonId?: string | null
 ): Promise<ChatHistory | null> {
   try {
+    const insertData: any = {
+      telegram_id: telegramId,
+      role,
+      message_text: messageText,
+      country
+    };
+
+    if (salespersonId) {
+      insertData.salesperson_id = salespersonId;
+    }
+
     const { data, error } = await supabase
       .from('chat_histories')
-      .insert({ telegram_id: telegramId, role, message_text: messageText, country })
+      .insert(insertData)
       .select()
       .single();
 
@@ -284,17 +296,24 @@ export async function getAllUsers(): Promise<User[]> {
 export async function createBooking(
   telegramId: number,
   tourType: 'tour' | 'flight' | 'car' | 'taxi',
-  details: Record<string, any>
+  details: Record<string, any>,
+  salespersonId?: string | null
 ): Promise<Booking | null> {
   try {
+    const insertData: any = {
+      telegram_id: telegramId,
+      tour_type: tourType,
+      status: 'pending',
+      details
+    };
+
+    if (salespersonId) {
+      insertData.salesperson_id = salespersonId;
+    }
+
     const { data, error } = await supabase
       .from('bookings')
-      .insert({
-        telegram_id: telegramId,
-        tour_type: tourType,
-        status: 'pending',
-        details
-      })
+      .insert(insertData)
       .select()
       .single();
 

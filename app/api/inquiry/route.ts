@@ -8,6 +8,51 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type',
 };
 
+async function getTargetChatId(salesperson_id?: string | null): Promise<string> {
+  console.log('[DEBUG] received salesperson_id:', salesperson_id, 'type:', typeof salesperson_id);
+  if (salesperson_id) {
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      );
+      const { data } = await supabase
+        .from('salespersons')
+        .select('telegram_id')
+        .eq('id', salesperson_id)
+        .single();
+      console.log('[DEBUG] supabase query result - data:', data);
+      if (data?.telegram_id) return data.telegram_id;
+    } catch (e) {
+      console.error('getTargetChatId error:', e);
+    }
+  }
+  console.log('[DEBUG] falling back to group chat, reason: telegram_id missing or query failed');
+  return process.env.OPERATOR_GROUP_CHAT_ID!;
+}
+
+async function getSalespersonName(salesperson_id?: string | null): Promise<string | null> {
+  if (salesperson_id) {
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      );
+      const { data } = await supabase
+        .from('salespersons')
+        .select('name')
+        .eq('id', salesperson_id)
+        .single();
+      if (data?.name) return data.name;
+    } catch (e) {
+      console.error('getSalespersonName error:', e);
+    }
+  }
+  return null;
+}
+
 export async function OPTIONS() {
   return new Response(null, { status: 204, headers: corsHeaders });
 }
@@ -30,6 +75,7 @@ export async function POST(req: NextRequest) {
     qa?: { question: string; answer: string }[];
     chatSummary?: string;
     language?: string;
+    salesperson_id?: string;
     // New format from HumanOperatorChat
     chatHistory?: { role: string; content: string }[];
     contactDetails?: {
@@ -42,6 +88,11 @@ export async function POST(req: NextRequest) {
 
   try {
     body = await req.json();
+    console.log('API received salesperson_id:', body.salesperson_id);
+    console.log("[DEBUG] Inquiry API received", {
+      salesperson_id: body.salesperson_id,
+      hasChatSummary: !!body.chatSummary
+    });
   } catch (error) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: corsHeaders });
   }
@@ -179,14 +230,22 @@ export async function POST(req: NextRequest) {
     tourType: 'tour' | 'flight' | 'car' | 'taxi' | 'hotel' | 'tickets';
     bookingDetails: typeof bookingDetails;
     customerInfo: typeof customerInfo;
+    salesperson_id?: string | null;
   } = {
     telegram_id: null,
     tourType: tourType as 'tour' | 'flight' | 'car' | 'taxi' | 'hotel' | 'tickets',
     bookingDetails,
     customerInfo,
+    salesperson_id: body.salesperson_id || null,
   };
 
   console.log('[inquiry] createBooking parameters:', JSON.stringify(bookingParams, null, 2));
+
+  console.log("[DEBUG] Booking insert payload", {
+    salesperson_id: bookingParams.salesperson_id,
+    customer_name: bookingParams.customerInfo.customerName,
+    phone: bookingParams.customerInfo.customerPhone
+  });
 
   console.log('CHECKPOINT: Before Supabase insert');
   let booking;
@@ -200,12 +259,21 @@ export async function POST(req: NextRequest) {
         customerPhone: bookingParams.customerInfo.customerPhone,
         customerEmail: bookingParams.customerInfo.customerEmail,
         source: bookingParams.customerInfo.source,
+        salesperson_id: bookingParams.salesperson_id,
       }
     );
     console.log('CHECKPOINT: After Supabase insert');
     console.log('[inquiry] Booking created successfully:', JSON.stringify(booking, null, 2));
+    console.log("[DEBUG] Booking insert result", {
+      success: true,
+      error: null
+    });
   } catch (err) {
     console.error('[inquiry] createBooking error details:', JSON.stringify(err, null, 2));
+    console.log("[DEBUG] Booking insert result", {
+      success: false,
+      error: err
+    });
     console.error('[inquiry] createBooking error stack:', err instanceof Error ? err.stack : 'No stack trace');
     return NextResponse.json(
       { error: 'Failed to create booking', details: err },
@@ -258,6 +326,9 @@ export async function POST(req: NextRequest) {
     ? `\n\n� *Chat Summary*\n${chatSummary.replace(/[_*[\]()~`>#+=|{}.!-]/g, '\\$&')}`
     : '';
 
+  const salespersonName = await getSalespersonName(body.salesperson_id);
+  const salespersonSection = salespersonName ? `\n👤 *Sales:* ${salespersonName}` : '';
+
   const message =
     `🔔 *New Web Inquiry — AsiaBuddy*\n` +
     `━━━━━━━━━━━━━━━━━━\n\n` +
@@ -269,6 +340,7 @@ export async function POST(req: NextRequest) {
     qaSection +
     otherSection +
     chatSection +
+    salespersonSection +
     `\n\n━━━━━━━━━━━━━━━━━━\n` +
     `🆔 *Booking ID:* ${bookingIdShort}\n` +
     `⏰ Received at: ${new Date().toUTCString()}\n` +
@@ -276,7 +348,7 @@ export async function POST(req: NextRequest) {
 
   // ── 4. Send to Telegram Operator Group ────────────────────────────────────
   const BOT_TOKEN = process.env.OPERATOR_BOT_TOKEN;
-  const CHAT_ID   = process.env.OPERATOR_GROUP_CHAT_ID;
+  const CHAT_ID   = await getTargetChatId(body.salesperson_id);
 
   console.log('[inquiry] BOT_TOKEN exists:', !!BOT_TOKEN);
   console.log('[inquiry] CHAT_ID value:', CHAT_ID);

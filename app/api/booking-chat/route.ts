@@ -18,7 +18,10 @@ export async function OPTIONS() {
  */
 export async function POST(request: Request) {
   try {
-    const { message, history, language, bookingContext } = await request.json();
+    const { message, history, language, bookingContext, salesperson_id } = await request.json();
+
+    // Store salesperson_id for future use (currently no database operation in this route)
+    const salespersonId = salesperson_id || null;
 
     if (!message) {
       return NextResponse.json(

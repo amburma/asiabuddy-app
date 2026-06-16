@@ -7,15 +7,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/thailand',
-        destination: 'https://thailand.asiabuddy.app',
-        permanent: false,
-      },
-      {
         source: '/thailand/:path*',
-        destination: 'https://thailand.asiabuddy.app/:path*',
-        permanent: false,
-      },
+        has: [{ type: 'host', value: 'thailand.asiabuddy.app' }],
+        destination: 'https://asiabuddy.app/thailand/:path*',
+        permanent: true,
+      }
     ]
   },
 }

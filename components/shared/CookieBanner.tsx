@@ -49,7 +49,7 @@ export default function CookieBanner() {
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-sm text-center sm:text-left">
           We use cookies and Google Analytics to improve your experience. See our{' '}
-          <a href="/privacy-policy" className="underline hover:text-gray-300">
+          <a href="https://asiabuddy.app/privacy-policy" className="underline hover:text-gray-300">
             Privacy Policy
           </a>.
         </p>

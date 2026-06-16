@@ -27,6 +27,7 @@ export interface Booking {
   customer_phone?: string;
   customer_email?: string;
   source?: 'telegram' | 'web';
+  salesperson_id?: string | null;
 }
 
 export interface Invoice {
@@ -294,6 +295,7 @@ export async function createBooking(
     customerPhone?: string;
     customerEmail?: string;
     source?: 'telegram' | 'web';
+    salesperson_id?: string | null;
   }
 ): Promise<Booking | null> {
   console.log("CREATE BOOKING CALLED", Date.now());
@@ -308,7 +310,8 @@ export async function createBooking(
         customer_name: options?.customerName,
         customer_phone: options?.customerPhone,
         customer_email: options?.customerEmail,
-        source: options?.source || 'telegram'
+        source: options?.source || 'telegram',
+        salesperson_id: options?.salesperson_id || null
       })
       .select()
       .single();
