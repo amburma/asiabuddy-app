@@ -56,3 +56,6 @@ Thumbs.db
 
 .vercel
 .env*
+
+app/thailand/_node_modules/
+app/thailand/node_modules/
