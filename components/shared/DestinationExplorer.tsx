@@ -14,11 +14,11 @@ interface Props {
 }
 
 export default function DestinationExplorer({ language }: Props) {
-  const currentDestinations = DESTINATIONS[language] || DESTINATIONS['EN'];
-  const [selectedId, setSelectedId] = useState(currentDestinations[0].id);
+  const currentDestinations = DESTINATIONS[language] ?? DESTINATIONS['EN'] ?? [];
+  const [selectedId, setSelectedId] = useState(currentDestinations?.[0]?.id ?? '');
   const [activeTab, setActiveTab] = useState<keyof DestinationPillars>('mustVisit');
 
-  const selectedDest = currentDestinations.find(d => d.id === selectedId)!;
+  const selectedDest = currentDestinations?.find(d => d.id === selectedId) ?? currentDestinations?.[0];
   const uiT = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
   const t = uiT.tabs || UI_TRANSLATIONS.EN.tabs;
   const labels = uiT.labels || UI_TRANSLATIONS.EN.labels;
@@ -35,7 +35,7 @@ export default function DestinationExplorer({ language }: Props) {
     <div className="w-full space-y-12 relative">
       {/* Destination Selector */}
       <div className="flex overflow-x-auto pb-4 gap-4 scrollbar-hide no-scrollbar">
-        {currentDestinations.map((dest) => (
+        {(currentDestinations ?? []).map((dest) => (
           <button
             key={dest.id}
             onClick={() => {
@@ -104,7 +104,7 @@ export default function DestinationExplorer({ language }: Props) {
         <div className="space-y-12 min-h-[400px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <AnimatePresence mode="wait">
-                {selectedDest.pillars[activeTab as keyof DestinationPillars].map((item, idx) => (
+                {selectedDest?.pillars[activeTab as keyof DestinationPillars].map((item: PillarItem, idx: number) => (
                   <motion.div
                     key={item.title + idx}
                     initial={{ opacity: 0, scale: 0.95 }}

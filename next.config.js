@@ -4,6 +4,10 @@ const nextConfig = {
   typescript: {
     tsconfigPath: './tsconfig.json',
   },
+  outputFileTracingExcludes: {
+    '*': ['./app/thailand/node_modules/**'],
+  },
+  turbopack: {},
   async redirects() {
     return [
       {

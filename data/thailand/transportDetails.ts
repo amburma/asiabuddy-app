@@ -1,4 +1,4 @@
-import { SupportedLanguage } from '../types';
+import { SupportedLanguage } from '@/types/country';
 
 export interface TransportSection {
   title: string;

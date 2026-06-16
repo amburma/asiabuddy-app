@@ -1,4 +1,4 @@
-import { SupportedLanguage } from './types';
+import { SupportedLanguage } from '@/types/country';
 
 const ENGLISH_UI = {
   "menu": "Menu",

@@ -1,4 +1,4 @@
-import { ThaiLanguage } from '../types';
+import { ThaiLanguage } from '@/types/country';
 
 const ENGLISH_GUIDE = `# Essential Thai Travel Visa Guide
 

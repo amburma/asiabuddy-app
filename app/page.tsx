@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 
 export default function Home() {
   return (
@@ -7,16 +6,17 @@ export default function Home() {
 
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/AB_Web_Background.jpg"
-          alt="AsiaBuddy Background"
-          fill
-          className="object-cover object-center scale-105"
-          priority
+        <div
+          className="absolute inset-0 scale-105"
+          style={{
+            backgroundImage: "url('/AB_Web_Background.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
         />
         {/* Layered overlays for depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80" />
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-900/20 via-transparent to-amber-900/20" />
+        <div className="absolute inset-0 bg-black/55" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70" />
       </div>
 
       {/* Decorative top line */}
@@ -24,17 +24,6 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="relative z-10 flex flex-col items-center w-full max-w-4xl mx-auto py-20">
-
-        {/* Logo */}
-        <div className="mb-8">
-          <Image
-            src="/Logo.png"
-            alt="AsiaBuddy Logo"
-            width={90}
-            height={90}
-            className="drop-shadow-[0_0_20px_rgba(251,191,36,0.5)]"
-          />
-        </div>
 
         {/* Eyebrow label */}
         <div className="flex items-center gap-3 mb-6">

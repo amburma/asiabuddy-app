@@ -1,4 +1,4 @@
-import { ThaiLanguage } from '../types';
+import { ThaiLanguage } from '@/types/country';
 
 export const GENERAL_INFORMATION: Record<ThaiLanguage, string> = {
   MM: `# ထိုင်းနိုင်ငံ အထွေထွေဗဟုသုတ လမ်းညွှန်

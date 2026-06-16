@@ -331,7 +331,7 @@ useEffect(() => {
   footer="Comprehensive Travel Guide • AsiaBuddy Services"
 >
   <div className="markdown-body mb-20">
-    <MarkdownRenderer content={TRAVEL_STYLE_GUIDE[language] || TRAVEL_STYLE_GUIDE['EN']} />
+    <MarkdownRenderer content={(TRAVEL_STYLE_GUIDE[language] || TRAVEL_STYLE_GUIDE['EN']) ?? ''} />
   </div>
   <div className="border-t border-gray-100 pt-12 pb-8">
     <TripPlannerChat language={language} />
@@ -349,7 +349,7 @@ useEffect(() => {
 >
 
 <div className="markdown-body mb-20">
-  <MarkdownRenderer content={MEDICAL_GUIDE_MARKDOWN[language] || MEDICAL_GUIDE_MARKDOWN['EN']} />
+  <MarkdownRenderer content={(MEDICAL_GUIDE_MARKDOWN[language] || MEDICAL_GUIDE_MARKDOWN['EN']) ?? ''} />
 </div>
 
   <div className="border-t border-gray-100 pt-12 pb-8">
@@ -368,7 +368,7 @@ useEffect(() => {
 >
 
 <div className="markdown-body mb-20">
-  <MarkdownRenderer content={NIGHTLIFE_GUIDE_MARKDOWN[language] || NIGHTLIFE_GUIDE_MARKDOWN['EN']} />
+  <MarkdownRenderer content={(NIGHTLIFE_GUIDE_MARKDOWN[language] || NIGHTLIFE_GUIDE_MARKDOWN['EN']) ?? ''} />
 </div>
 
   <div className="border-t border-gray-100 pt-12 pb-8">
@@ -386,7 +386,7 @@ useEffect(() => {
 >
 
 <div className="markdown-body">
-  <MarkdownRenderer content={SHOPPING_GUIDE_MARKDOWN[language] || SHOPPING_GUIDE_MARKDOWN['EN']} />
+  <MarkdownRenderer content={(SHOPPING_GUIDE_MARKDOWN[language] || SHOPPING_GUIDE_MARKDOWN['EN']) ?? ''} />
 </div>
 
   <div className="mt-12 pt-12 border-t border-gray-100">
@@ -561,7 +561,7 @@ useEffect(() => {
 >
 
 <div className="markdown-body">
-  <MarkdownRenderer content={GENERAL_INFORMATION[language] || GENERAL_INFORMATION['EN']} />
+  <MarkdownRenderer content={(GENERAL_INFORMATION[language] || GENERAL_INFORMATION['EN']) ?? ''} />
 </div>
 
 </GuideModal>
@@ -575,7 +575,7 @@ useEffect(() => {
   icon={<Receipt size={20} />}
   footer="VAT Refund Guide for Travelers • AsiaBuddy Services"
 ><div className="markdown-body">
-  <MarkdownRenderer content={VAT_REFUND_GUIDE[language] || VAT_REFUND_GUIDE['EN']} />
+  <MarkdownRenderer content={(VAT_REFUND_GUIDE[language] || VAT_REFUND_GUIDE['EN']) ?? ''} />
 </div>
 </GuideModal>
       {/* Global Visa Modal */}
@@ -588,7 +588,7 @@ useEffect(() => {
   footer="Essential Thai Travel Visa Guide • AsiaBuddy Services"
 >
 <div className="markdown-body">
-  <MarkdownRenderer content={VISA_GUIDE[language] || VISA_GUIDE['EN']} />
+  <MarkdownRenderer content={(VISA_GUIDE[language] || VISA_GUIDE['EN']) ?? ''} />
 </div>
 </GuideModal>
 {/* Global Transport Modal */}
@@ -602,7 +602,7 @@ useEffect(() => {
 >
 
 <div className="markdown-body">
-  <MarkdownRenderer content={(TRANSPORT_DETAILS[language] || TRANSPORT_DETAILS['EN']).fullGuideMarkdown} />
+  <MarkdownRenderer content={(TRANSPORT_DETAILS[language] || TRANSPORT_DETAILS['EN']).fullGuideMarkdown ?? ''} />
 </div>
 
 </GuideModal>
@@ -618,7 +618,7 @@ useEffect(() => {
 >
 
 <div className="markdown-body">
-  <MarkdownRenderer content={ACCOMMODATION_GUIDE[language] || ACCOMMODATION_GUIDE['EN']} />
+  <MarkdownRenderer content={(ACCOMMODATION_GUIDE[language] || ACCOMMODATION_GUIDE['EN']) ?? ''} />
 </div>
 
   <div className="mt-12 pt-12 border-t border-gray-100">
@@ -643,7 +643,7 @@ useEffect(() => {
 >
 
 <div className="markdown-body">
-  <MarkdownRenderer content={FOOD_GUIDE_MARKDOWN[language] || FOOD_GUIDE_MARKDOWN['EN']} />
+  <MarkdownRenderer content={(FOOD_GUIDE_MARKDOWN[language] || FOOD_GUIDE_MARKDOWN['EN']) ?? ''} />
 </div>
 
   <div className="mt-12 pt-12 border-t border-gray-100">

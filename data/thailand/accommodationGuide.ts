@@ -1,4 +1,4 @@
-import { SupportedLanguage } from '../types';
+import { SupportedLanguage } from '@/types/country';
 
 export const ACCOMMODATION_GUIDE: Record<SupportedLanguage, string> = {
   EN: `

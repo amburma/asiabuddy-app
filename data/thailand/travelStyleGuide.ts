@@ -1,4 +1,4 @@
-import { ThaiLanguage } from '../types';
+import { ThaiLanguage } from '@/types/country';
 
 export const TRAVEL_STYLE_GUIDE: Record<ThaiLanguage, string> = {
   EN: `# Comprehensive Guide to Traveling in Thailand
