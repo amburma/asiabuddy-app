@@ -15,6 +15,12 @@ const nextConfig = {
         has: [{ type: 'host', value: 'thailand.asiabuddy.app' }],
         destination: 'https://asiabuddy.app/thailand/:path*',
         permanent: true,
+      },
+      {
+        source: '/',
+        has: [{ type: 'host', value: 'thailand.asiabuddy.app' }],
+        destination: 'https://asiabuddy.app/thailand',
+        permanent: true,
       }
     ]
   },
