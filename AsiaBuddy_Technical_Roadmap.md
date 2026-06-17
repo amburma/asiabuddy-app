@@ -342,6 +342,31 @@ const finalInstruction = systemInstruction
 
 ---
 
+## 🌐 Translation Architecture
+
+| Content Type | Method | Reason |
+|---|---|---|
+| UI Text (buttons, menus, labels) | `i18n.ts` static file | Fast, Offline, accurate |
+| Chat responses | Gemini AI (auto language detect) | Dynamic, natural language |
+| Blog, Tours, Destinations (long content) | Google Translate API | Long content, cost-effective |
+
+### Rules
+- Database stores English only — no multi-language columns needed
+- User selects language → stored in preference → applied app-wide
+- Google Translate API translates DB content (descriptions, tours, blog) to user's selected language at render time
+- `i18n.ts` handles all UI text — never use Google Translate for UI elements
+- Chat API already detects user language automatically via ABSOLUTE LANGUAGE RULE in `web-chat/route.ts` 
+
+### Google Translate API — Integration Point
+- Trigger: when user's selected language ≠ `en` 
+- Apply to: `destinations.description`, `destinations.short_description`, `tours.title`, `tours.description`, `tours.short_description`, `tours.highlights`, `tours.inclusion`, `tours.exclusions` 
+- Do NOT apply to: slugs, IDs, prices, dates, status fields
+- Environment variable: `GOOGLE_TRANSLATE_API_KEY` (to be added to `.env.local` and Vercel)
+
+### Updated Last: 17 June 2026
+
+---
+
 ## 🔑 Environment Variables
 
 ### Next.js → `asiabuddy-main/.env.local` 
