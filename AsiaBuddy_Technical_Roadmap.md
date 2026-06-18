@@ -1,5 +1,5 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 15 June 2026
+> Last Updated: 17 June 2026 — Session 3
 
 ---
 
@@ -740,11 +740,30 @@ Do NOT modify /api/booking-chat or Telegram routing logic.
   - `./HumanOperatorChat` (from shared/) → `../thailand/HumanOperatorChat` 
   - `./TransportChat` (from shared/) → `../thailand/TransportChat` 
 
+### ✅ Completed (17 June 2026 — Session 3)
+- Production Verify — Landing page, Thailand page, Chat, Book Now, Telegram Alert ✅
+- next.config.js — root redirect rule for thailand.asiabuddy.app added ✅
+- app/thailand/vercel.json — redirect rule added ✅
+- Roadmap — Translation Architecture section added ✅
+- Supabase — destinations table: Thailand row inserted ✅
+- Supabase — tours table: Bangkok Temple Tour inserted ✅
+- Supabase — itineraries table: Day 1 Bangkok Temple Discovery inserted ✅
+- app/[country]/tours/page.tsx — Premium Tours Listing Page built ✅
+- app/[country]/tours/[slug]/page.tsx — WOW Level Tour Itinerary Page built ✅
+- app/[country]/tours/[slug]/BookNowClient.tsx — HumanOperatorChat + localStorage language ✅
+
 ### ⏳ Pending
+- JSX error line 387 in tours/[slug]/page.tsx — browser verify after fix
+- Book Now → HumanOperatorChat → Telegram Alert — local test required
+- git push → Production deploy (after local test passes)
+- Production verify — /thailand/tours + /thailand/tours/[slug]
 - Phase 4 (SEO) — generateMetadata, ISR, sitemap.ts
-- Phase 5 (Redirects/DNS)
-- Phase 6 (Destination/Tours UI)
-- Phase 7 (Testing/Cutover — git push)
+- Phase 6 — app/[country]/page.tsx Destination Page (Hero, Dual CTA, Trust Strip, Featured Tours)
+- Phase 6 — middleware.ts invalid country redirect
+- Phase 6 — app/sitemap.ts auto sitemap from Supabase
+- Google Translate API integration
+- Vercel Vite project delete (Cleanup)
+- Cookie Consent Banner — GDPR update
 
 ---
 

@@ -52,7 +52,19 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
     }
   };
 
-  const langKey = (language || 'en').toLowerCase().slice(0, 2);
+  const lang = (language || 'en').toLowerCase();
+  let langKey = 'en';
+  if (lang === 'my' || lang === 'mm') {
+    langKey = 'mm';
+  } else if (lang === 'th') {
+    langKey = 'th';
+  } else if (lang === 'de') {
+    langKey = 'de';
+  } else if (lang === 'fr') {
+    langKey = 'fr';
+  } else if (lang === 'es') {
+    langKey = 'es';
+  }
   const welcome = welcomeMessages[langKey] || welcomeMessages['en'];
 
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -130,6 +142,86 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
         return 'Your request has been received by AsiaBuddy Operator. If you do not hear back within 24 hours, please follow up using the Contact details in the App.';
     }
   };
+
+  const getFormLabels = (lang: string) => {
+    switch(lang) {
+      case 'mm':
+      case 'my':
+        return {
+          fullName: 'အမည်အပြည့်အစုံ',
+          phone: 'ဖုန်းနံပါတ်',
+          email: 'အီးမေးလ် (ရွေးချယ်စရာ)',
+          preferredApps: 'နှစ်သက်ရာ Contact Apps (ရွေးချယ်စရာ)',
+          emailHelper: 'အီးမေးလ် ပေးပါက Invoice ကို အလိုအလျောက် ပို့ပေးမည်။ ဗလာထားပါက Social Handle မှတဆင့် ဆက်သွယ်ပေးမည်။',
+          phoneHelper: 'ပေးထားသော ဖုန်းနံပါတ်မှတဆင့် ဆက်သွယ်ပေးမည်။',
+          messenger: 'm.me/asiabuddyapp သို့ သွားပြီး "Follow up" ပို့ပါ။',
+          submit: 'ပို့မည်',
+          submitting: 'ပို့နေသည်...'
+        };
+      case 'th':
+        return {
+          fullName: 'ชื่อเต็ม',
+          phone: 'เบอร์โทรศัพท์',
+          email: 'อีเมล (ไม่บังคับ)',
+          preferredApps: 'แอปติดต่อที่ต้องการ (ไม่บังคับ)',
+          emailHelper: 'หากคุณให้อีเมล ใบเสร็จจะถูกส่งอัตโนมัติ หากไม่กรอก เราจะติดต่อผ่าน social handle',
+          phoneHelper: 'เราจะติดต่อคุณผ่านเบอร์โทรศัพท์ที่คุณระบุไว้ด้านบน',
+          messenger: 'เยี่ยมชม m.me/asiabuddyapp และส่ง "Follow up" เพื่อติดตามการสอบถาม',
+          submit: 'ส่ง',
+          submitting: 'กำลังส่ง...'
+        };
+      case 'de':
+        return {
+          fullName: 'Vollständiger Name',
+          phone: 'Telefonnummer',
+          email: 'E-Mail (optional)',
+          preferredApps: 'Bevorzugte Kontakt-Apps (optional)',
+          emailHelper: 'Wenn Sie eine E-Mail angeben, wird Ihre Rechnung automatisch gesendet. Wenn Sie das Feld leer lassen, kontaktieren wir Sie über Ihre Social-Media-Handles.',
+          phoneHelper: 'Wir werden Sie über die oben angegebene Telefonnummer kontaktieren.',
+          messenger: 'Besuchen Sie m.me/asiabuddyapp und senden Sie "Follow up", um Ihrer Anfrage nachzugehen.',
+          submit: 'Absenden',
+          submitting: 'Wird gesendet...'
+        };
+      case 'fr':
+        return {
+          fullName: 'Nom complet',
+          phone: 'Numéro de téléphone',
+          email: 'E-mail (optionnel)',
+          preferredApps: 'Applications de contact préférées (optionnel)',
+          emailHelper: 'Si vous fournissez un e-mail, votre facture sera envoyée automatiquement. Si vous le laissez vide, nous vous contacterons via vos réseaux sociaux.',
+          phoneHelper: 'Nous vous contacterons via le numéro de téléphone que vous avez fourni ci-dessus.',
+          messenger: 'Visitez m.me/asiabuddyapp et envoyez "Follow up" pour faire suite à votre demande.',
+          submit: 'Envoyer',
+          submitting: 'Envoi en cours...'
+        };
+      case 'es':
+        return {
+          fullName: 'Nombre completo',
+          phone: 'Número de teléfono',
+          email: 'Correo electrónico (opcional)',
+          preferredApps: 'Aplicaciones de contacto preferidas (opcional)',
+          emailHelper: 'Si proporciona un correo electrónico, su factura se enviará automáticamente. Si lo deja en blanco, nos pondremos en contacto con usted a través de sus redes sociales.',
+          phoneHelper: 'Le contactaremos a través del número de teléfono que proporcionó arriba.',
+          messenger: 'Visite m.me/asiabuddyapp y envíe "Follow up" para dar seguimiento a su consulta.',
+          submit: 'Enviar',
+          submitting: 'Enviando...'
+        };
+      default:
+        return {
+          fullName: 'Full Name',
+          phone: 'Phone Number',
+          email: 'Email (optional)',
+          preferredApps: 'Preferred Contact Apps (optional)',
+          emailHelper: 'If you provide an email, your invoice will be sent automatically. If you leave it blank, we will contact you via your social handle.',
+          phoneHelper: 'We will contact you via the phone number you provided above.',
+          messenger: 'Visit m.me/asiabuddyapp and send "Follow up" to follow up on your inquiry.',
+          submit: 'Submit',
+          submitting: 'Submitting...'
+        };
+    }
+  };
+
+  const formLabels = getFormLabels((language || 'en').toLowerCase().slice(0, 2));
 
   useEffect(() => {
     if (scrollRef.current) {
@@ -414,7 +506,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
                     >
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Full Name <span className="text-red-500">*</span>
+                          {formLabels.fullName} <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                           <UserIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -436,7 +528,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Phone Number <span className="text-red-500">*</span>
+                          {formLabels.phone} <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                           <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -458,7 +550,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Email (optional)
+                          {formLabels.email}
                         </label>
                         <div className="relative">
                           <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
@@ -471,13 +563,13 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
                           />
                         </div>
                         <p className="mt-1 text-xs text-gray-500">
-                          If you provide an email, your invoice will be sent automatically. If you leave it blank, we will contact you via your social handle.
+                          {formLabels.emailHelper}
                         </p>
                       </div>
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Preferred Contact Apps (optional)
+                          {formLabels.preferredApps}
                         </label>
                         <div className="grid grid-cols-2 gap-2">
                           {['Viber', 'Line', 'Telegram', 'WhatsApp'].map((app) => (
@@ -501,10 +593,19 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
                           ))}
                         </div>
                         <p className="text-xs text-gray-500 mt-2">
-                          We will contact you via the phone number you provided above.
+                          {formLabels.phoneHelper}
                         </p>
                         <div className="mt-3 p-3 bg-blue-50 rounded-lg text-xs text-gray-600">
-                          <strong>Messenger:</strong> Visit <a href="https://m.me/asiabuddyapp" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">m.me/asiabuddyapp</a> and send <strong>"Follow up"</strong> to follow up on your inquiry.
+                          <strong>Messenger:</strong> {formLabels.messenger.split('m.me/asiabuddyapp').map((part, i) => 
+                            i === 0 ? (
+                              <span key={i}>{part}</span>
+                            ) : (
+                              <span key={i}>
+                                <a href="https://m.me/asiabuddyapp" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">m.me/asiabuddyapp</a>
+                                {part}
+                              </span>
+                            )
+                          )}
                         </div>
                       </div>
                     </motion.div>
@@ -523,10 +624,10 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
                   {isSubmitting ? (
                     <>
                       <Loader2 size={16} className="animate-spin" />
-                      Submitting...
+                      {formLabels.submitting}
                     </>
                   ) : (
-                    'Submit'
+                    formLabels.submit
                   )}
                 </button>
               )}
