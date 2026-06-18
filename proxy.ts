@@ -11,6 +11,13 @@ export function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
+  // Don't block /thailand/admin, /thailand/clogin, /thailand/blog
+  if (pathname.startsWith('/thailand/admin') || 
+      pathname.startsWith('/thailand/clogin') || 
+      pathname.startsWith('/thailand/blog')) {
+    return NextResponse.next()
+  }
+
   // Don't block Next.js internal routes
   if (pathname.startsWith('/_next/')) {
     return NextResponse.next()
