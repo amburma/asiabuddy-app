@@ -7,7 +7,7 @@ export default async function CountryPage({
 }) {
   const { country } = await params
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
-
+                                              
   if (country === 'thailand') {
     return <ThailandApp />
   }

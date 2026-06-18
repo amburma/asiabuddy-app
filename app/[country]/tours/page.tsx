@@ -1,6 +1,9 @@
 import { getSupabase } from '@/lib/supabase'
 import Link from 'next/link'
 
+export const revalidate = 3600
+// Revalidate every 1 hour
+
 interface Tour {
   id: string
   slug: string
@@ -22,6 +25,25 @@ interface Tour {
   status: string
   created_at: string
   updated_at: string
+}
+
+export async function generateMetadata(
+  { params }: { params: Promise<{ country: string }> }
+) {
+  const { country: countrySlug } = await params
+  const country = countrySlug.charAt(0).toUpperCase() 
+    + countrySlug.slice(1)
+  return {
+    title: `${country} Tours & Packages — AsiaBuddy`,
+    description: `Discover handpicked ${country} tours and travel 
+      experiences. Expert local guides, secure booking, 
+      best price guarantee.`,
+    openGraph: {
+      title: `${country} Tours & Packages — AsiaBuddy`,
+      description: `Handpicked ${country} tours and experiences.`,
+      url: `https://asiabuddy.app/${countrySlug}/tours`,
+    },
+  }
 }
 
 export default async function ToursPage({

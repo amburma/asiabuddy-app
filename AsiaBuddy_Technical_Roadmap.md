@@ -1,5 +1,5 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 17 June 2026 — Session 3
+> Last Updated: 18 June 2026 — Session 4
 
 ---
 
@@ -593,6 +593,7 @@ Change `status: "coming_soon"` → `status: "live"` in `data/countries.ts`
 | `data/countries.ts` is the only source of truth | Never hardcode country list |
 | Never use separate Vite project per country | All countries must use Next.js Monorepo `app/[country]/` |
 | Never use subdomain URLs in `data/countries.ts` slug | Use relative paths e.g. `/singapore` |
+| Never create middleware.ts | Next.js deprecated — use proxy.ts only |
 
 ---
 
@@ -753,8 +754,22 @@ Do NOT modify /api/booking-chat or Telegram routing logic.
 - app/[country]/tours/[slug]/BookNowClient.tsx — HumanOperatorChat + localStorage language ✅
 
 ### ⏳ Pending
-- JSX error line 387 in tours/[slug]/page.tsx — browser verify after fix
-- Book Now → HumanOperatorChat → Telegram Alert — local test required
+- Phase 6 — app/[country]/page.tsx Destination Page (in progress)
+- Phase 6 — app/sitemap.ts auto sitemap from Supabase
+- Phase 4 SEO — generateMetadata + ISR
+- Google Translate API integration
+- app/thailand/admin/page.tsx — Tours + Destinations + Blog CRUD UI
+  for Content Creator data entry
+- Vercel Vite project delete (Cleanup)
+- Cookie Consent Banner — GDPR update
+
+---
+
+## 🔜 နောက်ဆက်တွဲ
+
+- Cookie Consent Banner — GDPR compliance update
+  (Decline button equal styling, Privacy Policy GDPR fields: 
+  data controller, user rights, retention period)
 - git push → Production deploy (after local test passes)
 - Production verify — /thailand/tours + /thailand/tours/[slug]
 - Phase 4 (SEO) — generateMetadata, ISR, sitemap.ts

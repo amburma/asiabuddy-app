@@ -1,8 +1,11 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
+import { getSupabase } from '@/lib/supabase';
 import BookNowClient from './BookNowClient';
 import { ThaiLanguage } from '@/types/country';
+
+export const revalidate = 3600
+// Revalidate every 1 hour
 
 interface Tour {
   id: string;
@@ -40,12 +43,41 @@ interface Itinerary {
   created_at: string;
 }
 
+export async function generateMetadata(
+  { params }: { params: Promise<{ country: string; slug: string }> }
+) {
+  const { country: countrySlug, slug } = await params
+  const supabase = getSupabase()
+  const { data: tour } = await supabase
+    .from('tours')
+    .select('title, short_description')
+    .eq('slug', slug)
+    .single()
+
+  const country = countrySlug.charAt(0).toUpperCase() 
+    + countrySlug.slice(1)
+
+  return {
+    title: tour
+      ? `${tour.title} — AsiaBuddy ${country} Tours` 
+      : `${country} Tour — AsiaBuddy`,
+    description: tour?.short_description 
+      ?? `Explore ${country} with AsiaBuddy expert tours.`,
+    openGraph: {
+      title: tour?.title ?? `${country} Tour`,
+      description: tour?.short_description ?? '',
+      url: `https://asiabuddy.app/${countrySlug}/tours/${slug}`,
+    },
+  }
+}
+
 export default async function TourPage({
   params,
 }: {
   params: Promise<{ country: string; slug: string }>
 }) {
   const { country, slug } = await params;
+  const supabase = getSupabase();
 
   // Fetch tour by slug + country
   const { data: tour, error: tourError } = await supabase
