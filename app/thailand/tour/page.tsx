@@ -20,13 +20,12 @@ interface Tour {
   id: string
   title: string
   slug: string
-  excerpt: string | null
-  cover_image: string | null
-  duration: string | null
-  price: string | null
+  short_description: string | null
+  duration_days: number | null
+  price_from: number | null
   highlights: string[] | null
   country: string
-  published: boolean
+  status: string
   created_at: string
 }
 
@@ -34,8 +33,8 @@ async function getTours(): Promise<Tour[]> {
   const supabase = await createClient()
   const { data, error } = await supabase
     .from('tours')
-    .select('id, title, slug, excerpt, cover_image, duration, price, highlights, country, published, created_at')
-    .eq('published', true)
+    .select('id, title, slug, short_description, duration_days, price_from, highlights, country, status, created_at')
+    .eq('status', 'active')
     .eq('country', 'thailand')
     .order('created_at', { ascending: false })
 
@@ -51,18 +50,7 @@ function HeroTour({ tour }: { tour: Tour }) {
   return (
     <Link href={`/thailand/tour/${tour.slug}`} className="group block">
       <article className="relative rounded-3xl overflow-hidden min-h-[480px] md:min-h-[560px] flex items-end shadow-xl">
-        {tour.cover_image ? (
-          <Image
-            src={tour.cover_image}
-            alt={tour.title}
-            fill
-            priority
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-            sizes="100vw"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-sacred-green to-emerald-950" />
-        )}
+        <div className="absolute inset-0 bg-gradient-to-br from-sacred-green to-emerald-950" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
         <div className="relative z-10 p-8 md:p-12 w-full">
@@ -70,25 +58,25 @@ function HeroTour({ tour }: { tour: Tour }) {
             <span className="bg-gold-deep text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
               ✦ Featured Tour
             </span>
-            {tour.duration && (
+            {tour.duration_days && (
               <span className="bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1">
                 <Clock size={10} />
-                {tour.duration}
+                {tour.duration_days} days
               </span>
             )}
-            {tour.price && (
+            {tour.price_from && (
               <span className="bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1">
                 <DollarSign size={10} />
-                {tour.price}
+                {tour.price_from}
               </span>
             )}
           </div>
           <h2 className="font-serif text-4xl md:text-5xl text-white font-bold mb-3 leading-tight max-w-3xl group-hover:text-gold-soft transition-colors duration-300">
             {tour.title}
           </h2>
-          {tour.excerpt && (
+          {tour.short_description && (
             <p className="text-white/70 text-sm md:text-base max-w-2xl leading-relaxed mb-6 line-clamp-2">
-              {tour.excerpt}
+              {tour.short_description}
             </p>
           )}
           {tour.highlights && tour.highlights.length > 0 && (
@@ -116,28 +104,18 @@ function TourCard({ tour, index }: { tour: Tour; index: number }) {
     <Link href={`/thailand/tour/${tour.slug}`} className="group block">
       <article className="flex flex-col h-full bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
         <div className="relative aspect-[16/10] overflow-hidden">
-          {tour.cover_image ? (
-            <Image
-              src={tour.cover_image}
-              alt={tour.title}
-              fill
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, 33vw"
-            />
-          ) : (
-            <div className="absolute inset-0 bg-gradient-to-br from-sacred-green/10 to-gold-deep/10 flex items-center justify-center">
-              <span className="text-4xl opacity-20">✦</span>
-            </div>
-          )}
+          <div className="absolute inset-0 bg-gradient-to-br from-sacred-green/10 to-gold-deep/10 flex items-center justify-center">
+            <span className="text-4xl opacity-20">✦</span>
+          </div>
         </div>
 
         <div className="flex flex-col flex-grow p-5">
           <h3 className="font-serif text-lg text-sacred-green group-hover:text-gold-deep transition-colors leading-snug mb-2 line-clamp-2 font-bold">
             {tour.title}
           </h3>
-          {tour.excerpt && (
+          {tour.short_description && (
             <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 flex-grow mb-4">
-              {tour.excerpt}
+              {tour.short_description}
             </p>
           )}
 
@@ -154,16 +132,16 @@ function TourCard({ tour, index }: { tour: Tour; index: number }) {
 
           <div className="flex items-center justify-between pt-3 border-t border-gray-100">
             <div className="flex items-center gap-3">
-              {tour.duration && (
+              {tour.duration_days && (
                 <span className="flex items-center gap-1 text-[11px] text-gray-400 font-medium">
                   <Clock size={11} />
-                  {tour.duration}
+                  {tour.duration_days} days
                 </span>
               )}
-              {tour.price && (
+              {tour.price_from && (
                 <span className="flex items-center gap-1 text-[11px] text-sacred-green font-bold">
                   <DollarSign size={11} />
-                  {tour.price}
+                  {tour.price_from}
                 </span>
               )}
             </div>

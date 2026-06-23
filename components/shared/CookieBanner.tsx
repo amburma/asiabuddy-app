@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 
 export default function CookieBanner() {
   const [showBanner, setShowBanner] = useState(false);
+  const [showGDPRInfo, setShowGDPRInfo] = useState(false);
 
   useEffect(() => {
     const consent = localStorage.getItem('cookie_consent');
@@ -46,14 +47,33 @@ export default function CookieBanner() {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 z-50">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto flex flex-col gap-4">
         <p className="text-sm text-center sm:text-left">
-          We use cookies and Google Analytics to improve your experience. See our{' '}
-          <a href="https://asiabuddy.app/privacy-policy" className="underline hover:text-gray-300">
-            Privacy Policy
-          </a>.
+          We use cookies and Google Analytics to improve your experience.
         </p>
-        <div className="flex gap-3">
+        <button
+          onClick={() => setShowGDPRInfo(!showGDPRInfo)}
+          className="text-xs text-gray-300 hover:text-white underline text-left"
+        >
+          {showGDPRInfo ? 'Hide' : 'Show'} Privacy Policy
+        </button>
+        {showGDPRInfo && (
+          <div className="text-xs space-y-2 bg-gray-800 p-3 rounded">
+            <div>
+              <span className="font-semibold text-gray-200">Data Controller:</span>{' '}
+              <span className="text-gray-300">AsiaBuddy (asiabuddy.app)</span>
+            </div>
+            <div>
+              <span className="font-semibold text-gray-200">Your Rights:</span>{' '}
+              <span className="text-gray-300">You have the right to access, correct, or delete your personal data at any time. To exercise your rights, contact us via Telegram @asiabuddy_bot</span>
+            </div>
+            <div>
+              <span className="font-semibold text-gray-200">Data Retention:</span>{' '}
+              <span className="text-gray-300">Chat history and booking data are retained for 12 months from the date of collection.</span>
+            </div>
+          </div>
+        )}
+        <div className="flex gap-3 justify-center sm:justify-start">
           <button
             onClick={handleAccept}
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-sm font-medium transition-colors"
@@ -62,7 +82,7 @@ export default function CookieBanner() {
           </button>
           <button
             onClick={handleDecline}
-            className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-sm font-medium transition-colors"
+            className="px-4 py-2 bg-slate-500 hover:bg-slate-600 rounded text-sm font-medium transition-colors"
           >
             Decline
           </button>

@@ -14,6 +14,7 @@ interface Tour {
   duration_days: number
   duration_nights: number
   group_size_max: number
+  image_url?: string
   images: string[]
   highlights: string[]
   inclusions: string[]
@@ -152,39 +153,42 @@ export default async function ToursPage({
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {activeTours.map((tour) => (
+              {activeTours.map((tour) => {
+                return (
                 <Link
                   key={tour.id}
                   href={`/${country}/tours/${tour.slug}`}
                   className="group relative bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 cursor-pointer"
                 >
                   {/* IMAGE AREA */}
-                  <div className="relative h-56 overflow-hidden bg-gradient-to-br from-orange-200 via-amber-100 to-yellow-50">
-                    {/* Decorative Pattern */}
-                    <div 
-                      className="absolute inset-0 opacity-20"
-                      style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='2' cy='2' r='1.5' fill='%23f97316'/%3E%3C/svg%3E")`,
-                        backgroundSize: '20px 20px'
-                      }}
-                    ></div>
-                    
-                    {/* Center Content */}
-                    <div className="flex items-center justify-center h-full flex-col gap-2">
-                      <div className="text-7xl">🏝️</div>
-                    </div>
-                    
-                    {/* Featured Badge */}
-                    {tour.featured && (
-                      <div className="absolute top-4 left-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
-                        ⭐ Featured
-                      </div>
+                  <div className="relative w-full h-48 bg-amber-50">
+                    {tour.image_url ? (
+                      <img
+                        src={tour.image_url}
+                        alt={tour.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : tour.images && tour.images.length > 0 && tour.images[0] ? (
+                      <img
+                        src={tour.images[0]}
+                        alt={tour.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-6xl">🌏</div>
                     )}
-                    
-                    {/* Price Badge */}
-                    <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur text-orange-600 font-black text-sm px-3 py-1.5 rounded-xl shadow">
-                      From {tour.price_from.toLocaleString()} {tour.currency}
+                  </div>
+                  
+                  {/* Featured Badge */}
+                  {tour.featured && (
+                    <div className="absolute top-4 left-4 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
+                      ⭐ Featured
                     </div>
+                  )}
+                  
+                  {/* Price Badge */}
+                  <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur text-orange-600 font-black text-sm px-3 py-1.5 rounded-xl shadow">
+                    From {tour.price_from.toLocaleString()} {tour.currency}
                   </div>
 
                   {/* CARD BODY */}
@@ -218,7 +222,8 @@ export default async function ToursPage({
                     </div>
                   </div>
                 </Link>
-              ))}
+                )
+              })}
             </div>
           )}
         </div>

@@ -7,6 +7,15 @@ const nextConfig = {
   outputFileTracingExcludes: {
     '*': ['./app/thailand/node_modules/**'],
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'ysntqbakmqwuxljknwjg.supabase.co',
+        pathname: '/storage/v1/object/public/**',
+      },
+    ],
+  },
   turbopack: {},
   async redirects() {
     return [

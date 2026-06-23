@@ -12,9 +12,10 @@ export function proxy(request: NextRequest) {
   }
 
   // Don't block /thailand/admin, /thailand/clogin, /thailand/blog
-  if (pathname.startsWith('/thailand/admin') || 
-      pathname.startsWith('/thailand/clogin') || 
-      pathname.startsWith('/thailand/blog')) {
+  if (pathname.startsWith('/thailand/admin') ||
+      pathname.startsWith('/thailand/clogin') ||
+      pathname.startsWith('/thailand/blog') ||
+      pathname.startsWith('/admin')) {
     return NextResponse.next()
   }
 

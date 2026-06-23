@@ -1,5 +1,5 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 18 June 2026 — Session 4
+> Last Updated: 20-21 June 2026 — Session 6
 
 ---
 
@@ -594,6 +594,8 @@ Change `status: "coming_soon"` → `status: "live"` in `data/countries.ts`
 | Never use separate Vite project per country | All countries must use Next.js Monorepo `app/[country]/` |
 | Never use subdomain URLs in `data/countries.ts` slug | Use relative paths e.g. `/singapore` |
 | Never create middleware.ts | Next.js deprecated — use proxy.ts only |
+| Never use params.country directly in generateMetadata | params is a Promise in Next.js — always await params first |
+| tours table price column is price_from | Never use tour.price — use tour.price_from |
 
 ---
 
@@ -614,6 +616,9 @@ Change `status: "coming_soon"` → `status: "live"` in `data/countries.ts`
 | Email not sending on Vercel | Fire-and-forget email killed when Vercel function ended | Changed back to await — placed after ops handover so Telegram responds fast |
 | Chat history missing in Ops handover | Web bookings have telegram_id=null — getChatHistory() returned nothing | Use booking.details.chatSummary for web bookings instead |
 | HumanOperatorChat flow | Phase 1-4 fully implemented | ✅ Completed — June 2026 |
+| HumanOperatorChat welcome message in Thai | .slice(0,2) on language prop caused wrong key match | Replaced with explicit if/else language matching |
+| middleware.ts conflicts with proxy.ts | Next.js deprecated middleware.ts | Always use proxy.ts only — never create middleware.ts |
+| generateMetadata params error | params is Promise in Next.js app router | Always type as Promise<{...}> and await before use |
 
 ---
 
@@ -753,37 +758,178 @@ Do NOT modify /api/booking-chat or Telegram routing logic.
 - app/[country]/tours/[slug]/page.tsx — WOW Level Tour Itinerary Page built ✅
 - app/[country]/tours/[slug]/BookNowClient.tsx — HumanOperatorChat + localStorage language ✅
 
+### ✅ Completed (18 June 2026 — Session 4)
+- HumanOperatorChat.tsx — language detection fixed:
+  .slice(0,2) bug removed, explicit if/else language matching added,
+  English default when localStorage is null ✅
+- HumanOperatorChat.tsx — Contact Detail Box labels i18n added
+  (MY/TH/DE/FR/ES/EN) via getFormLabels() function ✅
+- BookNowClient.tsx — localStorage empty → explicit 'EN' fallback ✅
+- Full booking flow tested: Book Now → HumanOperatorChat → 
+  Telegram Alert → Approve → Email Invoice ✅
+- Production verified: /thailand/tours + 
+  /thailand/tours/bangkok-temple-tour ✅
+- middleware.ts created then merged into proxy.ts 
+  (Next.js deprecated middleware.ts — proxy.ts is correct) ✅
+- middleware.ts deleted — proxy.ts is single source of truth ✅
+- Invalid country redirect: /korea → / confirmed working ✅
+- app/[country]/destination/page.tsx — Premium Destination Page built:
+  5 sections (Hero, Stats Bar, Why AsiaBuddy, Featured Tours, 
+  Bottom CTA), cream/green/orange design matching existing site,
+  animated orange underline signature element ✅
+- app/[country]/destination/ route confirmed: 
+  does NOT replace /[country] ChatWidgets page ✅
+- Supabase tours table — price_from column confirmed 
+  (not price), currency=USD hardcoded ✅
+- app/sitemap.ts — Auto sitemap from Supabase tours + 
+  destinations, static + dynamic routes, graceful fallback ✅
+- generateMetadata added to 3 files:
+  app/[country]/tours/page.tsx
+  app/[country]/tours/[slug]/page.tsx  
+  app/[country]/destination/page.tsx ✅
+- ISR revalidate = 3600 added to all 3 pages ✅
+- params async fix — Next.js requires await params 
+  (Promise type) in generateMetadata ✅
+
 ### ⏳ Pending
-- Phase 6 — app/[country]/page.tsx Destination Page (in progress)
-- Phase 6 — app/sitemap.ts auto sitemap from Supabase
-- Phase 4 SEO — generateMetadata + ISR
+- app/thailand/admin/page.tsx — Tours + Destinations + Blog 
+  CRUD UI for Content Creator data entry
 - Google Translate API integration
-- app/thailand/admin/page.tsx — Tours + Destinations + Blog CRUD UI
-  for Content Creator data entry
 - Vercel Vite project delete (Cleanup)
 - Cookie Consent Banner — GDPR update
 
 ---
 
+## ✅ Session 5 — 19 June 2026
+
+### Completed
+- app/thailand/admin/page.tsx — Old broken Tab forms removed ✅
+- app/thailand/admin/page.tsx — blog_posts → posts table name fixed ✅
+- app/thailand/admin/page.tsx — Dead state variables removed ✅
+- app/thailand/admin/page.tsx — country: 'thailand' hardcode removed ✅
+- app/admin/page.tsx — Country dropdown (dynamic) ✅
+- app/admin/page.tsx — Tours / Destinations / Posts / Itinerary sections ✅
+- app/admin/page.tsx — Auth → redirect to /thailand/clogin ✅
+- HumanOperatorChat — Mobile h-[100dvh] full height fix ✅
+  desktop: md:h-[min(600px,85vh)] ✅
+- Cookie Consent Banner — Decline button equal styling (bg-slate-500) ✅
+- Cookie Consent Banner — Collapsible Privacy Policy (showGDPRInfo state) ✅
+- Cookie Consent Banner — Data Controller field added ✅
+- Cookie Consent Banner — Your Rights field added ✅
+- Cookie Consent Banner — Data Retention field added ✅
+- proxy.ts — /admin whitelist added (country check bypass) ✅
+- app/admin/page.tsx — Supabase import fixed: @/lib/supabase → @supabase/supabase-js createClient ✅
+- app/admin/page.tsx — NEXT_PUBLIC_ env vars (browser-safe client) ✅
+- lib/supabase-browser.ts — createBrowserClient file created ✅
+- app/admin/page.tsx — Auth check getSession() → getUser() ✅
+- app/admin/page.tsx — useMemo stable supabase instance ✅
+
+### ⏳ Pending Verify
+- Tour Create → Save → Supabase tours table — 400 Bad Request fix applied
+  (useMemo + getUser), browser verify မလုပ်ရသေး
+
+### ⏳ Remaining Work (Priority Order)
+
+**Priority 4 — Local Full Test**
+- /admin → Tour Create/Edit/Delete → Supabase ❌
+- /admin → Destination Create/Edit/Delete → Supabase ❌
+- /admin → Post Create/Edit/Delete → Supabase ❌
+- /admin → Itinerary Create/Edit/Delete → Supabase ❌
+- /admin → Image Upload (URL input + File Upload to Supabase Storage) ❌ not built yet
+- /thailand/tours → Tours list display ❌
+- /thailand/tours/[slug] → Itinerary page ❌
+- HumanOperatorChat → Book Now → Telegram Alert ❌
+- Cookie Consent Banner → Accept/Decline/GDPR toggle ❌
+
+**Priority 4 — Image Upload Feature (not built)**
+- Tour form — Image URL input option
+- Tour form — File Upload (Computer/Mobile)
+- Upload to Supabase Storage bucket
+
+**Priority 5 — Git Push → Production**
+- All local tests ✅ before git push
+- Vercel production verify
+
+**Priority 6 — Cleanup**
+- Vercel Vite project delete
+- app/thailand/ Vite codebase cleanup
+
+---
+
+## ✅ Session 6 — 20-21 June 2026
+
+### Completed
+- Posts Save 23502 error (null value in column "country") — root cause diagnosed: app/thailand/admin/page.tsx Posts Save payload was missing the "country" field entirely ✅
+- Investigated app/admin/page.tsx (newer admin page, route /admin) — confirmed its Tours/Destinations/Posts payloads already correctly include "country: selectedCountry" — this file was NOT the source of the bug
+- Discovered TWO parallel admin pages exist in the project:
+  - app/admin/page.tsx → route /admin (has "Managing Country" dropdown UI, currently NOT the page in active daily use, login flow currently broken)
+  - app/thailand/admin/page.tsx → route /thailand/admin (legacy page, currently the page actively used and tested by the team)
+- app/thailand/clogin/page.tsx (line 21) — post-login redirect fixed: changed hardcoded router.push("/thailand/admin") to router.push("/admin") — intended to make /admin the canonical post-login destination, but see Pending below
+- app/thailand/admin/page.tsx — added "country: selectedCountry" to Posts Save payload ✅
+- app/thailand/admin/page.tsx — added "country: selectedCountry" to Tours Save payload (preventive fix, same missing-field pattern found) ✅
+- app/thailand/admin/page.tsx — added "country: selectedCountry" to Destinations Save payload (preventive fix, same missing-field pattern found) ✅
+- Posts Save verified working: POST /rest/v1/posts → 201 Created, row confirmed present in Supabase posts table ✅
+- app/thailand/admin/page.tsx — Itinerary Save payload investigated: itineraries table does NOT have a "country" column (PGRST204 error confirmed this — country is implicit via tour_id foreign key relationship to tours table). Initial preventive "country" field addition was reverted/removed. Itinerary Save verified working: POST /rest/v1/itineraries → 201 Created, row confirmed in Supabase itineraries table ✅
+- Admin Full CRUD test — Tours/Posts Delete confirmed working (existing "Allow all" RLS policy, cmd=ALL, roles=public, qual=true) ✅
+- Admin Full CRUD test — Destinations/Itineraries Delete was silently failing (204 No Content returned but row not removed) — root cause: missing RLS DELETE policy on these two tables ✅
+- Supabase RLS — Added "Allow all" policy (FOR ALL TO public USING (true)) on destinations table, matching the existing working pattern from posts/tours ✅
+- Supabase RLS — Added "Allow all" policy (FOR ALL TO public USING (true)) on itineraries table, matching the existing working pattern from posts/tours ✅
+- Verified: Destinations Delete and Itineraries Delete now correctly remove rows from Supabase ✅
+
+### ⏳ Pending / In Progress
+- /admin route login flow (app/thailand/clogin → /admin) — currently broken, user cannot successfully log in via this path; needs separate investigation
+- Architecture decision needed: should app/admin/page.tsx eventually become the sole canonical admin page (replacing app/thailand/admin/page.tsx), or should the legacy page remain in use? Currently app/thailand/admin/page.tsx is the one in active use.
+
+### Remaining Work (Priority Order)
+- Priority 3 — Image Upload feature (URL input ✅ done; File Upload → Supabase Storage ❌ not built)
+- Priority 4 — Frontend verify: /thailand/tours, /thailand/tours/[slug]
+- Priority 5 — Fix /admin login flow (new, lower priority — app/thailand/admin/page.tsx works as the current workaround)
+- Priority 6 — Git Push → Production (ONLY after all local tests above pass)
+
+---
+
 ## 🔜 နောက်ဆက်တွဲ
 
-- Cookie Consent Banner — GDPR compliance update
-  (Decline button equal styling, Privacy Policy GDPR fields: 
-  data controller, user rights, retention period)
-- git push → Production deploy (after local test passes)
+- /admin Tour Save → browser verify (useMemo + getUser fix)
+- /admin Full CRUD test (Tours, Destinations, Posts, Itinerary)
+- Image Upload feature build (URL + File Upload → Supabase Storage)
+- git push → Production deploy (after all local tests pass)
 - Production verify — /thailand/tours + /thailand/tours/[slug]
-- Phase 4 (SEO) — generateMetadata, ISR, sitemap.ts
-- Phase 6 — app/[country]/page.tsx Destination Page (Hero, Dual CTA, Trust Strip, Featured Tours)
-- Phase 6 — middleware.ts invalid country redirect
-- Phase 6 — app/sitemap.ts auto sitemap from Supabase
 - Google Translate API integration
 - Vercel Vite project delete (Cleanup)
-- Cookie Consent Banner — GDPR update
 
 ---
 
-## 🔜 နောက်ဆက်တွဲ
+## ✅ Session 7 — 21 June 2026
 
-- Cookie Consent Banner — GDPR compliance update
-  (Decline button equal styling, Privacy Policy GDPR fields: 
-  data controller, user rights, retention period)
+### Completed
+- Supabase Storage bucket name fix — uploadImageToStorage() was targeting non-existent "images" bucket; fixed to use correct buckets: tour-images / destination-images / blog-images ✅
+- Image upload — Tours form: file upload → tour-images bucket → public URL saved to tours.image_url ✅
+- Image upload — Destinations form: file upload → destination-images bucket ✅
+- Image upload — Posts/Blog form: cover image upload → blog-images bucket ✅
+- Thumbnail preview fix — added separate preview state variables (toursImagePreview, destImagePreview, blogImagePreview); preview now appears after upload in all 3 forms ✅
+- Supabase tours table — added image_url (TEXT) column via SQL: ALTER TABLE tours ADD COLUMN image_url TEXT ✅
+- next.config.js — added remotePatterns for ysntqbakmqwuxljknwjg.supabase.co to allow Next.js Image/img rendering from Supabase Storage ✅
+- Tours List page (app/[country]/tours/page.tsx) — added image_url to Tour interface; replaced palm tree placeholder with conditional <img> tag rendering tour.image_url ✅
+- Tour Detail page (app/[country]/tours/[slug]/page.tsx) — added image_url to Tour interface; hero section now displays tour image with gradient overlay (from-black/60 via-black/20 to-black/60) ✅
+- Hero overlay tuning — adjusted overlay opacity so image is visible while breadcrumb and badge text remain readable with text-white ✅
+- Book Now modal — Close button was not working; fixed onClick handler in BookNowClient.tsx to correctly set modal state to false ✅
+- Storage orphan fix — Tours delete handler: extracts file path from image_url and calls supabase.storage.from('tour-images').remove([filePath]) ✅
+- Storage orphan fix — Destinations delete handler: same pattern for destination-images bucket ✅
+- Storage orphan fix — Posts delete handler: same pattern for blog-images bucket using cover_image field ✅
+- extractStoragePath helper function created (shared across all 3 delete handlers): extracts filename from Supabase public URL using /public/{bucketName}/ marker ✅
+- Supabase Storage RLS — Added DELETE policy "Allow public delete" to blog-images, tour-images, destination-images buckets (SELECT + INSERT existed; DELETE was missing causing silent storage delete failure) ✅
+- posts table fetch query fixed — changed to .select('*') so cover_image field is included in post objects at delete time ✅
+- Debug console.log lines removed from admin page ✅
+
+### ⏳ Pending
+- Edit function verify — Tours/Destinations/Posts/Itinerary edit → save → Supabase confirm (not yet tested)
+- /admin login flow fix — /thailand/clogin → login → /admin redirect still broken; /thailand/admin remains the working workaround
+- Git Push → Production (ONLY after Edit verify passes)
+- Vercel Vite project delete (Cleanup)
+- Google Translate API integration
+
+### Architecture Notes
+- Storage delete requires both: (1) RLS DELETE policy on the bucket AND (2) correct file path extraction from public URL
+- posts table must use .select('*') — partial select omits cover_image causing storage cleanup to silently skip
+- extractStoragePath uses /public/{bucketName}/ as marker (not /object/public/{bucketName}/)

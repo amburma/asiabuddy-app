@@ -18,6 +18,7 @@ interface Tour {
   duration_days: number;
   duration_nights: number;
   group_size_max: number;
+  image_url?: string;
   images: string[];
   highlights: string[];
   inclusions: string[];
@@ -110,9 +111,26 @@ export default async function TourPage({
     <>
       {/* SECTION 1 — HERO */}
       <section className="relative h-[520px] overflow-hidden">
-        {/* BG Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0F172A] via-[#1a1a2e]/90 to-orange-900/70" />
-        
+        {/* Hero Image */}
+        {tour.image_url ? (
+          <img
+            src={tour.image_url}
+            alt={tour.title}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : tour.images && tour.images.length > 0 && tour.images[0] ? (
+          <img
+            src={tour.images[0]}
+            alt={tour.title}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0F172A] to-slate-800" />
+        )}
+
+        {/* BG Gradient - top and bottom dark for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-black/60" />
+
         {/* Decorative blobs */}
         <div className="absolute -top-32 -right-32 w-[500px] h-[500px] rounded-full bg-orange-500/15 blur-3xl" />
         <div className="absolute -bottom-20 -left-20 w-96 h-96 rounded-full bg-amber-400/10 blur-3xl" />
@@ -123,7 +141,7 @@ export default async function TourPage({
           {/* TOP ROW */}
           <div className="flex items-center justify-between">
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-white/50 text-sm">
+            <nav className="flex items-center gap-2 text-white text-sm">
               <Link href="/" className="hover:text-white transition-colors">Home</Link>
               <span className="text-white/30">/</span>
               <Link href={`/${country}`} className="hover:text-white transition-colors">{countryName}</Link>
@@ -136,7 +154,7 @@ export default async function TourPage({
             {/* Back button */}
             <Link
               href={`/${country}/tours`}
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur border border-white/20 text-white text-sm px-4 py-2 rounded-full transition"
+              className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 backdrop-blur border border-white/40 text-white text-sm px-4 py-2 rounded-full transition"
             >
               ← Back to Tours
             </Link>

@@ -18,7 +18,7 @@ export default function CLoginPage() {
   if (error) {
     setError("Email သို့မဟုတ် Password မှားနေပါသည်။");
   } else {
-    router.push("/thailand/admin");
+    router.push("/admin");
   }
   setLoading(false);
 };

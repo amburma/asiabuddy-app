@@ -357,12 +357,13 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg h-[min(600px,85vh)] flex flex-col"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg h-[100dvh] md:h-[min(600px,85vh)] flex flex-col fixed inset-0 md:static md:inset-auto md:rounded-2xl md:max-w-lg z-[9999] md:z-auto overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="p-5 bg-gradient-to-r from-gold-deep to-amber-500 text-white flex items-center justify-between flex-shrink-0">
@@ -371,7 +372,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
               <Headphones size={20} />
             </div>
             <div>
-              <h4 className="text-sm font-bold uppercase tracking-widest leading-none mb-1">AsiaBuddy Concierge [SOURCE TEST]</h4>
+              <h4 className="text-sm font-bold uppercase tracking-widest leading-none mb-1">AsiaBuddy Concierge</h4>
               <p className="text-[10px] opacity-90 font-medium tracking-tight">🟢 Online · 24/7 Live Support</p>
             </div>
           </div>
@@ -386,7 +387,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
         {/* Messages */}
         <div
           ref={scrollRef}
-          className="flex-grow overflow-y-auto px-5 py-5 space-y-5 bg-gray-50"
+          className="flex-1 overflow-y-auto px-5 py-5 space-y-5 bg-gray-50 -webkit-overflow-scrolling: touch"
         >
           {messages.map((message, i) => (
             <motion.div
@@ -416,7 +417,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
         </div>
 
         {/* Input */}
-        <div className="p-5 bg-white border-t border-gray-200">
+        <div className="p-5 bg-white border-t border-gray-200 flex-shrink-0 pb-[calc(1.25rem+env(safe-area-inset-bottom))] md:pb-5">
           <div className="relative flex items-center">
             <input
               type="text"
