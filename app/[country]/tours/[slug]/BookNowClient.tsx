@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import HumanOperatorChat from '@/components/thailand/HumanOperatorChat';
 import { ThaiLanguage } from '@/types/country';
 
@@ -23,6 +24,11 @@ export default function BookNowClient({
 }: Props) {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [userLanguage, setUserLanguage] = useState<ThaiLanguage>(language);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const stored = localStorage.getItem('preferred_language');
@@ -33,9 +39,34 @@ export default function BookNowClient({
     }
   }, []);
 
+  useEffect(() => {
+    if (isChatOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isChatOpen]);
+
   const handleBookNow = () => {
     setIsChatOpen(true);
   };
+
+  const modalContent = isChatOpen ? (
+    <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center">
+      <div
+        className="absolute inset-0 bg-black/60"
+        onClick={() => setIsChatOpen(false)}
+      />
+      <div className="relative w-full h-full md:w-auto md:h-auto md:max-w-lg md:max-h-[85vh] flex flex-col">
+        <HumanOperatorChat
+          onClose={() => setIsChatOpen(false)}
+          language={userLanguage}
+          salesperson_id={salesperson_id}
+        />
+      </div>
+    </div>
+  ) : null;
 
   return (
     <>
@@ -47,13 +78,7 @@ export default function BookNowClient({
         Book Now — {price} {currency}
       </button>
 
-      {isChatOpen && (
-        <HumanOperatorChat
-          language={userLanguage}
-          onClose={() => setIsChatOpen(false)}
-          salesperson_id={salesperson_id}
-        />
-      )}
+      {mounted && createPortal(modalContent, document.body)}
     </>
   );
 }

@@ -933,3 +933,96 @@ Do NOT modify /api/booking-chat or Telegram routing logic.
 - Storage delete requires both: (1) RLS DELETE policy on the bucket AND (2) correct file path extraction from public URL
 - posts table must use .select('*') — partial select omits cover_image causing storage cleanup to silently skip
 - extractStoragePath uses /public/{bucketName}/ as marker (not /object/public/{bucketName}/)
+
+---
+
+## ✅ Session 8 — 23 June 2026
+
+### Completed
+
+- Priority 1 — Destinations Add fix:
+  Supabase SQL: ALTER TABLE destinations ADD COLUMN image_url TEXT ✅
+  app/thailand/admin/page.tsx — Destinations Save payload confirmed 
+  image_url field present ✅
+
+- Priority 2 — Destinations Delete + Storage fix:
+  app/thailand/admin/page.tsx — Delete handler fixed:
+  item.images (array) → item.image_url (string) ✅
+  extractStoragePath() null check + return null fix ✅
+
+- Priority 3 — /admin Login Flow fix:
+  Root cause: app/admin/page.tsx used different Supabase client 
+  than /thailand/clogin (session not shared)
+  Fix: changed import from createSupabaseBrowserClient 
+  (@/lib/supabase-browser) → createClient (@/lib/supabase/client)
+  useMemo: createSupabaseBrowserClient() → createClient() ✅
+  /thailand/clogin → login → /admin redirect now works ✅
+
+- Priority 4 — /thailand/tours + /thailand/tours/[slug] image fix:
+  app/[country]/tours/page.tsx — image_url?: string added to 
+  Tour interface; image rendering updated to use image_url 
+  with images[0] fallback ✅
+  app/[country]/tours/[slug]/page.tsx — image_url?: string added 
+  to Tour interface; hero image updated to use image_url 
+  with images[0] fallback ✅
+  Itinerary section confirmed already correctly implemented ✅
+
+- app/admin/page.tsx — Image upload feature ported from 
+  app/thailand/admin/page.tsx:
+  uploadImageToStorage() function ✅
+  extractStoragePath() function ✅
+  Tours: file input UI + onChange → uploadImageToStorage() 
+  + tour-images bucket ✅
+  Destinations: file input UI + onChange → uploadImageToStorage() 
+  + destination-images bucket ✅
+  Posts: file input UI + onChange → uploadImageToStorage() 
+  + blog-images bucket ✅
+  Thumbnail preview for all 3 forms ✅
+  Reset state after save for all 3 forms ✅
+
+- app/admin/page.tsx — Tours onChange bug fix:
+  Was creating local blob preview only (URL.createObjectURL) 
+  without calling uploadImageToStorage()
+  Fixed: now calls uploadImageToStorage(file, 'tour-images') ✅
+
+- app/admin/page.tsx — uploadImageToStorage() fix:
+  Added upsert: true to .upload() call ✅
+  Added console.error in catch block ✅
+
+- app/admin/page.tsx — Save payload image_url fix:
+  Tours Save: added image_url: toursImages || null 
+  alongside existing images array ✅
+  Destinations Save: added image_url: destImages || null 
+  alongside existing images field ✅
+
+- app/admin/page.tsx — Delete handler image field fix:
+  Tours Delete: item.image_url → 
+  tourImageForDelete = item.image_url || item.images[0] 
+  (fallback for legacy rows) ✅
+  Destinations Delete: item.image_url → 
+  destImageForDelete = item.image_url || item.images 
+  (fallback for legacy rows) ✅
+  Posts Delete: confirmed using item.cover_image correctly ✅
+
+- Local full test passed — all 10 items verified ✅
+- git push → Production ✅
+
+### Architecture Notes
+- app/admin/page.tsx is now the canonical admin page ✅
+- app/thailand/admin/page.tsx remains as legacy fallback ✅
+- image_url (TEXT) is the single image field for Tours 
+  and Destinations in app/admin/page.tsx
+- Delete handlers use fallback pattern: 
+  item.image_url || item.images[0/string] to handle both 
+  new rows (image_url set) and legacy rows (images only)
+- tours table: both images (array) and image_url (TEXT) 
+  columns now populated on save
+- destinations table: both images (string) and image_url (TEXT) 
+  columns now populated on save
+
+### ⏳ Remaining Work
+- Vercel Vite project delete (Cleanup)
+- Google Translate API integration
+- Edit function verify — Tours/Destinations/Posts/Itinerary 
+  edit → save → Supabase confirm
+- Cookie Consent Banner — production verify
