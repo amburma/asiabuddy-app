@@ -17,7 +17,9 @@ const config: Config = {
         "cream": "#FFF8E7",
       },
       fontFamily: {
-        serif: ["var(--font-geist-mono)", "serif"],
+        serif: ["var(--font-serif)", "serif"],
+        sans: ["var(--font-sans)", "sans-serif"],
+        mono: ["var(--font-mono)", "monospace"],
       },
     },
   },

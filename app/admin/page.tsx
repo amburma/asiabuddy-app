@@ -99,8 +99,13 @@ export default function GlobalAdminPage() {
   const [showDestForm, setShowDestForm] = useState(false);
   const [destName, setDestName] = useState('');
   const [destSlug, setDestSlug] = useState('');
-  const [destShortDesc, setDestShortDesc] = useState('');
-  const [destDesc, setDestDesc] = useState('');
+  const [destShortDescription, setDestShortDescription] = useState('');
+  const [destDescription, setDestDescription] = useState('');
+  const [destMustVisit, setDestMustVisit] = useState('');
+  const [destActivities, setDestActivities] = useState('');
+  const [destDining, setDestDining] = useState('');
+  const [destHiddenGems, setDestHiddenGems] = useState('');
+  const [destExperiences, setDestExperiences] = useState('');
   const [destImages, setDestImages] = useState('');
   const [destImagePreview, setDestImagePreview] = useState('');
   const [destFeatured, setDestFeatured] = useState(false);
@@ -166,7 +171,7 @@ export default function GlobalAdminPage() {
       .from('destinations')
       .select('*')
       .eq('country', selectedCountry)
-      .order('created_at', { ascending: false });
+      .order('display_order', { ascending: true });
     setDestinationsItems(data || []);
   };
 
@@ -225,8 +230,10 @@ export default function GlobalAdminPage() {
   };
 
   const resetDestForm = () => {
-    setDestName(''); setDestSlug(''); setDestShortDesc('');
-    setDestDesc(''); setDestImages(''); setDestImagePreview(''); setDestFeatured(false);
+    setDestName(''); setDestSlug(''); setDestShortDescription('');
+    setDestDescription(''); setDestMustVisit(''); setDestDining('');
+    setDestActivities(''); setDestHiddenGems(''); setDestExperiences('');
+    setDestImages(''); setDestImagePreview(''); setDestFeatured(false);
     setShowDestForm(false); setEditing(null);
     setSuccess(''); setError('');
   };
@@ -245,6 +252,34 @@ export default function GlobalAdminPage() {
     setItinMeals(''); setItinAccommodation(''); setItinImageUrl('');
     setShowItinForm(false); setEditing(null);
     setSuccess(''); setError('');
+  };
+
+  const handleDestinationReorder = async (index: number, direction: 'up' | 'down') => {
+    const list = [...destinationsItems];
+    const swapIndex = direction === 'up' ? index - 1 : index + 1;
+    if (swapIndex < 0 || swapIndex >= list.length) return;
+
+    const itemA = list[index];
+    const itemB = list[swapIndex];
+
+    const orderA = itemA.display_order ?? index;
+    const orderB = itemB.display_order ?? swapIndex;
+
+    const newList = [...list];
+    newList[index] = { ...itemA, display_order: orderB };
+    newList[swapIndex] = { ...itemB, display_order: orderA };
+    newList.sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
+    setDestinationsItems(newList);
+
+    const [resA, resB] = await Promise.all([
+      supabase.from('destinations').update({ display_order: orderB }).eq('id', itemA.id),
+      supabase.from('destinations').update({ display_order: orderA }).eq('id', itemB.id),
+    ]);
+
+    if (resA.error || resB.error) {
+      console.error('Reorder failed:', resA.error || resB.error);
+      fetchDestinations();
+    }
   };
 
   const handleLogout = async () => {
@@ -863,11 +898,31 @@ export default function GlobalAdminPage() {
               </Field>
 
               <Field label="Short Description">
-                <textarea value={destShortDesc} onChange={e => setDestShortDesc(e.target.value)} rows={3} placeholder="Brief summary..." className={`${inputCls} resize-none`} />
+                <textarea value={destShortDescription} onChange={e => setDestShortDescription(e.target.value)} rows={3} placeholder="Brief summary..." className={`${inputCls} resize-none`} />
               </Field>
 
               <Field label="Description">
-                <textarea value={destDesc} onChange={e => setDestDesc(e.target.value)} rows={6} placeholder="Full description..." className={`${inputCls} resize-none`} />
+                <textarea value={destDescription} onChange={e => setDestDescription(e.target.value)} rows={6} placeholder="Full description..." className={`${inputCls} resize-none`} />
+              </Field>
+
+              <Field label="Must Visit (comma-separated)">
+                <textarea value={destMustVisit} onChange={e => setDestMustVisit(e.target.value)} rows={3} placeholder="Grand Palace, Wat Pho, Wat Arun" className={`${inputCls} resize-none`} />
+              </Field>
+
+              <Field label="Dining (comma-separated)">
+                <textarea value={destDining} onChange={e => setDestDining(e.target.value)} rows={3} placeholder="Pad Thai, Tom Yum Goong, Mango Sticky Rice" className={`${inputCls} resize-none`} />
+              </Field>
+
+              <Field label="Activities (comma-separated)">
+                <textarea value={destActivities} onChange={e => setDestActivities(e.target.value)} rows={3} placeholder="River cruise, Tuk-tuk tour, Muay Thai show" className={`${inputCls} resize-none`} />
+              </Field>
+
+              <Field label="Hidden Gems (comma-separated)">
+                <textarea value={destHiddenGems} onChange={e => setDestHiddenGems(e.target.value)} rows={3} placeholder="Talat Noi, Bang Krachao, Wat Prayoon" className={`${inputCls} resize-none`} />
+              </Field>
+
+              <Field label="Experiences (comma-separated)">
+                <textarea value={destExperiences} onChange={e => setDestExperiences(e.target.value)} rows={3} placeholder="Floating market, Cooking class, Night market" className={`${inputCls} resize-none`} />
               </Field>
 
               <Field label="Images (comma-separated URLs)">
@@ -921,27 +976,43 @@ export default function GlobalAdminPage() {
                   try {
                     if (!destName) { setError('Name is required.'); return; }
                     const payload = {
-                      country: selectedCountry,
-                      name: destName,
-                      slug: editing?.slug || destSlug,
-                      short_description: destShortDesc || null,
-                      description: destDesc || null,
-                      images: destImages || null,
-                      image_url: destImages || null,
+                      name: destName.trim(),
+                      country: selectedCountry.trim().toLowerCase(),
+                      slug: destSlug.trim().toLowerCase(),
+                      description: destDescription.trim() || null,
+                      short_description: destShortDescription.trim() || null,
                       featured: destFeatured,
-                      updated_at: new Date().toISOString(),
+                      image_url: destImages || null,
+                      must_visit: destMustVisit.split(',').map(s => s.trim()).filter(Boolean),
+                      activities: destActivities.split(',').map(s => s.trim()).filter(Boolean),
+                      dining: destDining.split(',').map(s => s.trim()).filter(Boolean),
+                      hidden_gems: destHiddenGems.split(',').map(s => s.trim()).filter(Boolean),
+                      experiences: destExperiences.split(',').map(s => s.trim()).filter(Boolean),
+                      display_order: destinationsItems.length,
                     };
+                    console.log('DEST SAVE PAYLOAD:', payload);
                     if (editing) {
-                      await supabase.from('destinations').update(payload).eq('id', editing.id);
+                      const { error } = await supabase.from('destinations').update(payload).eq('id', editing.id);
+                      if (error) {
+                        setError(`Update failed: ${error.message}`);
+                        return;
+                      }
                       setSuccess('Destination updated successfully');
                     } else {
-                      await supabase.from('destinations').insert(payload);
+                      const { data, error } = await supabase.from('destinations').insert([payload]).select();
+                      console.log('DEST INSERT RESULT:', data, error);
+                      if (error) {
+                        console.error('Insert failed:', error.message);
+                        setError(`Insert failed: ${error.message}`);
+                        return;
+                      }
                       setSuccess('Destination created successfully');
                     }
                     resetDestForm();
                     fetchDestinations();
-                  } catch {
-                    setError('An error occurred.');
+                  } catch (err: any) {
+                    console.error('DEST SAVE ERROR:', err);
+                    setError(`An error occurred: ${err?.message || 'Unknown error'}`);
                   } finally {
                     setPublishing(false);
                   }
@@ -960,8 +1031,26 @@ export default function GlobalAdminPage() {
               <div className="text-center py-12 text-gray-400 text-sm">No destinations found for {selectedCountry}</div>
             ) : (
               <div className="space-y-3">
-                {destinationsItems.map(item => (
+                {destinationsItems.map((item, index) => (
                   <div key={item.id} className="bg-gray-50 rounded-xl p-4 flex gap-4 items-start">
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => handleDestinationReorder(index, 'up')}
+                        disabled={index === 0}
+                        style={{ opacity: index === 0 ? 0.3 : 1 }}
+                        className="px-2 py-1 text-gray-600 hover:text-emerald-600 disabled:cursor-not-allowed"
+                      >
+                        ▲
+                      </button>
+                      <button
+                        onClick={() => handleDestinationReorder(index, 'down')}
+                        disabled={index === destinationsItems.length - 1}
+                        style={{ opacity: index === destinationsItems.length - 1 ? 0.3 : 1 }}
+                        className="px-2 py-1 text-gray-600 hover:text-emerald-600 disabled:cursor-not-allowed"
+                      >
+                        ▼
+                      </button>
+                    </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="font-bold text-gray-800 text-sm">{item.name}</h4>
                       <p className="text-xs text-gray-500 mt-1">
@@ -974,9 +1063,14 @@ export default function GlobalAdminPage() {
                           setEditing(item);
                           setDestName(item.name || '');
                           setDestSlug(item.slug || '');
-                          setDestShortDesc(item.short_description || '');
-                          setDestDesc(item.description || '');
-                          setDestImages(item.images || '');
+                          setDestShortDescription(item.short_description || '');
+                          setDestDescription(item.description || '');
+                          setDestMustVisit(Array.isArray(item.must_visit) ? item.must_visit.join(', ') : '');
+                          setDestActivities(Array.isArray(item.activities) ? item.activities.join(', ') : '');
+                          setDestDining(Array.isArray(item.dining) ? item.dining.join(', ') : '');
+                          setDestHiddenGems(Array.isArray(item.hidden_gems) ? item.hidden_gems.join(', ') : '');
+                          setDestExperiences(Array.isArray(item.experiences) ? item.experiences.join(', ') : '');
+                          setDestImages(item.image_url || '');
                           setDestFeatured(item.featured || false);
                           setShowDestForm(true);
                           window.scrollTo(0, 0);

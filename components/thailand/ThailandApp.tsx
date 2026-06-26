@@ -83,6 +83,25 @@ const handleResetLanguage = () => {
   localStorage.removeItem('thaiguide_target_lang');
 };
 
+const handleOpenModal = (modalId: string) => {
+  switch (modalId) {
+    case 'vat': setShowVatModal(true); break
+    case 'visa': setShowVisaModal(true); break
+    case 'transport': setShowTransportModal(true); break
+    case 'apps': setShowAppsModal(true); break
+    case 'accommodation': setShowAccommodationModal(true); break
+    case 'food': setShowFoodModal(true); break
+    case 'travel-types': setShowTravelTypesModal(true); break
+    case 'medical': setShowMedicalModal(true); break
+    case 'nightlife': setShowNightlifeModal(true); break
+    case 'shopping': setShowShoppingModal(true); break
+    case 'booking': setShowBookingModal(true); break
+    case 'phrases': setShowPhrasesModal(true); break
+    case 'etiquette': setShowEtiquetteModal(true); break
+    case 'laws': setShowLawsModal(true); break
+  }
+};
+
 useEffect(() => {
     const savedLang = localStorage.getItem('thaiguide_target_lang')
     if (savedLang === 'english') setLanguage('EN')
@@ -285,20 +304,7 @@ useEffect(() => {
                 </div>
                 <TravelToolbox 
                   language={language} 
-                  onOpenVatModal={() => setShowVatModal(true)}
-                  onOpenVisaModal={() => setShowVisaModal(true)}
-                  onOpenTransportModal={() => setShowTransportModal(true)}
-                  onOpenAppsModal={() => setShowAppsModal(true)}
-                  onOpenAccommodationModal={() => setShowAccommodationModal(true)}
-                  onOpenFoodModal={() => setShowFoodModal(true)}
-                  onOpenTravelTypesModal={() => setShowTravelTypesModal(true)}
-                  onOpenMedicalModal={() => setShowMedicalModal(true)}
-                  onOpenNightlifeModal={() => setShowNightlifeModal(true)}
-                  onOpenShoppingModal={() => setShowShoppingModal(true)}
-                  onOpenBookingModal={() => setShowBookingModal(true)}
-                  onOpenPhrasesModal={() => setShowPhrasesModal(true)}
-                  onOpenEtiquetteModal={() => setShowEtiquetteModal(true)}
-                  onOpenLawsModal={() => setShowLawsModal(true)}
+                  onOpenModal={handleOpenModal}
                 />
               </div>
             </motion.div>

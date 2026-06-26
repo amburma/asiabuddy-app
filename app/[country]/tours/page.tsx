@@ -1,8 +1,10 @@
 import { getSupabase } from '@/lib/supabase'
 import Link from 'next/link'
+import { cookies } from 'next/headers'
+import { translateText } from '@/lib/translate'
+import LanguageSelector from '@/components/shared/LanguageSelector'
 
 export const revalidate = 3600
-// Revalidate every 1 hour
 
 interface Tour {
   id: string
@@ -55,6 +57,9 @@ export default async function ToursPage({
   const { country } = await params
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
 
+  const cookieStore = await cookies()
+  const targetLanguage = cookieStore.get('NEXT_LOCALE')?.value || 'en'
+
   const supabase = getSupabase()
   const { data: tours, error } = await supabase
     .from('tours')
@@ -70,6 +75,80 @@ export default async function ToursPage({
 
   const activeTours = tours || []
 
+  // 🌟 (ကမ္ဘာ့အဆင့်မီ စနစ်) စာမျက်နှာပေါ်ရှိ စာသားအားလုံးအား API (၁) ကြိမ်တည်းဖြင့် Batch ဘာသာပြန်ခြင်း 🌟
+  const translationPayload = {
+    homeText: "Home",
+    toursText: "Tours",
+    backText: `Back to ${countryName}`,
+    titleText: `${countryName} Tours & Packages`,
+    subtitleText: "Handpicked experiences. Unforgettable memories.",
+    verifiedText: "100% Verified Tours",
+    guaranteeText: "Best Price Guarantee",
+    supportText: "24/7 Support",
+    availText: "Available Experiences",
+    exploreTitle: `Explore ${countryName}`,
+    tourCountText: `${activeTours.length} tour${activeTours.length !== 1 ? 's' : ''} available`,
+    exploreCtaText: "Explore This Tour →",
+    maxGroupText: "Max",
+    peopleText: "people",
+    dayText: "Day",
+    nightText: "Night",
+    // ခရီးစဉ်များကို payload ထဲသို့ စုစည်းထည့်သွင်းခြင်း
+    tours: activeTours.map((t) => ({
+      id: t.id,
+      title: t.title || '',
+      short_description: t.short_description || ''
+    }))
+  }
+
+  let translatedData = translationPayload
+
+  if (activeTours.length > 0 && targetLanguage !== 'en') {
+    try {
+      // API ကို ၁ ကြိမ်တည်းသာ တိုက်ရိုက်ပို့သည်
+      const jsonString = JSON.stringify(translationPayload)
+      const prompt = `You are a professional JSON translation engine. Translate all the VALUE fields in this JSON object into the language code '${targetLanguage}'. 
+      Keep the JSON keys exactly the same. Do not translate brand names like 'AsiaBuddy' or person names like 'Zaw Zaw'. 
+      Return ONLY the translated JSON output, no other explanations or markdown backticks: ${jsonString}`
+      
+      const translatedJSONString = await translateText(prompt, targetLanguage)
+      
+      // Markdown backticks ကင်းစင်အောင် သန့်စင်ပြီး JSON parse ခြင်း
+      const cleanJSON = translatedJSONString.replace(/```json/g, '').replace(/```/g, '').trim()
+      translatedData = JSON.parse(cleanJSON)
+    } catch (e) {
+      console.error("Batch translation failed, falling back to English safely:", e)
+    }
+  }
+
+  // ဘာသာပြန်ပြီးသား စာသားများအား ပြန်လည်ထုတ်ယူခြင်း
+  const homeText = translatedData.homeText || translationPayload.homeText
+  const toursText = translatedData.toursText || translationPayload.toursText
+  const backText = translatedData.backText || translationPayload.backText
+  const titleText = translatedData.titleText || translationPayload.titleText
+  const subtitleText = translatedData.subtitleText || translationPayload.subtitleText
+  const verifiedText = translatedData.verifiedText || translationPayload.verifiedText
+  const guaranteeText = translatedData.guaranteeText || translationPayload.guaranteeText
+  const supportText = translatedData.supportText || translationPayload.supportText
+  const availText = translatedData.availText || translationPayload.availText
+  const exploreTitle = translatedData.exploreTitle || translationPayload.exploreTitle
+  const tourCountText = translatedData.tourCountText || translationPayload.tourCountText
+  const exploreCtaText = translatedData.exploreCtaText || translationPayload.exploreCtaText
+  const maxGroupText = translatedData.maxGroupText || translationPayload.maxGroupText
+  const peopleText = translatedData.peopleText || translationPayload.peopleText
+  const dayText = translatedData.dayText || translationPayload.dayText
+  const nightText = translatedData.nightText || translationPayload.nightText
+
+  // ခရီးစဉ်များကို ဘာသာပြန်အချက်အလက်ဖြင့် ပြန်လည်တွဲဆက်ခြင်း
+  const translatedTours = activeTours.map((tour, index) => {
+    const translatedTourData = translatedData.tours?.[index]
+    return {
+      ...tour,
+      title: translatedTourData?.title || tour.title,
+      short_description: translatedTourData?.short_description || tour.short_description,
+    }
+  })
+
   return (
     <div className="min-h-screen bg-white">
       {/* HERO SECTION */}
@@ -83,9 +162,14 @@ export default async function ToursPage({
         
         {/* Content */}
         <div className="relative z-20 flex flex-col justify-end h-full max-w-7xl mx-auto px-6 pb-16">
-          {/* Breadcrumb */}
-          <div className="text-orange-300 text-sm mb-4 tracking-wide uppercase">
-            Home / {countryName} / Tours
+          
+          {/* Breadcrumb Row + Language Selector */}
+          <div className="flex justify-between items-start w-full mb-4">
+            <div className="text-orange-300 text-sm tracking-wide uppercase font-sans">
+              {homeText} / {countryName} / {toursText}
+            </div>
+            
+            <LanguageSelector />
           </div>
           
           {/* Back Button */}
@@ -93,24 +177,24 @@ export default async function ToursPage({
             href={`/${country}`}
             className="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm mb-6 transition"
           >
-            ← Back to {countryName}
+            ← {backText}
           </Link>
           
           {/* Title */}
           <h1 className="text-5xl md:text-6xl font-black text-white leading-tight mb-4">
-            {countryName} Tours & Packages
+            {titleText}
           </h1>
           
           {/* Subtitle */}
           <p className="text-xl text-white/80 font-light max-w-2xl">
-            Handpicked experiences. Unforgettable memories.
+            {subtitleText}
           </p>
           
           {/* Stats Row */}
-          <div className="flex gap-8 mt-8">
-            <div className="text-white/90 text-sm font-medium">✦ 100% Verified Tours</div>
-            <div className="text-white/90 text-sm font-medium">✦ Best Price Guarantee</div>
-            <div className="text-white/90 text-sm font-medium">✦ 24/7 Support</div>
+          <div className="flex flex-wrap gap-8 mt-8">
+            <div className="text-white/90 text-sm font-medium">✦ {verifiedText}</div>
+            <div className="text-white/90 text-sm font-medium">✦ {guaranteeText}</div>
+            <div className="text-white/90 text-sm font-medium">✦ {supportText}</div>
           </div>
         </div>
       </div>
@@ -120,21 +204,21 @@ export default async function ToursPage({
         <div className="max-w-7xl mx-auto px-6 py-16">
           {/* Section Label */}
           <div className="text-orange-500 text-sm font-bold uppercase tracking-widest mb-2">
-            Available Experiences
+            {availText}
           </div>
           
           {/* Section Title */}
           <h2 className="text-3xl font-black text-gray-900 mb-2">
-            Explore {countryName}
+            {exploreTitle}
           </h2>
           
           {/* Section Subtitle */}
           <p className="text-gray-500 mb-10">
-            {activeTours.length} tour{activeTours.length !== 1 ? 's' : ''} available
+            {tourCountText}
           </p>
           
           {/* Grid */}
-          {activeTours.length === 0 ? (
+          {translatedTours.length === 0 ? (
             /* EMPTY STATE */
             <div className="min-h-[400px] flex flex-col items-center justify-center text-center py-24">
               <div className="text-8xl mb-6">🌏</div>
@@ -148,12 +232,12 @@ export default async function ToursPage({
                 href={`/${country}`}
                 className="mt-8 inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-2xl transition"
               >
-                ← Back to {countryName}
+                ← {backText}
               </Link>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {activeTours.map((tour) => {
+              {translatedTours.map((tour) => {
                 return (
                 <Link
                   key={tour.id}
@@ -209,16 +293,16 @@ export default async function ToursPage({
                     {/* Info Pills */}
                     <div className="flex flex-wrap gap-2">
                       <div className="inline-flex items-center gap-1.5 bg-gray-50 text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full border border-gray-100">
-                        🕐 {tour.duration_days} Day{tour.duration_days !== 1 ? 's' : ''} / {tour.duration_nights} Night{tour.duration_nights !== 1 ? 's' : ''}
+                        🕐 {tour.duration_days} {dayText}{tour.duration_days !== 1 ? 's' : ''} / {tour.duration_nights} {nightText}{tour.duration_nights !== 1 ? 's' : ''}
                       </div>
                       <div className="inline-flex items-center gap-1.5 bg-gray-50 text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full border border-gray-100">
-                        👥 Max {tour.group_size_max} people
+                        👥 {maxGroupText} {tour.group_size_max} {peopleText}
                       </div>
                     </div>
                     
                     {/* CTA Button */}
                     <div className="mt-5 w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-bold py-3 px-6 rounded-2xl transition-all duration-200 shadow-md hover:shadow-orange-200 hover:shadow-lg text-center block">
-                      Explore This Tour →
+                      {exploreCtaText}
                     </div>
                   </div>
                 </Link>

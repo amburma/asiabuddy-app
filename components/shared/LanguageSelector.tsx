@@ -1,44 +1,43 @@
-import { ThaiLanguage } from '@/types/country';
-import { Globe } from 'lucide-react';
+"use client";
 
-interface Props {
-  currentLanguage: ThaiLanguage;
-  onLanguageChange: (lang: ThaiLanguage) => void;
-}
+import React, { useEffect, useState } from 'react';
 
-const TIER1_LANGUAGES: ThaiLanguage[] = ['EN', 'DE', 'FR', 'ES', 'MM', 'TH'];
-
-const LANGUAGES: { id: ThaiLanguage; label: string }[] = [
-  { id: 'EN', label: 'English' },
-  { id: 'TH', label: 'ภาษาไทย' },
-  { id: 'MM', label: 'မြန်မာ' },
-  { id: 'DE', label: 'Deutsch' },
-  { id: 'FR', label: 'Français' },
-  { id: 'ES', label: 'Español' },
+const LANGUAGES = [
+  { code: 'EN', label: 'English', flag: '🇬🇧' },
+  { code: 'TH', label: 'ไทย', flag: '🇹🇭' },
+  { code: 'MM', label: 'မြန်မာ', flag: '🇲🇲' }, // မြန်မာ ဘာသာစကား ပေါင်းစပ်ထည့်သွင်းပြီး
+  { code: 'DE', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'FR', label: 'Français', flag: '🇫🇷' },
+  { code: 'ES', label: 'Español', flag: '🇪🇸' }
 ];
 
-export default function LanguageSelector({ currentLanguage, onLanguageChange }: Props) {
+export default function LanguageSelector() {
+  const [currentLang, setCurrentLang] = useState('EN');
+
+  useEffect(() => {
+    const savedLang = localStorage.getItem('language') || 'EN';
+    setCurrentLang(savedLang);
+  }, []);
+
+  const handleLanguageChange = (langCode: string) => {
+    localStorage.setItem('language', langCode);
+    setCurrentLang(langCode);
+    document.cookie = `NEXT_LOCALE=${langCode}; path=/; max-age=31536000; SameSite=Lax`;
+    window.location.reload();
+  };
+
   return (
-    <div className="flex items-center gap-2">
-      <Globe size={14} className="text-gold-deep" />
+    <div className="relative inline-block text-left z-50">
       <select
-        value={currentLanguage}
-        onChange={(e) => onLanguageChange(e.target.value as ThaiLanguage)}
-        className="bg-transparent text-[10px] uppercase font-bold tracking-widest text-gray-500 outline-none cursor-pointer hover:text-gold-deep transition-colors"
+        value={currentLang}
+        onChange={(e) => handleLanguageChange(e.target.value)}
+        className="bg-[#0D0D0D]/90 text-[#F5F0E8] border border-[#C9A84C]/30 rounded px-2.5 py-1 text-sm font-sans focus:outline-none focus:border-[#C9A84C] cursor-pointer hover:border-[#C9A84C]/60 transition-colors"
       >
-        {LANGUAGES.map((lang) => {
-          const isTier1 = TIER1_LANGUAGES.includes(lang.id);
-          return (
-            <option 
-              key={lang.id} 
-              value={lang.id} 
-              className={`bg-white ${isTier1 ? 'text-gray-700' : 'text-gray-400'}`}
-              disabled={!isTier1}
-            >
-              {lang.label} {!isTier1 ? '(Coming Soon)' : ''}
-            </option>
-          );
-        })}
+        {LANGUAGES.map((lang) => (
+          <option key={lang.code} value={lang.code} className="bg-[#0D0D0D] text-[#F5F0E8]">
+            {lang.flag} {lang.label}
+          </option>
+        ))}
       </select>
     </div>
   );

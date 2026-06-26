@@ -1,3 +1,5 @@
+'use client';
+
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThaiLanguage } from '@/types/country';
@@ -12,38 +14,12 @@ import CurrencyConverter from './CurrencyConverter';
 
 interface Props {
   language: ThaiLanguage;
-  onOpenVatModal: () => void;
-  onOpenVisaModal: () => void;
-  onOpenTransportModal: () => void;
-  onOpenAppsModal: () => void;
-  onOpenAccommodationModal: () => void;
-  onOpenFoodModal: () => void;
-  onOpenTravelTypesModal: () => void;
-  onOpenMedicalModal: () => void;
-  onOpenNightlifeModal: () => void;
-  onOpenShoppingModal: () => void;
-  onOpenBookingModal: () => void;
-  onOpenPhrasesModal: () => void;
-  onOpenEtiquetteModal: () => void;
-  onOpenLawsModal: () => void;
+  onOpenModal?: (modalId: string) => void;
 }
 
 export default function TravelToolbox({ 
   language, 
-  onOpenVatModal, 
-  onOpenVisaModal, 
-  onOpenTransportModal, 
-  onOpenAppsModal,
-  onOpenAccommodationModal,
-  onOpenFoodModal,
-  onOpenTravelTypesModal,
-  onOpenMedicalModal,
-  onOpenNightlifeModal,
-  onOpenShoppingModal,
-  onOpenBookingModal,
-  onOpenPhrasesModal,
-  onOpenEtiquetteModal,
-  onOpenLawsModal
+  onOpenModal
 }: Props) {
   const uiT = UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN;
   const enT = UI_TRANSLATIONS.EN;
@@ -79,14 +55,12 @@ export default function TravelToolbox({
           title: travelTypesT.title,
           content: (
             <span>
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenTravelTypesModal(); }}
-                target="_self"
+              <button 
+                onClick={() => onOpenModal?.('travel-types')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
               >
                 {travelTypesT.link}
-              </a>
+              </button>
             </span>
           )
         },
@@ -96,14 +70,12 @@ export default function TravelToolbox({
           title: visaT.title,
           content: (
             <span>
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenVisaModal(); }}
-                target="_self"
+              <button 
+                onClick={() => onOpenModal?.('visa')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
               >
                 {visaT.link}
-              </a>
+              </button>
             </span>
           )
         },
@@ -113,30 +85,24 @@ export default function TravelToolbox({
           title: transportT.detailsTitle,
           content: (
             <div className="flex flex-col gap-3">
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenTransportModal(); }}
-                target="_self"
+              <button 
+                onClick={() => onOpenModal?.('transport')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors text-left"
               >
                 {transportT.transportGuideLink}
-              </a>
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenAppsModal(); }}
-                target="_self"
+              </button>
+              <button 
+                onClick={() => onOpenModal?.('apps')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors text-left"
               >
                 {transportT.appsGuideLink}
-              </a>
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenBookingModal(); }}
-                target="_self"
+              </button>
+              <button 
+                onClick={() => onOpenModal?.('booking')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors text-left"
               >
                 {uiT.booking?.link || 'Book car rentals, bus tickets, flight tickets, and entrance fees.'}
-              </a>
+              </button>
             </div>
           )
         },
@@ -146,14 +112,12 @@ export default function TravelToolbox({
           title: accommodationT.detailsTitle,
           content: (
             <span>
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenAccommodationModal(); }}
-                target="_self"
+              <button 
+                onClick={() => onOpenModal?.('accommodation')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
               >
                 {accommodationT.guideLink}
-              </a>
+              </button>
             </span>
           )
         },
@@ -163,14 +127,12 @@ export default function TravelToolbox({
           title: foodT?.detailsTitle || 'Thailand Food Guide',
           content: (
             <span>
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenFoodModal(); }}
-                target="_self"
+              <button 
+                onClick={() => onOpenModal?.('food')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
               >
                 {foodT?.guideLink || 'Thailand Food Guide For more information'}
-              </a>
+              </button>
             </span>
           )
         },
@@ -180,14 +142,12 @@ export default function TravelToolbox({
           title: shoppingT?.detailsTitle || 'Thailand Shopping Guide',
           content: (
             <span>
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenShoppingModal(); }}
-                target="_self"
+              <button 
+                onClick={() => onOpenModal?.('shopping')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
               >
                 {shoppingT?.guideLink || 'Thailand Shopping Guide For more information'}
-              </a>
+              </button>
             </span>
           )
         },
@@ -197,14 +157,12 @@ export default function TravelToolbox({
           title: medicalT?.detailsTitle || 'Thailand Medical Guide',
           content: (
             <span>
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenMedicalModal(); }}
-                target="_self"
+              <button 
+                onClick={() => onOpenModal?.('medical')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
               >
                 {medicalT?.guideLink || 'The Ultimate Thailand Medical Guide For more information'}
-              </a>
+              </button>
             </span>
           )
         },
@@ -214,14 +172,12 @@ export default function TravelToolbox({
           title: nightlifeT?.detailsTitle || 'Thailand Nightlife Guide',
           content: (
             <span>
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenNightlifeModal(); }}
-                target="_self"
+              <button 
+                onClick={() => onOpenModal?.('nightlife')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
               >
                 {nightlifeT?.guideLink || 'The Ultimate Thailand Nightlife Guide For more information'}
-              </a>
+              </button>
             </span>
           )
         },
@@ -232,14 +188,12 @@ export default function TravelToolbox({
           content: (
             <span>
               {vatT.description}{' '}
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenVatModal(); }}
-                target="_self"
+              <button 
+                onClick={() => onOpenModal?.('vat')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
               >
                 {vatT.link}
-              </a>
+              </button>
             </span>
           )
         }
@@ -309,14 +263,12 @@ export default function TravelToolbox({
           title: t.phrases || 'Essential Phrases',
           content: (
             <span>
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenPhrasesModal(); }}
-                target="_self"
+              <button 
+                onClick={() => onOpenModal?.('phrases')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
               >
                 {t.phrases}
-              </a>
+              </button>
             </span>
           )
         },
@@ -326,14 +278,12 @@ export default function TravelToolbox({
           title: t.etiquette || 'Thai Etiquette',
           content: (
             <span>
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenEtiquetteModal(); }}
-                target="_self"
+              <button 
+                onClick={() => onOpenModal?.('etiquette')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
               >
                 {uiT.labels.etiquette}
-              </a>
+              </button>
             </span>
           )
         },
@@ -343,14 +293,12 @@ export default function TravelToolbox({
           title: t.laws || 'Key Laws',
           content: (
             <span>
-              <a 
-                href="#"
-                onClick={(e) => { e.preventDefault(); onOpenLawsModal(); }}
-                target="_self"
+              <button 
+                onClick={() => onOpenModal?.('laws')}
                 className="text-gold-deep hover:text-sacred-green font-bold underline decoration-dotted transition-colors inline-block text-left"
               >
                 {t.laws}
-              </a>
+              </button>
             </span>
           )
         }

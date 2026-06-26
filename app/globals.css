@@ -17,8 +17,9 @@
   --color-dark-accent: #48CAE4;
   --color-dark-text: #E9ECEF;
 
-  --font-serif: "Cormorant Garamond", serif;
+  --font-serif: "Playfair Display", serif;
   --font-sans: "Inter", sans-serif;
+  --font-mono: "DM Mono", monospace;
 }
 
 @layer base {

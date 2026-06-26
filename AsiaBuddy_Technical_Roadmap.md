@@ -596,6 +596,11 @@ Change `status: "coming_soon"` → `status: "live"` in `data/countries.ts`
 | Never create middleware.ts | Next.js deprecated — use proxy.ts only |
 | Never use params.country directly in generateMetadata | params is a Promise in Next.js — always await params first |
 | tours table price column is price_from | Never use tour.price — use tour.price_from |
+| app/[country]/page.tsx is Server Component | Never add "use client" — SEO requires SSR |
+| DestinationTabs.tsx is Client Component | "use client" must always be present |
+| TripChecklistModal.tsx is Client Component | "use client" required for useState modal |
+| City names from Supabase only | Never hardcode city names in DestinationTabs or page |
+| Windsurf quota exhausted | Close All → provide fresh prompt — never continue broken session |
 
 ---
 
@@ -619,6 +624,7 @@ Change `status: "coming_soon"` → `status: "live"` in `data/countries.ts`
 | HumanOperatorChat welcome message in Thai | .slice(0,2) on language prop caused wrong key match | Replaced with explicit if/else language matching |
 | middleware.ts conflicts with proxy.ts | Next.js deprecated middleware.ts | Always use proxy.ts only — never create middleware.ts |
 | generateMetadata params error | params is Promise in Next.js app router | Always type as Promise<{...}> and await before use |
+| DestinationTabs "Coming soon..." | destinations table had "Thailand" row (null content) at index 0; DestinationTabs defaulted to first result | Filter out null-content destinations in app/[country]/page.tsx before passing to DestinationTabs |
 
 ---
 
@@ -1023,6 +1029,246 @@ Do NOT modify /api/booking-chat or Telegram routing logic.
 ### ⏳ Remaining Work
 - Vercel Vite project delete (Cleanup)
 - Google Translate API integration
-- Edit function verify — Tours/Destinations/Posts/Itinerary 
+- Edit function verify — Tours/Destinations/Posts/Itinerary
   edit → save → Supabase confirm
 - Cookie Consent Banner — production verify
+
+---
+
+## ✅ Session 9 — 24 June 2026
+
+### Completed
+- Book Now modal bug fix — HumanOperatorChat not displaying
+  fullscreen on mobile/tablet:
+  Root cause 1: HumanOperatorChat.tsx outer container had
+  overflow-hidden causing height collapse on mobile ✅
+  Root cause 2: BookNowClient rendered inside sticky bottom
+  bar (z-50) — modal z-[9999] was trapped inside parent
+  stacking context ✅
+  Fix 1: HumanOperatorChat.tsx — rounded-2xl → md:rounded-2xl
+  (mobile: no radius, fills full screen) ✅
+  Fix 2: BookNowClient.tsx — React createPortal implemented,
+  modal now renders at document.body level, outside z-50
+  stacking context ✅
+  Fix 3: page.tsx — BookNowClient import was missing,
+  JSX opening tags were broken in both desktop card and
+  mobile sticky bar sections ✅
+  Fix 4: Body scroll lock useEffect added in
+  BookNowClient.tsx ✅
+- Local test passed — Book Now fullscreen confirmed ✅
+- git push → Production ✅
+
+### ⏳ Remaining Work (carried forward)
+- Edit function verify — Tours/Destinations/Posts/Itinerary
+- Cookie Consent Banner — production verify
+- Vercel Vite project delete (Cleanup)
+- Google Translate API integration
+
+---
+
+## ✅ Session 10 — 24 June 2026
+
+### Completed
+
+- app/[country]/page.tsx — Full luxury overhaul (Server Component, no "use client"):
+  Design system: Obsidian #0D0D0D + Ivory #F5F0E8 + Gold #C9A84C ✅
+  Fonts: Playfair Display (headings) + Inter (body) + DM Mono (badges) ✅
+
+- Section 1 — Hero:
+  Full-viewport Thailand temple image (Unsplash — replaced Alps mountain image) ✅
+  Giant Playfair Display title with gold underline ✅
+  Primary CTA: [Explore Tours] → /[country]/tours ✅
+  Secondary CTA: [Trip Checklist] → opens TripChecklistModal ✅
+  Stats bar (Destinations, Expert Guides, Tours, Happy Travelers) ✅
+
+- Section 2 — Destinations:
+  Playfair Display heading + gold decorative rule ✅
+  DestinationTabs component integrated (Client Component) ✅
+
+- Section 3 — Featured Tours:
+  Supabase server-side fetch — tours WHERE featured = true ✅
+  Luxury dark cards with image, gold border, price, View Details CTA ✅
+  [See All Tours] → /[country]/tours ✅
+
+- Section 4 — Chat Widgets:
+  ThailandApp / ChatWidgets component — dark obsidian wrapper ✅
+  No changes to existing chat component logic ✅
+
+- Section 5 — Footer:
+  Brand name + links + copyright ✅
+
+- components/shared/TripChecklistModal.tsx — New Client Component built:
+  useState modal open/close ✅
+  Gold border outlined trigger button style ✅
+  Fixed overlay backdrop (z-50) ✅
+  Close (✕) button ✅
+  Renders existing TripChecklist component inside modal ✅
+
+### 🔴 Priority 1 — DestinationTabs Data Bug (Pending Fix)
+- Problem: Supabase destinations table has country='thailand' data ✅
+  but DestinationTabs component shows "Coming soon..." — data not rendering
+- Suspected causes:
+  (a) country prop being passed incorrectly to DestinationTabs, OR
+  (b) Query hardcoded as 'Thailand' (capital T) instead of 'thailand'
+- Fix: Add console.log inside DestinationTabs to log received prop +
+  Supabase query result → verify in Windsurf browser console
+
+### ⏳ Remaining Work (carried forward → see Session 11)
+
+### Architecture Notes
+- app/[country]/page.tsx is SSR Server Component — "use client" must NEVER be added
+- DestinationTabs.tsx is Client Component — "use client" must be present
+- TripChecklistModal.tsx is Client Component — "use client" required (useState)
+- City names must always come from Supabase — never hardcode
+- Featured Tours fetch is server-side (Supabase query in Server Component)
+- lib/supabase.ts must NOT be modified
+- app/api/ routes must NOT be modified
+- .env.local must NOT be read by Windsurf
+- If Windsurf quota exhausted: Close All → provide fresh prompt
+
+---
+
+## ✅ Next.js Country Page — Rebuild Plan (Completed Session 10, Extended Session 11)
+
+> Status: app/[country]/page.tsx luxury overhaul COMPLETE ✅
+> Vite (thailand.asiabuddy.app) deprecation pending Priority 6 cleanup.
+
+### Final Page Structure (Built)
+
+SECTION 1 — HERO ✅
+  Headline: Explore [Country] — Playfair Display, gold underline
+  Thailand temple image (Unsplash) — full viewport
+  PRIMARY CTA: [Explore Tours] → /[country]/tours
+  SECONDARY CTA: [Trip Checklist] → TripChecklistModal
+  Stats bar: Destinations / Expert Guides / Tours / Happy Travelers
+
+SECTION 2 — DESTINATIONS ✅
+  Playfair Display heading + gold decorative rule
+  DestinationTabs — Client Component (city tabs from Supabase)
+  ⚠️ Data bug pending fix (Priority 1 — "Coming soon..." shown)
+
+SECTION 3 — FEATURED TOURS ✅
+  Server-side Supabase fetch: tours WHERE featured = true
+  Luxury dark cards — image, gold border, price, View Details
+  [See All Tours] → /[country]/tours
+
+SECTION 4 — CHAT BOXES ✅
+  ChatWidgets (ThailandApp) — obsidian dark wrapper
+  No changes to existing chat logic
+
+SECTION 5 — FOOTER ✅
+  Brand + links + copyright
+
+### New Component Built
+- components/shared/TripChecklistModal.tsx ✅
+  Client Component, useState open/close, gold border button,
+  fixed overlay backdrop, ✕ close button, renders TripChecklist
+
+### Design System Applied
+- Obsidian #0D0D0D + Ivory #F5F0E8 + Gold #C9A84C
+- Fonts: Playfair Display (headings) + Inter (body) + DM Mono (badges)
+
+### Architecture Rules (Permanent)
+- app/[country]/page.tsx — Server Component — "use client" NEVER allowed
+- DestinationTabs.tsx — Client Component — "use client" required
+- TripChecklistModal.tsx — Client Component — "use client" required
+- City names always from Supabase — never hardcode
+- Featured Tours always fetched server-side
+- ChatWidgets — no changes allowed ever
+- lib/supabase.ts — do not modify
+- app/api/ — do not modify
+- .env.local — Windsurf must never read
+
+---
+
+## ✅ Session 11 — 25 June 2026
+
+### Completed
+
+- Country Page crash fix:
+  app/[country]/page.tsx — Supabase query column mismatch fixed:
+  price → price_from ✅
+  duration → duration_days ✅
+  /thailand page renders successfully again ✅
+
+- Vite legacy config cleanup:
+  vite.config.ts deleted ✅
+  Vite-specific package.json deleted ✅
+  Vite lockfile deleted ✅
+  Legacy Vite workspace fully cleaned from monorepo ✅
+
+- lib/translate.ts — Gemini JSON Batch Translation system built:
+  All translatable strings on a page collected into single JSON payload ✅
+  Single Gemini API call per page render (replaces per-string calls) ✅
+  503 Service Unavailable (API overload) errors eliminated ✅
+  Graceful fallback: on API error → return original text (no crash) ✅
+  Note: translate.ts line 65 console.error is expected fallback logging —
+  not a crash. Page renders with original text when Gemini is unavailable.
+
+- LanguageSelector.tsx — Myanmar language added:
+  🇲🇲 Myanmar (မြန်မာ) option added to language bar ✅
+  Selection writes to NEXT_LOCALE cookie ✅
+  Auto-refresh triggered on selection ✅
+
+- app/[country]/tours/page.tsx — Tours Listing UI/UX overhaul:
+  Design system: Obsidian/Amber/Orange gradient header retained ✅
+  Blob decorations, existing card layout preserved 100% ✅
+  LanguageSelector injected top-right corner (non-destructive) ✅
+  Auto-translate wired to batch translation system ✅
+
+### ⚠️ Known Issue (Non-Critical)
+- lib/translate.ts line 65: console.error logs Gemini 503 errors
+  This is intentional fallback logging — NOT a crash
+  Page always renders (with original text if translation fails)
+  Root cause: Gemini free tier rate limits during high load
+  Fix when needed: upgrade to Pay-as-you-go key for translation calls
+
+### ⏳ Remaining Work (Priority Order)
+
+**🔴 Priority 1 — DestinationTabs Data Bug Fix ✅ FIXED (25 June 2026)**
+- Root cause: Supabase destinations table had 2 rows:
+  "Thailand" (all content fields null) + "Bangkok" (fully populated)
+  DestinationTabs defaulted to index 0 = "Thailand" → "Coming soon..." shown
+- Fix: app/[country]/page.tsx (lines 35-43) — filter added to exclude
+  destinations with empty content before passing to DestinationTabs
+- Result: Bangkok destination cards render correctly
+  (Must Visit / Dining / Activities / Hidden Gems / Experiences) ✅
+- Architecture note: Always filter out null-content destinations at
+  page level before passing to DestinationTabs — never rely on index 0
+
+**🔴 Priority 2 — Tour Detail Page UI/UX Overhaul**
+- app/[country]/tours/[slug]/page.tsx
+- Full-viewport hero (tour image + dark gradient overlay)
+- Overview section (2-column: description + Quick Facts card)
+- Itinerary — vertical gold timeline (Day 01, Day 02...)
+- Bottom sticky bar — price_from + Book Now CTA
+- BookNowClient component reuse (no changes to booking logic)
+
+**🟡 Priority 3 — Destination Data Entry**
+- Add via /admin ONLY after DestinationTabs bug fix verified:
+  Phuket, Chiang Mai, Pattaya, Krabi, Ayutthaya, Koh Samui
+- Bangkok already in Supabase ✅
+
+**🟡 Priority 4 — Local Full Test + git push**
+- npm run dev → /thailand / /thailand/tours / /thailand/tours/[slug]
+- All sections render with real Supabase data
+- TripChecklistModal opens/closes correctly
+- Language selector switches language correctly
+- git push → Production verify
+
+**🟢 Priority 5 — Cleanup & Integration**
+- Edit function verify — Tours/Destinations/Posts/Itinerary
+- Cookie Consent Banner — production verify
+- Google Translate API integration (replace Gemini batch translate with
+  Google Translate API per Translation Architecture spec)
+- Vercel Vite project (thailand.asiabuddy.app) delete
+
+### Architecture Notes
+- lib/translate.ts: Gemini batch translation is a temporary solution
+  Final architecture: Google Translate API (see Translation Architecture section)
+  Migration path: swap translate.ts implementation only — no page changes needed
+- LanguageSelector writes to NEXT_LOCALE cookie — consistent with i18n architecture
+- Tours Listing page: LanguageSelector is overlay-injected — original UI untouched
+- app/[country]/page.tsx Server Component rule remains — "use client" NEVER allowed
+- price_from is the correct column name in tours table — NEVER use price
+- duration_days is the correct column name in tours table — NEVER use duration

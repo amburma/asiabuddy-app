@@ -1,3 +1,4 @@
+"use client"
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -6,14 +7,12 @@ import {
   Plus, 
   Trash2, 
   RotateCcw, 
-  ChevronRight, 
   X,
   FileText,
   CreditCard,
   Smartphone,
   ShieldAlert,
   HeartPlus,
-  MapPin,
   ClipboardList,
   CheckCircle
 } from 'lucide-react';
@@ -40,7 +39,6 @@ export const TripChecklist: React.FC<TripChecklistProps> = ({ language, onClose 
   const [items, setItems] = useState<ChecklistItem[]>([]);
   const [customText, setCustomText] = useState('');
 
-  // Initial items setup
   const getDefaultItems = (): ChecklistItem[] => {
     return [
       { id: 'passport', text: t.items.passport, category: 'docs', completed: false },
@@ -49,38 +47,31 @@ export const TripChecklist: React.FC<TripChecklistProps> = ({ language, onClose 
       { id: 'insurance', text: t.items.insurance, category: 'docs', completed: false },
       { id: 'vaccine', text: t.items.vaccine, category: 'docs', completed: false },
       { id: 'backups', text: t.items.backups, category: 'docs', completed: false },
-      
       { id: 'cash', text: t.items.cash, category: 'finance', completed: false },
       { id: 'cards', text: t.items.cards, category: 'finance', completed: false },
-      
       { id: 'sim', text: t.items.sim, category: 'electronics', completed: false },
       { id: 'power', text: t.items.power, category: 'electronics', completed: false },
       { id: 'adapter', text: t.items.adapter, category: 'electronics', completed: false },
       { id: 'maps', text: t.items.maps, category: 'electronics', completed: false },
-      
       { id: 'medicine', text: t.items.medicine, category: 'health', completed: false },
       { id: 'firstaid', text: t.items.firstaid, category: 'health', completed: false },
       { id: 'sunscreen', text: t.items.sunscreen, category: 'health', completed: false },
       { id: 'clothing', text: t.items.clothing, category: 'health', completed: false },
-      
       { id: 'transport', text: t.items.transport, category: 'safety', completed: false },
       { id: 'address', text: t.items.address, category: 'safety', completed: false },
       { id: 'emergency', text: t.items.emergency, category: 'safety', completed: false },
       { id: 'advisories', text: t.items.advisories, category: 'safety', completed: false },
-      
       { id: 'numbers', text: t.items.numbers, category: 'app', completed: false },
       { id: 'phrases', text: t.items.phrases, category: 'app', completed: false },
       { id: 'vat', text: t.items.vat, category: 'app', completed: false },
     ];
   };
 
-  // Load from localStorage
   useEffect(() => {
     const saved = localStorage.getItem('thailand_trip_checklist');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // Sync with translated text from i18n
         const synced = parsed.map((item: ChecklistItem) => {
           if (item.isCustom) return item;
           const defaultItem = getDefaultItems().find(d => d.id === item.id);
@@ -95,7 +86,6 @@ export const TripChecklist: React.FC<TripChecklistProps> = ({ language, onClose 
     }
   }, [language]);
 
-  // Save to localStorage
   useEffect(() => {
     if (items.length > 0) {
       localStorage.setItem('thailand_trip_checklist', JSON.stringify(items));
@@ -146,7 +136,7 @@ export const TripChecklist: React.FC<TripChecklistProps> = ({ language, onClose 
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
       <motion.div 
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -154,49 +144,44 @@ export const TripChecklist: React.FC<TripChecklistProps> = ({ language, onClose 
         className="bg-white w-full max-w-2xl h-[90vh] rounded-2xl shadow-2xl overflow-hidden flex flex-col"
       >
         {/* Header */}
-        <div className="bg-sacred-green p-6 text-white relative">
+        <div className="bg-[#2D4A3E] p-6 text-white relative">
           <button 
             onClick={onClose}
             className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-full transition-colors"
           >
-            <X className="w-5 h-5 text-white/70" />
+            <X className="w-5 h-5 text-white" />
           </button>
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-white/10 rounded-lg">
-              <CheckCircle className="w-6 h-6 text-gold-deep" />
+              <CheckCircle className="w-6 h-6 text-[#D4AF37]" />
             </div>
             <div>
-              <h2 className="text-xl font-bold uppercase tracking-widest">{t.title}</h2>
+              <h2 className="text-xl font-bold uppercase tracking-widest text-[#D4AF37]">{t.title}</h2>
               <p className="text-xs text-white/70 font-medium">{t.subtitle}</p>
             </div>
           </div>
-
-          {/* Progress Bar */}
           <div className="mt-6 flex items-center gap-4">
             <div className="flex-1 h-3 bg-white/10 rounded-full overflow-hidden border border-white/5">
               <motion.div 
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
-                className="h-full bg-gold-deep"
+                className="h-full bg-[#D4AF37]"
               />
             </div>
-            <span className="text-sm font-bold text-gold-deep">{progress}%</span>
+            <span className="text-sm font-bold text-[#D4AF37]">{progress}%</span>
           </div>
         </div>
 
-        {/* Categories & Items Scroll Area */}
         <div className="flex-1 overflow-y-auto p-6 space-y-8 bg-gray-50/50">
           {categories.map((cat) => {
             const catItems = items.filter(item => item.category === cat.id);
             if (cat.id !== 'custom' && catItems.length === 0) return null;
-
             return (
               <div key={cat.id} className="space-y-3">
                 <div className="flex items-center gap-2 pb-2 border-b border-gray-100">
-                  <cat.icon className="w-4 h-4 text-sacred-green" />
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-sacred-green">{cat.label}</h3>
+                  <cat.icon className="w-4 h-4 text-[#2D4A3E]" />
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-[#2D4A3E]">{cat.label}</h3>
                 </div>
-
                 <div className="space-y-2">
                   <AnimatePresence mode="popLayout">
                     {catItems.map((item) => (
@@ -209,23 +194,18 @@ export const TripChecklist: React.FC<TripChecklistProps> = ({ language, onClose 
                         className={`group flex items-start gap-3 p-3 rounded-xl transition-all border ${
                           item.completed 
                             ? 'bg-white border-gray-100' 
-                            : 'bg-white border-gray-200 hover:border-gold-deep/30'
+                            : 'bg-white border-gray-200 hover:border-[#D4AF37]/30'
                         }`}
                       >
-                        <button 
-                          onClick={() => toggleItem(item.id)}
-                          className="mt-0.5"
-                        >
+                        <button onClick={() => toggleItem(item.id)} className="mt-0.5">
                           {item.completed ? (
-                            <CheckCircle2 className="w-5 h-5 text-sacred-green" />
+                            <CheckCircle2 className="w-5 h-5 text-[#2D4A3E]" />
                           ) : (
                             <Circle className="w-5 h-5 text-gray-300" />
                           )}
                         </button>
-                        <span className={`flex-1 text-sm leading-snug transition-all ${
-                          item.completed 
-                          ? 'text-gray-400 line-through italic' 
-                          : 'text-gray-700'
+                        <span className={`flex-1 text-sm leading-snug transition-all text-left ${
+                          item.completed ? 'text-gray-400 line-through italic' : 'text-gray-700'
                         }`}>
                           {item.text}
                         </span>
@@ -240,7 +220,6 @@ export const TripChecklist: React.FC<TripChecklistProps> = ({ language, onClose 
                       </motion.div>
                     ))}
                   </AnimatePresence>
-
                   {cat.id === 'custom' && (
                     <form onSubmit={addCustomItem} className="flex gap-2">
                       <input 
@@ -248,11 +227,11 @@ export const TripChecklist: React.FC<TripChecklistProps> = ({ language, onClose 
                         value={customText}
                         onChange={(e) => setCustomText(e.target.value)}
                         placeholder={t.addPlaceholder}
-                        className="flex-1 text-sm px-4 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gold-deep/20 focus:border-gold-deep transition-all"
+                        className="flex-1 text-sm px-4 py-2 bg-white border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/20 focus:border-[#D4AF37] transition-all"
                       />
                       <button 
                         type="submit"
-                        className="p-2 bg-sacred-green text-white rounded-xl hover:bg-sacred-green/90 transition-colors"
+                        className="p-2 bg-[#2D4A3E] text-white rounded-xl hover:bg-[#2D4A3E]/90 transition-colors"
                       >
                         <Plus className="w-5 h-5" />
                       </button>
@@ -264,7 +243,6 @@ export const TripChecklist: React.FC<TripChecklistProps> = ({ language, onClose 
           })}
         </div>
 
-        {/* Footer Actions */}
         <div className="p-4 bg-white border-t border-gray-100 flex items-center justify-between">
           <button 
             onClick={resetAll}
@@ -273,14 +251,12 @@ export const TripChecklist: React.FC<TripChecklistProps> = ({ language, onClose 
             <RotateCcw className="w-4 h-4" />
             {t.resetBtn}
           </button>
-          
           <div className="flex gap-2">
-            {/* Optional Export PDF could go here */}
             {progress === 100 && (
               <motion.div 
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="bg-gold-deep text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full shadow-lg shadow-gold-deep/20"
+                className="bg-[#D4AF37] text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full"
               >
                 100% Prepared!
               </motion.div>

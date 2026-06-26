@@ -1,6 +1,15 @@
 import { SupportedLanguage } from '@/types/country';
 
 const ENGLISH_UI = {
+  "brand": {
+    "name": "ThaiGuide",
+    "subtitle": "AsiaBuddy Services"
+  },
+  "home": "Home",
+  "tours": "Tours",
+  "destinations": "Destinations",
+  "tourPackages": "Tour Packages",
+  "travelBlog": "Travel Blog",
   "menu": "Menu",
   "menuCategories": {
     "travel": "Travel Planning",
@@ -321,6 +330,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     }
   },
   TH: {
+  "brand": { "name": "ThaiGuide", "subtitle": "บริการ AsiaBuddy" },
+  "home": "หน้าแรก",
+  "tours": "ทัวร์",
+  "destinations": "สถานที่",
+  "tourPackages": "แพ็กเกจทัวร์",
+  "travelBlog": "บล็อกการท่องเที่ยว",
   "menu": "Menu",
   "menuCategories": {
     "travel": "Travel Planning",
@@ -632,6 +647,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   }
 },
   MM: {
+  "brand": { "name": "ThaiGuide", "subtitle": "AsiaBuddy ဝန်ဆောင်မှုများ" },
+  "home": "ပင်မ",
+  "tours": "ခရီးစဉ်များ",
+  "destinations": "တည်နေရာများ",
+  "tourPackages": "ခရီးစဉ် ပက်ကေ့ချ်",
+  "travelBlog": "ခရီးသွား ဘလော့ဂ်",
   "menu": "Menu",
   "menuCategories": {
     "travel": "Travel Planning",
@@ -943,6 +964,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   }
 },
   ES: {
+  "brand": { "name": "ThaiGuide", "subtitle": "Servicios AsiaBuddy" },
+  "home": "Inicio",
+  "tours": "Tours",
+  "destinations": "Destinos",
+  "tourPackages": "Paquetes Turísticos",
+  "travelBlog": "Blog de Viajes",
   "menu": "Menú",
   "menuCategories": {
     "travel": "Planificación de Viajes",
@@ -1254,6 +1281,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   }
 },
   FR: {
+  "brand": { "name": "ThaiGuide", "subtitle": "Services AsiaBuddy" },
+  "home": "Accueil",
+  "tours": "Circuits",
+  "destinations": "Destinations",
+  "tourPackages": "Forfaits Touristiques",
+  "travelBlog": "Blog Voyage",
   "menu": "Menu",
   "menuCategories": {
     "travel": "Planification de Voyage",
@@ -1565,6 +1598,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   }
 },
   DE: {
+  "brand": { "name": "ThaiGuide", "subtitle": "AsiaBuddy Services" },
+  "home": "Startseite",
+  "tours": "Touren",
+  "destinations": "Ziele",
+  "tourPackages": "Reisepakete",
+  "travelBlog": "Reiseblog",
   "menu": "Menü",
   "menuCategories": {
     "travel": "Reiseplanung",
