@@ -1054,7 +1054,7 @@ export default function GlobalAdminPage() {
                             .order('sort_order', { ascending: true });
                           
                           if (itineraryData && itineraryData.length > 0) {
-                            const parsedDays = itineraryData.map(day => ({
+                            const parsedDays = itineraryData.map((day: any) => ({
                               id: day.id,
                               day_number: day.day_number,
                               title: day.title || '',

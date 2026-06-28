@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, MapPin, Calendar, Users, Home, DollarSign, Heart, FileText, Loader2, MessageSquare, ChevronRight, RefreshCcw, Calendar as CalendarIcon } from 'lucide-react';
 import { getConciergeResponse } from '@/services/geminiService';

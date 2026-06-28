@@ -150,7 +150,7 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
             </h3>
             <div className="w-12 h-1 bg-gold-deep mt-2 rounded-full" />
           </div>
-          <TransportChat language={language} />
+          <TransportChat language={language} destination="" />
         </div>
       </GuideModal>
 
