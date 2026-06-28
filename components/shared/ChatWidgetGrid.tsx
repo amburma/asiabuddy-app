@@ -16,6 +16,8 @@ import { FOOD_GUIDE_MARKDOWN } from '@/data/thailand/foodGuide'
 import { VISA_GUIDE } from '@/data/thailand/visaGuide'
 import { VAT_REFUND_GUIDE } from '@/data/thailand/vatRefundGuide'
 import { GENERAL_INFORMATION } from '@/data/thailand/generalInformation'
+import { TRANSPORT_GUIDE } from '@/data/thailand/transportGuide'
+import { BUDGET_GUIDE } from '@/data/thailand/budgetGuide'
 import TransportChat from '../thailand/TransportChat'
 import FoodChat from '../thailand/FoodChat'
 import AccommodationChat from '../thailand/AccommodationChat'
@@ -52,7 +54,10 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
 
   useEffect(() => {
     const handler = (e: Event) => {
-      const modalId = (e as CustomEvent).detail?.modalId
+      const detail = (e as CustomEvent).detail
+      const modalId = detail?.modalId
+      const lang = detail?.language
+      if (lang) setLanguage(lang.toUpperCase() as ThaiLanguage)
       if (modalId) handleOpenModal(modalId)
     }
     window.addEventListener('openGuideModal', handler)
@@ -65,6 +70,7 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
   const [showEtiquetteModal, setShowEtiquetteModal] = useState(false)
   const [showLawsModal, setShowLawsModal] = useState(false)
   const [showInformationModal, setShowInformationModal] = useState(false)
+  const [showBudgetModal, setShowBudgetModal] = useState(false)
 
   const handleOpenModal = (modalId: string) => {
     switch (modalId) {
@@ -83,6 +89,7 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
       case 'etiquette': setShowEtiquetteModal(true); break
       case 'laws': setShowLawsModal(true); break
       case 'information': setShowInformationModal(true); break
+      case 'budget': setShowBudgetModal(true); break
     }
   }
 
@@ -133,8 +140,17 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
         icon={<Bus size={20} />}
         footer="Thailand Transport Guide • AsiaBuddy Services"
       >
-        <div className="markdown-body">
-          <MarkdownRenderer content="" />
+        <div className="markdown-body mb-20">
+          <MarkdownRenderer content={TRANSPORT_GUIDE[language] || TRANSPORT_GUIDE['EN']} />
+        </div>
+        <div className="border-t border-gray-100 pt-12 pb-8">
+          <div className="mb-6">
+            <h3 className="text-lg font-serif text-sacred-green">
+              Ask anything about transport in Thailand.
+            </h3>
+            <div className="w-12 h-1 bg-gold-deep mt-2 rounded-full" />
+          </div>
+          <TransportChat language={language} />
         </div>
       </GuideModal>
 
@@ -280,6 +296,20 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
       >
         <div className="markdown-body">
           <MarkdownRenderer content={VAT_REFUND_GUIDE[language] || VAT_REFUND_GUIDE['EN']} />
+        </div>
+      </GuideModal>
+
+      {/* Budget Modal */}
+      <GuideModal
+        isOpen={showBudgetModal}
+        onClose={() => setShowBudgetModal(false)}
+        title="Thailand Budget & Money-Saving Guide"
+        subtitle="Smart Travel Tips"
+        icon={<Calculator size={20} />}
+        footer="Budget Guide • AsiaBuddy Services"
+      >
+        <div className="markdown-body mb-20">
+          <MarkdownRenderer content={BUDGET_GUIDE[language] || BUDGET_GUIDE['EN']} />
         </div>
       </GuideModal>
 

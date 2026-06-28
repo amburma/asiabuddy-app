@@ -1,5 +1,5 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 20-21 June 2026 — Session 6
+> Last Updated: 26 June 2026 — Session 13
 
 ---
 
@@ -1272,3 +1272,328 @@ SECTION 5 — FOOTER ✅
 - app/[country]/page.tsx Server Component rule remains — "use client" NEVER allowed
 - price_from is the correct column name in tours table — NEVER use price
 - duration_days is the correct column name in tours table — NEVER use duration
+
+---
+
+## ✅ Session 12 — 26 June 2026
+
+### Completed
+- TripChecklist Close Button — root cause confirmed:
+  Parent Hero section had CSS transform/filter properties causing
+  `fixed inset-0` positioning to break (modal clipped behind parent)
+  Fix: `createPortal` added to `TripChecklistModal.tsx` →
+  renders directly to `document.body` → outside all parent containers ✅
+
+- TripChecklist Title Bar — text color fix:
+  `text-[#D4AF37]` gold color added to `<h2>` in TripChecklist.tsx header ✅
+
+- TripChecklist i18n — root cause identified:
+  `TripChecklistModal` rendered in `page.tsx` without `language` prop →
+  defaulting to `'EN'` always
+  Fix applied: `language` prop passed from `page.tsx` via NEXT_LOCALE cookie ✅
+
+- Landing Page — assessment complete:
+  Issues identified: low contrast hero, washed image, equal CTA hierarchy
+  Decision: defer full redesign to Session 14 as dedicated session
+  Reason: avoid repeat of Session 10/11 overhaul errors ✅
+
+### ⚠️ Carry Forward
+- TripChecklist i18n — browser verify pending (Myanmar/FR/DE/ES)
+- git push pending (after i18n verify)
+
+### Architecture Notes
+- TripChecklistModal.tsx: always use createPortal → document.body
+  Never render TripChecklist directly inside a Hero/section with
+  transform, filter, or will-change CSS — fixed positioning will break
+- page.tsx must always pass language prop to TripChecklistModal:
+  `<TripChecklistModal language={language as SupportedLanguage} />`
+- language must be read from NEXT_LOCALE cookie in Server Component:
+  `const language = (cookies().get('NEXT_LOCALE')?.value ?? 'EN') as SupportedLanguage`
+
+### Landing Page Redesign Plan (Session 14)
+- Reference: Viator, GetYourGuide, Klook, Airbnb Experiences
+- Required changes:
+  (1) Hero image — dark overlay (bg-black/50) for contrast
+  (2) Hero text — switch to white (text-white) from dark
+  (3) CTA hierarchy — Explore Tours = primary (filled), Trip Checklist = secondary (outlined)
+  (4) Overall energy — remove ivory/cream wash, use deeper dark tones
+- Rule: change ONE section at a time, verify screenshot before next section
+- Rule: never full-page overhaul in single session
+
+---
+
+## ✅ Session 13 — 27 June 2026
+
+### Completed
+- lib/translate.ts — GEMINI_PRO_API_KEY fix:
+  Root cause: translate.ts was using empty GEMINI_PRO_API_KEY
+  Fix: confirmed correct key in .env.local and Vercel ✅
+  Model updated to gemini-2.5-flash ✅
+
+- app/[country]/tours/page.tsx — Language switching fix:
+  Added export const dynamic = 'force-dynamic' ✅
+  Fixed default language from 'en' to 'EN' (uppercase) ✅
+  Language map added to convert codes to full names for Gemini prompt ✅
+  Translation now works correctly on /thailand/tours ✅
+
+- app/[country]/page.tsx — Services Strip added:
+  New OUR SERVICES section below Hero ✅
+  6 service cards: Hotel, Flight, Tickets, Transfer, Car Rental, Tours ✅
+  Desktop: 6 columns, Mobile: 3 columns grid ✅
+  Placed between Hero and Destinations sections ✅
+
+- app/[country]/page.tsx — Essential Guides redesign:
+  Old "Thailand Essentials Guide" standalone section removed ✅
+  New ESSENTIAL GUIDES card grid (bg-amber-50, 8 cards) ✅
+  Cards: General Info, Travel Types, Visa Info, Transport,
+  Accommodation, Food & Dining, Culture & Etiquette, Budget Tips ✅
+  Weather & Seasons card removed ✅
+  Extracted to components/shared/EssentialGuides.tsx (Client Component) ✅
+  Cards dispatch openGuideModal custom events → ChatWidgetGrid modals ✅
+  Language prop passed from page.tsx → EssentialGuides → modal trigger ✅
+
+- data/thailand/transportGuide.ts — Created:
+  New transport guide data file ✅
+  Languages: EN, MM, TH, DE, FR, ES ✅
+  MM content: full Myanmar translation ✅
+  TH content: full Thai translation ✅
+  DE content: full German translation ✅
+  FR content: full French translation ✅
+  ES content: full Spanish translation ✅
+
+- components/shared/ChatWidgetGrid.tsx — Transport modal fix:
+  Transport modal content was empty string ✅
+  Fixed: TRANSPORT_GUIDE[language] content added ✅
+  TransportChat component added below guide content ✅
+
+- components/thailand/TransportChat.tsx — Text alignment fix:
+  AI response text was center-aligned ✅
+  Fixed to text-left ✅
+
+- components/thailand/AccommodationChat.tsx — Fixes:
+  AI response text alignment fixed to text-left ✅
+  Book Now createPortal fix applied ✅
+
+- components/thailand/FoodChat.tsx — Fixes:
+  AI response text alignment fixed to text-left ✅
+  Book Now createPortal fix applied ✅
+
+- components/thailand/TripPlannerChat.tsx — Fixes:
+  AI response text alignment fixed to text-left ✅
+  Book Now createPortal fix applied ✅
+
+- components/shared/FloatingChatButton.tsx — Created:
+  New floating concierge button (bottom-right, z-9999) ✅
+  Animated 🛎️ icon with pulse rings on load ✅
+  Tooltip: "✈️ Plan your trip now!" ✅
+  Live Support badge with green pulse dot ✅
+  createPortal used → HumanOperatorChat renders at document.body ✅
+  Fullscreen HumanOperatorChat confirmed working ✅
+
+- app/[country]/layout.tsx — FloatingChatButton integration:
+  FloatingChatButton added to layout (visible on all /thailand pages) ✅
+  NEXT_LOCALE cookie read via cookies() → language passed to button ✅
+  HumanOperatorChat welcome messages now display in correct language ✅
+
+- Admin — Tour + Itinerary unified editor (app/admin/page.tsx):
+  Tours Management and Itinerary Management merged into one editor ✅
+  Two-column layout: Editor (60%) + Live Preview panel (40%) ✅
+  Section A: Tour Basics (title, slug auto-generate, country, status, featured) ✅
+  Section B: Pricing & Details (price, currency, duration, group size, destination) ✅
+  Section C: What's Included (highlights, inclusions, exclusions — tag inputs) ✅
+  Section D: Tour Images (URL input + file upload, thumbnail preview) ✅
+  Section E: Day-by-Day Itinerary (day cards, ↑↓ reorder, Add Next Day) ✅
+  Live Preview panel: real-time tour preview as user types ✅
+  Save Tour + Itinerary button: saves tours table then itineraries table ✅
+  Edit mode: loads existing tour + itinerary days into editor ✅
+  Delete: removes itinerary rows first then tour row ✅
+  Success toast auto-dismiss after 3 seconds ✅
+
+- Itinerary Management — image upload:
+  image_url field added to itinerary form ✅
+  URL input + file upload to tour-images/itinerary/ path ✅
+  Image preview thumbnail shown after upload ✅
+  image_url saved to itineraries table ✅
+
+- app/[country]/tours/[slug]/page.tsx — Itinerary image display:
+  image_url rendered per day in timeline ✅
+  next.config.js remotePatterns updated for external image hosts ✅
+
+- app/thailand/guides/ — 8 Essential Guide pages created:
+  travel-types, visa, transport, accommodation,
+  food, culture, budget, weather ✅
+  Each page: Navbar + hero + card grid + Back button ✅
+  Note: These pages are superseded by modal system —
+  Essential Guides now use ChatWidgetGrid modals instead ✅
+
+### ⏳ Remaining Work (Priority Order)
+
+**🔴 Priority 1 — git push → Production**
+- Local full test: /thailand, /thailand/tours, /thailand/tours/[slug]
+- Language switching verify: MM/TH/DE/FR/ES
+- FloatingChatButton verify on mobile
+- Essential Guides modals verify all 7 cards
+- git push → Vercel production deploy
+
+**🟡 Priority 2 — Destination Data Entry**
+- Add via /admin: Phuket, Chiang Mai, Pattaya, Krabi, Ayutthaya, Koh Samui
+- Bangkok already in Supabase ✅
+
+**🟡 Priority 3 — Admin Tour Editor verify**
+- Create new tour with itinerary → Supabase confirm
+- Edit existing tour → save → verify
+- Delete tour → itinerary cascade confirm
+
+**🟢 Priority 4 — Cleanup**
+- Edit function verify: Tours/Destinations/Posts/Itinerary
+- Cookie Consent Banner production verify
+- Google Translate API integration
+- Vercel Vite project (thailand.asiabuddy.app) delete
+
+### Architecture Notes
+- EssentialGuides.tsx is Client Component — dispatches openGuideModal events
+- ChatWidgetGrid.tsx handles all guide modal state — do not duplicate
+- FloatingChatButton.tsx uses createPortal → document.body (z-99999)
+- layout.tsx reads NEXT_LOCALE cookie → passes to FloatingChatButton
+- transportGuide.ts pattern: Record<string, string> with EN/MM/TH/DE/FR/ES keys
+- Supported languages: EN, MM, TH, DE, FR, ES only
+- app/thailand/guides/* pages exist but are unused — modals are the UX
+
+---
+
+## ✅ Session 14 — 28 June 2026
+
+### Completed
+- lib/translate.ts — GEMINI_PRO_API_KEY fix:
+  Root cause: translate.ts was using empty GEMINI_PRO_API_KEY
+  Fix: confirmed correct key in .env.local and Vercel ✅
+  Model updated to gemini-2.5-flash ✅
+
+- app/[country]/tours/page.tsx — Language switching fix:
+  Added export const dynamic = 'force-dynamic' ✅
+  Fixed default language from 'en' to 'EN' (uppercase) ✅
+  Language map added to convert codes to full names for Gemini prompt ✅
+  Translation now works correctly on /thailand/tours ✅
+
+- app/[country]/page.tsx — Services Strip added:
+  New OUR SERVICES section below Hero ✅
+  6 service cards: Hotel, Flight, Tickets, Transfer, Car Rental, Tours ✅
+  Desktop: 6 columns, Mobile: 3 columns grid ✅
+  Placed between Hero and Destinations sections ✅
+
+- app/[country]/page.tsx — Essential Guides redesign:
+  Old "Thailand Essentials Guide" standalone section removed ✅
+  New ESSENTIAL GUIDES card grid (bg-amber-50, 8 cards) ✅
+  Cards: General Info, Travel Types, Visa Info, Transport,
+  Accommodation, Food & Dining, Culture & Etiquette, Budget Tips ✅
+  Weather & Seasons card removed ✅
+  Extracted to components/shared/EssentialGuides.tsx (Client Component) ✅
+  Cards dispatch openGuideModal custom events → ChatWidgetGrid modals ✅
+  Language prop passed from page.tsx → EssentialGuides → modal trigger ✅
+
+- data/thailand/transportGuide.ts — Created:
+  New transport guide data file ✅
+  Languages: EN, MM, TH, DE, FR, ES ✅
+  MM content: full Myanmar translation ✅
+  TH content: full Thai translation ✅
+  DE content: full German translation ✅
+  FR content: full French translation ✅
+  ES content: full Spanish translation ✅
+
+- components/shared/ChatWidgetGrid.tsx — Transport modal fix:
+  Transport modal content was empty string ✅
+  Fixed: TRANSPORT_GUIDE[language] content added ✅
+  TransportChat component added below guide content ✅
+
+- components/thailand/TransportChat.tsx — Text alignment fix:
+  AI response text was center-aligned ✅
+  Fixed to text-left ✅
+
+- components/thailand/AccommodationChat.tsx — Fixes:
+  AI response text alignment fixed to text-left ✅
+  Book Now createPortal fix applied ✅
+
+- components/thailand/FoodChat.tsx — Fixes:
+  AI response text alignment fixed to text-left ✅
+  Book Now createPortal fix applied ✅
+
+- components/thailand/TripPlannerChat.tsx — Fixes:
+  AI response text alignment fixed to text-left ✅
+  Book Now createPortal fix applied ✅
+
+- components/shared/FloatingChatButton.tsx — Created:
+  New floating concierge button (bottom-right, z-9999) ✅
+  Animated 🛎️ icon with pulse rings on load ✅
+  Tooltip: "✈️ Plan your trip now!" ✅
+  Live Support badge with green pulse dot ✅
+  createPortal used → HumanOperatorChat renders at document.body ✅
+  Fullscreen HumanOperatorChat confirmed working ✅
+
+- app/[country]/layout.tsx — FloatingChatButton integration:
+  FloatingChatButton added to layout (visible on all /thailand pages) ✅
+  NEXT_LOCALE cookie read via cookies() → language passed to button ✅
+  HumanOperatorChat welcome messages now display in correct language ✅
+
+- Admin — Tour + Itinerary unified editor (app/admin/page.tsx):
+  Tours Management and Itinerary Management merged into one editor ✅
+  Two-column layout: Editor (60%) + Live Preview panel (40%) ✅
+  Section A: Tour Basics (title, slug auto-generate, country, status, featured) ✅
+  Section B: Pricing & Details (price, currency, duration, group size, destination) ✅
+  Section C: What's Included (highlights, inclusions, exclusions — tag inputs) ✅
+  Section D: Tour Images (URL input + file upload, thumbnail preview) ✅
+  Section E: Day-by-Day Itinerary (day cards, ↑↓ reorder, Add Next Day) ✅
+  Live Preview panel: real-time tour preview as user types ✅
+  Save Tour + Itinerary button: saves tours table then itineraries table ✅
+  Edit mode: loads existing tour + itinerary days into editor ✅
+  Delete: removes itinerary rows first then tour row ✅
+  Success toast auto-dismiss after 3 seconds ✅
+
+- Itinerary Management — image upload:
+  image_url field added to itinerary form ✅
+  URL input + file upload to tour-images/itinerary/ path ✅
+  Image preview thumbnail shown after upload ✅
+  image_url saved to itineraries table ✅
+
+- app/[country]/tours/[slug]/page.tsx — Itinerary image display:
+  image_url rendered per day in timeline ✅
+  next.config.js remotePatterns updated for external image hosts ✅
+
+- app/thailand/guides/ — 8 Essential Guide pages created:
+  travel-types, visa, transport, accommodation,
+  food, culture, budget, weather ✅
+  Each page: Navbar + hero + card grid + Back button ✅
+  Note: These pages are superseded by modal system —
+  Essential Guides now use ChatWidgetGrid modals instead ✅
+
+### ⏳ Remaining Work (Priority Order)
+
+**🔴 Priority 1 — git push → Production**
+- Local full test: /thailand, /thailand/tours, /thailand/tours/[slug]
+- Language switching verify: MM/TH/DE/FR/ES
+- FloatingChatButton verify on mobile
+- Essential Guides modals verify all 7 cards
+- git push → Vercel production deploy
+
+**🟡 Priority 2 — Destination Data Entry**
+- Add via /admin: Phuket, Chiang Mai, Pattaya, Krabi, Ayutthaya, Koh Samui
+- Bangkok already in Supabase ✅
+
+**🟡 Priority 3 — Admin Tour Editor verify**
+- Create new tour with itinerary → Supabase confirm
+- Edit existing tour → save → verify
+- Delete tour → itinerary cascade confirm
+
+**🟢 Priority 4 — Cleanup**
+- Edit function verify: Tours/Destinations/Posts/Itinerary
+- Cookie Consent Banner production verify
+- Google Translate API integration
+- Vercel Vite project (thailand.asiabuddy.app) delete
+
+### Architecture Notes
+- EssentialGuides.tsx is Client Component — dispatches openGuideModal events
+- ChatWidgetGrid.tsx handles all guide modal state — do not duplicate
+- FloatingChatButton.tsx uses createPortal → document.body (z-99999)
+- layout.tsx reads NEXT_LOCALE cookie → passes to FloatingChatButton
+- transportGuide.ts pattern: Record<string, string> with EN/MM/TH/DE/FR/ES keys
+- Supported languages: EN, MM, TH, DE, FR, ES only
+- app/thailand/guides/* pages exist but are unused — modals are the UX

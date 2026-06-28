@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, Bus, User, Loader2, Info, MessageSquare, Calendar } from 'lucide-react';
 import { getConciergeResponse } from '@/services/geminiService';
@@ -22,16 +23,32 @@ export default function TransportChat({ language, destination }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [showBookNow, setShowBookNow] = useState(false);
   const [showHumanChat, setShowHumanChat] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = uiT.transport || UI_TRANSLATIONS.EN.transport;
   const commonT = uiT.chat || UI_TRANSLATIONS.EN.chat;
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isLoading]);
+
+  useEffect(() => {
+    if (showHumanChat) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showHumanChat]);
 
   const handleSend = async (customMessage?: string) => {
     const userMessage = customMessage || input.trim();
@@ -95,6 +112,21 @@ RESPONSE RULES — MANDATORY:
     setIsLoading(false);
   };
 
+  const modalContent = showHumanChat ? (
+    <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center">
+      <div
+        className="absolute inset-0 bg-black/60"
+        onClick={() => setShowHumanChat(false)}
+      />
+      <div className="relative w-full h-full md:w-auto md:h-auto md:max-w-lg md:max-h-[85vh] flex flex-col">
+        <HumanOperatorChat
+          language={language}
+          onClose={() => setShowHumanChat(false)}
+        />
+      </div>
+    </div>
+  ) : null;
+
   return (
     <div className="flex flex-col h-[450px] w-full bg-white rounded-2xl overflow-hidden border border-gold-soft/30 shadow-sm">
       {/* Header */}
@@ -148,7 +180,7 @@ RESPONSE RULES — MANDATORY:
                 ? 'bg-sacred-green text-white rounded-tr-none' 
                 : 'bg-white border border-gold-soft/20 text-gray-900 rounded-tl-none'
             }`}>
-              <div className="prose prose-sm max-w-none prose-p:leading-relaxed prose-headings:font-serif prose-headings:text-sacred-green prose-hr:my-4 prose-hr:border-gold-soft/20">
+              <div className="prose prose-sm max-w-none prose-p:leading-relaxed prose-headings:font-serif prose-headings:text-sacred-green prose-hr:my-4 prose-hr:border-gold-soft/20 text-left">
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>{m.content}</ReactMarkdown>
               </div>
             </div>
@@ -192,15 +224,7 @@ RESPONSE RULES — MANDATORY:
         )}
       </div>
 
-      {/* Human Operator Chat Modal */}
-      <AnimatePresence>
-        {showHumanChat && (
-          <HumanOperatorChat
-            language={language}
-            onClose={() => setShowHumanChat(false)}
-          />
-        )}
-      </AnimatePresence>
+      {mounted && createPortal(modalContent, document.body)}
     </div>
   );
 }

@@ -419,6 +419,17 @@ export default async function TourDetailPage({
                     <h4 className="font-bold text-sacred-green text-sm mb-1">
                       Day {day.day_number}{day.title ? ` — ${day.title}` : ''}
                     </h4>
+                    {day.image_url && (
+                      <div className="mb-3">
+                        <Image
+                          src={day.image_url}
+                          alt={day.title || `Day ${day.day_number}`}
+                          width={800}
+                          height={280}
+                          style={{ objectFit: 'cover', borderRadius: '8px', width: '100%', height: 'auto', maxHeight: '280px' }}
+                        />
+                      </div>
+                    )}
                     <p className="text-gray-500 text-sm leading-relaxed whitespace-pre-line">{day.content}</p>
                     {day.accommodation && (
                       <p className="text-gray-400 text-xs mt-2">🏨 {day.accommodation}</p>

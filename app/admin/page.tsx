@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { LogOut, Plus, Pencil, Trash2, X } from 'lucide-react';
+import { LogOut, Plus, Pencil, Trash2, X, ChevronDown, ChevronRight, GripVertical, Upload, ArrowUp, ArrowDown, ImagePlus } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -73,26 +73,38 @@ export default function GlobalAdminPage() {
 
   // Tours state
   const [toursItems, setToursItems] = useState<any[]>([]);
-  const [showToursForm, setShowToursForm] = useState(false);
+  const [showToursForm, setShowToursForm] = useState(true);
   const [toursTitle, setToursTitle] = useState('');
   const [toursSlug, setToursSlug] = useState('');
+  const [toursCountry, setToursCountry] = useState('thailand');
   const [toursShortDesc, setToursShortDesc] = useState('');
-  const [toursDesc, setToursDesc] = useState('');
   const [toursPriceFrom, setToursPriceFrom] = useState('');
   const [toursCurrency, setToursCurrency] = useState('USD');
   const [toursDurationDays, setToursDurationDays] = useState('');
   const [toursDurationNights, setToursDurationNights] = useState('');
   const [toursGroupSizeMax, setToursGroupSizeMax] = useState('');
-  const [toursImages, setToursImages] = useState('');
-  const [toursImageFile, setToursImageFile] = useState<File | null>(null);
-  const [toursImagePreview, setToursImagePreview] = useState('');
   const [toursFeatured, setToursFeatured] = useState(false);
   const [toursDestinationId, setToursDestinationId] = useState('');
-  const [toursSalespersonId, setToursSalespersonId] = useState('');
-  const [toursHighlights, setToursHighlights] = useState('');
-  const [toursInclusions, setToursInclusions] = useState('');
-  const [toursExclusions, setToursExclusions] = useState('');
-  const [toursStatus, setToursStatus] = useState('active');
+  const [toursHighlights, setToursHighlights] = useState<string[]>([]);
+  const [toursHighlightsInput, setToursHighlightsInput] = useState('');
+  const [toursInclusions, setToursInclusions] = useState<string[]>([]);
+  const [toursInclusionsInput, setToursInclusionsInput] = useState('');
+  const [toursExclusions, setToursExclusions] = useState<string[]>([]);
+  const [toursExclusionsInput, setToursExclusionsInput] = useState('');
+  const [toursStatus, setToursStatus] = useState('draft');
+  const [tourImageUrls, setTourImageUrls] = useState<string[]>([]);
+  const [tourImageInput, setTourImageInput] = useState('');
+  const [tourUploadStatus, setTourUploadStatus] = useState<'idle' | 'uploading' | 'done'>('idle');
+  const [itineraryDays, setItineraryDays] = useState<any[]>([]);
+  const [tourSectionOpen, setTourSectionOpen] = useState<Record<string, boolean>>({
+    basics: true,
+    pricing: true,
+    highlights: true,
+    images: true,
+    itinerary: true,
+  });
+  const [tourValidationErrors, setTourValidationErrors] = useState<Record<string, string>>({});
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   // Destinations state
   const [destinationsItems, setDestinationsItems] = useState<any[]>([]);
@@ -134,7 +146,10 @@ export default function GlobalAdminPage() {
   const [itinHighlights, setItinHighlights] = useState('');
   const [itinMeals, setItinMeals] = useState('');
   const [itinAccommodation, setItinAccommodation] = useState('');
-  const [itinImageUrl, setItinImageUrl] = useState('');
+  // Two image states: user-provided URL and uploaded file URL (file takes priority)
+  const [itinImageUrlInput, setItinImageUrlInput] = useState('');
+  const [itinUploadedUrl, setItinUploadedUrl] = useState('');
+  const [itinUploadSuccess, setItinUploadSuccess] = useState(false);
 
   // Auth
   useEffect(() => {
@@ -193,21 +208,22 @@ export default function GlobalAdminPage() {
     setItineraryItems(data || []);
   };
 
-  const uploadImageToStorage = async (file: File, bucket: string): Promise<string | null> => {
+  const uploadImageToStorage = async (file: File, bucket: string, folder?: string): Promise<string | null> => {
     setUploadingImage(true);
     try {
       const ext = file.name.split('.').pop();
       const sanitizedBase = file.name.replace(/[^a-zA-Z0-9]/g, '').substring(0, 20);
       const uniqueFileName = `${Date.now()}-${sanitizedBase}.${ext}`;
-      
-      const { error: uploadError } = await supabase.storage.from(bucket).upload(uniqueFileName, file, { upsert: true });
+      const uploadPath = folder ? `${folder}/${uniqueFileName}` : uniqueFileName;
+
+      const { error: uploadError } = await supabase.storage.from(bucket).upload(uploadPath, file, { upsert: true });
       if (uploadError) {
         console.error('Storage upload error:', uploadError);
         setError(`Upload failed: ${uploadError.message}`);
         return null;
       }
       
-      const { data } = supabase.storage.from(bucket).getPublicUrl(uniqueFileName);
+      const { data } = supabase.storage.from(bucket).getPublicUrl(uploadPath);
       return data.publicUrl;
     } catch (e: any) {
       console.error('uploadImageToStorage error:', e);
@@ -219,14 +235,35 @@ export default function GlobalAdminPage() {
   };
 
   const resetToursForm = () => {
-    setToursTitle(''); setToursSlug(''); setToursShortDesc('');
-    setToursDesc(''); setToursPriceFrom(''); setToursCurrency('USD');
-    setToursDurationDays(''); setToursDurationNights('');
-    setToursGroupSizeMax(''); setToursImages(''); setToursImageFile(null); setToursImagePreview(''); setToursFeatured(false);
-    setToursDestinationId(''); setToursSalespersonId('');
-    setToursHighlights(''); setToursInclusions(''); setToursExclusions('');
-    setToursStatus('active'); setShowToursForm(false);
-    setEditing(null); setSuccess(''); setError('');
+    setToursTitle('');
+    setToursSlug('');
+    setToursCountry(selectedCountry);
+    setToursShortDesc('');
+    setToursPriceFrom('');
+    setToursCurrency('USD');
+    setToursDurationDays('');
+    setToursDurationNights('');
+    setToursGroupSizeMax('');
+    setToursFeatured(false);
+    setToursDestinationId('');
+    setToursHighlights([]);
+    setToursHighlightsInput('');
+    setToursInclusions([]);
+    setToursInclusionsInput('');
+    setToursExclusions([]);
+    setToursExclusionsInput('');
+    setToursStatus('draft');
+    setTourImageUrls([]);
+    setTourImageInput('');
+    setTourUploadStatus('idle');
+    setItineraryDays([]);
+    setTourSectionOpen({ basics: true, pricing: true, highlights: true, images: true, itinerary: true });
+    setShowToursForm(true);
+    setEditing(null);
+    setSuccess('');
+    setError('');
+    setTourValidationErrors({});
+    setSaveSuccess(false);
   };
 
   const resetDestForm = () => {
@@ -246,10 +283,132 @@ export default function GlobalAdminPage() {
     setSuccess(''); setError('');
   };
 
+  const saveTour = async () => {
+    setPublishing(true);
+    setError('');
+    setSuccess('');
+    setTourValidationErrors({});
+    setSaveSuccess(false);
+
+    // Step 1: Validation
+    const errors: Record<string, string> = {};
+    if (!toursTitle.trim()) errors.title = 'Tour title is required';
+    if (!toursSlug.trim()) errors.slug = 'Slug is required';
+    if (!toursPriceFrom || parseFloat(toursPriceFrom) <= 0) errors.price_from = 'Price is required';
+    const country = toursCountry.trim() || 'thailand';
+    const durationDays = parseInt(toursDurationDays);
+    if (!durationDays || durationDays < 1) errors.duration_days = 'Duration must be at least 1 day';
+
+    if (Object.keys(errors).length > 0) {
+      setTourValidationErrors(errors);
+      setPublishing(false);
+      return;
+    }
+
+    try {
+      // Step 2: Save tour to Supabase
+      const tourData = {
+        title: toursTitle.trim(),
+        slug: toursSlug.trim(),
+        short_description: toursShortDesc.trim() || null,
+        description: null,
+        price_from: parseFloat(toursPriceFrom),
+        currency: toursCurrency || 'USD',
+        duration_days: durationDays,
+        duration_nights: parseInt(toursDurationNights) || 0,
+        group_size_max: parseInt(toursGroupSizeMax) || null,
+        images: tourImageUrls,
+        highlights: toursHighlights,
+        inclusions: toursInclusions,
+        exclusions: toursExclusions,
+        featured: toursFeatured,
+        destination_id: toursDestinationId || null,
+        country: country,
+        status: toursStatus || 'draft',
+      };
+
+      let tourId: string;
+      if (editing) {
+        // EDIT mode
+        const { data, error: updateError } = await supabase
+          .from('tours')
+          .update(tourData)
+          .eq('id', editing.id)
+          .select();
+        if (updateError) {
+          setError(`Failed to update tour: ${updateError.message}`);
+          setPublishing(false);
+          return;
+        }
+        tourId = editing.id;
+      } else {
+        // CREATE mode
+        const { data, error: insertError } = await supabase
+          .from('tours')
+          .insert([tourData])
+          .select();
+        if (insertError) {
+          setError(`Failed to create tour: ${insertError.message}`);
+          setPublishing(false);
+          return;
+        }
+        tourId = data[0].id;
+      }
+
+      // Step 3: Save itinerary days
+      if (editing) {
+        // Delete existing itinerary rows first
+        await supabase.from('itineraries').delete().eq('tour_id', tourId);
+      }
+
+      const itineraryRows = itineraryDays.map((day, index) => ({
+        tour_id: tourId,
+        day_number: day.day_number,
+        title: day.title || '',
+        content: day.content || '',
+        highlights: day.highlights || [],
+        meals_included: Object.entries(day.meals || {})
+          .filter(([_, checked]) => checked)
+          .map(([meal]) => meal.charAt(0).toUpperCase() + meal.slice(1))
+          .join(','),
+        accommodation: day.accommodation || '',
+        image_url: day.image_url || null,
+        sort_order: index,
+      }));
+
+      if (itineraryRows.length > 0) {
+        const { error: itinError } = await supabase
+          .from('itineraries')
+          .insert(itineraryRows);
+        if (itinError) {
+          setError(`Failed to save itinerary: ${itinError.message}`);
+          setPublishing(false);
+          return;
+        }
+      }
+
+      // Step 4: After successful save
+      setSaveSuccess(true);
+      setSuccess('✅ Tour saved successfully!');
+      fetchTours();
+      
+      if (!editing) {
+        resetToursForm();
+      }
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => setSaveSuccess(false), 3000);
+    } catch (err: any) {
+      setError(`An error occurred: ${err?.message || 'Unknown error'}`);
+    } finally {
+      setPublishing(false);
+    }
+  };
+
   const resetItinForm = () => {
     setItinTourId(''); setItinDayNumber(''); setItinSortOrder('');
     setItinTitle(''); setItinContent(''); setItinHighlights('');
-    setItinMeals(''); setItinAccommodation(''); setItinImageUrl('');
+    setItinMeals(''); setItinAccommodation(''); setItinImageUrlInput(''); setItinUploadedUrl(''); setItinUploadSuccess(false);
     setShowItinForm(false); setEditing(null);
     setSuccess(''); setError('');
   };
@@ -414,256 +573,522 @@ export default function GlobalAdminPage() {
         </div>
       </div>
 
-      {/* TOURS MANAGEMENT */}
-      <div className="max-w-3xl mx-auto px-6 pb-8">
-        <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
-
-          {/* Section header */}
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-gray-800">Tours Management</h2>
+      {/* TOURS + ITINERARY EDITOR */}
+      <div className="max-w-7xl mx-auto px-6 pb-8">
+        <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+          <div className="flex flex-col gap-3 border-b border-gray-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-gray-800">Tour + Itinerary Editor</h2>
+              <p className="text-sm text-gray-500">A unified workspace for tour basics, pricing, highlights, images, and day-by-day itinerary planning.</p>
+            </div>
             <button
-              onClick={() => { resetToursForm(); setShowToursForm(!showToursForm); }}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm"
+              onClick={() => {
+                resetToursForm();
+                setShowToursForm(true);
+              }}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-amber-600"
             >
               <Plus size={16} /> Add New Tour
             </button>
           </div>
 
-          {/* Tours Form */}
-          {showToursForm && (
-            <div className="border-t border-gray-100 pt-6 space-y-4">
+          <div className="p-6 lg:p-8">
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.6fr_0.9fr]">
+              <div className="space-y-4">
+                {saveSuccess && (
+                  <div className="flex items-center justify-between rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+                    <span>✅ Tour saved successfully!</span>
+                    <button onClick={() => setSaveSuccess(false)} className="rounded-full p-1 hover:bg-emerald-100">
+                      <X size={15} />
+                    </button>
+                  </div>
+                )}
+                {editing && (
+                  <div className="flex items-center justify-between rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                    <span>Editing: {editing.title}</span>
+                    <button onClick={resetToursForm} className="rounded-full p-1 hover:bg-amber-100">
+                      <X size={15} />
+                    </button>
+                  </div>
+                )}
 
-              {editing && (
-                <div className="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700">
-                  <span>Editing: {editing.title}</span>
-                  <button onClick={resetToursForm}><X size={15} /></button>
-                </div>
-              )}
+                <div className="overflow-hidden rounded-xl border border-gray-200">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between bg-gray-800 px-4 py-3 text-left text-sm font-semibold text-white"
+                    onClick={() => setTourSectionOpen(prev => ({ ...prev, basics: !prev.basics }))}
+                  >
+                    <span>📋 Tour Basics</span>
+                    {tourSectionOpen.basics ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                  </button>
+                  {tourSectionOpen.basics && (
+                    <div className="space-y-4 bg-white p-5">
+                      <Field label="Title *">
+                        <input
+                          value={toursTitle}
+                          onChange={e => {
+                            setToursTitle(e.target.value);
+                            setToursSlug(generateSlug(e.target.value));
+                            if (tourValidationErrors.title) {
+                              setTourValidationErrors(prev => ({ ...prev, title: '' }));
+                            }
+                          }}
+                          placeholder="e.g. Pattaya–Khao Yai–Bangkok 5D4N"
+                          className={`${inputCls} text-base ${tourValidationErrors.title ? 'border-red-300 focus:ring-red-400' : ''}`}
+                        />
+                        {tourValidationErrors.title && <p className="mt-1 text-sm text-red-500">{tourValidationErrors.title}</p>}
+                      </Field>
 
-              <Field label="Title *">
-                <input
-                  value={toursTitle}
-                  onChange={e => {
-                    setToursTitle(e.target.value);
-                    setToursSlug(generateSlug(e.target.value));
-                  }}
-                  placeholder="Tour name..."
-                  className={inputCls}
-                />
-              </Field>
+                      <Field label="Slug">
+                        <input value={toursSlug} onChange={e => { setToursSlug(generateSlug(e.target.value)); if (tourValidationErrors.slug) { setTourValidationErrors(prev => ({ ...prev, slug: '' })); } }} placeholder="pattaya-khao-yai-bangkok-5d4n" className={`${inputCls} bg-gray-50 ${tourValidationErrors.slug ? 'border-red-300 focus:ring-red-400' : ''}`} />
+                        {tourValidationErrors.slug && <p className="mt-1 text-sm text-red-500">{tourValidationErrors.slug}</p>}
+                      </Field>
 
-              <Field label="Slug (auto-generated)">
-                <input value={toursSlug} readOnly className={`${inputCls} bg-gray-50 text-gray-400`} />
-              </Field>
+                      <Field label="Short Description">
+                        <textarea value={toursShortDesc} onChange={e => setToursShortDesc(e.target.value)} rows={2} placeholder="A short summary for the tour card" className={`${inputCls} resize-none`} />
+                      </Field>
 
-              <Field label="Short Description">
-                <textarea value={toursShortDesc} onChange={e => setToursShortDesc(e.target.value)} rows={3} placeholder="Brief summary..." className={`${inputCls} resize-none`} />
-              </Field>
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <Field label="Country">
+                          <input value={toursCountry} onChange={e => setToursCountry(e.target.value)} placeholder="thailand" className={inputCls} />
+                        </Field>
+                        <Field label="Status">
+                          <select value={toursStatus} onChange={e => setToursStatus(e.target.value)} className={inputCls}>
+                            <option value="draft">Draft</option>
+                            <option value="published">Published</option>
+                          </select>
+                        </Field>
+                      </div>
 
-              <Field label="Description">
-                <textarea value={toursDesc} onChange={e => setToursDesc(e.target.value)} rows={6} placeholder="Full tour description..." className={`${inputCls} resize-none`} />
-              </Field>
-
-              <div className="grid grid-cols-3 gap-4">
-                <Field label="Price From *">
-                  <input type="number" value={toursPriceFrom} onChange={e => setToursPriceFrom(e.target.value)} placeholder="299" className={inputCls} />
-                </Field>
-                <Field label="Currency">
-                  <select value={toursCurrency} onChange={e => setToursCurrency(e.target.value)} className={inputCls}>
-                    {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
-                </Field>
-                <Field label="Duration Days *">
-                  <input type="number" value={toursDurationDays} onChange={e => setToursDurationDays(e.target.value)} placeholder="3" className={inputCls} />
-                </Field>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <Field label="Duration Nights">
-                  <input type="number" value={toursDurationNights} onChange={e => setToursDurationNights(e.target.value)} placeholder="2" className={inputCls} />
-                </Field>
-                <Field label="Group Size Max">
-                  <input type="number" value={toursGroupSizeMax} onChange={e => setToursGroupSizeMax(e.target.value)} placeholder="12" className={inputCls} />
-                </Field>
-              </div>
-
-              <Field label="Image URL">
-                <input value={toursImages} onChange={e => setToursImages(e.target.value)} placeholder="https://example.com/image.jpg" className={inputCls} />
-              </Field>
-              <Field label="Or Upload Image">
-                <div className="mt-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Or upload image from PC / Mobile
-                  </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={async (e) => {
-                      const file = e.target.files?.[0];
-                      if (!file) return;
-                      const url = await uploadImageToStorage(file, 'tour-images');
-                      if (url) {
-                        setToursImages(url);
-                        setToursImagePreview(url);
-                      }
-                    }}
-                    disabled={uploadingImage}
-                    className="w-full text-sm"
-                  />
-                  {uploadingImage && (
-                    <span className="text-xs text-emerald-600 font-medium">Uploading...</span>
-                  )}
-                  {toursImagePreview && (
-                    <img
-                      src={toursImagePreview}
-                      alt="Preview"
-                      className="mt-2 w-full max-h-48 object-cover rounded border"
-                    />
+                      <Field label="Featured">
+                        <label className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-700">
+                          <input type="checkbox" checked={toursFeatured} onChange={e => setToursFeatured(e.target.checked)} className="h-4 w-4 rounded border-gray-300 text-amber-500 focus:ring-amber-400" />
+                          Show in Featured Tours
+                        </label>
+                      </Field>
+                    </div>
                   )}
                 </div>
-              </Field>
 
-              <div className="grid grid-cols-2 gap-4">
-                <Field label="Destination ID">
-                  <input value={toursDestinationId} onChange={e => setToursDestinationId(e.target.value)} placeholder="UUID" className={inputCls} />
-                </Field>
-                <Field label="Salesperson ID">
-                  <input value={toursSalespersonId} onChange={e => setToursSalespersonId(e.target.value)} placeholder="UUID" className={inputCls} />
-                </Field>
+                <div className="overflow-hidden rounded-xl border border-gray-200">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between bg-gray-800 px-4 py-3 text-left text-sm font-semibold text-white"
+                    onClick={() => setTourSectionOpen(prev => ({ ...prev, pricing: !prev.pricing }))}
+                  >
+                    <span>💰 Pricing & Details</span>
+                    {tourSectionOpen.pricing ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                  </button>
+                  {tourSectionOpen.pricing && (
+                    <div className="space-y-4 bg-white p-5">
+                      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        <Field label="Price From">
+                          <input type="number" value={toursPriceFrom} onChange={e => { setToursPriceFrom(e.target.value); if (tourValidationErrors.price_from) { setTourValidationErrors(prev => ({ ...prev, price_from: '' })); } }} placeholder="299" className={`${inputCls} ${tourValidationErrors.price_from ? 'border-red-300 focus:ring-red-400' : ''}`} />
+                          {tourValidationErrors.price_from && <p className="mt-1 text-sm text-red-500">{tourValidationErrors.price_from}</p>}
+                        </Field>
+                        <Field label="Currency">
+                          <select value={toursCurrency} onChange={e => setToursCurrency(e.target.value)} className={inputCls}>
+                            {CURRENCIES.filter(currency => ['USD', 'THB', 'SGD', 'JPY'].includes(currency)).map(currency => (
+                              <option key={currency} value={currency}>{currency}</option>
+                            ))}
+                          </select>
+                        </Field>
+                        <Field label="Duration Days">
+                          <input type="number" value={toursDurationDays} onChange={e => { setToursDurationDays(e.target.value); if (tourValidationErrors.duration_days) { setTourValidationErrors(prev => ({ ...prev, duration_days: '' })); } }} placeholder="5" className={`${inputCls} ${tourValidationErrors.duration_days ? 'border-red-300 focus:ring-red-400' : ''}`} />
+                          {tourValidationErrors.duration_days && <p className="mt-1 text-sm text-red-500">{tourValidationErrors.duration_days}</p>}
+                        </Field>
+                      </div>
+                      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                        <Field label="Duration Nights">
+                          <input type="number" value={toursDurationNights} onChange={e => setToursDurationNights(e.target.value)} placeholder="4" className={inputCls} />
+                        </Field>
+                        <Field label="Max Group Size">
+                          <input type="number" value={toursGroupSizeMax} onChange={e => setToursGroupSizeMax(e.target.value)} placeholder="12" className={inputCls} />
+                        </Field>
+                        <Field label="Destination">
+                          <select value={toursDestinationId} onChange={e => setToursDestinationId(e.target.value)} className={inputCls}>
+                            <option value="">Select destination</option>
+                            {destinationsItems.map(destination => (
+                              <option key={destination.id} value={destination.id}>{destination.name}</option>
+                            ))}
+                          </select>
+                        </Field>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="overflow-hidden rounded-xl border border-gray-200">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between bg-gray-800 px-4 py-3 text-left text-sm font-semibold text-white"
+                    onClick={() => setTourSectionOpen(prev => ({ ...prev, highlights: !prev.highlights }))}
+                  >
+                    <span>✅ What&apos;s Included</span>
+                    {tourSectionOpen.highlights ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                  </button>
+                  {tourSectionOpen.highlights && (
+                    <div className="space-y-5 bg-white p-5">
+                      <div>
+                        <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-600">Highlights</label>
+                        <div className="flex flex-col gap-2 sm:flex-row">
+                          <input value={toursHighlightsInput} onChange={e => setToursHighlightsInput(e.target.value)} placeholder="Temple visit" className={inputCls} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); const value = toursHighlightsInput.trim(); if (value) { setToursHighlights(prev => [...prev, value]); setToursHighlightsInput(''); } } }} />
+                          <button type="button" onClick={() => { const value = toursHighlightsInput.trim(); if (value) { setToursHighlights(prev => [...prev, value]); setToursHighlightsInput(''); } }} className="rounded-lg border border-amber-400 px-4 py-2 text-sm font-semibold text-amber-600 transition hover:bg-amber-50">Add</button>
+                        </div>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {toursHighlights.map(tag => (
+                            <span key={tag} className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-sm text-amber-700">
+                              {tag}
+                              <button type="button" onClick={() => setToursHighlights(prev => prev.filter(item => item !== tag))}>
+                                <X size={12} />
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-600">Inclusions</label>
+                        <div className="flex flex-col gap-2 sm:flex-row">
+                          <input value={toursInclusionsInput} onChange={e => setToursInclusionsInput(e.target.value)} placeholder="Airport transfer" className={inputCls} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); const value = toursInclusionsInput.trim(); if (value) { setToursInclusions(prev => [...prev, value]); setToursInclusionsInput(''); } } }} />
+                          <button type="button" onClick={() => { const value = toursInclusionsInput.trim(); if (value) { setToursInclusions(prev => [...prev, value]); setToursInclusionsInput(''); } }} className="rounded-lg border border-amber-400 px-4 py-2 text-sm font-semibold text-amber-600 transition hover:bg-amber-50">Add</button>
+                        </div>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {toursInclusions.map(tag => (
+                            <span key={tag} className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-sm text-emerald-700">
+                              {tag}
+                              <button type="button" onClick={() => setToursInclusions(prev => prev.filter(item => item !== tag))}>
+                                <X size={12} />
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-600">Exclusions</label>
+                        <div className="flex flex-col gap-2 sm:flex-row">
+                          <input value={toursExclusionsInput} onChange={e => setToursExclusionsInput(e.target.value)} placeholder="International flight" className={inputCls} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); const value = toursExclusionsInput.trim(); if (value) { setToursExclusions(prev => [...prev, value]); setToursExclusionsInput(''); } } }} />
+                          <button type="button" onClick={() => { const value = toursExclusionsInput.trim(); if (value) { setToursExclusions(prev => [...prev, value]); setToursExclusionsInput(''); } }} className="rounded-lg border border-amber-400 px-4 py-2 text-sm font-semibold text-amber-600 transition hover:bg-amber-50">Add</button>
+                        </div>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {toursExclusions.map(tag => (
+                            <span key={tag} className="inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1 text-sm text-rose-700">
+                              {tag}
+                              <button type="button" onClick={() => setToursExclusions(prev => prev.filter(item => item !== tag))}>
+                                <X size={12} />
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="overflow-hidden rounded-xl border border-gray-200">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between bg-gray-800 px-4 py-3 text-left text-sm font-semibold text-white"
+                    onClick={() => setTourSectionOpen(prev => ({ ...prev, images: !prev.images }))}
+                  >
+                    <span>🖼️ Tour Images</span>
+                    {tourSectionOpen.images ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                  </button>
+                  {tourSectionOpen.images && (
+                    <div className="space-y-4 bg-white p-5">
+                      <div className="flex flex-col gap-2 sm:flex-row">
+                        <input value={tourImageInput} onChange={e => setTourImageInput(e.target.value)} placeholder="Paste an image URL" className={inputCls} />
+                        <button type="button" onClick={() => { const value = tourImageInput.trim(); if (value) { setTourImageUrls(prev => prev.includes(value) ? prev : [...prev, value]); setTourImageInput(''); } }} className="rounded-lg border border-amber-400 px-4 py-2 text-sm font-semibold text-amber-600 transition hover:bg-amber-50">Add Image</button>
+                      </div>
+                      <div className="rounded-lg border border-dashed border-gray-200 p-3">
+                        <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-gray-700">
+                          <Upload size={16} />
+                          Upload from device
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={async e => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              setTourUploadStatus('uploading');
+                              const url = await uploadImageToStorage(file, 'tour-images');
+                              if (url) {
+                                setTourImageUrls(prev => prev.includes(url) ? prev : [...prev, url]);
+                                setTourUploadStatus('done');
+                              } else {
+                                setTourUploadStatus('idle');
+                              }
+                            }}
+                            disabled={uploadingImage}
+                          />
+                        </label>
+                        {tourUploadStatus === 'uploading' && <p className="mt-2 text-xs font-medium text-amber-600">Uploading...</p>}
+                        {tourUploadStatus === 'done' && <p className="mt-2 text-xs font-medium text-emerald-600">✓ Done</p>}
+                      </div>
+                      {tourImageUrls.length > 0 && (
+                        <div className="flex gap-3 overflow-x-auto pb-2">
+                          {tourImageUrls.map((image, index) => (
+                            <div key={`${image}-${index}`} className="relative shrink-0">
+                              <img src={image} alt={`Tour preview ${index + 1}`} className="h-24 w-32 rounded-lg border border-gray-200 object-cover" />
+                              <button type="button" onClick={() => setTourImageUrls(prev => prev.filter(item => item !== image))} className="absolute right-1 top-1 rounded-full bg-black/70 p-1 text-white">
+                                <X size={12} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <div className="overflow-hidden rounded-xl border border-gray-200">
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between bg-gray-800 px-4 py-3 text-left text-sm font-semibold text-white"
+                    onClick={() => setTourSectionOpen(prev => ({ ...prev, itinerary: !prev.itinerary }))}
+                  >
+                    <span>🗓️ Day-by-Day Itinerary</span>
+                    {tourSectionOpen.itinerary ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                  </button>
+                  {tourSectionOpen.itinerary && (
+                    <div className="space-y-4 bg-white p-5">
+                      <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                        Build your itinerary below. Reorder days with the arrow buttons.
+                      </div>
+                      {itineraryDays.map((day, index) => (
+                        <div key={day.id} className="rounded-lg border border-l-4 border-l-amber-400 bg-white p-4 shadow-sm">
+                          <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div className="flex items-center gap-3">
+                              <GripVertical size={16} className="text-gray-400" />
+                              <span className="text-sm font-semibold text-gray-700">Day {String(day.day_number).padStart(2, '0')}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button type="button" className="rounded-lg border border-gray-200 px-2 py-1 text-gray-500 hover:text-gray-700" onClick={() => { const list = [...itineraryDays]; const swapIndex = index - 1; if (swapIndex < 0) return; [list[index], list[swapIndex]] = [list[swapIndex], list[index]]; list.forEach((item, itemIndex) => { item.day_number = itemIndex + 1; }); setItineraryDays(list); }}>
+                                <ArrowUp size={14} />
+                              </button>
+                              <button type="button" className="rounded-lg border border-gray-200 px-2 py-1 text-gray-500 hover:text-gray-700" onClick={() => { const list = [...itineraryDays]; const swapIndex = index + 1; if (swapIndex >= list.length) return; [list[index], list[swapIndex]] = [list[swapIndex], list[index]]; list.forEach((item, itemIndex) => { item.day_number = itemIndex + 1; }); setItineraryDays(list); }}>
+                                <ArrowDown size={14} />
+                              </button>
+                              <button type="button" className="rounded-lg border border-red-200 px-2 py-1 text-red-500 hover:bg-red-50" onClick={() => setItineraryDays(prev => prev.filter(item => item.id !== day.id).map((item, itemIndex) => ({ ...item, day_number: itemIndex + 1 }))) }>
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          </div>
+
+                          <Field label="Day Title">
+                            <input value={day.title} onChange={e => setItineraryDays(prev => prev.map(item => item.id === day.id ? { ...item, title: e.target.value } : item))} placeholder="e.g. Bangkok temple & food trail" className={inputCls} />
+                          </Field>
+                          <Field label="Content">
+                            <textarea value={day.content} onChange={e => setItineraryDays(prev => prev.map(item => item.id === day.id ? { ...item, content: e.target.value } : item))} rows={4} placeholder="Describe the day in detail" className={`${inputCls} resize-none`} />
+                          </Field>
+
+                          <div>
+                            <label className="mb-2 block text-xs font-bold uppercase tracking-wider text-gray-600">Highlights</label>
+                            <div className="flex flex-col gap-2 sm:flex-row">
+                              <input value={day.highlightsInput || ''} onChange={e => setItineraryDays(prev => prev.map(item => item.id === day.id ? { ...item, highlightsInput: e.target.value } : item))} placeholder="Add a highlight" className={inputCls} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); const value = (day.highlightsInput || '').trim(); if (!value) return; setItineraryDays(prev => prev.map(item => item.id === day.id ? { ...item, highlights: [...item.highlights, value], highlightsInput: '' } : item)); } }} />
+                              <button type="button" onClick={() => { const value = (day.highlightsInput || '').trim(); if (!value) return; setItineraryDays(prev => prev.map(item => item.id === day.id ? { ...item, highlights: [...item.highlights, value], highlightsInput: '' } : item)); }} className="rounded-lg border border-amber-400 px-4 py-2 text-sm font-semibold text-amber-600 transition hover:bg-amber-50">Add</button>
+                            </div>
+                            <div className="mt-3 flex flex-wrap gap-2">
+                              {(day.highlights || []).map((tag: string) => (
+                                <span key={tag} className="inline-flex items-center gap-2 rounded-full bg-amber-50 px-3 py-1 text-sm text-amber-700">
+                                  {tag}
+                                  <button type="button" onClick={() => setItineraryDays(prev => prev.map(item => item.id === day.id ? { ...item, highlights: item.highlights.filter((entry: string) => entry !== tag) } : item))}>
+                                    <X size={12} />
+                                  </button>
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+
+                          <Field label="Meals">
+                            <div className="flex flex-wrap gap-3 text-sm text-gray-700">
+                              {(['Breakfast', 'Lunch', 'Dinner'] as const).map(meal => (
+                                <label key={meal} className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2">
+                                  <input type="checkbox" checked={day.meals?.[meal.toLowerCase() as keyof typeof day.meals] || false} onChange={e => setItineraryDays(prev => prev.map(item => item.id === day.id ? { ...item, meals: { ...item.meals, [meal.toLowerCase()]: e.target.checked } } : item))} className="h-4 w-4 rounded border-gray-300 text-amber-500 focus:ring-amber-400" />
+                                  {meal}
+                                </label>
+                              ))}
+                            </div>
+                          </Field>
+
+                          <Field label="Accommodation">
+                            <input value={day.accommodation || ''} onChange={e => setItineraryDays(prev => prev.map(item => item.id === day.id ? { ...item, accommodation: e.target.value } : item))} placeholder="Hotel name or Not included" className={inputCls} />
+                          </Field>
+
+                          <Field label="Image URL">
+                            <div className="flex flex-col gap-2 sm:flex-row">
+                              <input value={day.image_url || ''} onChange={e => setItineraryDays(prev => prev.map(item => item.id === day.id ? { ...item, image_url: e.target.value } : item))} placeholder="Paste a day image URL" className={inputCls} />
+                              <button type="button" className="rounded-lg border border-amber-400 px-4 py-2 text-sm font-semibold text-amber-600 transition hover:bg-amber-50">
+                                <span className="flex items-center gap-2"><ImagePlus size={14} /> Preview</span>
+                              </button>
+                            </div>
+                          </Field>
+                        </div>
+                      ))}
+
+                      <button type="button" onClick={() => setItineraryDays(prev => [...prev, { id: `${Date.now()}-${prev.length}`, day_number: prev.length + 1, title: '', content: '', highlights: [], highlightsInput: '', meals: { breakfast: false, lunch: false, dinner: false }, accommodation: '', image_url: '' }])} className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-amber-400 px-4 py-3 text-sm font-semibold text-amber-600 transition hover:bg-amber-50">
+                        <Plus size={16} /> Add Next Day
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="sticky bottom-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                    <button type="button" onClick={resetToursForm} className="rounded-lg border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700 transition hover:bg-gray-50">Cancel</button>
+                    <button type="button" disabled={publishing} onClick={saveTour} className="inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 px-8 py-3 text-lg font-semibold text-white transition hover:bg-amber-600 disabled:opacity-60">
+                      {publishing ? <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/60 border-t-white" /> : null}
+                      {publishing ? 'Saving...' : 'Save Tour + Itinerary →'}
+                    </button>
+                  </div>
+                  {error && <p className="mt-3 text-sm text-red-500">{error}</p>}
+                  {success && <p className="mt-3 text-sm font-medium text-emerald-600">{success}</p>}
+                </div>
               </div>
 
-              <Field label="Featured">
-                <div className="flex items-center gap-2">
-                  <input type="checkbox" checked={toursFeatured} onChange={e => setToursFeatured(e.target.checked)} className="w-4 h-4 text-emerald-500 rounded" />
-                  <span className="text-sm text-gray-600">Mark as featured tour</span>
+              <aside className="hidden md:block">
+                <div className="sticky top-4 rounded-xl border border-gray-200 bg-gray-50 p-4 shadow-sm">
+                  <div className="mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800">👁️ Live Preview</h3>
+                    <p className="text-sm text-gray-500">Updates as you type</p>
+                  </div>
+                  <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+                    <div className="mb-3 flex items-center justify-between gap-3">
+                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${toursStatus === 'published' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-700'}`}>
+                        {toursStatus === 'published' ? 'Published' : 'Draft'}
+                      </span>
+                      {toursFeatured && <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">Featured</span>}
+                    </div>
+                    <h4 className="text-xl font-bold text-gray-900">{toursTitle || 'Tour title preview'}</h4>
+                    <p className="mt-2 text-sm text-gray-600">{toursShortDesc || 'A polished short description will appear here.'}</p>
+                    <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-gray-600">
+                      <span className="rounded-full bg-gray-100 px-3 py-1">{toursPriceFrom ? `${toursCurrency} ${toursPriceFrom}` : 'Price from TBD'}</span>
+                      <span className="rounded-full bg-gray-100 px-3 py-1">{toursDurationDays ? `${toursDurationDays} days` : 'Duration TBD'}</span>
+                    </div>
+                    {tourImageUrls[0] ? (
+                      <img src={tourImageUrls[0]} alt="Preview hero" className="mt-4 h-40 w-full rounded-lg object-cover" />
+                    ) : (
+                      <div className="mt-4 flex h-40 items-center justify-center rounded-lg border border-dashed border-gray-200 bg-gray-50 text-sm text-gray-400">
+                        Add an image to preview your tour hero
+                      </div>
+                    )}
+                    <div className="mt-4">
+                      <h5 className="text-sm font-semibold text-gray-800">Highlights</h5>
+                      <ul className="mt-2 space-y-1 text-sm text-gray-600">
+                        {toursHighlights.slice(0, 3).map(highlight => <li key={highlight} className="flex items-start gap-2"><span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500" />{highlight}</li>)}
+                        {toursHighlights.length > 3 && <li className="text-amber-600">+ {toursHighlights.length - 3} more</li>}
+                      </ul>
+                    </div>
+                    <div className="mt-4">
+                      <h5 className="text-sm font-semibold text-gray-800">Itinerary</h5>
+                      <div className="mt-2 space-y-2 text-sm text-gray-600">
+                        {itineraryDays.length === 0 ? (
+                          <p className="text-gray-400">Add itinerary days for a live timeline.</p>
+                        ) : itineraryDays.slice(0, 4).map(day => (
+                          <div key={day.id} className="rounded-lg bg-gray-50 px-3 py-2">Day {String(day.day_number).padStart(2, '0')} • {day.title || 'Untitled day'}</div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </Field>
-
-              <Field label="Highlights (one per line)">
-                <textarea value={toursHighlights} onChange={e => setToursHighlights(e.target.value)} rows={4} placeholder={"Temple visit\nBeach tour\nLocal food"} className={`${inputCls} resize-none`} />
-              </Field>
-
-              <Field label="Inclusions (one per line)">
-                <textarea value={toursInclusions} onChange={e => setToursInclusions(e.target.value)} rows={4} placeholder={"Hotel accommodation\nAirport transfers\nBreakfast daily"} className={`${inputCls} resize-none`} />
-              </Field>
-
-              <Field label="Exclusions (one per line)">
-                <textarea value={toursExclusions} onChange={e => setToursExclusions(e.target.value)} rows={4} placeholder={"International flights\nPersonal expenses"} className={`${inputCls} resize-none`} />
-              </Field>
-
-              <Field label="Status">
-                <select value={toursStatus} onChange={e => setToursStatus(e.target.value)} className={inputCls}>
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                </select>
-              </Field>
-
-              {error && <p className="text-red-500 text-sm">{error}</p>}
-              {success && <p className="text-emerald-600 text-sm font-medium">{success}</p>}
-
-              <button
-                disabled={publishing}
-                onClick={async () => {
-                  setPublishing(true); setError(''); setSuccess('');
-                  try {
-                    if (!toursTitle || !toursPriceFrom || !toursDurationDays) {
-                      setError('Title, Price From, and Duration Days are required.');
-                      return;
-                    }
-                    const payload = {
-                      country: selectedCountry,
-                      title: toursTitle,
-                      slug: editing?.slug || toursSlug,
-                      short_description: toursShortDesc || null,
-                      description: toursDesc || null,
-                      price_from: parseFloat(toursPriceFrom),
-                      currency: toursCurrency,
-                      duration_days: parseInt(toursDurationDays),
-                      duration_nights: toursDurationNights ? parseInt(toursDurationNights) : null,
-                      group_size_max: toursGroupSizeMax ? parseInt(toursGroupSizeMax) : null,
-                      images: toursImages ? [toursImages] : null,
-                      image_url: toursImages || null,
-                      featured: toursFeatured,
-                      destination_id: toursDestinationId || null,
-                      salesperson_id: toursSalespersonId || null,
-                      highlights: toArray(toursHighlights),
-                      inclusions: toArray(toursInclusions),
-                      exclusions: toArray(toursExclusions),
-                      status: toursStatus,
-                      updated_at: new Date().toISOString(),
-                    };
-                    if (editing) {
-                      await supabase.from('tours').update(payload).eq('id', editing.id);
-                      setSuccess('Tour updated successfully');
-                    } else {
-                      console.log('TOUR_INSERT_PAYLOAD_KEYS', Object.keys(payload))
-                      console.log('TOUR_INSERT_PAYLOAD_FULL', payload)
-                      const { data, error } = await supabase.from('tours').insert(payload).select();
-                      console.log('INSERT_RESULT:', JSON.stringify(data), 'ERROR:', JSON.stringify(error))
-                      setSuccess('Tour created successfully');
-                    }
-                    resetToursForm();
-                    fetchTours();
-                  } catch (error) {
-                    console.error('Error saving tour:', error);
-                    setError('Failed to save tour. Please try again.');
-                  } finally {
-                    setPublishing(false);
-                  }
-                }}
-                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl text-sm disabled:opacity-50"
-              >
-                {publishing ? 'Processing...' : editing ? 'Update Tour' : 'Save Tour'}
-              </button>
+              </aside>
             </div>
-          )}
+          </div>
+        </div>
+      </div>
 
-          {/* Tours List */}
-          <div className="border-t border-gray-100 pt-6">
-            <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider mb-4">Tours List</h3>
+      <div className="max-w-7xl mx-auto px-6 pb-8">
+        <div className="rounded-2xl bg-white p-6 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-lg font-bold text-gray-800">Tours List</h3>
+              <p className="text-sm text-gray-500">Edit an existing tour or remove it from the catalog.</p>
+            </div>
+          </div>
+          <div className="mt-6 border-t border-gray-100 pt-6">
             {toursItems.length === 0 ? (
-              <div className="text-center py-12 text-gray-400 text-sm">No tours found for {selectedCountry}</div>
+              <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 py-12 text-center text-sm text-gray-400">No tours found for {selectedCountry}</div>
             ) : (
               <div className="space-y-3">
                 {toursItems.map(item => (
-                  <div key={item.id} className="bg-gray-50 rounded-xl p-4 flex gap-4 items-start">
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-gray-800 text-sm">{item.title}</h4>
-                      <p className="text-xs text-gray-500 mt-1">
-                        {item.currency} {item.price_from} · {item.duration_days} days · {item.status}
+                  <div key={item.id} className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h4 className="text-sm font-bold text-gray-800">{item.title}</h4>
+                        <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${item.status === 'published' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-200 text-gray-700'}`}>{item.status || 'draft'}</span>
+                      </div>
+                      <p className="mt-1 text-xs text-gray-500">
+                        {item.currency} {item.price_from} · {item.duration_days} days · {item.duration_nights || 0} nights
                       </p>
                     </div>
                     <div className="flex gap-2">
                       <button
-                        onClick={() => {
+                        onClick={async () => {
                           setEditing(item);
                           setToursTitle(item.title || '');
                           setToursSlug(item.slug || '');
+                          setToursCountry(item.country || selectedCountry);
                           setToursShortDesc(item.short_description || '');
-                          setToursDesc(item.description || '');
                           setToursPriceFrom(String(item.price_from || ''));
                           setToursCurrency(item.currency || 'USD');
                           setToursDurationDays(String(item.duration_days || ''));
                           setToursDurationNights(String(item.duration_nights || ''));
                           setToursGroupSizeMax(String(item.group_size_max || ''));
-                          setToursImages(Array.isArray(item.images) ? item.images[0] : '');
-                          setToursFeatured(item.featured || false);
+                          setToursFeatured(Boolean(item.featured));
                           setToursDestinationId(item.destination_id || '');
-                          setToursSalespersonId(item.salesperson_id || '');
-                          setToursHighlights(Array.isArray(item.highlights) ? item.highlights.join('\n') : '');
-                          setToursInclusions(Array.isArray(item.inclusions) ? item.inclusions.join('\n') : '');
-                          setToursExclusions(Array.isArray(item.exclusions) ? item.exclusions.join('\n') : '');
-                          setToursStatus(item.status || 'active');
+                          setToursHighlights(Array.isArray(item.highlights) ? item.highlights : []);
+                          setToursInclusions(Array.isArray(item.inclusions) ? item.inclusions : []);
+                          setToursExclusions(Array.isArray(item.exclusions) ? item.exclusions : []);
+                          setToursStatus(item.status || 'draft');
+                          setTourImageUrls(Array.isArray(item.images) ? item.images : (item.image_url ? [item.image_url] : []));
+                          setTourImageInput('');
+                          setTourUploadStatus('idle');
+                          
+                          // Fetch existing itinerary days
+                          const { data: itineraryData } = await supabase
+                            .from('itineraries')
+                            .select('*')
+                            .eq('tour_id', item.id)
+                            .order('sort_order', { ascending: true });
+                          
+                          if (itineraryData && itineraryData.length > 0) {
+                            const parsedDays = itineraryData.map(day => ({
+                              id: day.id,
+                              day_number: day.day_number,
+                              title: day.title || '',
+                              content: day.content || '',
+                              highlights: Array.isArray(day.highlights) ? day.highlights : [],
+                              highlightsInput: '',
+                              meals: {
+                                breakfast: day.meals_included?.toLowerCase().includes('breakfast') || false,
+                                lunch: day.meals_included?.toLowerCase().includes('lunch') || false,
+                                dinner: day.meals_included?.toLowerCase().includes('dinner') || false,
+                              },
+                              accommodation: day.accommodation || '',
+                              image_url: day.image_url || '',
+                            }));
+                            setItineraryDays(parsedDays);
+                          } else {
+                            setItineraryDays([]);
+                          }
+                          
                           setShowToursForm(true);
                           window.scrollTo(0, 0);
                         }}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-amber-50 text-amber-600 rounded-lg text-xs font-medium hover:bg-amber-100"
+                        className="flex items-center gap-1 rounded-lg bg-amber-50 px-3 py-1.5 text-xs font-medium text-amber-600 hover:bg-amber-100"
                       >
                         <Pencil size={11} /> Edit
                       </button>
                       <button
                         onClick={async () => {
-                          if (!confirm('Delete this tour?')) return;
+                          if (!window.confirm('Delete this tour and all its itinerary days?')) return;
+                          
+                          // Delete itinerary rows first
+                          await supabase.from('itineraries').delete().eq('tour_id', item.id);
+                          
+                          // Delete tour images from storage
                           const tourImageForDelete = item.image_url || (Array.isArray(item.images) ? item.images[0] : item.images) || null;
                           if (tourImageForDelete) {
                             const filePath = extractStoragePath(tourImageForDelete, 'tour-images');
@@ -672,179 +1097,14 @@ export default function GlobalAdminPage() {
                               if (storageError) console.error('Tour storage delete error:', storageError);
                             }
                           }
+                          
+                          // Delete the tour
                           await supabase.from('tours').delete().eq('id', item.id);
                           fetchTours();
+                          setSuccess('🗑️ Tour deleted.');
+                          setTimeout(() => setSuccess(''), 3000);
                         }}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-xs font-medium hover:bg-red-100"
-                      >
-                        <Trash2 size={11} /> Delete
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ITINERARY MANAGEMENT */}
-      <div className="max-w-3xl mx-auto px-6 pb-8">
-        <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
-
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-gray-800">Itinerary Management</h2>
-            <button
-              onClick={() => { resetItinForm(); setShowItinForm(!showItinForm); }}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm"
-            >
-              <Plus size={16} /> Add New Day
-            </button>
-          </div>
-
-          {showItinForm && (
-            <div className="border-t border-gray-100 pt-6 space-y-4">
-
-              {editing && (
-                <div className="flex items-center justify-between bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700">
-                  <span>Editing: Day {editing.day_number} — {editing.title}</span>
-                  <button onClick={resetItinForm}><X size={15} /></button>
-                </div>
-              )}
-
-              <Field label="Select Tour *">
-                <select value={itinTourId} onChange={e => setItinTourId(e.target.value)} className={inputCls}>
-                  <option value="">-- Select a Tour --</option>
-                  {toursItems.map(t => (
-                    <option key={t.id} value={t.id}>{t.title}</option>
-                  ))}
-                </select>
-              </Field>
-
-              <div className="grid grid-cols-2 gap-4">
-                <Field label="Day Number *">
-                  <input type="number" value={itinDayNumber} onChange={e => setItinDayNumber(e.target.value)} placeholder="1" className={inputCls} />
-                </Field>
-                <Field label="Sort Order">
-                  <input type="number" value={itinSortOrder} onChange={e => setItinSortOrder(e.target.value)} placeholder="auto" className={inputCls} />
-                </Field>
-              </div>
-
-              <Field label="Title *">
-                <input value={itinTitle} onChange={e => setItinTitle(e.target.value)} placeholder="Day 1: Bangkok Temple Discovery" className={inputCls} />
-              </Field>
-
-              <Field label="Content">
-                <textarea value={itinContent} onChange={e => setItinContent(e.target.value)} rows={6} placeholder="Full day description..." className={`${inputCls} resize-none`} />
-              </Field>
-
-              <Field label="Highlights (one per line)">
-                <textarea value={itinHighlights} onChange={e => setItinHighlights(e.target.value)} rows={4} placeholder={"Visit Wat Pho\nTuk-tuk ride\nRiver cruise"} className={`${inputCls} resize-none`} />
-              </Field>
-
-              <Field label="Meals Included">
-                <input value={itinMeals} onChange={e => setItinMeals(e.target.value)} placeholder="Breakfast, Lunch" className={inputCls} />
-              </Field>
-
-              <Field label="Accommodation">
-                <input value={itinAccommodation} onChange={e => setItinAccommodation(e.target.value)} placeholder="Hotel name or Not included" className={inputCls} />
-              </Field>
-
-              <Field label="Image URL">
-                <input value={itinImageUrl} onChange={e => setItinImageUrl(e.target.value)} placeholder="https://example.com/day1.jpg" className={inputCls} />
-              </Field>
-
-              {error && <p className="text-red-500 text-sm">{error}</p>}
-              {success && <p className="text-emerald-600 text-sm font-medium">{success}</p>}
-
-              <button
-                disabled={publishing}
-                onClick={async () => {
-                  setPublishing(true); setError(''); setSuccess('');
-                  try {
-                    if (!itinTourId || !itinDayNumber || !itinTitle) {
-                      setError('Tour, Day Number, and Title are required.');
-                      return;
-                    }
-                    const payload = {
-                      tour_id: itinTourId,
-                      day_number: parseInt(itinDayNumber),
-                      sort_order: itinSortOrder ? parseInt(itinSortOrder) : parseInt(itinDayNumber),
-                      title: itinTitle,
-                      content: itinContent || null,
-                      highlights: toArray(itinHighlights),
-                      meals_included: itinMeals || null,
-                      accommodation: itinAccommodation || null,
-                      image_url: itinImageUrl || null,
-                      updated_at: new Date().toISOString(),
-                    };
-                    if (editing) {
-                      await supabase.from('itineraries').update(payload).eq('id', editing.id);
-                      setSuccess('Itinerary day updated successfully');
-                    } else {
-                      await supabase.from('itineraries').insert(payload);
-                      setSuccess('Itinerary day created successfully');
-                    }
-                    resetItinForm();
-                    fetchItineraries();
-                  } catch {
-                    setError('An error occurred.');
-                  } finally {
-                    setPublishing(false);
-                  }
-                }}
-                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl text-sm disabled:opacity-50"
-              >
-                {publishing ? 'Processing...' : editing ? 'Update Day' : 'Save Day'}
-              </button>
-            </div>
-          )}
-
-          {/* Itinerary List */}
-          <div className="border-t border-gray-100 pt-6">
-            <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider mb-4">Itinerary List</h3>
-            {itineraryItems.length === 0 ? (
-              <div className="text-center py-12 text-gray-400 text-sm">No itinerary days found</div>
-            ) : (
-              <div className="space-y-3">
-                {itineraryItems.map(item => (
-                  <div key={item.id} className="bg-gray-50 rounded-xl p-4 flex gap-4 items-start">
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-gray-800 text-sm">Day {item.day_number} — {item.title}</h4>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Tour: {item.tours?.title || item.tour_id}
-                      </p>
-                      <p className="text-xs text-gray-400 mt-0.5">
-                        Meals: {item.meals_included || 'N/A'} · Stay: {item.accommodation || 'N/A'}
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => {
-                          setEditing(item);
-                          setItinTourId(item.tour_id || '');
-                          setItinDayNumber(String(item.day_number || ''));
-                          setItinSortOrder(String(item.sort_order || ''));
-                          setItinTitle(item.title || '');
-                          setItinContent(item.content || '');
-                          setItinHighlights(Array.isArray(item.highlights) ? item.highlights.join('\n') : '');
-                          setItinMeals(item.meals_included || '');
-                          setItinAccommodation(item.accommodation || '');
-                          setItinImageUrl(item.image_url || '');
-                          setShowItinForm(true);
-                          window.scrollTo(0, 0);
-                        }}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-amber-50 text-amber-600 rounded-lg text-xs font-medium hover:bg-amber-100"
-                      >
-                        <Pencil size={11} /> Edit
-                      </button>
-                      <button
-                        onClick={async () => {
-                          if (!confirm('Delete this itinerary day?')) return;
-                          await supabase.from('itineraries').delete().eq('id', item.id);
-                          fetchItineraries();
-                        }}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-xs font-medium hover:bg-red-100"
+                        className="flex items-center gap-1 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-medium text-red-500 hover:bg-red-100"
                       >
                         <Trash2 size={11} /> Delete
                       </button>

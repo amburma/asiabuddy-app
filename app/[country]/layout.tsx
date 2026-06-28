@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { cookies } from 'next/headers'
+import FloatingChatButton from '@/components/shared/FloatingChatButton'
 
 const COUNTRY_META: Record<string, { name: string; description: string }> = {
   thailand: {
@@ -64,9 +66,15 @@ export default async function CountryLayout({
   params: Promise<{ country: string }>
 }) {
   const { country } = await params
+  const cookieStore = await cookies()
+  const language = cookieStore.get('NEXT_LOCALE')?.value ?? 'EN'
+
   return (
     <div className="min-h-screen" data-country={country}>
       {children}
+      {country === 'thailand' && (
+        <FloatingChatButton language={language} />
+      )}
     </div>
   )
 }

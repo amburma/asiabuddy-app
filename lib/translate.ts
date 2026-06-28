@@ -1,6 +1,7 @@
 export async function translateText(
   text: string,
-  targetLanguage: string
+  targetLanguage: string,
+  options?: { raw?: boolean }
 ): Promise<string> {
   if (
     targetLanguage === 'EN' ||
@@ -11,47 +12,56 @@ export async function translateText(
   }
 
   const langMap: Record<string, string> = {
-    'FR': 'French',
+    'EN': 'English',
+    'MY': 'Myanmar (Burmese)',
+    'MM': 'Myanmar (Burmese)',
+    'ZH': 'Chinese (Simplified)',
+    'JA': 'Japanese',
+    'KO': 'Korean',
     'DE': 'German',
-    'TH': 'Thai',
-    'MM': 'Burmese',
+    'FR': 'French',
     'ES': 'Spanish',
+    'AR': 'Arabic',
+    'RU': 'Russian',
+    'TH': 'Thai',
   }
 
   const langName = langMap[targetLanguage] || targetLanguage
+  const promptText = options?.raw
+    ? text
+    : `Translate to ${langName}. Return ONLY the translation, nothing else:\n${text}`
 
   try {
     const keys = [
-      process.env.GEMINI_API_KEY_1,
-      process.env.GEMINI_API_KEY_2,
-      process.env.GEMINI_API_KEY_3,
+      process.env.GEMINI_PRO_API_KEY,
     ].filter(Boolean)
 
     if (keys.length === 0) return text
 
     const key = keys[Math.floor(Math.random() * keys.length)]
+    const model = 'gemini-2.5-flash'
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${key}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `Translate to ${langName}. Return ONLY the translation, nothing else:\n${text}`
-            }]
-          }]
-        })
-      }
-    )
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: promptText,
+          }],
+        }],
+      }),
+    })
 
     if (!response.ok) {
       console.error(`Gemini API error: ${response.status} ${response.statusText}`)
       return text
     }
 
-    const data = await response.json()
+    const responseText = await response.text()
+
+    const data = JSON.parse(responseText)
     return data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || text
 
   } catch (error) {

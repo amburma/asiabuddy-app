@@ -4,6 +4,7 @@ import ChatWidgetGrid from '@/components/shared/ChatWidgetGrid'
 import DestinationTabs from '@/components/thailand/DestinationTabs'
 import InformationSection from '@/components/shared/InformationSection'
 import { TripChecklistModal } from '@/components/shared/TripChecklistModal'
+import EssentialGuides from '@/components/shared/EssentialGuides'
 import { translateText } from '@/lib/translate'
 import { cookies } from 'next/headers'
 import Navbar from '@/components/shared/Navbar'
@@ -141,14 +142,53 @@ export default async function CountryPage({
         </div>
       </section>
 
+      {/* SERVICES STRIP */}
+      <section className="bg-white pt-8 pb-4 px-4">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header */}
+          <h2 className="text-xs font-bold tracking-[0.2em] text-amber-600 uppercase text-center">
+            OUR SERVICES
+          </h2>
+          <div className="w-12 h-0.5 bg-amber-500 mt-2 mb-6 mx-auto" />
+
+          {/* Services Grid */}
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+            {[
+              { icon: "🏨", label: "Hotel", href: "/thailand/services#hotel" },
+              { icon: "✈️", label: "Flight", href: "/thailand/services#flight" },
+              { icon: "🎫", label: "Tickets", href: "/thailand/services#tickets" },
+              { icon: "🚗", label: "Transfer", href: "/thailand/services#transfer" },
+              { icon: "🚙", label: "Car Rental", href: "/thailand/services#carrental" },
+              { icon: "🗺️", label: "Tours", href: "/thailand/tours" },
+            ].map((service) => (
+              <a
+                key={service.label}
+                href={service.href}
+                className="flex flex-col items-center justify-center bg-white border border-gray-100 rounded-2xl py-4 px-2 shadow-sm hover:shadow-md hover:border-amber-300 hover:bg-amber-50 transition-all duration-200 cursor-pointer"
+              >
+                <span className="text-3xl mb-2 hover:scale-110 transition-transform">
+                  {service.icon}
+                </span>
+                <span className="text-xs font-semibold text-gray-700 text-center whitespace-nowrap">
+                  {service.label}
+                </span>
+              </a>
+            ))}
+          </div>
+
+          {/* Bottom Divider */}
+          <hr className="border-gray-100 mt-8" />
+        </div>
+      </section>
+
       {/* SECTION 2 — DESTINATIONS */}
       {translatedDestinations && translatedDestinations.length > 0 && (
-        <section id="destinations" className="bg-sacred-bg py-24 px-4">
+        <section id="destinations" className="bg-sacred-bg pt-4 pb-12 px-4">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-sm font-bold text-sacred-green uppercase tracking-[0.2em] mb-4">
-              Discover {countryName}
+            <h2 className="text-xs font-bold tracking-[0.2em] text-amber-600 uppercase text-center">
+              DISCOVER {countryName.toUpperCase()}
             </h2>
-            <div className="w-16 h-[2px] bg-gold-deep mb-12" />
+            <div className="w-12 h-0.5 bg-amber-500 mt-2 mb-8 mx-auto" />
             <DestinationTabs destinations={translatedDestinations} />
           </div>
         </section>
@@ -156,12 +196,12 @@ export default async function CountryPage({
 
       {/* SECTION 3 — FEATURED TOURS */}
       {translatedTours && translatedTours.length > 0 && (
-        <section id="tours" className="bg-sacred-bg py-24 px-4">
+        <section id="tours" className="bg-sacred-bg py-12 px-4">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-sm font-bold text-sacred-green uppercase tracking-[0.2em] mb-4">
-              Featured Journeys
+            <h2 className="text-xs font-bold tracking-[0.2em] text-amber-600 uppercase text-center">
+              FEATURED JOURNEYS
             </h2>
-            <div className="w-16 h-[2px] bg-gold-deep mb-12" />
+            <div className="w-12 h-0.5 bg-amber-500 mt-2 mb-8 mx-auto" />
             
             {/* Tour Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
@@ -219,13 +259,12 @@ export default async function CountryPage({
         </section>
       )}
 
-      {translatedDestinations && translatedDestinations.length > 0 && lowerCountry === 'thailand' && (
-        <InformationSection language={targetLanguage} />
-      )}
+      {/* ESSENTIAL GUIDES */}
+      <EssentialGuides country={lowerCountry} language={targetLanguage.toUpperCase()} />
 
       {/* SECTION 4 — CHAT WIDGETS */}
       {lowerCountry === 'thailand' && (
-        <section id="chat" className="bg-sacred-bg py-24 px-4">
+        <section id="chat" className="bg-sacred-bg pt-0 pb-12 px-4">
           <div className="max-w-7xl mx-auto text-center">
             <ChatWidgetGrid language={targetLanguage} />
           </div>

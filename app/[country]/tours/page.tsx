@@ -4,7 +4,8 @@ import { cookies } from 'next/headers'
 import { translateText } from '@/lib/translate'
 import LanguageSelector from '@/components/shared/LanguageSelector'
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 interface Tour {
   id: string
@@ -58,7 +59,7 @@ export default async function ToursPage({
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
 
   const cookieStore = await cookies()
-  const targetLanguage = cookieStore.get('NEXT_LOCALE')?.value || 'en'
+  const targetLanguage = (cookieStore.get('NEXT_LOCALE')?.value ?? 'EN').toUpperCase()
 
   const supabase = getSupabase()
   const { data: tours, error } = await supabase
@@ -101,24 +102,59 @@ export default async function ToursPage({
     }))
   }
 
-  let translatedData = translationPayload
+  let translatedData: typeof translationPayload | null = null
 
-  if (activeTours.length > 0 && targetLanguage !== 'en') {
+  if (activeTours.length > 0 && targetLanguage !== 'EN') {
     try {
       // API ကို ၁ ကြိမ်တည်းသာ တိုက်ရိုက်ပို့သည်
       const jsonString = JSON.stringify(translationPayload)
-      const prompt = `You are a professional JSON translation engine. Translate all the VALUE fields in this JSON object into the language code '${targetLanguage}'. 
-      Keep the JSON keys exactly the same. Do not translate brand names like 'AsiaBuddy' or person names like 'Zaw Zaw'. 
+
+      // Map language code to full language name for the prompt
+      const langMap: Record<string, string> = {
+        'EN': 'English',
+        'MY': 'Myanmar (Burmese)',
+        'MM': 'Myanmar (Burmese)',
+        'ZH': 'Chinese (Simplified)',
+        'JA': 'Japanese',
+        'KO': 'Korean',
+        'DE': 'German',
+        'FR': 'French',
+        'ES': 'Spanish',
+        'AR': 'Arabic',
+        'RU': 'Russian',
+        'TH': 'Thai',
+      }
+      const targetLanguageName = langMap[targetLanguage] || targetLanguage
+
+      const prompt = `You are a professional JSON translation engine. Translate all the VALUE fields in this JSON object into ${targetLanguageName}.
+      Keep the JSON keys exactly the same. Do not translate brand names like 'AsiaBuddy' or person names like 'Zaw Zaw'.
       Return ONLY the translated JSON output, no other explanations or markdown backticks: ${jsonString}`
-      
-      const translatedJSONString = await translateText(prompt, targetLanguage)
-      
+
+      const translatedJSONString = await translateText(prompt, targetLanguage, { raw: true })
+
       // Markdown backticks ကင်းစင်အောင် သန့်စင်ပြီး JSON parse ခြင်း
       const cleanJSON = translatedJSONString.replace(/```json/g, '').replace(/```/g, '').trim()
-      translatedData = JSON.parse(cleanJSON)
+      const firstBracket = Math.min(
+        ...[cleanJSON.indexOf('{'), cleanJSON.indexOf('[')]
+          .filter((i) => i >= 0)
+      )
+      const lastBracket = Math.max(
+        cleanJSON.lastIndexOf('}'),
+        cleanJSON.lastIndexOf(']')
+      )
+      const jsonPayload =
+        firstBracket >= 0 && lastBracket > firstBracket
+          ? cleanJSON.slice(firstBracket, lastBracket + 1)
+          : cleanJSON
+
+      translatedData = JSON.parse(jsonPayload)
     } catch (e) {
       console.error("Batch translation failed, falling back to English safely:", e)
     }
+  }
+
+  if (!translatedData) {
+    translatedData = translationPayload
   }
 
   // ဘာသာပြန်ပြီးသား စာသားများအား ပြန်လည်ထုတ်ယူခြင်း
@@ -144,8 +180,8 @@ export default async function ToursPage({
     const translatedTourData = translatedData.tours?.[index]
     return {
       ...tour,
-      title: translatedTourData?.title || tour.title,
-      short_description: translatedTourData?.short_description || tour.short_description,
+      title: translatedTourData?.title ?? tour.title ?? '',
+      short_description: translatedTourData?.short_description ?? tour.short_description ?? '',
     }
   })
 
@@ -238,6 +274,8 @@ export default async function ToursPage({
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {translatedTours.map((tour) => {
+                const imageUrl = tour.image_url ?? tour.images?.[0] ?? '/placeholder.jpg'
+
                 return (
                 <Link
                   key={tour.id}
@@ -246,16 +284,10 @@ export default async function ToursPage({
                 >
                   {/* IMAGE AREA */}
                   <div className="relative w-full h-48 bg-amber-50">
-                    {tour.image_url ? (
+                    {imageUrl !== '/placeholder.jpg' ? (
                       <img
-                        src={tour.image_url}
-                        alt={tour.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : tour.images && tour.images.length > 0 && tour.images[0] ? (
-                      <img
-                        src={tour.images[0]}
-                        alt={tour.title}
+                        src={imageUrl}
+                        alt={tour.title ?? ''}
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -272,14 +304,14 @@ export default async function ToursPage({
                   
                   {/* Price Badge */}
                   <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur text-orange-600 font-black text-sm px-3 py-1.5 rounded-xl shadow">
-                    From {tour.price_from.toLocaleString()} {tour.currency}
+                    From {tour.price_from?.toLocaleString() ?? 'N/A'} {tour.currency}
                   </div>
 
                   {/* CARD BODY */}
                   <div className="p-6">
                     {/* Title */}
                     <h3 className="text-xl font-black text-gray-900 group-hover:text-orange-500 transition-colors leading-tight mb-2">
-                      {tour.title}
+                      {tour.title ?? ''}
                     </h3>
                     
                     {/* Description */}
@@ -293,7 +325,7 @@ export default async function ToursPage({
                     {/* Info Pills */}
                     <div className="flex flex-wrap gap-2">
                       <div className="inline-flex items-center gap-1.5 bg-gray-50 text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full border border-gray-100">
-                        🕐 {tour.duration_days} {dayText}{tour.duration_days !== 1 ? 's' : ''} / {tour.duration_nights} {nightText}{tour.duration_nights !== 1 ? 's' : ''}
+                        🕐 {tour.duration_days ?? 0} {dayText}{(tour.duration_days ?? 0) !== 1 ? 's' : ''} / {tour.duration_nights ?? 0} {nightText}{(tour.duration_nights ?? 0) !== 1 ? 's' : ''}
                       </div>
                       <div className="inline-flex items-center gap-1.5 bg-gray-50 text-gray-600 text-xs font-medium px-3 py-1.5 rounded-full border border-gray-100">
                         👥 {maxGroupText} {tour.group_size_max} {peopleText}

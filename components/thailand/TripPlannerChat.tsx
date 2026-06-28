@@ -43,6 +43,7 @@ export default function TripPlannerChat({ language }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [showBookNow, setShowBookNow] = useState(false);
   const [showHumanChat, setShowHumanChat] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = UI_TRANSLATIONS[language]?.chat || UI_TRANSLATIONS.EN.chat;
@@ -93,10 +94,25 @@ export default function TripPlannerChat({ language }: Props) {
   const l = labels[language] || labels['EN'];
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, isLoading, step]);
+
+  useEffect(() => {
+    if (showHumanChat) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showHumanChat]);
 
   const handleNext = (nextStep: Step) => {
     setStep(nextStep);
@@ -160,6 +176,21 @@ RESPONSE RULES — MANDATORY:
     }
     setIsLoading(false);
   };
+
+  const modalContent = showHumanChat ? (
+    <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center">
+      <div
+        className="absolute inset-0 bg-black/60"
+        onClick={() => setShowHumanChat(false)}
+      />
+      <div className="relative w-full h-full md:w-auto md:h-auto md:max-w-lg md:max-h-[85vh] flex flex-col">
+        <HumanOperatorChat
+          language={language}
+          onClose={() => setShowHumanChat(false)}
+        />
+      </div>
+    </div>
+  ) : null;
 
   const renderStep = () => {
     switch(step) {
@@ -367,7 +398,7 @@ RESPONSE RULES — MANDATORY:
                     animate={{ opacity: 1 }}
                     className="bg-white border border-gold-soft/20 rounded-2xl p-4 shadow-sm"
                   >
-                    <div className="prose prose-sm max-w-none text-[11px] leading-relaxed font-medium text-gray-800">
+                    <div className="prose prose-sm max-w-none text-[11px] leading-relaxed font-medium text-gray-800 text-left">
                       <ReactMarkdown rehypePlugins={[rehypeRaw]}>{m.content}</ReactMarkdown>
                     </div>
                   </motion.div>
@@ -419,15 +450,7 @@ RESPONSE RULES — MANDATORY:
         </motion.div>
       </AnimatePresence>
 
-      {/* Human Operator Chat Modal */}
-      <AnimatePresence>
-        {showHumanChat && (
-          <HumanOperatorChat
-            language={language}
-            onClose={() => setShowHumanChat(false)}
-          />
-        )}
-      </AnimatePresence>
+      {mounted && createPortal(modalContent, document.body)}
     </div>
   );
 }

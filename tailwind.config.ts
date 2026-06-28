@@ -21,6 +21,10 @@ const config: Config = {
         sans: ["var(--font-sans)", "sans-serif"],
         mono: ["var(--font-mono)", "monospace"],
       },
+      animation: {
+        'bounce-slow': 'bounce 2s infinite',
+        'ping-slow': 'ping 2s cubic-bezier(0, 0, 0.2, 1) infinite',
+      },
     },
   },
   plugins: [],
