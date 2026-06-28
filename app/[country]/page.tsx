@@ -47,23 +47,13 @@ export default async function CountryPage({
       dest.experiences
   ) || []
 
-  // Translate destinations if needed
-  let translatedDestinations = destinationsWithContent
-  if (destinationsWithContent && targetLanguage !== 'en') {
-    translatedDestinations = await Promise.all(
-      destinationsWithContent.map(async (dest) => {
-        const translatedName = await translateText(dest.name || '', targetLanguage)
-        const translatedDescription = await translateText(dest.description || '', targetLanguage)
-        console.log('[DEBUG] translation result (name):', translatedName)
-        console.log('[DEBUG] translation result (description):', translatedDescription)
-        return {
-          ...dest,
-          name: translatedName,
-          description: translatedDescription,
-        }
-      })
-    )
-  }
+  const lang = targetLanguage.toLowerCase()
+  const translatedDestinations = destinationsWithContent.map((dest) => ({
+    ...dest,
+    name: dest[`name_${lang}`] || dest.name,
+    description: dest[`description_${lang}`] || dest.description,
+    short_description: dest[`short_description_${lang}`] || dest.short_description,
+  }))
 
   // 2. Fetch Featured Tours (Corrected column names to price_from and duration_days)
   const { data: tours, error: toursError } = await supabase

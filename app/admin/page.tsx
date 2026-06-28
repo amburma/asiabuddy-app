@@ -121,6 +121,10 @@ export default function GlobalAdminPage() {
   const [destImages, setDestImages] = useState('');
   const [destImagePreview, setDestImagePreview] = useState('');
   const [destFeatured, setDestFeatured] = useState(false);
+  const [destNameMm, setDestNameMm] = useState('');
+  const [destNameTh, setDestNameTh] = useState('');
+  const [destDescMm, setDestDescMm] = useState('');
+  const [destDescTh, setDestDescTh] = useState('');
 
   // Posts state
   const [postsItems, setPostsItems] = useState<any[]>([]);
@@ -1153,8 +1157,24 @@ export default function GlobalAdminPage() {
                 />
               </Field>
 
+              <Field label="Name (မြန်မာ)">
+                <input value={destNameMm} onChange={e => setDestNameMm(e.target.value)} className={inputCls} />
+              </Field>
+
+              <Field label="Name (ภาษาไทย)">
+                <input value={destNameTh} onChange={e => setDestNameTh(e.target.value)} className={inputCls} />
+              </Field>
+
               <Field label="Slug (auto-generated)">
                 <input value={destSlug} readOnly className={`${inputCls} bg-gray-50 text-gray-400`} />
+              </Field>
+
+              <Field label="Description (မြန်မာ)">
+                <textarea value={destDescMm} onChange={e => setDestDescMm(e.target.value)} rows={3} className={`${inputCls} resize-none`} />
+              </Field>
+
+              <Field label="Description (ภาษาไทย)">
+                <textarea value={destDescTh} onChange={e => setDestDescTh(e.target.value)} rows={3} className={`${inputCls} resize-none`} />
               </Field>
 
               <Field label="Short Description">
@@ -1241,6 +1261,10 @@ export default function GlobalAdminPage() {
                       slug: destSlug.trim().toLowerCase(),
                       description: destDescription.trim() || null,
                       short_description: destShortDescription.trim() || null,
+                      name_mm: destNameMm || null,
+                      name_th: destNameTh || null,
+                      description_mm: destDescMm || null,
+                      description_th: destDescTh || null,
                       featured: destFeatured,
                       image_url: destImages || null,
                       must_visit: destMustVisit.split(',').map(s => s.trim()).filter(Boolean),
@@ -1325,6 +1349,10 @@ export default function GlobalAdminPage() {
                           setDestSlug(item.slug || '');
                           setDestShortDescription(item.short_description || '');
                           setDestDescription(item.description || '');
+                          setDestNameMm(item.name_mm || '');
+                          setDestNameTh(item.name_th || '');
+                          setDestDescMm(item.description_mm || '');
+                          setDestDescTh(item.description_th || '');
                           setDestMustVisit(Array.isArray(item.must_visit) ? item.must_visit.join(', ') : '');
                           setDestActivities(Array.isArray(item.activities) ? item.activities.join(', ') : '');
                           setDestDining(Array.isArray(item.dining) ? item.dining.join(', ') : '');
