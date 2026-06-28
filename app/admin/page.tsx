@@ -1186,7 +1186,7 @@ export default function GlobalAdminPage() {
               </Field>
 
               <Field label="Images (comma-separated URLs)">
-                <input value={destImages} onChange={e => setDestImages(e.target.value)} placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg" className={inputCls} />
+                <input value={destImages} onChange={e => { setDestImages(e.target.value); setDestImagePreview(e.target.value); }} placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg" className={inputCls} />
               </Field>
               <Field label="Or Upload Image">
                 <div className="flex items-center gap-3">
@@ -1331,6 +1331,7 @@ export default function GlobalAdminPage() {
                           setDestHiddenGems(Array.isArray(item.hidden_gems) ? item.hidden_gems.join(', ') : '');
                           setDestExperiences(Array.isArray(item.experiences) ? item.experiences.join(', ') : '');
                           setDestImages(item.image_url || '');
+                          setDestImagePreview(item.image_url || '');
                           setDestFeatured(item.featured || false);
                           setShowDestForm(true);
                           window.scrollTo(0, 0);

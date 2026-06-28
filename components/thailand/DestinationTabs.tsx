@@ -11,7 +11,7 @@ interface Destination {
   dining?: string[]
   activities?: string[]
   hidden_gems?: string[]
-  other_experiences?: string[]
+  experiences?: string[]
 }
 
 interface Props {
@@ -27,7 +27,7 @@ export default function DestinationTabs({ destinations }: Props) {
   const contentTabs = [
     { key: 'must_visit' as const, label: '📍 Must Visit' },
     { key: 'dining' as const, label: '🍜 Dining' },
-    { key: 'other_experiences' as const, label: '🎭 Experiences' },
+    { key: 'experiences' as const, label: '🎭 Experiences' },
     { key: 'activities' as const, label: '🏃 Activities' },
     { key: 'hidden_gems' as const, label: '💎 Hidden Gems' },
   ]
@@ -76,6 +76,16 @@ export default function DestinationTabs({ destinations }: Props) {
           </button>
         ))}
       </div>
+
+      {destination?.image_url && (
+        <div className="w-full h-56 md:h-72 rounded-2xl overflow-hidden mb-6">
+          <img
+            src={destination.image_url}
+            alt={destination.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      )}
 
       {/* Content Tabs */}
       <div className="flex gap-2 mb-6 border-b border-gray-100 pb-2">
