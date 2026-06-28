@@ -202,6 +202,13 @@ const ENGLISH_UI = {
     "bookNow": "Book Now",
     "bookNowSubtitle": "Connect with a Human Operator"
   },
+  "destinationTabs": {
+    "mustVisit": "Must Visit",
+    "dining": "Dining",
+    "experiences": "Experiences",
+    "activities": "Activities",
+    "hiddenGems": "Hidden Gems"
+  },
   "footer": {
     "by": "AsiaBuddy Services",
     "tagline": "Explore Asia beside AsiaBuddy.",
@@ -528,6 +535,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "bookNow": "จองเลย",
     "bookNowSubtitle": "เชื่อมต่อกับเจ้าหน้าที่มนุษย์"
   },
+  "destinationTabs": {
+    "mustVisit": "สถานที่ต้องไป",
+    "dining": "ร้านอาหาร",
+    "experiences": "ประสบการณ์",
+    "activities": "กิจกรรม",
+    "hiddenGems": "สถานที่ซ่อนเร้น"
+  },
   "footer": {
     "by": "ความเป็นเลิศทางวัฒนธรรมไทย • บริการ AsiaBuddy",
     "tagline": "สำรวจเอเชียไปพร้อมกับเอเชียบัดดี้",
@@ -844,6 +858,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "safe": "Safe travels!",
     "bookNow": "ဘွတ်ကင်လုပ်ပါ",
     "bookNowSubtitle": "လူသားလက်ထောက်နှင့် ချိတ်ဆက်ပါ"
+  },
+  "destinationTabs": {
+    "mustVisit": "သွားရောက်ရမည့်နေရာများ",
+    "dining": "စားသောက်ဆိုင်များ",
+    "experiences": "အတွေ့အကြုံများ",
+    "activities": "လှုပ်ရှားမှုများ",
+    "hiddenGems": "လူသိနည်းသောနေရာများ"
   },
   "footer": {
     "by": "ထိုင်းယဉ်ကျေးမှု ထူးချွန်မှု • AsiaBuddy ဝန်ဆောင်မှုများ",
@@ -1162,6 +1183,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "bookNow": "Reservar Ahora",
     "bookNowSubtitle": "Conectar con un Operador Humano"
   },
+  "destinationTabs": {
+    "mustVisit": "Lugares imprescindibles",
+    "dining": "Restaurantes",
+    "experiences": "Experiencias",
+    "activities": "Actividades",
+    "hiddenGems": "Joyas ocultas"
+  },
   "footer": {
     "by": "Excelencia Cultural Tailandesa • Servicios AsiaBuddy",
     "tagline": "Explore Asia junto a AsiaBuddy.",
@@ -1479,6 +1507,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "bookNow": "Réserver Maintenant",
     "bookNowSubtitle": "Connecter avec un Opérateur Humain"
   },
+  "destinationTabs": {
+    "mustVisit": "Incontournables",
+    "dining": "Restaurants",
+    "experiences": "Expériences",
+    "activities": "Activités",
+    "hiddenGems": "Trésors Cachés"
+  },
   "footer": {
     "by": "Excellence Culturelle Thaïlandaise • Services AsiaBuddy",
     "tagline": "Explorez l'Asie aux côtés d'AsiaBuddy.",
@@ -1795,6 +1830,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "safe": "Gute Reise!",
     "bookNow": "Jetzt Buchen",
     "bookNowSubtitle": "Mit einem menschlichen Mitarbeiter verbinden"
+  },
+  "destinationTabs": {
+    "mustVisit": "Sehenswürdigkeiten",
+    "dining": "Restaurants",
+    "experiences": "Erlebnisse",
+    "activities": "Aktivitäten",
+    "hiddenGems": "Geheimtipps"
   },
   "footer": {
     "by": "Thailändische kulturelle Exzellenz • AsiaBuddy Services",

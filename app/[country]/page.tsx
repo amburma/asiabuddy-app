@@ -189,7 +189,7 @@ export default async function CountryPage({
               DISCOVER {countryName.toUpperCase()}
             </h2>
             <div className="w-12 h-0.5 bg-amber-500 mt-2 mb-8 mx-auto" />
-            <DestinationTabs destinations={translatedDestinations} />
+            <DestinationTabs destinations={translatedDestinations} language={targetLanguage.toUpperCase()} />
           </div>
         </section>
       )}

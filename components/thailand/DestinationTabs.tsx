@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { UI_TRANSLATIONS } from '@/lib/i18n'
 
 interface Destination {
   id: string
@@ -16,20 +17,24 @@ interface Destination {
 
 interface Props {
   destinations: Destination[]
+  language?: string
 }
 
-export default function DestinationTabs({ destinations }: Props) {
+export default function DestinationTabs({ destinations, language = 'EN' }: Props) {
   const [selectedDestination, setSelectedDestination] = useState(0)
   const [selectedContent, setSelectedContent] = useState<keyof Destination>('must_visit')
+
+  const uiT = UI_TRANSLATIONS[language as keyof typeof UI_TRANSLATIONS] || UI_TRANSLATIONS.EN
+  const tabs = uiT.destinationTabs
 
   const destination = destinations[selectedDestination]
 
   const contentTabs = [
-    { key: 'must_visit' as const, label: '📍 Must Visit' },
-    { key: 'dining' as const, label: '🍜 Dining' },
-    { key: 'experiences' as const, label: '🎭 Experiences' },
-    { key: 'activities' as const, label: '🏃 Activities' },
-    { key: 'hidden_gems' as const, label: '💎 Hidden Gems' },
+    { key: 'must_visit' as const,   label: `📍 ${tabs.mustVisit}` },
+    { key: 'dining' as const,       label: `🍜 ${tabs.dining}` },
+    { key: 'experiences' as const,  label: `🎭 ${tabs.experiences}` },
+    { key: 'activities' as const,   label: `🏃 ${tabs.activities}` },
+    { key: 'hidden_gems' as const,  label: `💎 ${tabs.hiddenGems}` },
   ]
 
   const renderContent = () => {
