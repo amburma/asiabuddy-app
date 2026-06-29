@@ -272,8 +272,8 @@ export default async function CountryPage({
               <Link href={`/${lowerCountry}/tours`} className="font-sans text-white hover:text-gold-deep transition-colors">
                 Tours
               </Link>
-              <Link href="/about" className="font-sans text-white hover:text-gold-deep transition-colors">
-                About
+              <Link href={`/${lowerCountry}/about`} className="font-sans text-white hover:text-gold-deep transition-colors">
+                About Us
               </Link>
             </div>
           </div>
