@@ -66,12 +66,12 @@ export default function DestinationTabs({ destinations, language = 'EN' }: Props
   return (
     <div>
       {/* City Tabs */}
-      <div className="flex gap-3 flex-wrap mb-8">
+      <div className="flex gap-3 overflow-x-auto pb-2 mb-8 scrollbar-hide">
         {destinations.map((dest, index) => (
           <button
             key={dest.id}
             onClick={() => setSelectedDestination(index)}
-            className={`font-medium px-5 py-2 text-sm rounded-full transition-all cursor-pointer font-sans ${
+            className={`shrink-0 font-medium px-5 py-2 text-sm rounded-full transition-all cursor-pointer font-sans ${
               selectedDestination === index
                 ? 'bg-gold-deep text-white shadow-lg shadow-gold-deep/20 font-semibold'
                 : 'bg-white border border-gray-100 text-gray-700 hover:border-gold-soft hover:text-gold-deep'
@@ -93,12 +93,12 @@ export default function DestinationTabs({ destinations, language = 'EN' }: Props
       )}
 
       {/* Content Tabs */}
-      <div className="flex gap-2 mb-6 border-b border-gray-100 pb-2">
+      <div className="flex gap-2 mb-6 border-b border-gray-100 pb-2 overflow-x-auto scrollbar-hide">
         {contentTabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => setSelectedContent(tab.key)}
-            className={`text-sm px-3 py-1.5 transition-all font-sans ${
+            className={`shrink-0 text-sm px-3 py-1.5 transition-all font-sans ${
               selectedContent === tab.key
                 ? 'text-gold-deep border-b-2 border-gold-deep'
                 : 'text-gray-700 hover:text-gold-deep'
