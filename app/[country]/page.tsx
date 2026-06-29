@@ -67,20 +67,10 @@ export default async function CountryPage({
     console.error('Error fetching tours:', toursError)
   }
 
-  // Translate tours if needed
-  let translatedTours = tours
-  if (tours && targetLanguage !== 'en') {
-    translatedTours = await Promise.all(
-      tours.map(async (tour) => {
-        const translatedTitle = await translateText(tour.title || '', targetLanguage)
-        console.log('[DEBUG] translation result (title):', translatedTitle)
-        return {
-          ...tour,
-          title: translatedTitle,
-        }
-      })
-    )
-  }
+  const translatedTours = tours?.map((tour) => ({
+    ...tour,
+    title: (tour as any)[`title_${lang}`] || tour.title,
+  })) || []
 
   return (
     <>
@@ -144,11 +134,11 @@ export default async function CountryPage({
           {/* Services Grid */}
           <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
             {[
-              { icon: "🏨", label: "Hotel", href: "/thailand/services#hotel" },
-              { icon: "✈️", label: "Flight", href: "/thailand/services#flight" },
-              { icon: "🎫", label: "Tickets", href: "/thailand/services#tickets" },
-              { icon: "🚗", label: "Transfer", href: "/thailand/services#transfer" },
-              { icon: "🚙", label: "Car Rental", href: "/thailand/services#carrental" },
+              { icon: "🏨", label: "Hotel", href: "/thailand/services" },
+              { icon: "✈️", label: "Flight", href: "/thailand/services" },
+              { icon: "🎫", label: "Tickets", href: "/thailand/services" },
+              { icon: "🚗", label: "Transfer", href: "/thailand/services" },
+              { icon: "🚙", label: "Car Rental", href: "/thailand/services" },
               { icon: "🗺️", label: "Tours", href: "/thailand/tours" },
             ].map((service) => (
               <a

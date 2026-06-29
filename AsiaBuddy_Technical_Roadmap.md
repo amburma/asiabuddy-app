@@ -1597,3 +1597,66 @@ SECTION 5 — FOOTER ✅
 - transportGuide.ts pattern: Record<string, string> with EN/MM/TH/DE/FR/ES keys
 - Supported languages: EN, MM, TH, DE, FR, ES only
 - app/thailand/guides/* pages exist but are unused — modals are the UX
+---
+
+## Session 14 Continued / Session 15 — 2026-06-28
+
+### ✅ Budget Tips Modal — Complete
+- Created `data/thailand/budgetGuide.ts` with BUDGET_GUIDE Record<string, string>
+- EN content: full luxury travel budget guide (currency, transport, food, VAT refund, shopping)
+- MM/TH/DE/FR/ES keys: empty strings (pending manual translation)
+- ChatWidgetGrid.tsx: added BUDGET_GUIDE import, showBudgetModal state, case 'budget' handler, GuideModal render
+- EssentialGuides.tsx: fixed Budget Tips card modalId from 'information' → 'budget'
+- TravelToolbox.tsx: removed duplicate hardcoded guides section (replaced by EssentialGuides.tsx card grid)
+- ShoppingChat recommended for Budget modal chat component (pending implementation)
+
+### ✅ Essential Guides — Duplicate Section Fixed
+- Root cause: TravelToolbox.tsx toolsBySection had a 'guides' section duplicating EssentialGuides.tsx
+- Fix: deleted entire first section (guides) from toolsBySection, kept tools section only
+- EssentialGuides.tsx now sole renderer of 8 guide cards
+
+### ✅ Destination Data — Complete
+- All 7 destinations added via Admin: Bangkok, Phuket, Chiang Mai, Pattaya, Krabi, Ayutthaya, Koh Samui
+- image_url: Unsplash URLs added for all destinations
+- must_visit, activities, dining, hidden_gems, experiences: populated for all destinations
+- DestinationTabs.tsx: fixed `other_experiences` → `experiences` field name mismatch
+- DestinationTabs.tsx: added image_url hero render above content tabs
+- Admin page.tsx: fixed destImagePreview not setting on URL input change and on Edit load
+
+### ✅ Destination Tabs i18n — Complete
+- lib/i18n.ts: added `destinationTabs` key to all 6 languages (EN, MM, TH, DE, FR, ES)
+  - mustVisit, dining, experiences, activities, hiddenGems
+- DestinationTabs.tsx: accepts language prop, uses UI_TRANSLATIONS[language].destinationTabs
+- page.tsx: passes language prop to DestinationTabs
+
+### ✅ Static Translations for Destinations — Complete
+- Architecture decision: Option A (Static) chosen over Option B (Cache)
+  - Reason: Free, instant, offline-compatible, no API dependency
+- Supabase destinations table: added 15 new columns
+  - name_mm, name_th, name_de, name_fr, name_es
+  - description_mm, description_th, description_de, description_fr, description_es
+  - short_description_mm, short_description_th, short_description_de, short_description_fr, short_description_es
+- page.tsx: removed Gemini translateText() for destinations entirely
+  - Replaced with static column lookup: dest[`name_${lang}`] || dest.name
+- Admin page.tsx: added MM and TH name/description fields for destinations
+
+### ✅ TypeScript Fixes
+- app/admin/page.tsx: `itineraryData.map(day: any)` 
+- components/shared/ChatWidgetGrid.tsx: TransportChat destination="" prop added
+- components/thailand/TripPlannerChat.tsx: added createPortal import from 'react-dom'
+
+### ⏳ Pending
+- Budget Tips: MM/TH/DE/FR/ES translations (manual)
+- Budget Tips: ShoppingChat integration inside modal
+- Destinations: name/description translations for MM/TH/DE/FR/ES via Admin
+- Tours: static translation columns (same pattern as destinations)
+- PWA Offline feature (next priority after translations)
+- Vite legacy Vercel project: DELETE (causing deploy errors)
+- Cookie Consent Banner
+- B2B bank transfer details for PDF invoice Phase 3
+
+### Architecture Rules (additions)
+- Destination/Tour translations: static multilingual columns in Supabase, NOT Gemini API
+- Column naming pattern: `fieldname_languagecode` (e.g. name_mm, description_th)
+- page.tsx lookup pattern: dest[`field_${lang}`] || dest.field (EN fallback)
+- TravelToolbox: guides section permanently removed — EssentialGuides.tsx handles all guide cards
