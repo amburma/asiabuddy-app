@@ -40,6 +40,10 @@ export async function generateMetadata({
   return {
     title: `${countryName} Travel Guide — AsiaBuddy`,
     description,
+    icons: {
+      icon: `/api/site-icon/${country}`,
+      apple: `/api/site-icon/${country}`,
+    },
     openGraph: {
       title: `${countryName} Travel Guide — AsiaBuddy`,
       description,

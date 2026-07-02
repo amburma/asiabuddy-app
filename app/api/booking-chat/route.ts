@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { getAIKnowledgeBaseForAI } from '@/src/services/googleSheets';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',

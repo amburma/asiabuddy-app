@@ -1660,3 +1660,542 @@ SECTION 5 — FOOTER ✅
 - Column naming pattern: `fieldname_languagecode` (e.g. name_mm, description_th)
 - page.tsx lookup pattern: dest[`field_${lang}`] || dest.field (EN fallback)
 - TravelToolbox: guides section permanently removed — EssentialGuides.tsx handles all guide cards
+
+---
+
+## Session 16 — 30 June 2026
+
+### ✅ Completed — GYG Affiliate + Tours Service Card Integration
+
+- Supabase: Created `gyg_links` table manually via SQL Editor (NOT via migration file):
+  Columns: id (uuid), city (text), activity_name (text), gyg_url (text),
+  price_from (text), rating (text), reviews_count (text), duration (text),
+  image_url (text), created_at (timestamptz) ✅
+  RLS Policy: "Allow all" FOR ALL TO public USING (true) ✅
+  Inserted test row: city='bangkok', activity_name='Bangkok Temple Tour' ✅
+
+- lib/queries/gygLinks.ts — Created:
+  getGygLinksByCity(city: string) function querying gyg_links table
+  using existing Supabase client from lib/supabase.ts ✅
+
+- components/shared/services/TourServiceCard.tsx — Created:
+  Follows TicketServiceCard pattern — Obsidian #0D0D0D bg, Ivory #F5F0E8 text,
+  Gold #C9A84C accent, Playfair Display headings, Inter body, DM Mono price ✅
+  Props: { activity_name, image_url, price_from, rating, reviews_count, duration, gyg_url } ✅
+  Accepts language prop, uses UI_TRANSLATIONS[language].serviceCards.bookNow ✅
+
+- app/[country]/page.tsx — Tours slot wired in OUR SERVICES grid:
+  Imports getGygLinksByCity and TourServiceCard ✅
+  Fetches tourLinks server-side using defaultCity = 'bangkok' (HARDCODED — see Known Issues) ✅
+  Renders horizontal scroll row of up to 3 TourServiceCard when data exists ✅
+  Falls back to original static Tours icon link when tourLinks is empty ✅
+
+- next.config.js — Added images.unsplash.com to images.remotePatterns
+  (fixed "Invalid src prop" runtime error for next/image) ✅
+
+### ⚠️ Known Issues / Technical Debt
+
+- defaultCity in app/[country]/page.tsx Tours slot is HARDCODED to 'bangkok'.
+  It does NOT dynamically follow the user's selected city tab
+  (DestinationTabs selectedDestination state is client-side only,
+  not accessible from the server component page.tsx).
+  Only Bangkok currently has gyg_links data, so this works for now.
+  TODO when more cities have gyg_links data: refactor to make Tours slot
+  dynamic per selected city (may require converting fetch to a client-side
+  call triggered by tab selection, or lifting state up).
+
+- TourServiceCard sizing/styling needs further polish:
+  Card width/height did not initially match the other 5 static service slots
+  (Hotel/Flight/Tickets/Transfer/CarRental) — partially fixed, verify final state.
+  Price text visibility, rating star icon visibility, and "Book Now" button
+  text being cut off / overlapped by FloatingChatButton — these were flagged
+  for fixing, confirm current state before considering this fully done.
+
+- gyg_links table has only 1 row (Bangkok Temple Tour) with a PLACEHOLDER
+  affiliate URL — must be replaced with a real GYG "Create short url" link
+  from partner.getyourguide.com before this can generate real commission.
+  Real price/rating/reviews/duration data also needs to be pulled from
+  the actual GYG activity page to replace placeholder values.
+
+### ⏳ Remaining Work (Priority Order)
+
+**🔴 Priority 1 — GYG Real Data**
+- Replace placeholder gyg_url in gyg_links table with real affiliate link
+  from GYG dashboard (Tools → Links → Bangkok → Create short url)
+- Update price_from, rating, reviews_count, duration with real GYG data
+- Add gyg_links rows for remaining cities: Chiang Mai, Phuket, Pattaya, Krabi, Ayutthaya
+
+**🟡 Priority 2 — Affiliate Program Registrations (not yet started)**
+- Klook (Tickets) — apply at affiliate.klook.com
+- Agoda (Hotel) — apply directly or via CJ Affiliate/Travelpayouts
+- 12Go / WayAway (Transfer/Flight) — apply via Travelpayouts
+
+**🟡 Priority 3 — UI Polish**
+- Finalize TourServiceCard sizing to match other 5 service slots exactly
+- Confirm price text, rating stars, and CTA button text are all fully visible
+  and not overlapped by FloatingChatButton
+- Consider adding icons to Destination sub-tabs (Must Visit / Dining /
+  Experiences / Activities / Hidden Gems) to match Services Strip icon pattern
+
+**🟢 Priority 4 — Future Service Cards (once affiliates approved)**
+- Wire HotelServiceCard to Agoda data (Supabase table TBD, e.g. agoda_links)
+- Wire FlightServiceCard + TransferServiceCard to 12Go/WayAway data
+- Wire TicketServiceCard to Klook data
+- Each new service follows the same Supabase table → query function →
+  service card → page.tsx wiring pattern established with GYG/Tours
+
+### Architecture Notes (additions)
+- gyg_links table created via Supabase SQL Editor directly — NOT via
+  a migration file in supabase/migrations/. Any future schema changes
+  to this table must also be done via SQL Editor unless a migration
+  workflow is explicitly set up.
+- Service card components (HotelServiceCard, FlightServiceCard,
+  TransferServiceCard, CarRentalServiceCard, TicketServiceCard,
+  TourServiceCard) all live in components/shared/services/ and follow
+  an identical prop/design pattern — new affiliate integrations should
+  reuse this pattern.
+
+---
+
+## Session 17 — 01 July 2026
+
+### 🔄 Carried Over — Hardcoded `/thailand/services` href Fix
+
+- Fix applied per `Windsurf_Prompt_Fix_Hardcoded_Services_Href.md`: 5 static
+  OUR SERVICES slots (Hotel/Flight/Transfer/Tickets/CarRental) in
+  `app/[country]/page.tsx` now use dynamic `` `/${country}/services` ``
+  instead of hardcoded `/thailand/services`.
+- `app/[country]/services/page.tsx` created as placeholder ("Coming Soon")
+  page, i18n keys added to `lib/i18n.ts` for all 6 languages.
+- ⚠️ **Unverified before logging as done**: Windsurf's reversion pass
+  reported updating placeholder colors to `bg-sacred-bg`, `text-sacred-green`,
+  `bg-gold-deep` class names. These token names do **not** appear anywhere
+  else in this roadmap — every other session documents the design system as
+  raw hex (Obsidian `#0D0D0D`, Ivory `#F5F0E8`, Gold `#C9A84C`), not named
+  Tailwind tokens. **TODO before marking this session complete:** confirm
+  `tailwind.config.js` actually defines `sacred-bg` / `sacred-green` /
+  `gold-deep` mapped to the correct hex values, and visually compare the
+  services placeholder against the live MainPage hero section. If the
+  tokens are undefined, the classes will silently no-op and the page may
+  not actually match the design system despite the build passing.
+
+### ⏳ Priority 1 — GYG Real Data (still open, detail to be added)
+
+- Placeholder for now — full checklist/detail to be filled in next update.
+  Carried over unchanged from Session 16:
+  - Replace placeholder `gyg_url` in `gyg_links` with real GYG affiliate
+    link (Tools → Links → Bangkok → Create short url)
+  - Update `price_from`, `rating`, `reviews_count`, `duration` with real data
+  - Add `gyg_links` rows for Chiang Mai, Phuket, Pattaya, Krabi, Ayutthaya
+
+### 🟡 Priority 2 — Affiliate Program Registrations — Sample/Placeholder Data Added
+
+- **Status: registrations NOT started.** Klook (Tickets), Agoda (Hotel), and
+  12Go/WayAway (Transfer/Flight) affiliate applications are still pending —
+  will apply once ready, per plan below.
+- In the meantime, placeholder **sample data** has been scoped (see
+  `Windsurf_Prompt_Add_Sample_Service_Cards.md`) so the existing
+  `HotelServiceCard`, `TicketServiceCard`, `TransferServiceCard`, and
+  `FlightServiceCard` components (already built in
+  `components/shared/services/`, currently unused per Session 16 notes)
+  can render real-looking sample content instead of sitting dark/unused,
+  following the exact same pattern used for `gyg_links` → `TourServiceCard`.
+- This is placeholder-only — no real affiliate URLs, no commission-generating
+  links. Once each affiliate program is approved, swap sample rows for real
+  data (same pattern as the GYG Priority 1 task above).
+
+### Architecture Notes (additions)
+- Placeholder/sample affiliate data must be clearly marked (e.g. a
+  `is_placeholder boolean` column or a naming convention) so it can't
+  accidentally go live as a real bookable link before affiliate approval.
+
+---
+
+## Session 17 Continued — 01 July 2026
+
+### 🟡 Priority 2 — Sample Service Cards (Hotel/Tickets/Transfer/Flight) — Reported Complete, NOT Yet Verified
+
+- Windsurf executed `Windsurf_Prompt_Add_Sample_Service_Cards.md`:
+  - Created `agoda_links`, `klook_links`, `transfer_links` tables via Supabase
+    SQL Editor, each with `is_placeholder boolean default true` and RLS
+    "Allow all" policy — matches `gyg_links` precedent ✅
+  - 4 sample rows inserted (city='bangkok'), all `*_url` fields set to
+    `#placeholder-*` strings, no real affiliate credentials ✅
+  - `lib/queries/agodaLinks.ts`, `klookLinks.ts`, `transferLinks.ts` created,
+    following `gygLinks.ts` pattern ✅
+  - `app/[country]/page.tsx` — imports + server-side data fetching for all
+    4 sources added (defaultCity = 'bangkok', same hardcoded pattern as
+    Tours — tracked technical debt, not fixed here) ✅
+  - Build reported passing (TypeScript + static generation, no errors) ✅
+
+### ⚠️ NOT confirmed before this can be marked done — TODO
+
+1. **Full `page.tsx` JSX for the 4 slots was not actually pasted in the
+   report** (only referenced by line range). Must get the real snippet and
+   confirm it genuinely mirrors the Tours fallback-to-static-icon pattern
+   before trusting the wiring is correct.
+2. **Placeholder links are not yet inert.** `href="#placeholder-*"` is a
+   real clickable anchor — will scroll/jump on click, not visibly disabled.
+   Needs `e.preventDefault()` (or equivalent) + a visible "Coming Soon" /
+   disabled-state cue, especially since `is_placeholder = true` exists in
+   the DB but it's unconfirmed whether the UI actually reads and displays it.
+   **Do not deploy to production until this is fixed** — a dead "Book Now"
+   button is a bad user experience and could look broken to real visitors.
+3. **Flight slot component choice (`FlightServiceCard` vs
+   `TransferServiceCard`) was not justified** — prompt asked for a props
+   comparison before choosing; report just states the choice was made.
+   Confirm no prop mismatch / runtime error.
+
+### Architecture Notes (additions)
+- Placeholder rows now exist in `agoda_links`, `klook_links`,
+  `transfer_links` — do not let these reach production-visible state
+  without either (a) real affiliate URLs, or (b) visibly disabled/inert
+  placeholder styling. This mirrors the reversion-report caution from
+  earlier in Session 17: verify before marking "done."
+
+---
+
+## Session 17 Continued (2) — 01 July 2026
+
+### 🐛 New Bug Found — Service Card Layout Mixing + Coming Soon Regression
+
+- Supabase tables (`agoda_links`, `klook_links`, `transfer_links`) created
+  successfully via SQL Editor ✅ — resolved the earlier `{}` console error.
+- Visual verification on `localhost:3000/thailand` revealed 2 new issues:
+  1. Hotel/Tickets/Transfer sample cards render in one merged, unlabeled
+     vertical list below the OUR SERVICES strip — no visual separation by
+     category, contradicting the expected per-category organization.
+  2. CarRental (no sample data table yet) no longer falls back to the
+     `/[country]/services` "Coming Soon" placeholder when clicked — this
+     regressed as a side effect of the sample-card wiring.
+- Root cause still unconfirmed because **the real `page.tsx` JSX has still
+  never been delivered by Windsurf** despite being requested twice. Sent a
+  new prompt (`Windsurf_Prompt_Fix_Service_Card_Layout.md`) that makes
+  pasting the actual current + updated code a hard requirement, not
+  optional, before this can be marked fixed.
+
+### Architecture Notes (additions)
+- Established pattern going forward: any service card section (Hotel/
+  Tickets/Transfer/Flight/Tours) must have a visible category label/heading
+  and use the horizontal-scroll-row pattern — never an unlabeled full-width
+  vertical stack mixing multiple categories.
+- CarRental has no backing table/query — must unconditionally fall back to
+  the Coming Soon placeholder until a real integration is built for it.
+
+---
+
+## Session 17 Continued (3) — 01 July 2026
+
+### ✅ Confirmed Fixed — Category Labels + Horizontal Card Layout
+
+- Screenshot verified: "HOTELS IN BANGKOK", "TICKETS & ACTIVITIES IN BANGKOK"
+  headings now render correctly above each card section, matching the
+  requested labeled/separated format.
+
+### 🐛 New Bug Found — All Sections Render Simultaneously (No Click-to-Reveal)
+
+- Hotel/Tickets/Transfer/Flight sections all render unconditionally and
+  stack on the page at once. The OUR SERVICES icons link to in-page anchors
+  (`#hotels-section` etc.) which only scroll to already-visible content —
+  they do not control show/hide.
+- Desired behavior: clicking an icon should show ONLY that service's
+  section, hiding the others (single active section at a time).
+- Sent `Windsurf_Prompt_Click_To_Reveal_Sections.md` — requires extracting
+  the icon strip + sections into a new Client Component (following the
+  existing `DestinationTabs.tsx` pattern: `"use client"`, `useState` for
+  active tab, receives server-fetched data as props) since
+  `app/[country]/page.tsx` must remain a Server Component per project rules.
+- Car Rental fallback to Coming Soon was reported fixed by Windsurf but
+  **not yet visually confirmed by the user** — still needs a click-test
+  screenshot.
+
+### Architecture Notes (additions)
+- New pattern precedent: any future click-driven show/hide UI on
+  `app/[country]/page.tsx` should follow the same approach — a dedicated
+  Client Component receiving server-fetched props, never `"use client"`
+  on `page.tsx` itself.
+
+---
+
+## Session 17 Continued (4) — 01 July 2026
+
+### 🎯 Architecture Decision — Dedicated Listing Pages (Replaces Click-to-Reveal Plan)
+
+- User requested a different UX direction than the previously-planned
+  click-to-reveal inline sections: each service category (Hotel/Flight/
+  Transfer/Tickets) should get its own dedicated listing page, mirroring
+  the existing, working `app/[country]/tours/page.tsx` pattern exactly.
+  OUR SERVICES icons become plain links to these pages (same as Tours/
+  CarRental already work), not inline show/hide state.
+- Naming convention agreed: **plural**, matching `tours` — `hotels`,
+  `flights`, `transfers`, `tickets`.
+- "Promotion at the top" sorting logic explicitly deferred to a future
+  phase (no `is_promoted`/`sort_order` column yet — not enough real data
+  to make this meaningful until affiliate integrations are live).
+
+### 🐛 Confirmed Bug — Tours Icon 404s
+
+- Read-only investigation confirmed: `app/[country]/activities/` folder
+  exists but has **no `page.tsx`**. `ServicesStrip.tsx`'s Tours icon links
+  to `/${country}/activities` (404), while the homepage hero CTA correctly
+  links to `/${country}/tours` (which works). This inconsistency likely
+  originated when `ServicesStrip.tsx` was extracted from `page.tsx` in an
+  earlier session. Fix bundled into the dedicated-pages prompt
+  (`Windsurf_Prompt_Build_Dedicated_Service_Pages.md`).
+
+### Next
+- Sent build prompt for 4 new pages (`hotels`, `flights`, `transfers`,
+  `tickets`) + `ServicesStrip.tsx` simplification (remove inline sections,
+  fix all hrefs) + Tours 404 fix. Awaiting Windsurf report.
+
+---
+
+## Session 17 Continued (5) — 01 July 2026
+
+### ⚠️ Report Rejected — Missing Required Code + Verification (repeat pattern)
+
+- Windsurf reported creating `app/[country]/hotels/page.tsx`,
+  `flights/page.tsx`, `tickets/page.tsx`, `transfers/page.tsx`, and
+  simplifying `ServicesStrip.tsx` (315 → 130 lines), with `npm run build`
+  passing after fixing 2 type errors along the way.
+- **Not accepted as complete** — report contained no actual code (despite
+  repeated explicit requirement), described the flights page as using a
+  "placeholder" without clarifying whether it's wired to real
+  `getTransferLinksByCity(..., 'wayaway')` data or dummy content, and
+  offered no evidence of manual browser click-testing (only build-time
+  route generation, which is not the same thing). Homepage inline-section
+  removal and the Tours `/activities` → `/tours` href fix were also not
+  explicitly confirmed.
+- Sent a firm follow-up requiring: full code paste, clarification on the
+  flights placeholder, and real click-through browser testing of all 6
+  OUR SERVICES icons before this can be logged as done.
+
+### Note for future sessions
+- This is a recurring pattern in this task thread — Windsurf repeatedly
+  substitutes descriptions/build success for the actually-requested full
+  code + manual verification. Consider requiring screenshots as standard
+  practice for any UI-facing task going forward, not just code.
+
+---
+
+## Session 17 Continued (6) — 01 July 2026
+
+### ✅ Verified — Hotels/Tickets/Transfers Pages Working with Real Data
+
+- Browser click-through confirmed (this time with real evidence, not just
+  build success): `/thailand/hotels`, `/thailand/tickets`,
+  `/thailand/transfers` all load correctly with real sample data from
+  `agoda_links`/`klook_links`/`transfer_links`, no 404s. Car Rental still
+  correctly falls back to `/thailand/services` Coming Soon. Old inline
+  "Hotels in Bangkok" homepage sections confirmed removed.
+
+### 🎯 Architecture Correction — Two Separate "Tours" Concepts
+
+- Clarified that `/tours` (own `tours` table, hero "Explore Tours" CTA) and
+  a to-be-built `/activities` (GYG **affiliate** tours from `gyg_links`,
+  OUR SERVICES strip "Tours" icon) are two intentionally separate routes —
+  the earlier fix that pointed the strip's Tours icon to `/tours` was a
+  misdiagnosis; `/activities` was never actually the wrong destination,
+  it was just missing a `page.tsx`.
+
+### 🐛 Confirmed Bug — Flights Page Uses Hardcoded Placeholder, Not Real Data
+
+- `app/[country]/flights/page.tsx` renders one hardcoded sample card into
+  `FlightServiceCard` instead of querying
+  `getTransferLinksByCity(defaultCity, 'wayaway')`. Needs fixing to match
+  the pattern already correctly used by the transfers page (`'12go'`).
+
+### Next
+- Sent `Windsurf_Prompt_Build_Activities_Fix_Flights.md`: build
+  `app/[country]/activities/page.tsx` (GYG affiliate tours listing),
+  re-point the Tours icon href to `/activities`, and wire real data into
+  the flights page. Awaiting report.
+
+---
+
+## Session 17 Continued (7) — 01 July 2026 — PAUSED FOR HANDOFF
+
+### ⚠️ Latest Report — Not Yet Accepted (evidence gap, same recurring pattern)
+
+- Windsurf reports: `app/[country]/activities/page.tsx` created (GYG-backed
+  data), `ServicesStrip.tsx` Tours icon repointed to `/activities`,
+  `app/[country]/flights/page.tsx` switched to real Wayaway
+  (`transfer_links`, provider='wayaway') data. `npm run build` passed;
+  `/thailand/activities` and `/thailand/flights` both returned HTTP 200.
+- **Not yet confirmed as done.** HTTP 200 is a status-code check, not the
+  browser-rendered-content verification the prompt explicitly required
+  (visually confirm the GYG card renders on `/activities`, confirm the
+  Tours icon really navigates there and not `/tours`, confirm "Explore
+  Tours" hero CTA still correctly goes to `/tours` unaffected, confirm
+  `/flights` shows real `transfer_links` data not the old hardcoded card).
+  No code was pasted either, despite being a stated hard requirement again.
+- **Session paused here for a break** — nothing further sent to Windsurf
+  yet. Next action when resuming: re-send the same 4-point verification
+  ask (browser content check, not just status code) before accepting.
+
+---
+
+## Session 17 Continued (8) — 01 July 2026
+
+### 🎨 New Task — Unify Header Styling Across All Service Pages
+
+- User wants the page-title/header area on Hotel/Flight/Tickets/Transfer/
+  Car Rental (services)/Tours/Activities pages to visually match the
+  homepage's "OUR SERVICES" section (gold uppercase label + underline +
+  Playfair Display heading in the site's green) — color/typography only,
+  no text or layout changes, no hero background photos added.
+- Sent `Windsurf_Prompt_Unify_Page_Headers.md`, which requires confirming
+  the real Tailwind color token names first (Step 0) rather than assuming
+  `sacred-green`/`gold-deep` are correct, given the earlier unresolved
+  token-naming concern from the `/services` placeholder page reversion.
+- Awaiting report.
+
+---
+
+## Session 17 Continued (9) — 01 July 2026 — Design System Consolidation Decision
+
+### 📐 Historical Context Confirmed (nothing was broken — this documents a known legacy split)
+
+- Investigation confirmed the Tours Listing page's "Obsidian/Amber/Orange
+  gradient header" (large hero banner + top-right `LanguageSelector.tsx`
+  overlay) was a **deliberate, documented design decision** from an
+  earlier session — not a bug. See the original Tours Listing UI/UX
+  overhaul entry: "Design system: Obsidian/Amber/Orange gradient header
+  retained" + "LanguageSelector injected top-right corner (non-destructive)."
+- When Windsurf used `tours/page.tsx` as the template for the new
+  `hotels`/`flights`/`tickets`/`transfers` pages in this session, it
+  correctly inherited this same orange banner + LanguageSelector overlay
+  pattern — this was accurate copying of the existing template, not a
+  mistake. The visual mismatch flagged earlier in this session (vs. the
+  newer homepage "Sacred Aesthetic" gold/cream look) is a **real,
+  pre-existing design-language split across two eras of this site**, not
+  something introduced by this session's work.
+- Separately, it's still unconfirmed whether the main site Navbar (logo +
+  MENU + globe icon + home icon, visible on the homepage) shares the same
+  underlying language-switching/navigation logic as the Tours page's
+  `LanguageSelector.tsx` overlay, or whether they are two independent
+  components from different site eras. This needs live testing
+  (click-through), not assumption, before deciding whether any
+  breadcrumb/dropdown/back-link can be safely removed as redundant.
+
+### 🎯 Strategic Direction Decided — Unify Site-Wide to "Sacred Aesthetic"
+
+- **Business goal clarified**: the app should compete on UI/UX polish with
+  Viator, GetYourGuide, Klook, and Airbnb Experiences — not just match
+  functionality, but match/exceed the premium, cohesive feel of those
+  platforms.
+- **Decision**: rather than keeping the Obsidian/Amber/Orange banner as
+  Tours-only legacy styling, the site should unify around the newer
+  homepage "Sacred Aesthetic" (gold/cream palette, Playfair Display
+  headings, understated gold-label + underline pattern) across **all**
+  pages, including Tours — this better supports the "boutique travel
+  concierge" brand positioning implied by the ThaiGuide name and
+  Playfair Display typography.
+- This supersedes the earlier framing of "remove the banner because it's
+  a mismatch" — the banner isn't a mistake, but the decision is still to
+  retire it in favor of one consistent design language site-wide.
+
+### 🚀 Future Scope — Competitor-Level UX Ideas (not started, separate phase)
+
+Captured for later prioritization, not part of the current header/color
+unification work:
+- More prominent trust signals on cards (rating/review count sizing,
+  consistent "Free Cancellation" / "Instant Confirmation" badge styling)
+- Higher-quality, curated destination photography (replace Unsplash
+  placeholders)
+- Filter/sort controls on listing pages (price, rating, duration) —
+  standard on Viator/Airbnb Experiences
+- Social proof / urgency indicators (e.g. "X booked this month")
+- Mobile-first checkout flow audit, minimizing steps to book
+
+### Architecture Notes (additions)
+- Any future page-level template work should default to the "Sacred
+  Aesthetic" (homepage) pattern, not the legacy Obsidian/Amber/Orange
+  pattern, unless explicitly decided otherwise.
+- Before removing any UI element for being "redundant" with the main
+  Navbar, confirm via live browser testing (not documentation, since this
+  isn't documented) whether the two components actually share logic.
+
+---
+
+## Session 18 — 02 July 2026 — Navbar/Breadcrumb Architecture Investigation & Unification
+
+### 🔍 Investigation Completed — Navbar Component Architecture Confirmed
+
+- **Navbar component location**: `components/shared/Navbar.tsx` (Client Component, `"use client"`).
+  Props: `{ country?: string; language?: string }`.
+- **NOT rendered via layout**: `app/[country]/layout.tsx` does NOT import or render `Navbar.tsx`. 
+  The layout only wraps children in a `<div>` and conditionally renders `FloatingChatButton` for Thailand.
+- **Only manually rendered on**: `app/[country]/page.tsx` (homepage), via 
+  `<Navbar country={lowerCountry} language={targetLanguage.toUpperCase()} />`.
+- **Globe icon confirmed**: opens `LanguageWelcome.tsx` (full-page takeover modal) via 
+  `onClick={() => setShowLanguageWelcome(true)}` — NOT the lightweight `LanguageSelector.tsx` dropdown. 
+  This resolves the open question from Session 17 Continued (9) about whether these share logic — they do not; only `LanguageWelcome.tsx` is wired to the navbar.
+- **Home icon confirmed**: navigates to `/${country}` (country homepage), not `/`. 
+  Source: `<Link href={`/${country}`}>` in `Navbar.tsx`.
+- **Confirmed: all 7 service pages currently lack the sticky Navbar entirely**, showing only a text breadcrumb 
+  (`"Home / {countryName} / {service}"`) instead:
+  - `app/[country]/tours/page.tsx`
+  - `app/[country]/hotels/page.tsx`
+  - `app/[country]/flights/page.tsx`
+  - `app/[country]/tickets/page.tsx`
+  - `app/[country]/transfers/page.tsx`
+  - `app/[country]/activities/page.tsx`
+  - `app/[country]/services/page.tsx`
+- **Variable naming confirmed identical across all 7 files** (all Server Components):
+  - Country slug variable: `country` (from `const { country } = await params`)
+  - Language variable: `targetLanguage` (from `const targetLanguage = (cookieStore.get('NEXT_LOCALE')?.value ?? 'EN').toUpperCase()`)
+  - `app/[country]/services/page.tsx` additionally has `lowerCountry` and uses hardcoded breadcrumb text (not `translatedData`-driven like the other 6).
+
+### 🎯 Decision — Unify Navbar Across All Service Pages
+
+- **Decision**: Replace the text breadcrumb on all 7 service pages with the same sticky `Navbar.tsx` component used on the homepage — `<Navbar country={country} language={targetLanguage} />` — inserted as the first child inside `<div className="min-h-screen bg-white">`, before the existing gold-label/title header block. The breadcrumb `<div>` block is removed; the gold-label + Playfair title block underneath is preserved unchanged.
+- This supersedes the earlier "breadcrumb-only, no navbar" approach documented in Step 4 of the Sacred Aesthetic Unification report — that approach is now retired in favor of full Navbar consistency with the homepage.
+- Implementation prompt sent to Windsurf covering all 7 files. **Status: awaiting Windsurf implementation report + build output + manual browser verification before this is marked complete.**
+
+### Next
+- Awaiting Windsurf's implementation report for the 7-file Navbar replacement.
+- After code is accepted, manual browser click-through verification required on all 7 `/thailand/{service}` routes to confirm: Navbar renders correctly, Menu/Globe/Home icons all function, gold-label/title block still renders correctly below it, no layout/spacing regressions.
+
+---
+
+## Session 19 — 02 July 2026 — Consolidated Backlog Review & Affiliate Signup Decision
+
+### 📋 Full Roadmap Review — Consolidated Remaining Work
+
+A full pass through every prior session's "Pending" / "Remaining Work" / "TODO" entries was done to compile a single accurate backlog, since several items had been carried over silently across multiple sessions without a consolidated view.
+
+**🔴 Blocking / Safety-Critical (must fix before production traffic grows):**
+- Placeholder affiliate links (`href="#placeholder-*"` in `agoda_links`, `klook_links`, `transfer_links`) are live/clickable, not visibly disabled — needs `e.preventDefault()` + "Coming Soon" UI cue before real users see them (carried from Session 17 Continued).
+- Flight slot component choice (`FlightServiceCard` vs `TransferServiceCard`) was never confirmed prop-compatible (carried from Session 17 Continued).
+- Tailwind design tokens (`sacred-bg`, `sacred-green`, `gold-deep`) — never confirmed to actually be defined in `tailwind.config.js` with correct hex mappings (carried from Session 17).
+- Session 18 Navbar-on-service-pages work — code and build both confirmed correct, but manual browser click-test across all 7 `/thailand/{service}` routes is still outstanding.
+
+**🟡 GYG / Affiliate Data:**
+- Replace placeholder `gyg_url` + price/rating/reviews/duration in `gyg_links` with real data from GYG partner dashboard (carried from Session 16).
+- Add `gyg_links` rows for Chiang Mai, Phuket, Pattaya, Krabi, Ayutthaya (Bangkok is currently the only city with data).
+- `defaultCity` is hardcoded to `'bangkok'` across all service page data fetches — not yet dynamic per selected city tab (carried from Session 16).
+
+**🟢 UI Polish:**
+- `TourServiceCard` sizing/styling still not confirmed to exactly match the other 5 service card components (carried from Session 16).
+
+**⚪ Older Carry-Over (open since Session 14–15, still unresolved):**
+- Cookie Consent Banner — production verify still outstanding.
+- Vercel legacy Vite project (`thailand.asiabuddy.app`) — deletion still pending; previously noted as causing deploy errors.
+- Destination name/description translations (MM/TH/DE/FR/ES) — static columns exist in Supabase but translation content itself is still empty/pending, to be filled via Admin.
+- Tours table — static translation columns (same pattern as destinations) not yet implemented.
+- Budget Tips modal — MM/TH/DE/FR/ES translations still pending (EN-only currently).
+- PWA Offline feature — not started.
+- B2B bank transfer details for PDF invoice (Phase 3) — not started.
+
+### 🎯 Decision — Begin Affiliate Program Signups Now (Parallel Track)
+
+- **Decision**: Klook and Agoda affiliate program signups will begin now, in parallel with the remaining GYG real-data work above — these are independent tracks and affiliate approval turnaround (days, per each program's public documentation) means starting early avoids idle waiting later.
+- 12Go/WayAway affiliate signup will follow the same pattern once Klook/Agoda are underway.
+- Once each program is approved, real affiliate data replaces the corresponding placeholder table (`agoda_links`, `klook_links`, `transfer_links`) — same pattern already established for `gyg_links`.
+- This does not change the priority order of the 🔴 Blocking items above — those should still be addressed independently of affiliate signup status.
+
+### Next
+- User to complete Klook affiliate signup (affiliate.klook.com) and Agoda affiliate signup (partners.agoda.com).
+- Separately: address the 🔴 Blocking items, starting with making placeholder links visibly inert (highest user-facing risk).
+- Separately: complete Session 18 browser click-test verification for the 7 service pages.

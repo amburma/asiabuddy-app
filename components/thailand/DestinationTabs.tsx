@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { MapPin, UtensilsCrossed, Compass, Activity, Gem } from 'lucide-react'
 import { UI_TRANSLATIONS } from '@/lib/i18n'
 
 interface Destination {
@@ -20,6 +21,12 @@ interface Props {
   language?: string
 }
 
+interface ContentTab {
+  key: keyof Destination
+  icon: React.ReactNode
+  label: string
+}
+
 export default function DestinationTabs({ destinations, language = 'EN' }: Props) {
   const [selectedDestination, setSelectedDestination] = useState(0)
   const [selectedContent, setSelectedContent] = useState<keyof Destination>('must_visit')
@@ -29,12 +36,12 @@ export default function DestinationTabs({ destinations, language = 'EN' }: Props
 
   const destination = destinations[selectedDestination]
 
-  const contentTabs = [
-    { key: 'must_visit' as const,   label: `📍 ${tabs.mustVisit}` },
-    { key: 'dining' as const,       label: `🍜 ${tabs.dining}` },
-    { key: 'experiences' as const,  label: `🎭 ${tabs.experiences}` },
-    { key: 'activities' as const,   label: `🏃 ${tabs.activities}` },
-    { key: 'hidden_gems' as const,  label: `💎 ${tabs.hiddenGems}` },
+  const contentTabs: ContentTab[] = [
+    { key: 'must_visit' as const,   icon: <MapPin size={20} className="text-gold-deep" />, label: tabs.mustVisit },
+    { key: 'dining' as const,       icon: <UtensilsCrossed size={20} className="text-gold-deep" />, label: tabs.dining },
+    { key: 'experiences' as const,  icon: <Compass size={20} className="text-gold-deep" />, label: tabs.experiences },
+    { key: 'activities' as const,   icon: <Activity size={20} className="text-gold-deep" />, label: tabs.activities },
+    { key: 'hidden_gems' as const,  icon: <Gem size={20} className="text-gold-deep" />, label: tabs.hiddenGems },
   ]
 
   const renderContent = () => {
@@ -98,13 +105,14 @@ export default function DestinationTabs({ destinations, language = 'EN' }: Props
           <button
             key={tab.key}
             onClick={() => setSelectedContent(tab.key)}
-            className={`shrink-0 text-sm px-3 py-1.5 transition-all font-sans ${
+            className={`shrink-0 text-sm px-3 py-1.5 transition-all font-sans flex items-center gap-1.5 ${
               selectedContent === tab.key
                 ? 'text-gold-deep border-b-2 border-gold-deep'
                 : 'text-gray-700 hover:text-gold-deep'
             }`}
           >
-            {tab.label}
+            {tab.icon}
+            <span>{tab.label}</span>
           </button>
         ))}
       </div>

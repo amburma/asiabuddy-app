@@ -2,7 +2,7 @@ import { getSupabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { translateText } from '@/lib/translate'
-import LanguageSelector from '@/components/shared/LanguageSelector'
+import Navbar from '@/components/shared/Navbar'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -81,13 +81,13 @@ export default async function ToursPage({
     homeText: "Home",
     toursText: "Tours",
     backText: `Back to ${countryName}`,
-    titleText: `${countryName} Tours & Packages`,
+    titleText: `Tours in ${countryName}`,
     subtitleText: "Handpicked experiences. Unforgettable memories.",
     verifiedText: "100% Verified Tours",
     guaranteeText: "Best Price Guarantee",
     supportText: "24/7 Support",
     availText: "Available Experiences",
-    exploreTitle: `Explore ${countryName}`,
+    exploreTitle: `Tours in ${countryName}`,
     tourCountText: `${activeTours.length} tour${activeTours.length !== 1 ? 's' : ''} available`,
     exploreCtaText: "Explore This Tour →",
     maxGroupText: "Max",
@@ -187,50 +187,19 @@ export default async function ToursPage({
 
   return (
     <div className="min-h-screen bg-white">
-      {/* HERO SECTION */}
-      <div className="relative h-[420px] overflow-hidden bg-amber-600">
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/80 via-orange-900/40 to-amber-500/60 z-10"></div>
-        
-        {/* Decorative Circles */}
-        <div className="absolute -top-20 -right-20 w-96 h-96 rounded-full bg-orange-400/20 blur-3xl z-0"></div>
-        <div className="absolute -bottom-10 -left-10 w-72 h-72 rounded-full bg-yellow-300/20 blur-2xl z-0"></div>
-        
-        {/* Content */}
-        <div className="relative z-20 flex flex-col justify-end h-full max-w-7xl mx-auto px-6 pb-16">
-          
-          {/* Breadcrumb Row + Language Selector */}
-          <div className="flex justify-between items-start w-full mb-4">
-            <div className="text-orange-300 text-sm tracking-wide uppercase font-sans">
-              {homeText} / {countryName} / {toursText}
+      <Navbar country={country} language={targetLanguage} />
+      <div className="border-b border-gold-soft/20 bg-sacred-bg/70">
+        <div className="max-w-7xl mx-auto px-6 py-8 md:py-10">
+          <div className="mt-6">
+            <div className="inline-flex flex-col items-start gap-2 mb-4">
+              <span className="text-[10px] uppercase tracking-[0.5em] font-bold text-gold-deep">
+                {availText}
+              </span>
+              <span className="h-[1px] w-16 bg-gold-deep/70" />
             </div>
-            
-            <LanguageSelector />
-          </div>
-          
-          {/* Back Button */}
-          <Link
-            href={`/${country}`}
-            className="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm mb-6 transition"
-          >
-            ← {backText}
-          </Link>
-          
-          {/* Title */}
-          <h1 className="text-5xl md:text-6xl font-black text-white leading-tight mb-4">
-            {titleText}
-          </h1>
-          
-          {/* Subtitle */}
-          <p className="text-xl text-white/80 font-light max-w-2xl">
-            {subtitleText}
-          </p>
-          
-          {/* Stats Row */}
-          <div className="flex flex-wrap gap-8 mt-8">
-            <div className="text-white/90 text-sm font-medium">✦ {verifiedText}</div>
-            <div className="text-white/90 text-sm font-medium">✦ {guaranteeText}</div>
-            <div className="text-white/90 text-sm font-medium">✦ {supportText}</div>
+            <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-sacred-green leading-tight">
+              {titleText}
+            </h1>
           </div>
         </div>
       </div>
@@ -238,20 +207,6 @@ export default async function ToursPage({
       {/* TOURS GRID SECTION */}
       <div className="bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-6 py-16">
-          {/* Section Label */}
-          <div className="text-orange-500 text-sm font-bold uppercase tracking-widest mb-2">
-            {availText}
-          </div>
-          
-          {/* Section Title */}
-          <h2 className="text-3xl font-black text-gray-900 mb-2">
-            {exploreTitle}
-          </h2>
-          
-          {/* Section Subtitle */}
-          <p className="text-gray-500 mb-10">
-            {tourCountText}
-          </p>
           
           {/* Grid */}
           {translatedTours.length === 0 ? (

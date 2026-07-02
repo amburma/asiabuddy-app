@@ -549,3 +549,124 @@ export async function getPolicyDataForAI(): Promise<string> {
     return 'Policy data is currently unavailable. Please try again later.';
   }
 }
+
+/**
+ * Get AI Knowledge Base data from the _AI_Knowledge_Base folder
+ * This function reads from: master_packages, master_pricing, master_policies, master_faq, ai_rules
+ * @returns Object with sheet names as keys and their data as values
+ */
+export async function getAIKnowledgeBaseData(): Promise<Record<string, any[][]>> {
+  try {
+    console.log('Fetching AI Knowledge Base data from Google Drive...');
+
+    // Get Thailand folder ID from environment or find by name
+    let thailandFolderId: string | null = process.env.GOOGLE_DRIVE_FOLDER_ID_THAILAND || null;
+    
+    if (!thailandFolderId) {
+      thailandFolderId = await findFolderByName('Thailand');
+      if (!thailandFolderId) {
+        throw new Error('Thailand folder not found. Please set GOOGLE_DRIVE_FOLDER_ID_THAILAND environment variable.');
+      }
+    }
+
+    console.log(`Thailand folder ID: ${thailandFolderId}`);
+
+    // Find _AI_Knowledge_Base subfolder
+    const knowledgeBaseFolderId = await findFolderByName('_AI_Knowledge_Base', thailandFolderId);
+    if (!knowledgeBaseFolderId) {
+      throw new Error('_AI_Knowledge_Base folder not found in Thailand folder');
+    }
+
+    console.log(`_AI_Knowledge_Base folder ID: ${knowledgeBaseFolderId}`);
+
+    // Get all sheets in _AI_Knowledge_Base folder
+    const sheets = await getSheetsInFolder(knowledgeBaseFolderId);
+    console.log(`Found ${sheets.length} sheets in _AI_Knowledge_Base folder`);
+
+    if (sheets.length === 0) {
+      console.warn('No sheets found in _AI_Knowledge_Base folder');
+      return {};
+    }
+
+    // Read data from all sheets
+    const knowledgeBaseData: Record<string, any[][]> = {};
+    for (const sheet of sheets) {
+      console.log(`Reading sheet: ${sheet.name}`);
+      const data = await readSheetData(sheet.id);
+      knowledgeBaseData[sheet.name] = data;
+      console.log(`  - Read ${data.length} rows from ${sheet.name}`);
+    }
+
+    console.log('Successfully fetched all AI Knowledge Base data');
+    return knowledgeBaseData;
+  } catch (error) {
+    console.error('Error getting AI Knowledge Base data:', error);
+    throw error;
+  }
+}
+
+/**
+ * Format AI Knowledge Base data for Gemini AI context
+ * Converts raw sheet data into a readable text format for price negotiation
+ * @param knowledgeBaseData - Raw knowledge base data from sheets
+ * @returns Formatted text string for AI context
+ */
+export function formatAIKnowledgeBaseForAI(knowledgeBaseData: Record<string, any[][]>): string {
+  let formattedText = 'AI KNOWLEDGE BASE - PRICING, POLICIES & PACKAGES:\n\n';
+
+  // Priority order for sheets
+  const priorityOrder = ['master_pricing', 'master_packages', 'master_policies', 'master_faq', 'ai_rules'];
+  
+  // Sort sheets by priority, then alphabetically for non-priority sheets
+  const sortedSheetNames = Object.keys(knowledgeBaseData).sort((a, b) => {
+    const aIndex = priorityOrder.indexOf(a);
+    const bIndex = priorityOrder.indexOf(b);
+    
+    if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+    if (aIndex !== -1) return -1;
+    if (bIndex !== -1) return 1;
+    return a.localeCompare(b);
+  });
+
+  for (const sheetName of sortedSheetNames) {
+    const rows = knowledgeBaseData[sheetName];
+    if (rows.length === 0) continue;
+
+    formattedText += `=== ${sheetName.toUpperCase()} ===\n`;
+
+    // Use first row as headers
+    const headers = rows[0];
+    formattedText += `Headers: ${headers.join(' | ')}\n\n`;
+
+    // Add data rows (limit to first 30 rows to avoid token limits)
+    const dataRows = rows.slice(1, 31);
+    for (const row of dataRows) {
+      if (row.length > 0) {
+        formattedText += `${row.join(' | ')}\n`;
+      }
+    }
+
+    if (rows.length > 31) {
+      formattedText += `... and ${rows.length - 31} more rows\n`;
+    }
+
+    formattedText += '\n';
+  }
+
+  return formattedText;
+}
+
+/**
+ * Get formatted AI Knowledge Base data ready for Gemini AI
+ * This is a convenience function that combines fetching and formatting
+ * @returns Formatted knowledge base data text
+ */
+export async function getAIKnowledgeBaseForAI(): Promise<string> {
+  try {
+    const knowledgeBaseData = await getAIKnowledgeBaseData();
+    return formatAIKnowledgeBaseForAI(knowledgeBaseData);
+  } catch (error) {
+    console.error('Error getting AI Knowledge Base data for AI:', error);
+    return 'AI Knowledge Base data is currently unavailable. Please use general pricing guidelines.';
+  }
+}

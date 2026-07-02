@@ -9,6 +9,13 @@ import { translateText } from '@/lib/translate'
 import { cookies } from 'next/headers'
 import Navbar from '@/components/shared/Navbar'
 import { SupportedLanguage } from '@/types/country'
+import { getGygLinksSummary } from '@/lib/queries/gygLinks'
+import { getAgodaLinksByCity } from '@/lib/queries/agodaLinks'
+import { getKlookLinksByCity } from '@/lib/queries/klookLinks'
+import { getTransferLinksByCity } from '@/lib/queries/transferLinks'
+import Footer from '@/components/shared/Footer'
+import { UI_TRANSLATIONS } from '@/lib/i18n'
+import ServicesStrip from '@/components/shared/services/ServicesStrip'
 
 export default async function CountryPage({
   params,
@@ -48,6 +55,7 @@ export default async function CountryPage({
   ) || []
 
   const lang = targetLanguage.toLowerCase()
+  const uiTranslations = UI_TRANSLATIONS[(targetLanguage.toUpperCase() || 'EN') as SupportedLanguage]
   const translatedDestinations = destinationsWithContent.map((dest) => ({
     ...dest,
     name: dest[`name_${lang}`] || dest.name,
@@ -71,6 +79,16 @@ export default async function CountryPage({
     ...tour,
     title: (tour as any)[`title_${lang}`] || tour.title,
   })) || []
+
+  // 3. Fetch GYG Links Summary for Services Strip
+  const gygSummary = await getGygLinksSummary()
+
+  // 4. Fetch service links for Services Strip (using hardcoded defaultCity = 'bangkok')
+  const defaultCity = 'bangkok'
+  const agodaLinks = await getAgodaLinksByCity(defaultCity)
+  const klookLinks = await getKlookLinksByCity(defaultCity)
+  const transfer12goLinks = await getTransferLinksByCity(defaultCity, '12go')
+  const transferWayawayLinks = await getTransferLinksByCity(defaultCity, 'wayaway')
 
   return (
     <>
@@ -122,44 +140,15 @@ export default async function CountryPage({
         </div>
       </section>
 
-      {/* SERVICES STRIP */}
-      <section className="bg-white pt-8 pb-4 px-4">
-        <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
-          <h2 className="text-xs font-bold tracking-[0.2em] text-amber-600 uppercase text-center">
-            OUR SERVICES
-          </h2>
-          <div className="w-12 h-0.5 bg-amber-500 mt-2 mb-6 mx-auto" />
-
-          {/* Services Grid */}
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
-            {[
-              { icon: "🏨", label: "Hotel", href: "/thailand/services" },
-              { icon: "✈️", label: "Flight", href: "/thailand/services" },
-              { icon: "🎫", label: "Tickets", href: "/thailand/services" },
-              { icon: "🚗", label: "Transfer", href: "/thailand/services" },
-              { icon: "🚙", label: "Car Rental", href: "/thailand/services" },
-              { icon: "🗺️", label: "Tours", href: "/thailand/tours" },
-            ].map((service) => (
-              <a
-                key={service.label}
-                href={service.href}
-                className="flex flex-col items-center justify-center bg-white border border-gray-100 rounded-2xl py-4 px-2 shadow-sm hover:shadow-md hover:border-amber-300 hover:bg-amber-50 transition-all duration-200 cursor-pointer"
-              >
-                <span className="text-3xl mb-2 hover:scale-110 transition-transform">
-                  {service.icon}
-                </span>
-                <span className="text-xs font-semibold text-gray-700 text-center whitespace-nowrap">
-                  {service.label}
-                </span>
-              </a>
-            ))}
-          </div>
-
-          {/* Bottom Divider */}
-          <hr className="border-gray-100 mt-8" />
-        </div>
-      </section>
+      <ServicesStrip
+        country={lowerCountry}
+        language={targetLanguage.toUpperCase() as SupportedLanguage}
+        agodaLinks={agodaLinks}
+        klookLinks={klookLinks}
+        transfer12goLinks={transfer12goLinks}
+        transferWayawayLinks={transferWayawayLinks}
+        gygSummary={gygSummary}
+      />
 
       {/* SECTION 2 — DESTINATIONS */}
       {translatedDestinations && translatedDestinations.length > 0 && (
@@ -252,39 +241,7 @@ export default async function CountryPage({
       )}
 
       {/* SECTION 5 — FOOTER */}
-      <footer id="footer" className="bg-sacred-green border-t border-gold-deep/20 py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-            {/* Brand */}
-            <div>
-              <h3 className="font-serif text-2xl text-gold-deep font-bold mb-2">
-                AsiaBuddy
-              </h3>
-              <p className="font-sans text-white/80 text-sm">
-                Your luxury travel concierge in Southeast Asia
-              </p>
-            </div>
-            {/* Links */}
-            <div className="flex gap-8 md:justify-end">
-              <Link href="/" className="font-sans text-white hover:text-gold-deep transition-colors">
-                Home
-              </Link>
-              <Link href={`/${lowerCountry}/tours`} className="font-sans text-white hover:text-gold-deep transition-colors">
-                Tours
-              </Link>
-              <Link href={`/${lowerCountry}/about`} className="font-sans text-white hover:text-gold-deep transition-colors">
-                About Us
-              </Link>
-            </div>
-          </div>
-          {/* Bottom Bar */}
-          <div className="text-center pt-8 border-t border-gold-deep/10">
-            <p className="font-sans text-white/60 text-sm">
-              © 2025 AsiaBuddy. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <Footer country={lowerCountry} />
     </>
   )
 }

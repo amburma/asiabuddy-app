@@ -351,6 +351,54 @@ const ENGLISH_UI = {
       "phrases": "Basic Thai Phrases — Study phrases in app",
       "vat": "VAT Refund — Read the guide in app"
     }
+  },
+  "serviceCards": {
+    "bookNow": "Book Now",
+    "viewFlight": "View Flight",
+    "bookTransfer": "Book Transfer",
+    "reserveCar": "Reserve Car",
+    "getTickets": "Get Tickets",
+    "freeCancellation": "Free Cancellation",
+    "skipTheLine": "Skip the Line",
+    "instantConfirmation": "Instant Confirmation",
+    "perNight": "/night",
+    "perDay": "/day",
+    "perPerson": "/person",
+    "priceChecked": "Price checked",
+    "minDriverAge": "Minimum driver age"
+  },
+  "activitiesPage": {
+    "breadcrumb": "Home",
+    "breadcrumbActivities": "Activities",
+    "backTo": "Back to",
+    "decorativeLabel": "Experiences",
+    "title": "Activities",
+    "subtitle": "Discover amazing experiences and book through our trusted partners",
+    "statCurated": "✦ Curated Activities",
+    "statBestPrices": "✦ Best Prices",
+    "statInstantBooking": "✦ Instant Booking",
+    "sectionLabel": "Available Experiences",
+    "sectionTitle": "Browse Activities",
+    "activitiesAvailable": "{count} {count, plural, one {activity} other {activities}} available",
+    "emptyStateTitle": "Activities Coming Soon",
+    "emptyStateDescription": "We're curating amazing experiences for you. Check back soon!",
+    "filterAllCities": "All Cities",
+    "filterNoActivities": "No activities found",
+    "filterNoActivitiesDescription": "Try selecting a different city or view all activities"
+  },
+  "servicesStrip": {
+    "hotel": "Hotel",
+    "flight": "Flight",
+    "transfer": "Transfer",
+    "tickets": "Tickets",
+    "carRental": "Car Rental"
+  },
+  "servicesPage": {
+    "comingSoonTitle": "Coming Soon",
+    "comingSoonMessage": "We are working hard to bring you the best travel services.",
+    "servicesList": "Hotel • Flight • Tickets • Transfer • Car Rental • Tours",
+    "backToHome": "Back to Home",
+    "chatNote": "For bookings & inquiries, use our Live Support Chat on the home page."
   }
 };
 
@@ -710,6 +758,54 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "phrases": "วลีภาษาไทยพื้นฐาน — ศึกษาวลีพื้นฐานที่ใช้บ่อย",
       "vat": "ข้อมูลคืนภาษี — อ่านขั้นตอนการขอคืนภาษี (VAT)"
     }
+  },
+  "serviceCards": {
+    "bookNow": "จองเลย",
+    "viewFlight": "ดูเที่ยวบิน",
+    "bookTransfer": "จองการเดินทาง",
+    "reserveCar": "จองรถ",
+    "getTickets": "รับตั๋ว",
+    "freeCancellation": "ยกเลิกฟรี",
+    "skipTheLine": "ไม่ต้องต่อคิว",
+    "instantConfirmation": "ยืนยันทันที",
+    "perNight": "/คืน",
+    "perDay": "/วัน",
+    "perPerson": "/คน",
+    "priceChecked": "ตรวจสอบราคา",
+    "minDriverAge": "อายุคนขับขั้นต่ำ"
+  },
+  "activitiesPage": {
+    "breadcrumb": "หน้าแรก",
+    "breadcrumbActivities": "กิจกรรม",
+    "backTo": "กลับไปยัง",
+    "decorativeLabel": "ประสบการณ์",
+    "title": "กิจกรรม",
+    "subtitle": "ค้นพบประสบการณ์ที่น่าทึ่งและจองผ่านพาร์ทเนอร์ที่เชื่อถือได้ของเรา",
+    "statCurated": "✦ กิจกรรมที่คัดสรรมาแล้ว",
+    "statBestPrices": "✦ ราคาดีที่สุด",
+    "statInstantBooking": "✦ จองทันที",
+    "sectionLabel": "ประสบการณ์ที่มีให้",
+    "sectionTitle": "เรียกดูกิจกรรม",
+    "activitiesAvailable": "{count} กิจกรรมที่มีให้",
+    "emptyStateTitle": "กิจกรรมเร็วๆ นี้",
+    "emptyStateDescription": "เรากำลังคัดสรรประสบการณ์ที่น่าทึ่งสำหรับคุณ ติดตามข่าวสารเพิ่มเติมเร็วๆ นี้!",
+    "filterAllCities": "ทุกเมือง",
+    "filterNoActivities": "ไม่พบกิจกรรม",
+    "filterNoActivitiesDescription": "ลองเลือกเมืองอื่นหรือดูกิจกรรมทั้งหมด"
+  },
+  "servicesStrip": {
+    "hotel": "โรงแรม",
+    "flight": "เที่ยวบิน",
+    "transfer": "การเดินทาง",
+    "tickets": "ตั๋ว",
+    "carRental": "เช่ารถ"
+  },
+  "servicesPage": {
+    "comingSoonTitle": "เร็วๆ นี้",
+    "comingSoonMessage": "เรากำลังทำงานอย่างหนักเพื่อนำบริการการเดินทางที่ดีที่สุดมาสู่คุณ",
+    "servicesList": "โรงแรม • เที่ยวบิน • ตั๋ว • การเดินทาง • เช่ารถ • ทัวร์",
+    "backToHome": "กลับไปหน้าแรก",
+    "chatNote": "สำหรับการจองและสอบถาม ให้ใช้แชทสนับสนุนสดของเราบนหน้าแรก"
   }
 },
   MM: {
@@ -1060,6 +1156,54 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "phrases": "အခြေခံထိုင်းစကားပြော — အက်ပ်အတွင်းရှိ စကားစုများကို လေ့လာပါ",
       "vat": "VAT ပြန်အမ်းငွေ — အက်ပ်အတွင်းရှိ လမ်းညွှန်ချက်ကို ဖတ်ထားပါ"
     }
+  },
+  "serviceCards": {
+    "bookNow": "ဘွတ်ကင်လုပ်ပါ",
+    "viewFlight": "လေယာဉ်ကြည့်ပါ",
+    "bookTransfer": "သယ်ယူပို့ဆောင်ရေး ဘွတ်ကင်လုပ်ပါ",
+    "reserveCar": "ကားအငှား ဘွတ်ကင်လုပ်ပါ",
+    "getTickets": "လက်မှတ်ရယူပါ",
+    "freeCancellation": "အခမဲ့ ဖျက်သိမ်းနိုင်",
+    "skipTheLine": "တန်းစီမနေရ",
+    "instantConfirmation": "ချက်ချင်း အတည်ပြု",
+    "perNight": "/ည",
+    "perDay": "/ရက်",
+    "perPerson": "/လူ",
+    "priceChecked": "စျေးနှုတ်ထားသည်",
+    "minDriverAge": "ကားမောင်း အနိမ့်ဆုံးအသက်"
+  },
+  "activitiesPage": {
+    "breadcrumb": "ပင်မ",
+    "breadcrumbActivities": "လှုပ်ရှားမှုများ",
+    "backTo": "ပြန်သွားရန်",
+    "decorativeLabel": "အတွေ့အကြုံများ",
+    "title": "လှုပ်ရှားမှုများ",
+    "subtitle": "အံ့ဖွယ်ကောင်းသော အတွေ့အကြုံများကို ရှာဖွေပြီး ကျွန်ုပ်တို့၏ ယုံကြည်ရသော ပါတ်နာများမှ ဘွတ်ကင်လုပ်ပါ",
+    "statCurated": "✦ ရွေးချယ်ထားသော လှုပ်ရှားမှုများ",
+    "statBestPrices": "✦ အကောင်းဆုံးစျေးနှုန်းများ",
+    "statInstantBooking": "✦ ချက်ချင်းဘွတ်ကင်လုပ်နိုင်",
+    "sectionLabel": "ရရှိနိုင်သော အတွေ့အကြုံများ",
+    "sectionTitle": "လှုပ်ရှားမှုများ ကြည့်ရှုပါ",
+    "activitiesAvailable": "{count} လှုပ်ရှားမှုများ ရရှိနိုင်သည်",
+    "emptyStateTitle": "လှုပ်ရှားမှုများ မကြာမီ လာမည်",
+    "emptyStateDescription": "ကျွန်ုပ်တို့သည် သင့်အတွက် အံ့ဖွယ်ကောင်းသော အတွေ့အကြုံများကို ရွေးချယ်နေသည်။ မကြာမီ ပြန်လာကြည့်ပါ!",
+    "filterAllCities": "မြို့အားလုံး",
+    "filterNoActivities": "လှုပ်ရှားမှုများ မတွေ့ပါ",
+    "filterNoActivitiesDescription": "မြို့တစ်ခုကို ရွေးချယ်ကြည့်ပါ သို့မဟုတ် လှုပ်ရှားမှုအားလုံးကို ကြည့်ပါ"
+  },
+  "servicesStrip": {
+    "hotel": "ဟိုတယ်",
+    "flight": "လေယာဉ်",
+    "transfer": "သယ်ယူပို့ဆောင်ရေး",
+    "tickets": "လက်မှတ်များ",
+    "carRental": "ကားအငှား"
+  },
+  "servicesPage": {
+    "comingSoonTitle": "မကြာမီလာမည်",
+    "comingSoonMessage": "ကျွန်ုပ်တို့သည် အကောင်းဆုံး ခရီးသွားဝန်ဆောင်မှုများကို သင့်အတွက် ယူဆောင်လာရန် အထမ်းသပ်လုပ်ဆောင်နေပါသည်",
+    "servicesList": "ဟိုတယ် • လေယာဉ် • လက်မှတ် • သယ်ယူပို့ဆောင်ရေး • ကားအငှား • ခရီးစဉ်များ",
+    "backToHome": "ပင်မစာမျက်နှာသို့ ပြန်သွားပါ",
+    "chatNote": "ဘွတ်ကင်နှင့် စုံစမ်းမေးမြန်းရန်အတွက် ပင်မစာမျက်နှာရှိ တိုက်ရိုက်စကားပြောဝန်ဆောင်မှုကို အသုံးပြုပါ"
   }
 },
   ES: {
@@ -1410,6 +1554,54 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "phrases": "Frases básicas en tailandés: estudiar frases en la aplicación",
       "vat": "Reembolso de IVA: leer guía en la aplicación"
     }
+  },
+  "serviceCards": {
+    "bookNow": "Reservar Ahora",
+    "viewFlight": "Ver Vuelo",
+    "bookTransfer": "Reservar Transfer",
+    "reserveCar": "Reservar Coche",
+    "getTickets": "Obtener Entradas",
+    "freeCancellation": "Cancelación Gratuita",
+    "skipTheLine": "Saltar Fila",
+    "instantConfirmation": "Confirmación Instantánea",
+    "perNight": "/noche",
+    "perDay": "/día",
+    "perPerson": "/persona",
+    "priceChecked": "Precio verificado",
+    "minDriverAge": "Edad mínima del conductor"
+  },
+  "activitiesPage": {
+    "breadcrumb": "Inicio",
+    "breadcrumbActivities": "Actividades",
+    "backTo": "Volver a",
+    "decorativeLabel": "Experiencias",
+    "title": "Actividades",
+    "subtitle": "Descubre experiencias increíbles y reserva a través de nuestros socios de confianza",
+    "statCurated": "✦ Actividades Curadas",
+    "statBestPrices": "✦ Mejores Precios",
+    "statInstantBooking": "✦ Reserva Instantánea",
+    "sectionLabel": "Experiencias Disponibles",
+    "sectionTitle": "Explorar Actividades",
+    "activitiesAvailable": "{count} {count, plural, one {actividad} other {actividades}} disponibles",
+    "emptyStateTitle": "Actividades Próximamente",
+    "emptyStateDescription": "Estamos curando experiencias increíbles para ti. ¡Vuelve pronto!",
+    "filterAllCities": "Todas las Ciudades",
+    "filterNoActivities": "No se encontraron actividades",
+    "filterNoActivitiesDescription": "Intenta seleccionar otra ciudad o ver todas las actividades"
+  },
+  "servicesStrip": {
+    "hotel": "Hotel",
+    "flight": "Vuelo",
+    "transfer": "Traslado",
+    "tickets": "Entradas",
+    "carRental": "Alquiler de Coche"
+  },
+  "servicesPage": {
+    "comingSoonTitle": "Próximamente",
+    "comingSoonMessage": "Estamos trabajando duro para brindarte los mejores servicios de viaje.",
+    "servicesList": "Hotel • Vuelo • Entradas • Traslado • Alquiler de Coche • Tours",
+    "backToHome": "Volver al Inicio",
+    "chatNote": "Para reservas y consultas, usa nuestro Chat de Soporte en Vivo en la página de inicio."
   }
 },
   FR: {
@@ -1760,6 +1952,54 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "phrases": "Phrases de base en thaï : étudier les phrases dans l'app",
       "vat": "Remboursement TVA : lire le guide dans l'app"
     }
+  },
+  "serviceCards": {
+    "bookNow": "Réserver Maintenant",
+    "viewFlight": "Voir Vol",
+    "bookTransfer": "Réserver Transfert",
+    "reserveCar": "Réserver Voiture",
+    "getTickets": "Obtenir Billets",
+    "freeCancellation": "Annulation Gratuite",
+    "skipTheLine": "Éviter la File",
+    "instantConfirmation": "Confirmation Instantanée",
+    "perNight": "/nuit",
+    "perDay": "/jour",
+    "perPerson": "/personne",
+    "priceChecked": "Prix vérifié",
+    "minDriverAge": "Âge minimum du conducteur"
+  },
+  "activitiesPage": {
+    "breadcrumb": "Accueil",
+    "breadcrumbActivities": "Activités",
+    "backTo": "Retour à",
+    "decorativeLabel": "Expériences",
+    "title": "Activités",
+    "subtitle": "Découvrez des expériences incroyables et réservez via nos partenaires de confiance",
+    "statCurated": "✦ Activités Sélectionnées",
+    "statBestPrices": "✦ Meilleurs Prix",
+    "statInstantBooking": "✦ Réservation Instantanée",
+    "sectionLabel": "Expériences Disponibles",
+    "sectionTitle": "Explorer les Activités",
+    "activitiesAvailable": "{count} {count, plural, one {activité} other {activités}} disponibles",
+    "emptyStateTitle": "Activités à Venir",
+    "emptyStateDescription": "Nous sélectionnons des expériences incroyables pour vous. Revenez bientôt !",
+    "filterAllCities": "Toutes les Villes",
+    "filterNoActivities": "Aucune activité trouvée",
+    "filterNoActivitiesDescription": "Essayez de sélectionner une autre ville ou voir toutes les activités"
+  },
+  "servicesStrip": {
+    "hotel": "Hôtel",
+    "flight": "Vol",
+    "transfer": "Transfert",
+    "tickets": "Billets",
+    "carRental": "Location de Voiture"
+  },
+  "servicesPage": {
+    "comingSoonTitle": "Bientôt Disponible",
+    "comingSoonMessage": "Nous travaillons dur pour vous offrir les meilleurs services de voyage.",
+    "servicesList": "Hôtel • Vol • Billets • Transfert • Location de Voiture • Circuits",
+    "backToHome": "Retour à l'Accueil",
+    "chatNote": "Pour les réservations et les demandes, utilisez notre Chat de Support en Direct sur la page d'accueil."
   }
 },
   DE: {
@@ -2110,6 +2350,54 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "phrases": "Thai-Grundlagen: Sätze in der App lernen",
       "vat": "MwSt.-Rückerstattung: Leitfaden in der App lesen"
     }
+  },
+  "serviceCards": {
+    "bookNow": "Jetzt Buchen",
+    "viewFlight": "Flug Ansehen",
+    "bookTransfer": "Transfer Buchen",
+    "reserveCar": "Auto Reservieren",
+    "getTickets": "Tickets Holen",
+    "freeCancellation": "Kostenlose Stornierung",
+    "skipTheLine": "Schlange Überspringen",
+    "instantConfirmation": "Sofortige Bestätigung",
+    "perNight": "/Nacht",
+    "perDay": "/Tag",
+    "perPerson": "/Person",
+    "priceChecked": "Preis geprüft",
+    "minDriverAge": "Mindestalter des Fahrers"
+  },
+  "activitiesPage": {
+    "breadcrumb": "Startseite",
+    "breadcrumbActivities": "Aktivitäten",
+    "backTo": "Zurück zu",
+    "decorativeLabel": "Erlebnisse",
+    "title": "Aktivitäten",
+    "subtitle": "Entdecken Sie tolle Erlebnisse und buchen Sie über unsere vertrauenswürdigen Partner",
+    "statCurated": "✦ Kuratierte Aktivitäten",
+    "statBestPrices": "✦ Beste Preise",
+    "statInstantBooking": "✦ Sofortige Buchung",
+    "sectionLabel": "Verfügbare Erlebnisse",
+    "sectionTitle": "Aktivitäten Durchsuchen",
+    "activitiesAvailable": "{count} {count, plural, one {Aktivität} other {Aktivitäten}} verfügbar",
+    "emptyStateTitle": "Aktivitäten Bald Verfügbar",
+    "emptyStateDescription": "Wir kuratieren tolle Erlebnisse für Sie. Schauen Sie bald wieder vorbei!",
+    "filterAllCities": "Alle Städte",
+    "filterNoActivities": "Keine Aktivitäten gefunden",
+    "filterNoActivitiesDescription": "Versuchen Sie, eine andere Stadt auszuwählen oder alle Aktivitäten anzuzeigen"
+  },
+  "servicesStrip": {
+    "hotel": "Hotel",
+    "flight": "Flug",
+    "transfer": "Transfer",
+    "tickets": "Tickets",
+    "carRental": "Autovermietung"
+  },
+  "servicesPage": {
+    "comingSoonTitle": "Bald Verfügbar",
+    "comingSoonMessage": "Wir arbeiten hart, um Ihnen die besten Reiseservices zu bieten.",
+    "servicesList": "Hotel • Flug • Tickets • Transfer • Autovermietung • Touren",
+    "backToHome": "Zurück zur Startseite",
+    "chatNote": "Für Buchungen und Anfragen nutzen Sie unseren Live-Support-Chat auf der Startseite."
   }
 }
 };
