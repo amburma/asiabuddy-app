@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
-import FloatingChatButton from '@/components/shared/FloatingChatButton'
+import FloatingChatButtonLoader from '@/components/shared/FloatingChatButtonLoader'
 
 const COUNTRY_META: Record<string, { name: string; description: string }> = {
   thailand: {
@@ -77,7 +77,7 @@ export default async function CountryLayout({
     <div className="min-h-screen" data-country={country}>
       {children}
       {country === 'thailand' && (
-        <FloatingChatButton language={language} />
+        <FloatingChatButtonLoader language={language} />
       )}
     </div>
   )

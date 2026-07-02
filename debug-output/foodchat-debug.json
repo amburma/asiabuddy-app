@@ -1,0 +1,4488 @@
+[
+  {
+    "widget": "FoodChat",
+    "modalId": "food",
+    "buttonText": "Food & Dining",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Fast Refresh] rebuilding",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_12ajn7s._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_lucide-react_dist_esm_icons_042d.wy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_thailand_FoodChat_tsx_0z6jln5._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/__nextjs_font/geist-latin.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      }
+    ],
+    "success": true,
+    "screenshot": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\FoodChat-modal.png",
+    "modalVisible": false,
+    "guideModalVisible": true,
+    "modalBoundingBox": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "modalStyles": {
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "zIndex": "60"
+    },
+    "hasFoodGuide": true,
+    "hasTransportGuide": false,
+    "hasAccommodationGuide": false,
+    "hasTravelTypes": false
+  },
+  {
+    "widget": "TransportChat",
+    "modalId": "transport",
+    "buttonText": "Transport",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Fast Refresh] rebuilding",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Fast Refresh] done in 201ms",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0o14d4q._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_lucide-react_dist_esm_icons_042d.wy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_thailand_TransportChat_tsx_0z6jln5._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": true,
+    "screenshot": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\TransportChat-modal.png",
+    "modalVisible": false,
+    "guideModalVisible": true,
+    "modalBoundingBox": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "modalStyles": {
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "zIndex": "60"
+    },
+    "hasFoodGuide": false,
+    "hasTransportGuide": true,
+    "hasAccommodationGuide": false,
+    "hasTravelTypes": false
+  },
+  {
+    "widget": "AccommodationChat",
+    "modalId": "accommodation",
+    "buttonText": "Accommodation",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_03yngo3._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_lucide-react_dist_esm_icons_042d.wy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_thailand_AccommodationChat_tsx_0z6jln5._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": true,
+    "screenshot": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\AccommodationChat-modal.png",
+    "modalVisible": false,
+    "guideModalVisible": true,
+    "modalBoundingBox": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "modalStyles": {
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "zIndex": "60"
+    },
+    "hasFoodGuide": false,
+    "hasTransportGuide": false,
+    "hasAccommodationGuide": true,
+    "hasTravelTypes": false
+  },
+  {
+    "widget": "TripPlannerChat",
+    "modalId": "travel-types",
+    "buttonText": "Travel Types",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0lvb38g._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_lucide-react_dist_esm_icons_0quj9n2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_thailand_TripPlannerChat_tsx_0z6jln5._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": true,
+    "screenshot": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\TripPlannerChat-modal.png",
+    "modalVisible": false,
+    "guideModalVisible": true,
+    "modalBoundingBox": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "modalStyles": {
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "zIndex": "60"
+    },
+    "hasFoodGuide": false,
+    "hasTransportGuide": false,
+    "hasAccommodationGuide": false,
+    "hasTravelTypes": true
+  },
+  {
+    "widget": "PhrasesChat",
+    "modalId": "phrases",
+    "buttonText": "Essential Phrases",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_05rdj73._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_lucide-react_dist_esm_icons_031fk6l._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_thailand_PhrasesChat_tsx_0z6jln5._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": true,
+    "screenshot": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\PhrasesChat-modal.png",
+    "modalVisible": false,
+    "guideModalVisible": true,
+    "modalBoundingBox": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "modalStyles": {
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "zIndex": "60"
+    },
+    "hasFoodGuide": false,
+    "hasTransportGuide": false,
+    "hasAccommodationGuide": false,
+    "hasTravelTypes": false
+  },
+  {
+    "widget": "EtiquetteChat",
+    "modalId": "etiquette",
+    "buttonText": "Culture & Etiquette",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_12hfv52._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_EtiquetteGuide_tsx_0z6jln5._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": true,
+    "screenshot": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\EtiquetteChat-modal.png",
+    "modalVisible": false,
+    "guideModalVisible": true,
+    "modalBoundingBox": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "modalStyles": {
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "zIndex": "60"
+    },
+    "hasFoodGuide": false,
+    "hasTransportGuide": false,
+    "hasAccommodationGuide": false,
+    "hasTravelTypes": false
+  },
+  {
+    "widget": "BudgetChat",
+    "modalId": "budget",
+    "buttonText": "Budget Tips",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": true,
+    "screenshot": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\BudgetChat-modal.png",
+    "modalVisible": false,
+    "guideModalVisible": true,
+    "modalBoundingBox": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "modalStyles": {
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "zIndex": "60"
+    },
+    "hasFoodGuide": false,
+    "hasTransportGuide": false,
+    "hasAccommodationGuide": false,
+    "hasTravelTypes": false
+  },
+  {
+    "widget": "VisaChat",
+    "modalId": "visa",
+    "buttonText": "Visa Info",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [
+      {
+        "message": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=ESSENTIAL GUIDES') to be visible\u001b[22m\n",
+        "stack": "page.waitForSelector: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('text=ESSENTIAL GUIDES') to be visible\u001b[22m\n\n    at testWidget (C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\scripts\\debug-chat-widgets.js:86:16)\n    at async runTests (C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\scripts\\debug-chat-widgets.js:330:20)"
+      }
+    ],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": false
+  },
+  {
+    "widget": "InfoChat",
+    "modalId": "information",
+    "buttonText": "General Info",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Fast Refresh] rebuilding",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": true,
+    "screenshot": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\InfoChat-modal.png",
+    "modalVisible": false,
+    "guideModalVisible": true,
+    "modalBoundingBox": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "modalStyles": {
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "zIndex": "60"
+    },
+    "hasFoodGuide": false,
+    "hasTransportGuide": false,
+    "hasAccommodationGuide": false,
+    "hasTravelTypes": false
+  },
+  {
+    "widget": "MedicalChat",
+    "buttonText": "Medical",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": true,
+    "screenshot": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\MedicalChat-modal.png",
+    "guideModalVisible": true,
+    "modalBoundingBox": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "modalStyles": {
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "zIndex": "60"
+    },
+    "hasMedicalGuide": true,
+    "hasNightlifeGuide": false,
+    "hasShoppingGuide": false,
+    "hasBooking": false
+  },
+  {
+    "widget": "NightlifeChat",
+    "buttonText": "Nightlife",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": true,
+    "screenshot": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\NightlifeChat-modal.png",
+    "guideModalVisible": true,
+    "modalBoundingBox": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "modalStyles": {
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "zIndex": "60"
+    },
+    "hasMedicalGuide": false,
+    "hasNightlifeGuide": true,
+    "hasShoppingGuide": false,
+    "hasBooking": false
+  },
+  {
+    "widget": "ShoppingChat",
+    "buttonText": "Shopping",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": true,
+    "screenshot": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\ShoppingChat-modal.png",
+    "guideModalVisible": true,
+    "modalBoundingBox": {
+      "x": 0,
+      "y": 0,
+      "width": 1280,
+      "height": 720
+    },
+    "modalStyles": {
+      "display": "flex",
+      "visibility": "visible",
+      "opacity": "1",
+      "zIndex": "60"
+    },
+    "hasMedicalGuide": false,
+    "hasNightlifeGuide": false,
+    "hasShoppingGuide": true,
+    "hasBooking": false
+  },
+  {
+    "widget": "BookingChat",
+    "buttonText": "Booking",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [
+      {
+        "message": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Booking\")').first()\u001b[22m\n",
+        "stack": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Booking\")').first()\u001b[22m\n\n    at testMenuWidget (C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\scripts\\debug-chat-widgets.js:233:18)\n    at async runTests (C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\scripts\\debug-chat-widgets.js:337:20)"
+      }
+    ],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": false
+  },
+  {
+    "widget": "ConciergeChat",
+    "buttonText": "Concierge",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [
+      {
+        "message": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Concierge\")').first()\u001b[22m\n",
+        "stack": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Concierge\")').first()\u001b[22m\n\n    at testMenuWidget (C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\scripts\\debug-chat-widgets.js:233:18)\n    at async runTests (C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\scripts\\debug-chat-widgets.js:337:20)"
+      }
+    ],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": false
+  },
+  {
+    "widget": "HumanOperatorChat",
+    "buttonText": "Human Operator",
+    "consoleMessages": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu",
+        "location": {
+          "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+          "line": 2477,
+          "column": 27,
+          "lineNumber": 2477,
+          "columnNumber": 27
+        }
+      }
+    ],
+    "pageErrors": [
+      {
+        "message": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Human Operator\")').first()\u001b[22m\n",
+        "stack": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Human Operator\")').first()\u001b[22m\n\n    at testMenuWidget (C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\scripts\\debug-chat-widgets.js:233:18)\n    at async runTests (C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\scripts\\debug-chat-widgets.js:337:20)"
+      }
+    ],
+    "failedRequests": [],
+    "networkRequests": [
+      {
+        "url": "http://localhost:3000/thailand",
+        "method": "GET",
+        "resourceType": "document"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/2a65768255d6b625-s.p.14by5b4al-y~f.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/36363bfb06833f56-s.p.0-pny06~-x26a.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/media/83afe278b6a6bb3c-s.p.0q-301v4kxxnr.woff2",
+        "method": "GET",
+        "resourceType": "font"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__0xnaw8-._.css",
+        "method": "GET",
+        "resourceType": "stylesheet"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "https://ysntqbakmqwuxljknwjg.supabase.co/storage/v1/object/public/destination-images/1782661945753-01Bangkokpng.png",
+        "method": "GET",
+        "resourceType": "image"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0rqeker._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/turbopack-_0p44nws._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_0z8ikg~._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_CookieBanner_tsx_0ekm029._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_layout_tsx_004glpo._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_0w4g.p7.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0v6msya._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0ie5e~4._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_layout_tsx_0w4g.p7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_0evp7ux._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_08l-x_2._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_motion-dom_dist_es_0n_wqqr._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_framer-motion_dist_es_129u8xh._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_micromark-core-commonmark_dev_lib_13dj~6i._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_parse5_dist_0z49r7t._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_08i8wiq._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/app_%5Bcountry%5D_page_tsx_0axnaze._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_0yjw1oe._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10mygs7._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/_0seoy_u._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/node_modules_0o~51it._.js",
+        "method": "GET",
+        "resourceType": "script"
+      },
+      {
+        "url": "http://localhost:3000/_next/static/chunks/components_shared_FloatingChatButton_tsx_0xkadec._.js",
+        "method": "GET",
+        "resourceType": "script"
+      }
+    ],
+    "success": false
+  }
+]

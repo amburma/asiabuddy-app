@@ -1,6 +1,7 @@
 import { getSupabase } from '@/lib/supabase'
 import Link from 'next/link'
-import ChatWidgetGrid from '@/components/shared/ChatWidgetGrid'
+import dynamic from 'next/dynamic'
+const ChatWidgetGrid = dynamic(() => import('@/components/shared/ChatWidgetGrid'))
 import DestinationTabs from '@/components/thailand/DestinationTabs'
 import InformationSection from '@/components/shared/InformationSection'
 import { TripChecklistModal } from '@/components/shared/TripChecklistModal'

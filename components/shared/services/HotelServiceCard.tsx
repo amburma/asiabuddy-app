@@ -25,7 +25,8 @@ interface HotelServiceCardProps {
 
 export default function HotelServiceCard({ hotel, language = 'EN', is_placeholder = false }: HotelServiceCardProps) {
   const t = UI_TRANSLATIONS[language].serviceCards;
-  const isPlaceholder = is_placeholder === true;
+  // Check both the prop AND the URL pattern for safety
+  const isPlaceholder = is_placeholder === true || hotel.affiliate_url.startsWith('#placeholder-');
   return (
     <div className={`bg-[#0D0D0D] border border-[#0D0D0D] hover:border-[#C9A84C] rounded-lg overflow-hidden transition-all duration-300 h-full flex flex-col ${isPlaceholder ? 'opacity-75' : ''}`}>
       {/* Image Container - 16:9 aspect ratio */}
@@ -88,12 +89,14 @@ export default function HotelServiceCard({ hotel, language = 'EN', is_placeholde
 
           {/* Book Now Button */}
           {isPlaceholder ? (
-            <div
-              aria-disabled="true"
+            <button
+              type="button"
+              disabled
+              onClick={(e) => e.preventDefault()}
               className="block w-full border border-[#C9A84C]/60 bg-[#1A1A1A] text-[#F5F0E8] text-center py-2.5 sm:py-3 rounded font-medium cursor-not-allowed opacity-90 text-sm sm:text-base"
             >
               Coming Soon
-            </div>
+            </button>
           ) : (
             <Link
               href={hotel.affiliate_url}

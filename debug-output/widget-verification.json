@@ -1,0 +1,432 @@
+[
+  {
+    "name": "FoodChat",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\FoodChat.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "",
+    "consoleLogs": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected"
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "TransportChat",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\TransportChat.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "",
+    "consoleLogs": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected"
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "AccommodationChat",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\AccommodationChat.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "",
+    "consoleLogs": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected"
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "TripPlannerChat",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\TripPlannerChat.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "",
+    "consoleLogs": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected"
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "MedicalChat",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\MedicalChat.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "Button is in menu",
+    "consoleLogs": [
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "NightlifeChat",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\NightlifeChat.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "Button is in menu",
+    "consoleLogs": [
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "ShoppingChat",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\ShoppingChat.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "Button is in menu",
+    "consoleLogs": [
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "PhrasesChat",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\PhrasesChat.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "Button is in menu",
+    "consoleLogs": [
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "EtiquetteGuide",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\EtiquetteGuide.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "Button is in menu",
+    "consoleLogs": [
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "LawsGuide",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\LawsGuide.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "Button is in menu",
+    "consoleLogs": [
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "InfoChat",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\InfoChat.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "",
+    "consoleLogs": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected"
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "VisaChat",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\VisaChat.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "",
+    "consoleLogs": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected"
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "BudgetChat",
+    "triggerFound": true,
+    "modalVisible": true,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\BudgetChat.png",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "",
+    "consoleLogs": [
+      {
+        "type": "info",
+        "text": "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold"
+      },
+      {
+        "type": "log",
+        "text": "[HMR] connected"
+      },
+      {
+        "type": "log",
+        "text": "%c%s%c [DEBUG] targetLanguage: background: #e6e6e6;background: light-dark(rgba(0,0,0,0.1), rgba(255,255,255,0.25));color: #000000;color: light-dark(#000000, #ffffff);border-radius: 2px  Server   en"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      },
+      {
+        "type": "log",
+        "text": "[Navbar] currentLanguage: EN | t.menu: Menu"
+      }
+    ]
+  },
+  {
+    "name": "ConciergeChat",
+    "triggerFound": false,
+    "modalVisible": false,
+    "screenshotPath": "",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "ConciergeChat view - span text in menu"
+  },
+  {
+    "name": "HumanOperatorChat",
+    "triggerFound": false,
+    "modalVisible": false,
+    "screenshotPath": "",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "Trigger button not found with selector: button:has-text(\"Book Now\")"
+  },
+  {
+    "name": "BookingChat",
+    "triggerFound": false,
+    "modalVisible": false,
+    "screenshotPath": "",
+    "consoleErrors": [],
+    "failedRequests": [],
+    "notes": "Trigger button not found with selector: button[id=\"menu-booking-btn\"]"
+  }
+]

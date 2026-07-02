@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'motion/react'
 import { ThaiLanguage } from '@/types/country'
 import TravelToolbox from './TravelToolbox'
@@ -18,20 +19,22 @@ import { VAT_REFUND_GUIDE } from '@/data/thailand/vatRefundGuide'
 import { GENERAL_INFORMATION } from '@/data/thailand/generalInformation'
 import { TRANSPORT_GUIDE } from '@/data/thailand/transportGuide'
 import { BUDGET_GUIDE } from '@/data/thailand/budgetGuide'
-import TransportChat from '../thailand/TransportChat'
-import FoodChat from '../thailand/FoodChat'
-import AccommodationChat from '../thailand/AccommodationChat'
-import TripPlannerChat from '../thailand/TripPlannerChat'
+
+const TransportChat = dynamic(() => import('../thailand/TransportChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const FoodChat = dynamic(() => import('../thailand/FoodChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const AccommodationChat = dynamic(() => import('../thailand/AccommodationChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const TripPlannerChat = dynamic(() => import('../thailand/TripPlannerChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
 
 interface ChatWidgetGridProps {
   language?: string
 }
-import MedicalChat from '../thailand/MedicalChat'
-import NightlifeChat from '../thailand/NightlifeChat'
-import ShoppingChat from '../thailand/ShoppingChat'
-import PhrasesChat from '../thailand/PhrasesChat'
-import LawsGuide from './LawsGuide'
-import EtiquetteGuide from './EtiquetteGuide'
+
+const MedicalChat = dynamic(() => import('../thailand/MedicalChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const NightlifeChat = dynamic(() => import('../thailand/NightlifeChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const ShoppingChat = dynamic(() => import('../thailand/ShoppingChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const PhrasesChat = dynamic(() => import('../thailand/PhrasesChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const LawsGuide = dynamic(() => import('./LawsGuide'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const EtiquetteGuide = dynamic(() => import('./EtiquetteGuide'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
 
 export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridProps) {
   const [language, setLanguage] = useState<ThaiLanguage>(

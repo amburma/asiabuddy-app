@@ -47,7 +47,8 @@ const stopsLabel = (stops: number): string => {
 export default function FlightServiceCard({ flight, language = 'EN', is_placeholder = false }: FlightServiceCardProps) {
   const t = UI_TRANSLATIONS[language].serviceCards;
   const relativeTime = getRelativeTime(flight.price_checked_at);
-  const isPlaceholder = is_placeholder === true;
+  // Check both the prop AND the URL pattern for safety
+  const isPlaceholder = is_placeholder === true || flight.affiliate_url.startsWith('#placeholder-');
 
   return (
     <div className={`bg-[#0D0D0D] border border-[#0D0D0D] hover:border-[#D4AF37] rounded-lg overflow-hidden transition-all duration-300 p-4 sm:p-6 ${isPlaceholder ? 'opacity-75' : ''}`}>
@@ -166,12 +167,14 @@ export default function FlightServiceCard({ flight, language = 'EN', is_placehol
 
       {/* Book Now Button */}
       {isPlaceholder ? (
-        <div
-          aria-disabled="true"
+        <button
+          type="button"
+          disabled
+          onClick={(e) => e.preventDefault()}
           className="block w-full border border-[#D4AF37]/60 bg-[#1A1A1A] text-[#F5F0E8] text-center py-2.5 sm:py-3 rounded font-medium cursor-not-allowed opacity-90 text-sm sm:text-base"
         >
           Coming Soon
-        </div>
+        </button>
       ) : (
         <Link
           href={flight.affiliate_url}

@@ -1,3 +1,9 @@
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+  generateStatsFile: true,
+  statsFilename: 'analyze/client-stats.json',
+})
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -58,4 +64,4 @@ const nextConfig = {
     ]
   },
 }
-module.exports = nextConfig
+module.exports = withBundleAnalyzer(nextConfig)

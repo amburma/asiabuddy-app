@@ -49,7 +49,8 @@ function getVehicleLabel(vehicleType: string): string {
 
 export default function TransferServiceCard({ transfer, language = 'EN', is_placeholder = false }: TransferServiceCardProps) {
   const t = UI_TRANSLATIONS[language].serviceCards;
-  const isPlaceholder = is_placeholder === true;
+  // Check both the prop AND the URL pattern for safety
+  const isPlaceholder = is_placeholder === true || transfer.affiliate_url.startsWith('#placeholder-');
   return (
     <div className={`bg-[#0D0D0D] border border-[#0D0D0D] hover:border-[#B8945A] rounded-lg overflow-hidden transition-all duration-300 p-4 sm:p-6 flex flex-col h-full ${isPlaceholder ? 'opacity-75' : ''}`}>
       {/* Header with Vehicle Icon and Type */}
@@ -109,12 +110,14 @@ export default function TransferServiceCard({ transfer, language = 'EN', is_plac
 
         {/* Book Now Button */}
         {isPlaceholder ? (
-          <div
-            aria-disabled="true"
+          <button
+            type="button"
+            disabled
+            onClick={(e) => e.preventDefault()}
             className="block flex-1 sm:flex-none border border-[#B8945A]/60 bg-[#1A1A1A] text-[#F5F0E8] text-center py-2.5 sm:py-3 px-4 rounded font-medium cursor-not-allowed opacity-90 text-sm sm:text-base whitespace-nowrap"
           >
             Coming Soon
-          </div>
+          </button>
         ) : (
           <Link
             href={transfer.affiliate_url}
