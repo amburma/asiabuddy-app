@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 import { motion, AnimatePresence } from 'motion/react'
-import { ThaiLanguage } from '@/types/country'
+import { SupportedLanguage, ThaiLanguage } from '@/types/country'
 import TravelToolbox from './TravelToolbox'
 import GuideModal from './GuideModal'
 import MarkdownRenderer from './MarkdownRenderer'
 import { Plane, Stethoscope, Music, ShoppingBag, Home, Utensils, Bus, MessageSquare, ShieldCheck, Gavel, Receipt, FileCheck, Calculator, X } from 'lucide-react'
 import { TRAVEL_STYLE_GUIDE } from '@/data/thailand/travelStyleGuide'
+import { UI_TRANSLATIONS } from '@/lib/i18n'
 import { MEDICAL_GUIDE_MARKDOWN } from '@/data/thailand/medicalGuide'
 import { NIGHTLIFE_GUIDE_MARKDOWN } from '@/data/thailand/nightlifeGuide'
 import { SHOPPING_GUIDE_MARKDOWN } from '@/data/thailand/shoppingGuide'
@@ -40,6 +41,7 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
   const [language, setLanguage] = useState<ThaiLanguage>(
     (langProp?.toUpperCase() as ThaiLanguage) || 'EN'
   )
+  const t = UI_TRANSLATIONS[(language || 'EN').toUpperCase() as SupportedLanguage] || UI_TRANSLATIONS.EN
   const [showVatModal, setShowVatModal] = useState(false)
   const [showVisaModal, setShowVisaModal] = useState(false)
   const [showTransportModal, setShowTransportModal] = useState(false)
@@ -107,8 +109,8 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
       <GuideModal
         isOpen={showTravelTypesModal}
         onClose={() => setShowTravelTypesModal(false)}
-        title="Comprehensive Guide to Traveling in Thailand"
-        subtitle="Travel Styles & Planner"
+        title={t.travelTypes?.modalTitle || 'Comprehensive Guide to Traveling in Thailand'}
+        subtitle={t.travelTypes?.modalSubtitle || 'Travel Styles & Planner'}
         icon={<Plane size={20} />}
         footer="Comprehensive Travel Guide • AsiaBuddy Services"
       >
@@ -124,8 +126,8 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
       <GuideModal
         isOpen={showVisaModal}
         onClose={() => setShowVisaModal(false)}
-        title="Thailand Visa Guide"
-        subtitle="Visa Information"
+        title={t.visa?.modalTitle || 'Thailand Visa Guide'}
+        subtitle={t.visa?.modalSubtitle || 'Visa Information'}
         icon={<FileCheck size={20} />}
         footer="Visa Guide • AsiaBuddy Services"
       >
@@ -138,8 +140,8 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
       <GuideModal
         isOpen={showTransportModal}
         onClose={() => setShowTransportModal(false)}
-        title="Thailand Nationwide Transport Guide"
-        subtitle="Transportation"
+        title={t.transport?.modalTitle || 'Thailand Nationwide Transport Guide'}
+        subtitle={t.transport?.modalSubtitle || 'Transportation'}
         icon={<Bus size={20} />}
         footer="Thailand Transport Guide • AsiaBuddy Services"
       >
@@ -175,8 +177,8 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
       <GuideModal
         isOpen={showAccommodationModal}
         onClose={() => setShowAccommodationModal(false)}
-        title="Comprehensive Guide to Accommodations in Thailand"
-        subtitle="Accommodations"
+        title={t.accommodation?.modalTitle || 'Comprehensive Guide to Accommodations in Thailand'}
+        subtitle={t.accommodation?.detailsTitle || 'Accommodations'}
         icon={<Home size={20} />}
         footer="Accommodation Guide for Travelers • AsiaBuddy Services"
       >
@@ -198,8 +200,8 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
       <GuideModal
         isOpen={showFoodModal}
         onClose={() => setShowFoodModal(false)}
-        title="The Ultimate Thailand Food Guide: From Michelin Stars to Street Eats"
-        subtitle="Food Guide"
+        title={t.food?.modalTitle || 'The Ultimate Thailand Food Guide: From Michelin Stars to Street Eats'}
+        subtitle={t.food?.detailsTitle || 'Food Guide'}
         icon={<Utensils size={20} />}
         footer="Thailand Food Guide • AsiaBuddy Services"
       >
@@ -278,8 +280,8 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
       <GuideModal
         isOpen={showInformationModal}
         onClose={() => setShowInformationModal(false)}
-        title="Thailand General Information"
-        subtitle="Essential Travel Guide"
+        title={t.infoModalTitle || 'Thailand General Information'}
+        subtitle={t.infoModalSubtitle || 'Essential Travel Guide'}
         icon={<MessageSquare size={20} />}
         footer="General Information • AsiaBuddy Services"
       >
@@ -306,8 +308,8 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
       <GuideModal
         isOpen={showBudgetModal}
         onClose={() => setShowBudgetModal(false)}
-        title="Thailand Budget & Money-Saving Guide"
-        subtitle="Smart Travel Tips"
+        title={t.budget || 'Thailand Budget & Money-Saving Guide'}
+        subtitle={t.budgetSubtitle || 'Smart Travel Tips'}
         icon={<Calculator size={20} />}
         footer="Budget Guide • AsiaBuddy Services"
       >
@@ -391,10 +393,10 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
                   </div>
                   <div>
                     <h2 className="text-sm font-bold uppercase tracking-widest text-sacred-green leading-none mb-1">
-                      Thai Etiquette Guide
+                      {t.tools?.etiquette || 'Thai Etiquette Guide'}
                     </h2>
                     <p className="text-[10px] text-gray-500 font-medium uppercase tracking-tighter text-gold-deep">
-                      Cultural Dos & Don'ts &bull; Local Customs
+                      {t.labels?.culturalSubtitle || "Cultural Dos & Don'ts • Local Customs"}
                     </p>
                   </div>
                 </div>

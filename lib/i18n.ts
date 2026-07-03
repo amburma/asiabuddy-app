@@ -92,6 +92,7 @@ const ENGLISH_UI = {
   "visa": {
     "title": "Visa info",
     "modalTitle": "Thailand Visa Guide",
+    "modalSubtitle": "Visa Information",
     "description": "Check your status.",
     "link": "Visa Information"
   },
@@ -101,6 +102,9 @@ const ENGLISH_UI = {
     "modalSubtitle": "Travel Styles & Planner",
     "link": "Travel types"
   },
+  "budget": "Budget Tips",
+  "budgetSubtitle": "Smart Travel Tips",
+  "learnMore": "Learn more",
   "accommodation": {
     "title": "Accommodation",
     "modalTitle": "Thailand Accommodation Guide",
@@ -208,6 +212,20 @@ const ENGLISH_UI = {
     "experiences": "Experiences",
     "activities": "Activities",
     "hiddenGems": "Hidden Gems"
+  },
+  "essentialGuides": {
+    "sectionTitle": "ESSENTIAL GUIDES",
+    "learnMore": "Learn more",
+    "cards": {
+      "generalInfo": "General Info",
+      "travelTypes": "Travel Types",
+      "visaInfo": "Visa Info",
+      "transport": "Transport",
+      "accommodation": "Accommodation",
+      "foodDining": "Food & Dining",
+      "cultureEtiquette": "Culture & Etiquette",
+      "budgetTips": "Budget Tips"
+    }
   },
   "about": {
     "ourStory": "Our Story",
@@ -499,6 +517,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "visa": {
     "title": "Visa info",
     "modalTitle": "Thailand Visa Guide",
+    "modalSubtitle": "ข้อมูลวีซ่า",
     "description": "Check your status.",
     "link": "ข้อมูลวีซ่า"
   },
@@ -507,6 +526,23 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "modalTitle": "Travel Styles Guide",
     "modalSubtitle": "สไตล์การเดินทางและเครื่องมือวางแผน",
     "link": "สไตล์การเดินทาง"
+  },
+  "budget": "เคล็ดลับงบประมาณ",
+  "budgetSubtitle": "เคล็ดลับการเดินทางที่ชาญฉลาด",
+  "learnMore": "เรียนรู้เพิ่มเติม",
+  "essentialGuides": {
+    "sectionTitle": "คู่มือที่จำเป็น",
+    "learnMore": "ดูเพิ่มเติม",
+    "cards": {
+      "generalInfo": "ข้อมูลทั่วไป",
+      "travelTypes": "ประเภทการเดินทาง",
+      "visaInfo": "ข้อมูลวีซ่า",
+      "transport": "การเดินทาง",
+      "accommodation": "ที่พัก",
+      "foodDining": "อาหารและการรับประทานอาหาร",
+      "cultureEtiquette": "วัฒนธรรมและมารยาท",
+      "budgetTips": "เคล็ดลับงบประมาณ"
+    }
   },
   "accommodation": {
     "title": "Accommodation",
@@ -875,7 +911,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "culturalGuideLink": "ယဉ်ကျေးမှုဆိုင်ရာ Dos & Don'ts လမ်းညွှန်",
   "lawsRegulationsLink": "၂၀၂၆ ခုနှစ်အတွက် အရေးကြီးသော စည်းမျဉ်းများ",
   "transport": {
-    "title": "Transport",
+    "title": "သယ်ယူပို့ဆောင်ရေး",
     "detailsTitle": "ထိုင်းနိုင်ငံအတွင်း သယ်ယူပို့ဆောင်ရေး — ပိုမိုသိရှိလိုပါက",
     "appsGuideLink": "ထိုင်းနိုင်ငံ သယ်ယူပို့ဆောင်ရေးအတွက် အဓိက အက်ပ်များနှင့် ဝဘ်ဆိုဒ်များ။ ပိုမိုသိရှိလိုပါက ဤနေရာကိုနှိပ်ပါ!",
     "transportGuideLink": "သယ်ယူပို့ဆောင်ရေး လမ်းညွှန်",
@@ -895,19 +931,23 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "link": "VAT Refund"
   },
   "visa": {
-    "title": "Visa info",
+    "title": "ဗီဇာအချက်အလက်",
     "modalTitle": "Thailand Visa Guide",
+    "modalSubtitle": "ဗီဇာ အချက်အလက်",
     "description": "Check your status.",
     "link": "ဗီဇာ ဆိုင်ရာ အချက်အလက်များ"
   },
   "travelTypes": {
-    "title": "Travel types",
+    "title": "ခရီးသွားအမျိုးအစားများ",
     "modalTitle": "Travel Styles Guide",
     "modalSubtitle": "ခရီးသွားပုံစံများနှင့် စီစဉ်သူ",
     "link": "ခရီးသွားပုံစံများ (Travel Styles)"
   },
+  "budget": "ဘတ်ဂျက် အကြံပြုချက်များ",
+  "budgetSubtitle": "စမတ်ခရီးသွားအကြံပြုချက်များ",
+  "learnMore": "ထပ်မံလေ့လာရန်",
   "accommodation": {
-    "title": "Accommodation",
+    "title": "တည်းခိုရန်နေရာများ",
     "modalTitle": "Thailand Accommodation Guide",
     "chatTitle": "တည်းခိုနေထိုင်မှု အကူအညီ",
     "detailsTitle": "တည်းခိုနေထိုင်မှု အသေးစိတ်",
@@ -928,7 +968,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "femaleParticle": "အမျိုးသမီး- Ka",
     "phrasesChatHeading": "သင်သိလိုသော အရေးကြီးသော ထိုင်းစကားစုများကို မေးမြန်းပါ။",
     "laws": "Key Laws",
-    "etiquette": "Etiquette",
+    "etiquette": "ယဉ်ကျေးမှု နှင့် ကျင့်ဝတ်",
     "weather": "Weather Info",
     "serviceMinded": "Service Minded Help",
     "learnThaiBasics": "ထိုင်းဘာသာစကား အခြေခံများကို လေ့လာပါ",
@@ -1014,6 +1054,20 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "activities": "လှုပ်ရှားမှုများ",
     "hiddenGems": "လူသိနည်းသောနေရာများ"
   },
+  "essentialGuides": {
+    "sectionTitle": "အရေးကြီးသောလမ်းညွှန်များ",
+    "learnMore": "ပိုမိုလေ့လာရန်",
+    "cards": {
+      "generalInfo": "အထွေထွေ အချက်အလက်",
+      "travelTypes": "ခရီးသွားအမျိုးအစားများ",
+      "visaInfo": "ဗီဇာ အချက်အလက်",
+      "transport": "သယ်ယူပို့ဆောင်ရေး",
+      "accommodation": "တည်းခိုနေထိုင်ရေး",
+      "foodDining": "အစားအစာ",
+      "cultureEtiquette": "ယဉ်ကျေးမှုနှင့် အပြုအမှု",
+      "budgetTips": "ဘတ်ဂျက် အကြံပြုချက်များ"
+    }
+  },
   "about": {
     "ourStory": "ကျွန်ုပ်တို့၏ ဖြတ်သန်းမှုပုံရိပ်လွှာ",
     "heroTitle1": "ပိုမိုစမတ်ကျကျ ခရီးသွားပါ။",
@@ -1071,7 +1125,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     ]
   },
   "food": {
-    "title": "Food",
+    "title": "အစားအသောက်",
     "chatTitle": "Food Concierge",
     "statusActive": "Food Concierge Active",
     "suggestionsLabel": "Common Food Inquiries",
@@ -1295,6 +1349,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "visa": {
     "title": "Info de Visa",
     "modalTitle": "Guía de Visa para Tailandia",
+    "modalSubtitle": "Información de visa",
     "description": "Verifique su estado.",
     "link": "Información de Visa"
   },
@@ -1304,6 +1359,9 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "modalSubtitle": "Estilos de viaje y planificador",
     "link": "Estilos de Viaje"
   },
+  "budget": "Consejos de presupuesto",
+  "budgetSubtitle": "Consejos inteligentes para viajeros",
+  "learnMore": "Más información",
   "accommodation": {
     "title": "Alojamiento",
     "modalTitle": "Guía de Alojamiento en Tailandia",
@@ -1411,6 +1469,20 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "experiences": "Experiencias",
     "activities": "Actividades",
     "hiddenGems": "Joyas ocultas"
+  },
+  "essentialGuides": {
+    "sectionTitle": "GUÍAS ESENCIALES",
+    "learnMore": "Más información",
+    "cards": {
+      "generalInfo": "Información general",
+      "travelTypes": "Tipos de viaje",
+      "visaInfo": "Información de visa",
+      "transport": "Transporte",
+      "accommodation": "Alojamiento",
+      "foodDining": "Comida y cena",
+      "cultureEtiquette": "Cultura y etiqueta",
+      "budgetTips": "Consejos de presupuesto"
+    }
   },
   "about": {
     "ourStory": "Nuestra historia",
@@ -1693,6 +1765,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "visa": {
     "title": "Infos Visa",
     "modalTitle": "Guide des Visas pour la Thaïlande",
+    "modalSubtitle": "Informations sur le visa",
     "description": "Vérifiez votre statut.",
     "link": "Informations Visa"
   },
@@ -1702,6 +1775,9 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "modalSubtitle": "Styles de voyage et planificateur",
     "link": "Styles de Voyage"
   },
+  "budget": "Conseils budgétaires",
+  "budgetSubtitle": "Conseils de voyage intelligents",
+  "learnMore": "En savoir plus",
   "accommodation": {
     "title": "Hébergement",
     "modalTitle": "Guide de l'Hébergement en Thaïlande",
@@ -1809,6 +1885,20 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "experiences": "Expériences",
     "activities": "Activités",
     "hiddenGems": "Trésors Cachés"
+  },
+  "essentialGuides": {
+    "sectionTitle": "GUIDES ESSENTIELS",
+    "learnMore": "En savoir plus",
+    "cards": {
+      "generalInfo": "Informations générales",
+      "travelTypes": "Types de voyage",
+      "visaInfo": "Informations sur les visas",
+      "transport": "Transport",
+      "accommodation": "Hébergement",
+      "foodDining": "Restauration",
+      "cultureEtiquette": "Culture et étiquette",
+      "budgetTips": "Conseils budgétaires"
+    }
   },
   "about": {
     "ourStory": "Notre histoire",
@@ -2091,6 +2181,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "visa": {
     "title": "Visa-Info",
     "modalTitle": "Thailand Visum-Leitfaden",
+    "modalSubtitle": "Visum-Informationen",
     "description": "Überprüfen Sie Ihren Status.",
     "link": "Visum-Informationen"
   },
@@ -2100,6 +2191,9 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "modalSubtitle": "Reisestile & Planer",
     "link": "Reisestile"
   },
+  "budget": "Budget-Tipps",
+  "budgetSubtitle": "Intelligente Reisetipps",
+  "learnMore": "Mehr erfahren",
   "accommodation": {
     "title": "Unterkunft",
     "modalTitle": "Thailand Unterkunftsleitfaden",
@@ -2207,6 +2301,20 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "experiences": "Erlebnisse",
     "activities": "Aktivitäten",
     "hiddenGems": "Geheimtipps"
+  },
+  "essentialGuides": {
+    "sectionTitle": "WESENTLICHE LEITFÄDEN",
+    "learnMore": "Mehr erfahren",
+    "cards": {
+      "generalInfo": "Allgemeine Informationen",
+      "travelTypes": "Reisearten",
+      "visaInfo": "Visa-Informationen",
+      "transport": "Transport",
+      "accommodation": "Unterkunft",
+      "foodDining": "Essen & Gastronomie",
+      "cultureEtiquette": "Kultur & Etikette",
+      "budgetTips": "Budgettipps"
+    }
   },
   "about": {
     "ourStory": "Unsere Geschichte",
