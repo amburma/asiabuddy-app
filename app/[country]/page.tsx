@@ -30,6 +30,7 @@ export default async function CountryPage({
   // Detect user's preferred language from cookie
   const cookieStore = await cookies()
   const targetLanguage = cookieStore.get('NEXT_LOCALE')?.value || 'en'
+  const isFirstVisit = !cookieStore.has('NEXT_LOCALE')
 
   const supabase = getSupabase()
   
@@ -92,7 +93,7 @@ export default async function CountryPage({
 
   return (
     <>
-      <Navbar country={lowerCountry} language={targetLanguage.toUpperCase()} />
+      <Navbar country={lowerCountry} language={targetLanguage.toUpperCase()} isFirstVisit={isFirstVisit} />
 
       {/* SECTION 1 — HERO */}
       <section id="home" className="relative min-h-[40vh] flex items-center justify-center overflow-hidden bg-sacred-green/5">

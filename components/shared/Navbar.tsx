@@ -26,6 +26,7 @@ import LanguageWelcome from './LanguageWelcome'
 interface NavbarProps {
   country?: string
   language?: string
+  isFirstVisit?: boolean
 }
 
 const languages = [
@@ -36,10 +37,10 @@ const languages = [
   { code: 'FR', label: 'Français' },
 ]
 
-export default function Navbar({ country, language }: NavbarProps) {
+export default function Navbar({ country, language, isFirstVisit }: NavbarProps) {
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
-  const [showLanguageWelcome, setShowLanguageWelcome] = useState(false)
+  const [showLanguageWelcome, setShowLanguageWelcome] = useState(isFirstVisit || false)
   const [currentLanguage, setCurrentLanguage] = useState(
     language ? language.toUpperCase() : 'EN'
   )

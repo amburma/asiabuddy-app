@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ThaiLanguage } from '@/types/country';
 import { UI_TRANSLATIONS } from '@/lib/i18n';
@@ -40,10 +40,25 @@ export default function TravelToolbox({
   const tempC = 32;
   const tempF = Math.round((tempC * 9/5) + 32);
   
-  // ICT Time calculation (UTC+7)
-  const now = new Date();
-  const ictTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
-  const timeString = ictTime.toISOString().replace('T', ' ').substring(0, 16) + ' ' + (weatherT.timeSuffix || 'ICT');
+  // ICT Time calculation (UTC+7) - client-side only to prevent hydration mismatch
+  const [mounted, setMounted] = useState(false);
+  const [timeString, setTimeString] = useState('');
+
+  useEffect(() => {
+    setMounted(true);
+    
+    // Initial time calculation
+    const updateTime = () => {
+      const now = new Date();
+      const ictTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+      setTimeString(ictTime.toISOString().replace('T', ' ').substring(0, 16) + ' ' + (weatherT.timeSuffix || 'ICT'));
+    };
+    
+    updateTime();
+    const interval = setInterval(updateTime, 60000); // Update every 60 seconds
+    
+    return () => clearInterval(interval);
+  }, [weatherT.timeSuffix]);
   
   const toolsBySection = [
     {
@@ -60,7 +75,7 @@ export default function TravelToolbox({
                   {tempC}°C / {tempF}°F
                 </span>
                 <span className="text-[9px] italic text-gray-400">
-                  {timeString}
+                  {mounted ? timeString : '—'}
                 </span>
               </div>
               <div className="space-y-2 text-[10px] leading-relaxed">

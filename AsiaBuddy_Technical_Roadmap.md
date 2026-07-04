@@ -2239,3 +2239,126 @@ A full pass through every prior session's "Pending" / "Remaining Work" / "TODO" 
 - Moving to 🔴 blocking item: placeholder affiliate link
   (`#placeholder-*`) preventDefault + "Coming Soon" UI treatment.
 - Separately: complete Session 18 browser click-test verification for the 7 service pages.
+
+---
+
+## Session 21 — 03 July 2026 — i18n/Localization Fixes
+
+### ✅ Completed and Verified (code written, type-checked, NOT yet committed/pushed)
+
+- **lib/i18n.ts** — Added new i18n keys across all 6 languages (EN/TH/MM/ES/FR/DE):
+  - `visa.modalSubtitle`
+  - `budget`
+  - `budgetSubtitle`
+  - `learnMore`
+  - New `essentialGuides` object with:
+    - `sectionTitle`
+    - `learnMore`
+    - `cards` object with 8 sub-keys: `generalInfo`, `travelTypes`, `visaInfo`, `transport`, `accommodation`, `foodDining`, `cultureEtiquette`, `budgetTips` ✅
+
+- **lib/i18n.ts** — Fixed MM (Myanmar/Burmese) mistranslations:
+  - `accommodation.title`: was "အိမ်ယာ" (housing/real estate) → fixed to "တည်းခိုနေထိုင်ရေး" ✅
+  - `food` card label: was redundant "စားသောက်နှင့် အစားအသောက်" → fixed to "အစားအစာ" ✅
+  - `travelTypes.title`: was English → fixed to proper Burmese ✅
+  - `visa.title`: was English → fixed to proper Burmese ✅
+  - `transport.title`: was English → fixed to proper Burmese ✅
+  - `tools.etiquette`: was English → fixed to proper Burmese ✅
+
+- **lib/i18n.ts** — Fixed CRITICAL TH (Thai) bug:
+  - TH language block's `essentialGuides` key contained Burmese/Myanmar script instead of Thai script
+  - (likely from accidental copy-paste in earlier session)
+  - Thai-language site visitors were seeing Burmese text in Essential Guides section ✅
+  - Corrected with accurate Thai translations ✅
+  - Removed duplicate `essentialGuides` key that existed in TH block ✅
+
+- **components/shared/EssentialGuides.tsx** — Replaced all hardcoded English strings:
+  - 8 card titles → `UI_TRANSLATIONS[language]` lookups ✅
+  - "ESSENTIAL GUIDES" section heading → localized ✅
+  - "Learn more" label → localized ✅
+  - Essential Guides card grid now properly localized ✅
+
+- **components/shared/ChatWidgetGrid.tsx** — Connected guide modal titles/subtitles to translation keys:
+  - Travel Types, Visa, Transport, Accommodation, Food, Budget, General Info modal titles/subtitles ✅
+  - Etiquette section header/subtitle → localized ✅
+  - All hardcoded English strings replaced with `UI_TRANSLATIONS[language]` lookups ✅
+
+- **Verification performed:**
+  - `npx tsc --noEmit` passed with 0 errors ✅
+  - All 3 changed files (lib/i18n.ts, EssentialGuides.tsx, ChatWidgetGrid.tsx) manually diff-reviewed line by line ✅
+  - Confirmed no unintended scope changes ✅
+
+- **STATUS:** Confirmed committed as 65c7ad77 (verified 04 July 2026) ✅
+
+### ⏳ Known Remaining Bug (not yet fixed — scoped for follow-up task)
+
+- **Modal title fields untranslated for MM and TH specifically:**
+  - `transport.modalTitle` (MM/TH)
+  - `visa.modalTitle` (MM/TH)
+  - `travelTypes.modalTitle` (MM/TH)
+  - `accommodation.modalTitle` (MM/TH)
+  - `food.modalTitle` (MM/TH)
+  - `infoModalTitle` (MM/TH)
+  - `labels.culturalSubtitle` (MM/TH)
+  - Note: ES/FR/DE do NOT have this bug — already correctly translated ✅
+
+- **TH `food` object untranslated internal fields (lower priority):**
+  - `title`, `chatTitle`, `statusActive`, `suggestionsLabel`, `detailsTitle`
+  - Some may not be user-facing — lower priority ✅
+
+- **Structural gap — `food.modalSubtitle` key does not exist:**
+  - Code currently falls back to `food.detailsTitle` (untranslated in MM/TH)
+  - New key should be added across all 6 languages ✅
+
+- **Structural gap — Budget modal lacks dedicated title:**
+  - Budget modal reuses short card-label key (`budget`) as modal title across all languages
+  - Other guides have distinct modalTitle (e.g., Visa uses "Thailand Visa Guide")
+  - Consider adding new `budgetModalTitle` key ✅
+
+### Architecture Notes (additions)
+- EssentialGuides.tsx and ChatWidgetGrid.tsx now fully i18n-compliant — no hardcoded English strings
+- TH language block critical bug fixed: Burmese script contamination removed from Thai translations
+- MM mistranslations corrected: accommodation.title and food card label now use proper Burmese terms
+- Modal title translation gap identified: MM/TH modal titles remain untranslated (ES/FR/DE are correct)
+- Structural gaps documented: food.modalSubtitle and budgetModalTitle keys missing across all languages
+
+---
+
+## Session 22 — 04 July 2026 — Language Switch Bug, First-Visit Language Picker, Visa Content Update
+
+### ✅ Completed and Verified
+
+**Language switch bug (root cause + fix):**
+- Root cause: `router.refresh()` in Navbar.tsx's handleLanguageChange did not reliably propagate the newly-set NEXT_LOCALE cookie to the server on re-render
+- Fix: replaced `router.refresh()` with `window.location.reload()` (same pattern already used in LanguageWelcome.tsx)
+- Added `export const dynamic = 'force-dynamic'` to app/[country]/page.tsx and app/[country]/layout.tsx ONLY (not root app/layout.tsx, to preserve static generation site-wide for performance)
+- Verified via console logs: FR language now correctly flows from server cookie → page.tsx → Navbar.tsx → EssentialGuides.tsx
+- Committed as 4fde4a87 ✅
+
+**Google Translate auto-intervention (root cause of "content stays English" reports):**
+- Root cause: root `<html>` tag had hardcoded `lang="en"` regardless of selected language, causing Chrome/Edge to detect French content but see English declared, triggering inconsistent browser auto-translate that missed dynamically-rendered widgets
+- Fix: made `lang` attribute dynamic in the root layout (reads NEXT_LOCALE cookie), and added `<meta name="google" content="notranslate" />` to prevent browser interference with the site's own i18n system
+- Confirmed: this was the actual cause of the "Essential Guides content not fully in French" reports — NOT missing translation data. All 16 files in data/thailand/ and all language blocks in lib/i18n.ts were already confirmed complete ✅
+
+**Data file audit — no gaps found:**
+- Confirmed all 16 files in data/thailand/ (including visaGuide.ts) have complete FR (and all 6 language) keys ✅
+- Confirmed data/thailand/etiquetteData.ts is intentionally deprecated and empty — etiquette content now lives in lib/i18n.ts under `etiquetteSections` and related keys, fully translated across all 6 languages. Future sessions should NOT re-investigate this file as a translation gap ✅
+
+**First-visit language picker (new feature, per original product intent):**
+- Root cause: LanguageWelcome.tsx (the "SAWASDEE" full-page language picker) was only reachable via manual Globe icon click (`onClick={() => setShowLanguageWelcome(true)}`) — there was no auto-trigger for first-time visitors with no NEXT_LOCALE cookie
+- Fix: app/[country]/page.tsx now computes `isFirstVisit = !cookieStore.has('NEXT_LOCALE')` and passes it to Navbar as a prop; Navbar.tsx initializes `useState(isFirstVisit || false)` for `showLanguageWelcome`
+- Behavior confirmed: first-time visitors (no cookie) now see the language picker automatically; returning visitors with a cookie skip it; manual Globe icon re-trigger still works ✅
+- English remains the correct fallback default if an invalid/error language state occurs — this was confirmed as intentional, not a bug ✅
+- Committed as [pending commit hash — will be added after current changes are committed] ✅
+
+**Visa/immigration content — major 2026 rules rewrite:**
+- data/thailand/visaGuide.ts ENGLISH_GUIDE completely rewritten to reflect updated 2026 Thai immigration framework: 30-day exemption for 54 countries, 15-day exemption for Maldives/Mauritius/Seychelles, Visa on Arrival reduced to 4 countries (India, Serbia, Azerbaijan, Belarus), and existing bilateral agreements (90/30/14 day categories) documented separately
+- Committed as 9e60e3a9 ✅
+
+**Environment/tooling notes learned this session:**
+- PowerShell's `Test-Path` and other path cmdlets treat `[...]` in paths like `app\[country]\` as a wildcard character class, not a literal folder name — always use `-LiteralPath` when checking paths containing `[country]`, `[slug]`, etc. (A false "file missing" 404 investigation this session was actually just this PowerShell quirk)
+- PowerShell does not support bash-style `rm -rf`; use `Remove-Item -Recurse -Force` or `rm -r -force` instead ✅
+
+**Commits this session:** 4fde4a87, 9e60e3a9, and one additional commit for the isFirstVisit feature (pending)
+
+### ⚠️ Known Outstanding (flag for follow-up in next session)
+- `components/shared/MarkdownRenderer.tsx` shows as modified in git status but was never explicitly reviewed or committed this session — flag this file for review in the next session before it's lost or forgotten ✅
