@@ -29,7 +29,7 @@
       ]
     },
     "types": ["node"],
-    "ignoreDeprecations": "5.0"
+    "ignoreDeprecations": "6.0"
   },
   "include": [
   "next-env.d.ts",
@@ -43,7 +43,6 @@
 ],
   "exclude": [
     "node_modules",
-    "app/thailand",
     "src",
     "src/**/*"
   ]

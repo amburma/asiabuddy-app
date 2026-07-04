@@ -89,7 +89,7 @@ export default function TourServiceCard({ tour, language = 'EN' }: TourServiceCa
           <Link
             href={tour.gyg_url}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow noopener sponsored"
             className="block w-full bg-[#C9A84C] text-[#0D0D0D] text-center py-2.5 sm:py-3 rounded font-medium hover:bg-opacity-90 transition-all duration-200 text-sm sm:text-base pb-8 sm:pb-3"
           >
             {t.bookNow}

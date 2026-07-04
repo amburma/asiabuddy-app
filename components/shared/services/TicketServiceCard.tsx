@@ -144,7 +144,7 @@ export default function TicketServiceCard({ ticket, language = 'EN', is_placehol
             <Link
               href={ticket.affiliate_url}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener sponsored"
               className="block w-full bg-[#E0B952] text-[#0D0D0D] text-center py-2.5 sm:py-3 rounded font-medium hover:bg-opacity-90 transition-all duration-200 text-sm sm:text-base"
             >
               {t.bookNow}

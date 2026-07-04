@@ -101,7 +101,7 @@ export default function HotelServiceCard({ hotel, language = 'EN', is_placeholde
             <Link
               href={hotel.affiliate_url}
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener sponsored"
               className="block w-full bg-[#C9A84C] text-[#0D0D0D] text-center py-2.5 sm:py-3 rounded font-medium hover:bg-opacity-90 transition-all duration-200 text-sm sm:text-base"
             >
               {t.bookNow}

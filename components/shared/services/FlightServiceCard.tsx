@@ -13,7 +13,7 @@ interface FlightData {
   arrival_time: string;
   duration: string;
   stops: number;
-  price: number;
+  price: number | null;
   price_checked_at: string;
   affiliate_url: string;
 }
@@ -157,7 +157,7 @@ export default function FlightServiceCard({ flight, language = 'EN', is_placehol
       <div className="mb-4 pt-4 border-t border-[#1A1A1A]">
         <div className="mb-2">
           <span className="font-dm-mono text-3xl sm:text-4xl text-[#D4AF37] font-bold">
-            ${flight.price}
+            {flight.price && flight.price > 0 ? `$${flight.price}` : 'See live prices'}
           </span>
         </div>
         <p className="text-xs text-[#F5F0E8] opacity-60">
@@ -179,7 +179,7 @@ export default function FlightServiceCard({ flight, language = 'EN', is_placehol
         <Link
           href={flight.affiliate_url}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="nofollow noopener sponsored"
           className="block w-full bg-[#D4AF37] text-[#0D0D0D] text-center py-2.5 sm:py-3 rounded font-medium hover:bg-opacity-90 transition-all duration-200 text-sm sm:text-base"
         >
           {t.bookNow}

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { translateText } from '@/lib/translate'
 import FlightServiceCard from '@/components/shared/services/FlightServiceCard'
-import { getTransferLinksByCity } from '@/lib/queries/transferLinks'
+import { getFlightLinksByCity } from '@/lib/queries/flightLinks'
 import Navbar from '@/components/shared/Navbar'
 
 export const dynamic = 'force-dynamic'
@@ -39,7 +39,7 @@ export default async function FlightsPage({
   const targetLanguage = (cookieStore.get('NEXT_LOCALE')?.value ?? 'EN').toUpperCase()
 
   const defaultCity = 'bangkok'
-  const wayawayLinks = await getTransferLinksByCity(defaultCity, 'wayaway')
+  const flightLinks = await getFlightLinksByCity(defaultCity)
 
   const translationPayload = {
     homeText: 'Home',
@@ -52,7 +52,7 @@ export default async function FlightsPage({
     supportText: '24/7 Support',
     availText: 'Available Flights',
     exploreTitle: `Flights in ${countryName}`,
-    countText: `${wayawayLinks.length} flight${wayawayLinks.length !== 1 ? 's' : ''} available`,
+    countText: `${flightLinks.length} flight${flightLinks.length !== 1 ? 's' : ''} available`,
     exploreCtaText: 'View Flight →',
   }
 
@@ -108,7 +108,7 @@ export default async function FlightsPage({
       <div className="bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-6 py-16">
 
-          {wayawayLinks.length === 0 ? (
+          {flightLinks.length === 0 ? (
             <div className="min-h-[400px] flex flex-col items-center justify-center text-center py-24">
               <div className="text-8xl mb-6">✈️</div>
               <h3 className="text-3xl font-black text-gray-800 mb-3">No Flights Available Yet</h3>
@@ -119,28 +119,24 @@ export default async function FlightsPage({
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {wayawayLinks.map((flight) => {
-                const routeParts = (flight.route_name || '').split(/\s+to\s+/i)
-                const departureCity = routeParts[0]?.trim() || 'Bangkok'
-                const arrivalCity = routeParts[1]?.trim() || 'Destination'
-
+              {flightLinks.map((flight) => {
                 return (
                   <div key={flight.id} className="w-full">
                     <FlightServiceCard
                       flight={{
-                        airline: flight.provider || 'Wayaway',
-                        departure_city: departureCity,
-                        arrival_city: arrivalCity,
-                        departure_time: 'Flexible',
-                        arrival_time: 'Flexible',
-                        duration: 'Flexible',
-                        stops: 0,
-                        price: parseFloat(flight.price_from?.replace(/[^0-9.]/g, '') || '0'),
-                        price_checked_at: new Date().toISOString(),
-                        affiliate_url: flight.booking_url || '#',
+                        airline: flight.airline || 'Multiple Airlines',
+                        departure_city: flight.departure_city || 'Your City',
+                        arrival_city: flight.arrival_city || 'Bangkok',
+                        departure_time: flight.departure_time || 'Flexible',
+                        arrival_time: flight.arrival_time || 'Flexible',
+                        duration: flight.duration || 'Flexible',
+                        stops: flight.stops ?? 0,
+                        price: flight.price === 'See live prices' || !flight.price ? null : (parseFloat(flight.price.replace(/[^0-9.]/g, '')) || null),
+                        price_checked_at: flight.created_at,
+                        affiliate_url: flight.flight_url || '#',
                       }}
                       language={targetLanguage as any}
-                      is_placeholder={Boolean(flight.is_placeholder)}
+                      is_placeholder={false}
                     />
                   </div>
                 )

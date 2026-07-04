@@ -122,7 +122,7 @@ export default function TransferServiceCard({ transfer, language = 'EN', is_plac
           <Link
             href={transfer.affiliate_url}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="nofollow noopener sponsored"
             className="block flex-1 sm:flex-none bg-[#B8945A] text-[#0D0D0D] text-center py-2.5 sm:py-3 px-4 rounded font-medium hover:bg-opacity-90 transition-all duration-200 text-sm sm:text-base whitespace-nowrap"
           >
             {t.bookNow}

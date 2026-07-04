@@ -2358,7 +2358,49 @@ A full pass through every prior session's "Pending" / "Remaining Work" / "TODO" 
 - PowerShell's `Test-Path` and other path cmdlets treat `[...]` in paths like `app\[country]\` as a wildcard character class, not a literal folder name — always use `-LiteralPath` when checking paths containing `[country]`, `[slug]`, etc. (A false "file missing" 404 investigation this session was actually just this PowerShell quirk)
 - PowerShell does not support bash-style `rm -rf`; use `Remove-Item -Recurse -Force` or `rm -r -force` instead ✅
 
-**Commits this session:** 4fde4a87, 9e60e3a9, and one additional commit for the isFirstVisit feature (pending)
+**Commits this session:** 4fde4a87, 9e60e3a9, 6bbdc3d6 (MarkdownRenderer GFM tables), and one additional commit for the isFirstVisit feature
 
-### ⚠️ Known Outstanding (flag for follow-up in next session)
-- `components/shared/MarkdownRenderer.tsx` shows as modified in git status but was never explicitly reviewed or committed this session — flag this file for review in the next session before it's lost or forgotten ✅
+### Session 22 Continued — Post-Fix Backlog Sweep
+
+**Google Translate auto-intervention fix (re-confirmed):**
+- Root `<html>` tag `lang` attribute made dynamic (reads NEXT_LOCALE cookie) instead of hardcoded "en"
+- Added `<meta name="google" content="notranslate" />` in root layout
+- Confirmed as the actual root cause of earlier "Essential Guides French content incomplete" reports — NOT missing translation data ✅
+
+**Live clock hydration fix:**
+- components/shared/TravelToolbox.tsx — the "Heure Locale" timestamp widget was computing Date values during SSR render, causing a mismatch with client hydration
+- Fixed with client-only mount pattern (useEffect + mounted state) ✅
+
+**First-visit language picker feature (re-confirmed):**
+- app/[country]/page.tsx now computes `isFirstVisit = !cookieStore.has('NEXT_LOCALE')` and passes it to Navbar
+- Navbar.tsx initializes `useState(isFirstVisit || false)` for `showLanguageWelcome`
+- New visitors with no cookie see the "SAWASDEE" language picker automatically; returning visitors and manual Globe-icon trigger are unaffected ✅
+
+**MarkdownRenderer.tsx — GFM table support (orphaned uncommitted change, now committed):**
+- Added `remark-gfm` plugin and styled table/thead/tbody/tr/th/td components matching the site's gold/sacred color scheme
+- Unrelated to i18n work — a separate feature enhancement that had never been committed
+- Committed as 6bbdc3d6 ✅
+
+**CRITICAL BUG FOUND & FIXED — Flights page showed mislabeled transfer data:**
+- app/[country]/flights/page.tsx was calling `getTransferLinksByCity(defaultCity, 'wayaway')` (the TRANSFER data table, filtered by provider) and mapping transfer fields onto FlightServiceCard with hardcoded placeholders (departure_time: 'Flexible', stops: 0, airline: flight.provider || 'Wayaway')
+- This meant real users visiting /thailand/flights saw ground transfer routes/prices mislabeled as flights
+- No `flight_links` table or flight-specific query function exists in Supabase
+- RESOLUTION: flights page temporarily disabled and replaced with a "Coming Soon" placeholder (same pattern as other pending affiliate services) until real flight data is available
+- FlightServiceCard.tsx itself was NOT deleted — only its rendering with transfer data was removed ✅
+
+**FlightServiceCard / TransferServiceCard prop compatibility — investigated, confirmed NOT an issue:**
+- The two components have intentionally different, independent prop interfaces (FlightData: 10 fields; TransferData: 7 fields; only 3 fields overlap by type)
+- TransferServiceCard is correctly wired in app/[country]/transfers/page.tsx with real transfer_links data
+- No further action needed for this item — remove it from any "pending" list ✅
+
+**Uncommitted-work audit closed:**
+- All previously-uncommitted files from this session (app/layout.tsx, TravelToolbox.tsx, Navbar.tsx, page.tsx, MarkdownRenderer.tsx + its dependencies, placeholder affiliate link fixes, flights page fix) have been committed
+- Note: `git status` should be checked at the start of every future session before beginning new work, since this session found multiple critical fixes had been sitting uncommitted for extended periods ✅
+
+### ⏳ Remaining Work / Backlog
+
+**High priority:**
+- 🔴 Tailwind design tokens verification (sacred-bg, sacred-green, gold-deep, gold-soft) — NOT YET DONE. If any of these custom classes are missing from tailwind.config.js/ts theme.extend.colors, Tailwind will silently ignore them in production with no build error, causing invisible site-wide styling failures. This is the next task to pick up.
+
+**Long-term (not blocking):**
+- 🟡 Real flight_links Supabase table + getFlightLinksByCity() query function — needed before flights page can be re-enabled with real data
