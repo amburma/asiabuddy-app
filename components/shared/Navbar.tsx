@@ -53,7 +53,6 @@ export default function Navbar({ country, language }: NavbarProps) {
   }, [language])
 
   const t = UI_TRANSLATIONS[currentLanguage as keyof typeof UI_TRANSLATIONS] || UI_TRANSLATIONS.EN
-  console.log('[Navbar] currentLanguage:', currentLanguage, '| t.menu:', t.menu)
 
   const modalContent: Record<string, { title: string; subtitle: string; icon: React.ReactNode; content: string; footer?: string }> = {
     information: {
@@ -171,7 +170,7 @@ export default function Navbar({ country, language }: NavbarProps) {
     document.cookie = `NEXT_LOCALE=${upper};path=/;max-age=31536000`
     setCurrentLanguage(upper)
     setShowLanguageDropdown(false)
-    router.refresh()
+    window.location.reload()
   }
 
   return (

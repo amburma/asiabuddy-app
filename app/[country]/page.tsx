@@ -30,7 +30,6 @@ export default async function CountryPage({
   // Detect user's preferred language from cookie
   const cookieStore = await cookies()
   const targetLanguage = cookieStore.get('NEXT_LOCALE')?.value || 'en'
-  console.log('[DEBUG] targetLanguage:', targetLanguage)
 
   const supabase = getSupabase()
   

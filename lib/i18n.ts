@@ -103,6 +103,7 @@ const ENGLISH_UI = {
     "link": "Travel types"
   },
   "budget": "Budget Tips",
+  "budgetModalTitle": "Thailand Budget Guide",
   "budgetSubtitle": "Smart Travel Tips",
   "learnMore": "Learn more",
   "accommodation": {
@@ -290,7 +291,8 @@ const ENGLISH_UI = {
     "suggestionsLabel": "Common Food Inquiries",
     "detailsTitle": "Thailand Food Guide",
     "guideLink": "Thailand Food Guide — For more information",
-    "modalTitle": "Food Guide",
+    "modalTitle": "คู่มืออาหารไทย",
+    "modalSubtitle": "Local Cuisine & Dining Safety",
     "suggestions": [
       "Street food safety",
       "Best Pad Thai",
@@ -470,13 +472,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "dos": "Key Dos",
     "donts": "Key Don'ts",
     "legalAdvisory": "Legal Advisory",
-    "culturalSubtitle": "Cultural Dos & Don'ts • Local Customs",
+    "culturalSubtitle": "สิ่งที่ควรทำและไม่ควรทำด้านวัฒนธรรม • ประเพณีท้องถิ่น",
     "bestTime": "Best Time to Visit",
     "goToLocation": "ไปที่ตำแหน่งนี้"
   },
   "infoLink": "สำหรับข้อมูลเพิ่มเติม คลิกที่นี่",
   "exploreThailandEssentials": "สำรวจสิ่งจำเป็นในประเทศไทย",
-  "infoModalTitle": "Thailand Essentials Guide",
+  "infoModalTitle": "คู่มือสิ่งจำเป็นในประเทศไทย",
   "infoModalSubtitle": "คำแนะนำที่ใช้ได้จริงสำหรับการเข้าพักของคุณ",
   "booking": {
     "link": "จองรถเช่า ตั๋วรถโดยสาร ตั๋วเครื่องบิน และค่าเข้าชมสถานที่",
@@ -499,7 +501,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "detailsTitle": "การเดินทางในประเทศไทย — สำหรับข้อมูลเพิ่มเติม",
     "appsGuideLink": "แอปและเว็บไซต์ที่จำเป็นสำหรับการเดินทางในประเทศไทย คลิกที่นี่เพื่อข้อมูลเพิ่มเติม!",
     "transportGuideLink": "คู่มือการเดินทาง",
-    "modalTitle": "Thailand Nationwide Transport Guide",
+    "modalTitle": "คู่มือการเดินทางทั่วประเทศไทย",
     "modalSubtitle": "การเดินทาง",
     "statusActive": "Transport Concierge Active",
     "destinationLabel": "Destination",
@@ -516,18 +518,19 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   },
   "visa": {
     "title": "Visa info",
-    "modalTitle": "Thailand Visa Guide",
+    "modalTitle": "คู่มือวีซ่าประเทศไทย",
     "modalSubtitle": "ข้อมูลวีซ่า",
     "description": "Check your status.",
     "link": "ข้อมูลวีซ่า"
   },
   "travelTypes": {
     "title": "Travel types",
-    "modalTitle": "Travel Styles Guide",
+    "modalTitle": "คู่มือสไตล์การเดินทาง",
     "modalSubtitle": "สไตล์การเดินทางและเครื่องมือวางแผน",
     "link": "สไตล์การเดินทาง"
   },
   "budget": "เคล็ดลับงบประมาณ",
+  "budgetModalTitle": "คู่มืองบประมาณประเทศไทย",
   "budgetSubtitle": "เคล็ดลับการเดินทางที่ชาญฉลาด",
   "learnMore": "เรียนรู้เพิ่มเติม",
   "essentialGuides": {
@@ -546,7 +549,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   },
   "accommodation": {
     "title": "Accommodation",
-    "modalTitle": "Thailand Accommodation Guide",
+    "modalTitle": "คู่มือที่พักในประเทศไทย",
     "chatTitle": "ความช่วยเหลือด้านที่พัก",
     "detailsTitle": "รายละเอียดที่พัก",
     "guideLink": "ลิงก์คู่มือที่พัก",
@@ -716,6 +719,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "detailsTitle": "Thailand Food Guide",
     "guideLink": "คู่มืออาหารไทย สำหรับข้อมูลเพิ่มเติม",
     "modalTitle": "Food Guide",
+    "modalSubtitle": "อาหารท้องถิ่นและความปลอดภัยด้านอาหาร",
     "suggestions": [
       "ความปลอดภัยของสตรีทฟู้ด",
       "ผัดไทยเจ้าดัง",
@@ -886,13 +890,13 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "dos": "Key Dos",
     "donts": "Key Don'ts",
     "legalAdvisory": "Legal Advisory",
-    "culturalSubtitle": "Cultural Dos & Don'ts • Local Customs",
+    "culturalSubtitle": "ယဉ်ကျေးမှု ဆိုင်ရာ လုပ်သင့်တာနှင့် မလုပ်သင့်တာများ • ဒေသခံ ဓလေ့ထုံးစဉ်များ",
     "bestTime": "Best Time to Visit",
     "goToLocation": "တည်နေရာသို့သွားပါ"
   },
   "infoLink": "ပိုမိုသိရှိလိုပါက ဤနေရာကိုနှိပ်ပါ",
   "exploreThailandEssentials": "ထိုင်းနိုင်ငံ၏ အခြေခံလိုအပ်ချက်များကို ရှာဖွေပါ",
-  "infoModalTitle": "Thailand Essentials Guide",
+  "infoModalTitle": "ထိုင်းနိုင်ငံ အခြေခံလိုအပ်ချက်များ လမ်းညွှန်",
   "infoModalSubtitle": "သင်၏နေထိုင်မှုအတွက် လက်တွေ့ကျသော လမ်းညွှန်ချက်များ",
   "booking": {
     "link": "ကားအငှားများ၊ ဘတ်စ်ကားလက်မှတ်များ၊ လေယာဉ်လက်မှတ်များနှင့် ဝင်ကြေးများကို ဘွတ်ကင်လုပ်ပါ။",
@@ -915,7 +919,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "detailsTitle": "ထိုင်းနိုင်ငံအတွင်း သယ်ယူပို့ဆောင်ရေး — ပိုမိုသိရှိလိုပါက",
     "appsGuideLink": "ထိုင်းနိုင်ငံ သယ်ယူပို့ဆောင်ရေးအတွက် အဓိက အက်ပ်များနှင့် ဝဘ်ဆိုဒ်များ။ ပိုမိုသိရှိလိုပါက ဤနေရာကိုနှိပ်ပါ!",
     "transportGuideLink": "သယ်ယူပို့ဆောင်ရေး လမ်းညွှန်",
-    "modalTitle": "Thailand Nationwide Transport Guide",
+    "modalTitle": "ထိုင်းနိုင်ငံ တစ်နိုင်ငံလုံး သယ်ယူပို့ဆောင်ရေး လမ်းညွှန်",
     "modalSubtitle": "သယ်ယူပို့ဆောင်ရေး",
     "statusActive": "Transport Concierge Active",
     "destinationLabel": "Destination",
@@ -932,23 +936,24 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   },
   "visa": {
     "title": "ဗီဇာအချက်အလက်",
-    "modalTitle": "Thailand Visa Guide",
+    "modalTitle": "ထိုင်းနိုင်ငံ ဗီဇာ လမ်းညွှန်",
     "modalSubtitle": "ဗီဇာ အချက်အလက်",
     "description": "Check your status.",
     "link": "ဗီဇာ ဆိုင်ရာ အချက်အလက်များ"
   },
   "travelTypes": {
     "title": "ခရီးသွားအမျိုးအစားများ",
-    "modalTitle": "Travel Styles Guide",
+    "modalTitle": "ခရီးသွားပုံစံများ လမ်းညွှန်",
     "modalSubtitle": "ခရီးသွားပုံစံများနှင့် စီစဉ်သူ",
     "link": "ခရီးသွားပုံစံများ (Travel Styles)"
   },
   "budget": "ဘတ်ဂျက် အကြံပြုချက်များ",
+  "budgetModalTitle": "ထိုင်းနိုင်ငံ ဘတ်ဂျက် လမ်းညွှန်",
   "budgetSubtitle": "စမတ်ခရီးသွားအကြံပြုချက်များ",
   "learnMore": "ထပ်မံလေ့လာရန်",
   "accommodation": {
     "title": "တည်းခိုရန်နေရာများ",
-    "modalTitle": "Thailand Accommodation Guide",
+    "modalTitle": "ထိုင်းနိုင်ငံ တည်းခိုနေထိုင်ရေး လမ်းညွှန်",
     "chatTitle": "တည်းခိုနေထိုင်မှု အကူအညီ",
     "detailsTitle": "တည်းခိုနေထိုင်မှု အသေးစိတ်",
     "guideLink": "တည်းခိုနေထိုင်မှု ลမ်းညွှန် လင့်ခ်",
@@ -1131,7 +1136,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "suggestionsLabel": "Common Food Inquiries",
     "detailsTitle": "Thailand Food Guide",
     "guideLink": "ထိုင်းနိုင်ငံ အစားအသောက် လမ်းညွှန် ပိုမိုသိရှိလိုပါက",
-    "modalTitle": "Food Guide",
+    "modalTitle": "အစားအသောက် လမ်းညွှန်",
+    "modalSubtitle": "ဒေသီယ အစားအသောက် နှင့် စားသုံးခြင်း ဘေးကင်းရေး",
     "suggestions": [
       "လမ်းဘေးစာ ဘေးကင်းရေး",
       "အကောင်းဆုံး ပတ်ထိုင်း",
@@ -1360,6 +1366,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "link": "Estilos de Viaje"
   },
   "budget": "Consejos de presupuesto",
+  "budgetModalTitle": "Guía de Presupuesto de Tailandia",
   "budgetSubtitle": "Consejos inteligentes para viajeros",
   "learnMore": "Más información",
   "accommodation": {
@@ -1548,6 +1555,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "detailsTitle": "Guía de Comida de Tailandia",
     "guideLink": "Guía de Comida de Tailandia — Para más información",
     "modalTitle": "Guía de Comida",
+    "modalSubtitle": "Cocina Local & Seguridad Gastronómica",
     "suggestions": [
       "Seguridad de comida callejera",
       "Mejor Pad Thai",
@@ -1776,6 +1784,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "link": "Styles de Voyage"
   },
   "budget": "Conseils budgétaires",
+  "budgetModalTitle": "Guide Budget de la Thaïlande",
   "budgetSubtitle": "Conseils de voyage intelligents",
   "learnMore": "En savoir plus",
   "accommodation": {
@@ -1964,6 +1973,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "detailsTitle": "Guide Gastronomique de la Thaïlande",
     "guideLink": "Guide Gastronomique de la Thaïlande — Pour plus d'informations",
     "modalTitle": "Guide Nourriture",
+    "modalSubtitle": "Cuisine Locale & Sécurité Alimentaire",
     "suggestions": [
       "Sécurité de la street food",
       "Meilleur Pad Thai",
@@ -2192,6 +2202,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "link": "Reisestile"
   },
   "budget": "Budget-Tipps",
+  "budgetModalTitle": "Thailand Budget-Leitfaden",
   "budgetSubtitle": "Intelligente Reisetipps",
   "learnMore": "Mehr erfahren",
   "accommodation": {
@@ -2380,6 +2391,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "detailsTitle": "Thailand Essen-Leitfaden",
     "guideLink": "Thailand Essen-Leitfaden — Für weitere Informationen",
     "modalTitle": "Essen-Leitfaden",
+    "modalSubtitle": "Lokale Küche & Essenssicherheit",
     "suggestions": [
       "Straßenküche Sicherheit",
       "Bester Pad Thai",

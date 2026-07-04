@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import FloatingChatButtonLoader from '@/components/shared/FloatingChatButtonLoader'
 
+export const dynamic = 'force-dynamic'
+
 const COUNTRY_META: Record<string, { name: string; description: string }> = {
   thailand: {
     name: 'Thailand',

@@ -308,7 +308,7 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
       <GuideModal
         isOpen={showBudgetModal}
         onClose={() => setShowBudgetModal(false)}
-        title={t.budget || 'Thailand Budget & Money-Saving Guide'}
+        title={t.budgetModalTitle || 'Thailand Budget & Money-Saving Guide'}
         subtitle={t.budgetSubtitle || 'Smart Travel Tips'}
         icon={<Calculator size={20} />}
         footer="Budget Guide • AsiaBuddy Services"
