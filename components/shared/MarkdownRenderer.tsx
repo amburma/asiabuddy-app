@@ -1,5 +1,6 @@
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import remarkGfm from 'remark-gfm';
 
 const MarkdownComponents: any = {
   h1: ({ node, ...props }: any) => (
@@ -15,7 +16,7 @@ const MarkdownComponents: any = {
     <h4 className="text-sm font-bold text-gray-800 mt-6 mb-2" {...props} />
   ),
   p: ({ node, ...props }: any) => (
-    <p className="text-xs text-gray-700 leading-relaxed mb-5" {...props} />
+    <p className="text-xs text-left text-gray-700 leading-relaxed mb-5" {...props} />
   ),
   ul: ({ node, ...props }: any) => (
     <ul className="space-y-3 mb-6 list-none p-0" {...props} />
@@ -41,6 +42,26 @@ const MarkdownComponents: any = {
   u: ({ node, ...props }: any) => (
     <span className="underline decoration-gold-soft/50 decoration-2 underline-offset-4" {...props} />
   ),
+  table: ({ node, ...props }: any) => (
+    <div className="overflow-x-auto mb-6 rounded-lg border border-gray-100">
+      <table className="w-full text-xs" {...props} />
+    </div>
+  ),
+  thead: ({ node, ...props }: any) => (
+    <thead className="bg-gold-soft/15 border-b border-gray-200" {...props} />
+  ),
+  tbody: ({ node, ...props }: any) => (
+    <tbody className="divide-y divide-gray-100" {...props} />
+  ),
+  tr: ({ node, ...props }: any) => (
+    <tr className="hover:bg-gold-soft/8 transition-colors" {...props} />
+  ),
+  th: ({ node, ...props }: any) => (
+    <th className="text-left font-bold text-gray-900 px-4 py-3 bg-gold-soft/20" {...props} />
+  ),
+  td: ({ node, ...props }: any) => (
+    <td className="px-4 py-3 text-left text-gray-700 leading-relaxed" {...props} />
+  ),
 };
 
 interface MarkdownRendererProps {
@@ -49,7 +70,7 @@ interface MarkdownRendererProps {
 
 export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
-    <ReactMarkdown rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
+    <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]} components={MarkdownComponents}>
       {content}
     </ReactMarkdown>
   );
