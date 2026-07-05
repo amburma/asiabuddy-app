@@ -4,6 +4,7 @@ import { translateText } from '@/lib/translate'
 import FlightServiceCard from '@/components/shared/services/FlightServiceCard'
 import { getFlightLinksByCity } from '@/lib/queries/flightLinks'
 import Navbar from '@/components/shared/Navbar'
+import AviasalesSearchWidget from '@/components/shared/AviasalesSearchWidget'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -118,8 +119,13 @@ export default async function FlightsPage({
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {flightLinks.map((flight) => {
+            <>
+              <div className="mb-8">
+                <h3 className="text-2xl font-bold text-gray-800 text-center mb-6">Search Live Flights</h3>
+                <AviasalesSearchWidget />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {flightLinks.map((flight) => {
                 return (
                   <div key={flight.id} className="w-full">
                     <FlightServiceCard
@@ -142,6 +148,7 @@ export default async function FlightsPage({
                 )
               })}
             </div>
+            </>
           )}
         </div>
       </div>
