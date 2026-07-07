@@ -30,20 +30,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={language} className={`${playfair.variable} ${inter.variable} ${dmMono.variable}`}>
       <head>
-        <Script
-          id="travelpayouts-drive"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function () {
-                  var script = document.createElement("script");
-                  script.async = 1;
-                  script.src = 'https://emrldtp.com/NTQ2Mzky.js?t=546392';
-                  document.head.appendChild(script);
-              })();
-            `,
-          }}
-        />
         <meta name="google" content="notranslate" />
       </head>
       <body>{children}<CookieBanner /></body>

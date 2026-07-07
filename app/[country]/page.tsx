@@ -142,15 +142,21 @@ export default async function CountryPage({
         </div>
       </section>
 
-      <ServicesStrip
-        country={lowerCountry}
-        language={targetLanguage.toUpperCase() as SupportedLanguage}
-        agodaLinks={agodaLinks}
-        klookLinks={klookLinks}
-        transfer12goLinks={transfer12goLinks}
-        transferWayawayLinks={transferWayawayLinks}
-        gygSummary={gygSummary}
-      />
+      {/* ESSENTIAL GUIDES */}
+      <EssentialGuides country={lowerCountry} language={targetLanguage.toUpperCase()} />
+
+      {/* SECTION 3 — DESTINATIONS */}
+      {translatedDestinations && translatedDestinations.length > 0 && (
+        <section id="destinations" className="bg-sacred-bg pt-4 pb-12 px-4">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-xs font-bold tracking-[0.2em] text-amber-600 uppercase text-center">
+              DISCOVER {countryName.toUpperCase()}
+            </h2>
+            <div className="w-12 h-0.5 bg-amber-500 mt-2 mb-8 mx-auto" />
+            <DestinationTabs destinations={translatedDestinations} language={targetLanguage.toUpperCase()} />
+          </div>
+        </section>
+      )}
 
       {/* SECTION 2 — TICKETS HORIZONTAL SCROLL */}
       {klookLinks.length > 0 && (
@@ -181,18 +187,15 @@ export default async function CountryPage({
         </section>
       )}
 
-      {/* SECTION 3 — DESTINATIONS */}
-      {translatedDestinations && translatedDestinations.length > 0 && (
-        <section id="destinations" className="bg-sacred-bg pt-4 pb-12 px-4">
-          <div className="max-w-7xl mx-auto">
-            <h2 className="text-xs font-bold tracking-[0.2em] text-amber-600 uppercase text-center">
-              DISCOVER {countryName.toUpperCase()}
-            </h2>
-            <div className="w-12 h-0.5 bg-amber-500 mt-2 mb-8 mx-auto" />
-            <DestinationTabs destinations={translatedDestinations} language={targetLanguage.toUpperCase()} />
-          </div>
-        </section>
-      )}
+      <ServicesStrip
+        country={lowerCountry}
+        language={targetLanguage.toUpperCase() as SupportedLanguage}
+        agodaLinks={agodaLinks}
+        klookLinks={klookLinks}
+        transfer12goLinks={transfer12goLinks}
+        transferWayawayLinks={transferWayawayLinks}
+        gygSummary={gygSummary}
+      />
 
       {/* SECTION 3 — FEATURED TOURS */}
       {translatedTours && translatedTours.length > 0 && (
@@ -258,9 +261,6 @@ export default async function CountryPage({
           </div>
         </section>
       )}
-
-      {/* ESSENTIAL GUIDES */}
-      <EssentialGuides country={lowerCountry} language={targetLanguage.toUpperCase()} />
 
       {/* SECTION 4 — CHAT WIDGETS */}
       {lowerCountry === 'thailand' && (
