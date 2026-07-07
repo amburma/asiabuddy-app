@@ -29,8 +29,10 @@ export async function generateMetadata({
 
 export default async function ActivitiesPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ country: string }>
+  searchParams: Promise<{ city?: string }>
 }) {
   const { country } = await params
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
@@ -38,8 +40,24 @@ export default async function ActivitiesPage({
   const cookieStore = await cookies()
   const targetLanguage = (cookieStore.get('NEXT_LOCALE')?.value ?? 'EN').toUpperCase()
 
-  const defaultCity = 'bangkok'
-  const gygLinks = await getGygLinksByCity(defaultCity)
+  const { city: cityParam } = await searchParams
+  const city = cityParam || 'bangkok'
+  const gygLinks = await getGygLinksByCity(city)
+
+  const cities = [
+    { slug: 'bangkok', name: 'Bangkok' },
+    { slug: 'pattaya', name: 'Pattaya' },
+    { slug: 'phuket', name: 'Phuket' },
+    { slug: 'krabi', name: 'Krabi' },
+    { slug: 'huahin', name: 'Hua Hin' },
+    { slug: 'hatyai', name: 'Hat Yai' },
+    { slug: 'kanchanaburi', name: 'Kanchanaburi' },
+    { slug: 'pakchong', name: 'Pak Chong' },
+    { slug: 'kochang', name: 'Ko Chang' },
+    { slug: 'chiangmai', name: 'Chiang Mai' },
+    { slug: 'chiangrai', name: 'Chiang Rai' },
+    { slug: 'kosamui', name: 'Ko Samui' },
+  ]
 
   const translationPayload = {
     homeText: 'Home',
@@ -106,7 +124,24 @@ export default async function ActivitiesPage({
       </div>
 
       <div className="bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex flex-wrap gap-2 mb-8">
+            {cities.map((cityOption) => (
+              <Link
+                key={cityOption.slug}
+                href={`/${country}/activities?city=${cityOption.slug}`}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  city === cityOption.slug
+                    ? 'bg-orange-500 text-white'
+                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                {cityOption.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 py-8">
 
           {gygLinks.length === 0 ? (
             <div className="min-h-[400px] flex flex-col items-center justify-center text-center py-24">
@@ -125,9 +160,9 @@ export default async function ActivitiesPage({
                     tour={{
                       activity_name: activity.activity_name,
                       image_url: activity.image_url || '',
-                      price_from: activity.price_from || '0',
-                      rating: activity.rating || '0',
-                      reviews_count: activity.reviews_count || '0',
+                      price_from: activity.price_from,
+                      rating: activity.rating,
+                      reviews_count: activity.reviews_count,
                       duration: activity.duration || 'Flexible',
                       gyg_url: activity.gyg_url,
                     }}

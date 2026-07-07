@@ -2404,3 +2404,244 @@ A full pass through every prior session's "Pending" / "Remaining Work" / "TODO" 
 
 **Long-term (not blocking):**
 - 🟡 Real flight_links Supabase table + getFlightLinksByCity() query function — needed before flights page can be re-enabled with real data
+
+---
+
+## Session 23 — 06 July 2026 — Klook Real Affiliate Data Wired (Tickets)
+
+### ✅ Completed and Verified
+
+**Klook affiliate account + real links generated:**
+- Klook affiliate account (AID 126322) approved and active
+- Generated 12 real affiliate links via affiliate.klook.com Method 1
+  (individual generation) for: Bangkok, Pattaya, Phuket, Krabi, Hua Hin,
+  Hat Yai, Kanchanaburi, Pak Chong, Ko Chang, Satun, Chiang Rai, Ko Samui
+- Custom tag naming convention applied: <city>_destination (e.g.
+  bangkok_destination, pattaya_destination, etc.)
+- Shortened links (not full redirect URLs) used for storage — functionally
+  identical for commission tracking, cleaner for DB/UI
+
+**klook_links table — created (did NOT already exist despite earlier
+notes suggesting otherwise):**
+- Columns confirmed via information_schema query: id (uuid), city (text),
+  activity_name (text), klook_url (text), price_from (text), rating (text),
+  reviews_count (text), duration (text), image_url (text),
+  is_placeholder (text — NOTE: stored as TEXT, not boolean, unlike what
+  the naming implies; must be string-compared as 'true'/'false'),
+  created_at (timestamptz)
+- 12 rows inserted with real klook_url values, is_placeholder = 'false'
+  for all rows (real, non-placeholder links)
+- price_from, rating, reviews_count, image_url left NULL — no real
+  pricing/rating data pulled from Klook activity pages yet (same gap as
+  documented for gyg_links in Session 16/17)
+
+**Integration — Tickets service slot wired to real data:**
+- lib/queries/klookLinks.ts — getKlookLinksByCity() confirmed working
+- components/shared/services/TicketServiceCard.tsx — confirmed existing,
+  correct null handling, correct design tokens, correct CTA logic
+  (clickable when is_placeholder = 'false', disabled "Coming Soon" when
+  'true')
+- app/[country]/page.tsx — added "FEATURED TICKETS" horizontal scroll
+  section (homepage teaser, top 3 tickets, "View All" link to
+  /[country]/tickets)
+- app/[country]/tickets/page.tsx — dedicated full-listing page, fixed to
+  accept `searchParams.city` (was previously hardcoded to 'bangkok' only)
+  and now renders a 12-city selector (Bangkok, Pattaya, Phuket, Krabi,
+  Hua Hin, Hat Yai, Kanchanaburi, Pak Chong, Ko Chang, Satun, Chiang Rai,
+  Ko Samui), each linking to /[country]/tickets?city=<slug>. Verified
+  working for both Bangkok (default) and Pattaya (via ?city=pattaya).
+- Homepage "FEATURED TICKETS" teaser intentionally stays hardcoded to
+  bangkok only (matches existing hardcoded-city precedent from the Tours
+  teaser) — this is scoped/acceptable, only the dedicated listing page
+  needed the city-param fix.
+
+### 🐛 Bugs Found and Fixed This Session
+
+1. **"$N/A" price text bug** — components/shared/services/ServicesStrip.tsx
+   (lines ~49/64/79/94) used `price_from || 'N/A'` fallback, showing
+   "1 tickets from $N/A" (and same for hotels/flights/transfers) whenever
+   price_from was null. Fixed to conditionally omit the price segment
+   entirely using `price_from != null && price_from !== ''` (explicit
+   null/empty check, not truthy check — truthy would incorrectly hide a
+   legitimate "$0" price). Fixed across all 4 service tiles (Hotels,
+   Flights, Tickets, Transfers), not just Tickets, since all 4 shared the
+   same bug pattern.
+
+2. **Tickets listing page showing only 3 of 12 potential rows** —
+   app/[country]/tickets/page.tsx line 122 incorrectly used
+   `klookLinks.slice(0, 3)` — a 3-item preview limit that belongs only on
+   the homepage teaser section, not the dedicated full-listing page.
+   Fixed to `klookLinks.map(...)` to show all available tickets for the city.
+
+3. **/thailand/tickets hardcoded to defaultCity = 'bangkok'** — same
+   hardcoded-city technical debt pattern documented for the Tours slot in
+   Session 16. Fixed by adding searchParams.city support + city selector
+   UI. Verified working with ?city=pattaya. All 12 cities' real Klook
+   links are now reachable through the UI (previously only Bangkok's was,
+   despite 12 rows existing in the database).
+
+### 🔍 Investigated — Not a Bug, Data Gap (new backlog item)
+
+- **Homepage "FEATURED JOURNEYS" (Tours) section not rendering:**
+  Initially suspected as a regression/bug during this session's
+  investigation. Root cause confirmed via direct query:
+  `SELECT id, title, country, featured, slug FROM tours WHERE country = 'thailand'` 
+  returned 30 rows, ALL with `featured: false`. The section's conditional
+  `{translatedTours && translatedTours.length > 0 && (...)}` correctly
+  returns nothing because the query filters `featured = true`. This is
+  NOT a code bug — no tour has ever been marked featured.
+  CORRECTION to prior assumption: this homepage Tours section queries the
+  `tours` table directly (filtered by country + featured), NOT the
+  `gyg_links` table as earlier session notes/reports implied. `gyg_links` 
+  appears to be a separate, currently-unused-on-homepage data source —
+  worth clarifying its actual current purpose in a future session.
+  **Action deferred by user request** — see backlog below.
+
+### ⏳ Backlog (new items from this session)
+
+- 🟡 **Mark tours as featured** — pick 2-6 tours from the 30 existing
+  `country='thailand'` rows and run `UPDATE tours SET featured = true
+  WHERE slug IN (...)` so the homepage "FEATURED JOURNEYS" section
+  renders. Purely a content decision, no code change needed.
+- 🟡 **Clarify gyg_links' actual current role** — it was documented in
+  Session 16/17 as the data source for a Tours homepage slot, but that
+  slot actually reads from the `tours` table instead. Determine whether
+  gyg_links is dead/unused, meant for a different page, or needs to be
+  wired somewhere — don't assume it's connected to the homepage Tours
+  section going forward.
+
+### Architecture Notes (additions)
+- klook_links.is_placeholder is stored as TEXT, not boolean — any future
+  service table created via Supabase SQL Editor's default UI flow should
+  have its column types double-checked before writing query/comparison
+  code; do not assume boolean just because a column name implies it.
+- The "$N/A" placeholder-text bug pattern (raw fallback string shown to
+  users when a DB field is null) applies broadly across all 4 service
+  tiles in ServicesStrip.tsx — worth checking for the same anti-pattern
+  in any newly added service tile in the future (e.g. when agoda_links
+  or transfer_links get real data).
+- A browser console error referencing https://emrldtp.com/chunk.*.js
+  ("config is not valid") was investigated during this session and
+  confirmed to originate from a browser extension, not app code — not an
+  AsiaBuddy bug, no action taken.
+- Confirmed service→provider mapping for future reference: Tours →
+  gyg_links (or tours table, role TBD — see backlog) / Tickets →
+  klook_links / Hotel → agoda_links (placeholder only) / Transfer →
+  transfer_links (placeholder only) / Flight → no table yet.
+
+---
+
+## Session 24 — 07 July 2026 — GYG Activities Real Data (IN PROGRESS — paused)
+
+### ✅ Completed This Session
+
+**GYG affiliate real links generated (29 activities across 12 cities):**
+- Researched and curated "activities popular with Myanmar tourists" list
+  (Grand Palace, Safari World, Alcazar Show, Phi Phi Island, Khao Yai,
+  White Temple, etc.) across: Bangkok, Pattaya, Phuket, Krabi, Hua Hin,
+  Hat Yai, Kanchanaburi, Pak Chong, Ko Chang, Chiang Mai, Chiang Rai,
+  Ko Samui (Satun skipped — no activities found, replaced by Chiang Mai
+  per user decision)
+- Generated real GYG affiliate links via partner.getyourguide.com Link
+  Builder (partner_id CSMXKHM), with per-activity campaign tags following
+  <city>_<activity> naming convention
+- Caught and fixed several data-quality issues before inserting: city
+  naming inconsistency (mixed case/spaces vs. klook_links convention),
+  a duplicate-URL issue on two different "Krabi" activities, an activity
+  mislabeled under the wrong city (Ko Chang activities tagged as
+  "pakchong"), and one activity whose URL didn't match its stated name
+  (Hat Yai "Municipal Park" was actually an airport transfer ticket —
+  renamed to match the real product)
+
+**gyg_links table updated:**
+- Deleted old placeholder row (id 2f313649-cdc4-475d-ba97-aeb1411b487a,
+  "Bangkok Temple Tour" with non-specific URL bangkok-l84-tw and a
+  malformed "€56" price display)
+- Inserted 29 real rows with confirmed columns: city, activity_name,
+  gyg_url, price_from (NULL), rating (NULL), reviews_count (NULL),
+  duration (NULL), image_url (NULL)
+- NOTE: gyg_links has NO is_placeholder column (unlike klook_links) —
+  do not assume that column exists here.
+- Verified live on localhost:3000/thailand/activities — Bangkok's 3
+  activities (Grand Palace, Safari World, Asiatique) render correctly.
+
+**Architecture clarification (closes a Session 23 backlog item):**
+- Confirmed gyg_links IS actively used — by app/[country]/activities/page.tsx
+  (NOT by the homepage "Featured Journeys" section, which reads from a
+  separate `tours` table). These are two distinct, unrelated data sources
+  serving two different pages.
+- Also discovered the `destinations` table (used for homepage "Discover
+  Thailand" city tabs) uses a DIFFERENT city list and slug format
+  (hyphenated, e.g. "chiang-mai", "koh-samui") than gyg_links/klook_links
+  (no-hyphen, e.g. "chiangmai", "kosamui"). "Chiang Rai" doesn't exist in
+  destinations at all. Decision: activities page will follow the same
+  pattern as the Tickets page — a custom-built city selector matching
+  the klook_links/gyg_links convention, NOT pulled from destinations —
+  to stay consistent with the working Tickets implementation.
+
+### 🐛 New Bugs Found — NOT yet fixed (blocking, must fix before this
+task is considered done)
+
+1. **"$0 /person" price bug** — worse than the earlier "$N/A" bug fixed
+   in Session 23. Null price_from is rendering as "$0", which is
+   actively misleading (implies a real free price, not missing data).
+   Likely a `price_from || 0` or similar fallback in the Activities card
+   component (different from ServicesStrip.tsx, which was already fixed
+   in Session 23 — this is a NEW location, probably in an
+   ActivityCard/TourCard-style component under
+   components/shared/services/ or app/[country]/activities/).
+   Fix: use explicit `price_from != null && price_from !== ''` check
+   (same pattern as the ServicesStrip fix) and hide the price line
+   entirely when null — do not fall back to 0.
+
+2. **"(0)" rating bug** — same root cause, different field. Null
+   rating/reviews_count is rendering as "(0)", implying zero reviews
+   exist. Fix: hide the rating badge entirely when rating/reviews_count
+   is null, using the same explicit null-check pattern.
+
+3. **No city selector on /thailand/activities** — page currently only
+   ever shows Bangkok (hardcoded), same issue Tickets page had before
+   the Session 23 fix. All 26 non-Bangkok activities (Pattaya, Phuket,
+   Krabi, Hua Hin, Hat Yai, Kanchanaburi, Pak Chong, Ko Chang, Chiang Mai,
+   Chiang Rai, Ko Samui) are in the database but currently unreachable
+   through the UI.
+
+4. **No image placeholder** — image_url is NULL for all 29 new rows, so
+   cards show only the dark navy background with an icon. Not broken,
+   but a generic Thailand-themed placeholder image would look more
+   finished than an empty box (lower priority than bugs 1-3).
+
+### ⏳ Backlog (carried over + new)
+
+- 🟡 Mark 2-6 tours as featured=true (from Session 23, still pending)
+- 🟡 Fix "$0 /person" price bug on /activities (this session, priority)
+- 🟡 Fix "(0)" rating bug on /activities (this session, priority)
+- 🟡 Add city selector to /activities matching the Tickets page pattern
+  (this session, priority — blocks 26 of 29 real activities from ever
+  being visible)
+- 🟢 Add placeholder image for activities with null image_url (low
+  priority, cosmetic)
+- 🟢 Find a real Satun activity/product on GYG (skipped this session,
+  substituted with Chiang Mai instead)
+
+---
+
+## Session 25 — 07 July 2026 — Activities Bugs Closed Out
+
+### ✅ Completed This Session
+
+**All 4 blocking bugs fixed via Windsurf:**
+- City selector (12 cities) — added to `/thailand/activities` following the `tickets/page.tsx` pattern, with searchParams.city handling and pill UI
+- "$0 /person" price bug — fixed by removing `|| '0'` fallback in activities/page.tsx and adding explicit null check in TourServiceCard.tsx
+- "(0)" rating bug — fixed by removing `|| '0'` fallbacks and adding explicit null check on both rating and reviews_count fields
+- Empty image-box placeholder — replaced dark icon box with existing `/thailand.jpg` placeholder image
+
+**Verification:**
+- All fixes confirmed via screenshot verification on Bangkok and Hua Hin activities
+- Build succeeded with no errors after each fix
+- No regressions on activities with real data (price, rating, image_url all render correctly when present)
+
+### ⏳ Remaining (non-blocking, data content only — not code)
+
+- 🟢 All 29 GYG activities share one identical placeholder image — gyg_links.image_url is NULL for every row across all 12 cities. Task 4's placeholder fix works correctly; the sameness is because no real per-activity photos have been sourced yet. When time allows: find a real photo per activity (GYG dashboard / Google Places / licensed stock) and update gyg_links.image_url per row via Supabase SQL Editor.
+- 🟢 Satun has no real GYG activity — substituted with an extra Chiang Mai activity in Session 24. Revisit later if a real Satun product becomes available on GYG.

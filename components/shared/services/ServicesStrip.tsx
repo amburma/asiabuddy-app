@@ -46,7 +46,7 @@ export default function ServicesStrip({
             </span>
             {agodaLinks.length > 0 && (
               <span className="text-[10px] text-gray-500 text-center mt-1">
-                {agodaLinks.length} hotels from ${agodaLinks[0]?.price_from || 'N/A'}
+                {agodaLinks.length} hotels{agodaLinks[0]?.price_from != null && agodaLinks[0].price_from !== '' ? ` from $${agodaLinks[0].price_from}` : ''}
               </span>
             )}
           </Link>
@@ -61,7 +61,7 @@ export default function ServicesStrip({
             </span>
             {transferWayawayLinks.length > 0 && (
               <span className="text-[10px] text-gray-500 text-center mt-1">
-                {transferWayawayLinks.length} flights from ${transferWayawayLinks[0]?.price_from || 'N/A'}
+                {transferWayawayLinks.length} flights{transferWayawayLinks[0]?.price_from != null && transferWayawayLinks[0].price_from !== '' ? ` from $${transferWayawayLinks[0].price_from}` : ''}
               </span>
             )}
           </Link>
@@ -76,7 +76,7 @@ export default function ServicesStrip({
             </span>
             {klookLinks.length > 0 && (
               <span className="text-[10px] text-gray-500 text-center mt-1">
-                {klookLinks.length} tickets from ${klookLinks[0]?.price_from || 'N/A'}
+                {klookLinks.length} tickets{klookLinks[0]?.price_from != null && klookLinks[0].price_from !== '' ? ` from $${klookLinks[0].price_from}` : ''}
               </span>
             )}
           </Link>
@@ -91,7 +91,7 @@ export default function ServicesStrip({
             </span>
             {transfer12goLinks.length > 0 && (
               <span className="text-[10px] text-gray-500 text-center mt-1">
-                {transfer12goLinks.length} transfers from ${transfer12goLinks[0]?.price_from || 'N/A'}
+                {transfer12goLinks.length} transfers{transfer12goLinks[0]?.price_from != null && transfer12goLinks[0].price_from !== '' ? ` from $${transfer12goLinks[0].price_from}` : ''}
               </span>
             )}
           </Link>

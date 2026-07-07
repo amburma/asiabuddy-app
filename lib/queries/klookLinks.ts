@@ -10,7 +10,7 @@ export interface KlookLink {
   reviews_count: string | null;
   duration: string | null;
   image_url: string | null;
-  is_placeholder: boolean;
+  is_placeholder: string;
   created_at: string;
 }
 

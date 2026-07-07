@@ -17,6 +17,7 @@ import { getTransferLinksByCity } from '@/lib/queries/transferLinks'
 import Footer from '@/components/shared/Footer'
 import { UI_TRANSLATIONS } from '@/lib/i18n'
 import ServicesStrip from '@/components/shared/services/ServicesStrip'
+import TicketServiceCard from '@/components/shared/services/TicketServiceCard'
 
 export default async function CountryPage({
   params,
@@ -151,7 +152,36 @@ export default async function CountryPage({
         gygSummary={gygSummary}
       />
 
-      {/* SECTION 2 — DESTINATIONS */}
+      {/* SECTION 2 — TICKETS HORIZONTAL SCROLL */}
+      {klookLinks.length > 0 && (
+        <section className="bg-white pt-8 pb-4 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xs font-bold tracking-[0.2em] text-amber-600 uppercase">
+                FEATURED TICKETS
+              </h2>
+              <Link
+                href={`/${lowerCountry}/tickets`}
+                className="text-xs font-semibold text-amber-600 hover:text-amber-700 transition-colors"
+              >
+                View All →
+              </Link>
+            </div>
+            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+              {klookLinks.slice(0, 3).map((ticket) => (
+                <div key={ticket.id} className="flex-shrink-0 w-80">
+                  <TicketServiceCard
+                    ticket={ticket}
+                    language={targetLanguage.toUpperCase() as SupportedLanguage}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* SECTION 3 — DESTINATIONS */}
       {translatedDestinations && translatedDestinations.length > 0 && (
         <section id="destinations" className="bg-sacred-bg pt-4 pb-12 px-4">
           <div className="max-w-7xl mx-auto">

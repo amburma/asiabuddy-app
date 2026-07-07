@@ -29,8 +29,10 @@ export async function generateMetadata({
 
 export default async function TicketsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ country: string }>
+  searchParams: Promise<{ city?: string }>
 }) {
   const { country } = await params
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
@@ -38,8 +40,24 @@ export default async function TicketsPage({
   const cookieStore = await cookies()
   const targetLanguage = (cookieStore.get('NEXT_LOCALE')?.value ?? 'EN').toUpperCase()
 
-  const defaultCity = 'bangkok'
-  const klookLinks = await getKlookLinksByCity(defaultCity)
+  const { city: cityParam } = await searchParams
+  const city = cityParam || 'bangkok'
+  const klookLinks = await getKlookLinksByCity(city)
+
+  const cities = [
+    { slug: 'bangkok', name: 'Bangkok' },
+    { slug: 'pattaya', name: 'Pattaya' },
+    { slug: 'phuket', name: 'Phuket' },
+    { slug: 'krabi', name: 'Krabi' },
+    { slug: 'huahin', name: 'Hua Hin' },
+    { slug: 'hatyai', name: 'Hat Yai' },
+    { slug: 'kanchanaburi', name: 'Kanchanaburi' },
+    { slug: 'pakchong', name: 'Pak Chong' },
+    { slug: 'kochang', name: 'Ko Chang' },
+    { slug: 'satun', name: 'Satun' },
+    { slug: 'chiangrai', name: 'Chiang Rai' },
+    { slug: 'kosamui', name: 'Ko Samui' },
+  ]
 
   const translationPayload = {
     homeText: 'Home',
@@ -106,7 +124,24 @@ export default async function TicketsPage({
       </div>
 
       <div className="bg-gray-50 min-h-screen">
-        <div className="max-w-7xl mx-auto px-6 py-16">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex flex-wrap gap-2 mb-8">
+            {cities.map((cityOption) => (
+              <Link
+                key={cityOption.slug}
+                href={`/${country}/tickets?city=${cityOption.slug}`}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  city === cityOption.slug
+                    ? 'bg-orange-500 text-white'
+                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                }`}
+              >
+                {cityOption.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 py-8">
 
           {klookLinks.length === 0 ? (
             <div className="min-h-[400px] flex flex-col items-center justify-center text-center py-24">
@@ -122,19 +157,8 @@ export default async function TicketsPage({
               {klookLinks.map((ticket) => (
                 <div key={ticket.id} className="w-full">
                   <TicketServiceCard
-                    ticket={{
-                      attraction_name: ticket.activity_name,
-                      image_url: ticket.image_url || '',
-                      price: parseFloat(ticket.price_from?.replace(/[^0-9.]/g, '') || '0'),
-                      rating: parseFloat(ticket.rating || '0'),
-                      reviews_count: parseInt(ticket.reviews_count?.replace(/[^0-9]/g, '') || '0'),
-                      skip_the_line: true,
-                      instant_confirmation: true,
-                      delivery_method: 'qr',
-                      affiliate_url: ticket.klook_url,
-                    }}
+                    ticket={ticket}
                     language={targetLanguage as any}
-                    is_placeholder={Boolean(ticket.is_placeholder)}
                   />
                 </div>
               ))}
