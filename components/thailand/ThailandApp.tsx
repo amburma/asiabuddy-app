@@ -45,6 +45,7 @@ const ConciergeChat = dynamic(() => import('@/components/thailand/ConciergeChat'
 const TransportChat = dynamic(() => import('@/components/thailand/TransportChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
 const FoodChat = dynamic(() => import('@/components/thailand/FoodChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
 const AccommodationChat = dynamic(() => import('@/components/thailand/AccommodationChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const CarRentalChat = dynamic(() => import('@/components/thailand/CarRentalChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
 const TripPlannerChat = dynamic(() => import('@/components/thailand/TripPlannerChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
 const MedicalChat = dynamic(() => import('@/components/thailand/MedicalChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
 const NightlifeChat = dynamic(() => import('@/components/thailand/NightlifeChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
@@ -70,6 +71,7 @@ export default function ThailandApp() {
   const [showMedicalModal, setShowMedicalModal] = useState(false);
   const [showNightlifeModal, setShowNightlifeModal] = useState(false);
   const [showShoppingModal, setShowShoppingModal] = useState(false);
+  const [showCarRentalModal, setShowCarRentalModal] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showWebFormModal, setShowWebFormModal] = useState(false);
   const [showHumanOperatorChat, setShowHumanOperatorChat] = useState(false);
@@ -109,6 +111,7 @@ const handleOpenModal = (modalId: string) => {
     case 'medical': setShowMedicalModal(true); break
     case 'nightlife': setShowNightlifeModal(true); break
     case 'shopping': setShowShoppingModal(true); break
+    case 'carRental': setShowCarRentalModal(true); break
     case 'booking': setShowBookingModal(true); break
     case 'phrases': setShowPhrasesModal(true); break
     case 'etiquette': setShowEtiquetteModal(true); break
@@ -417,6 +420,31 @@ useEffect(() => {
       <div className="w-12 h-1 bg-gold-deep mt-2 rounded-full" />
     </div>
     <ShoppingChat language={language} />
+  </div>
+</GuideModal>
+
+{/* Car Rental Modal */}
+<GuideModal
+  isOpen={showCarRentalModal}
+  onClose={() => setShowCarRentalModal(false)}
+  title={uiT.carRental?.modalTitle || 'Comprehensive Guide to Car Rentals in Thailand'}
+  subtitle={uiT.carRental?.detailsTitle || 'Car Rentals'}
+  icon={<Briefcase size={20} />}
+  footer={`${uiT.carRental?.detailsTitle || 'Car Rental Guide'} • ${uiT.footer?.by || 'AsiaBuddy Services'}`}
+>
+
+<div className="markdown-body">
+  <MarkdownRenderer content="" />
+</div>
+
+  <div className="mt-12 pt-12 border-t border-gray-100">
+    <div className="mb-6">
+      <h3 className="text-lg font-serif text-sacred-green">
+        {uiT.carRental?.title || 'Ask any Thailand Car Rental you want to know.'}
+      </h3>
+      <div className="w-12 h-1 bg-gold-deep mt-2 rounded-full" />
+    </div>
+    <CarRentalChat language={language} />
   </div>
 </GuideModal>
 

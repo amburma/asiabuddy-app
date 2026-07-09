@@ -70,19 +70,76 @@ const ENGLISH_UI = {
   "culturalGuideLink": "Cultural Dos & Don'ts Guide",
   "lawsRegulationsLink": "Key Laws",
   "transport": {
-    "title": "Transport",
-    "detailsTitle": "Transport in Thailand — For more information",
-    "appsGuideLink": "Transport Guide — Essential Apps and Websites for Transport in Thailand. For more information, click here!",
-    "transportGuideLink": "Transport Guide",
+    "title": "TRANSPORT & CAR RENTAL",
+    "detailsTitle": "Transportation in Thailand — For more information",
     "modalTitle": "Thailand Nationwide Transport Guide",
     "modalSubtitle": "Transportation",
-    "statusActive": "Transport Concierge Active",
     "destinationLabel": "Destination",
-    "suggestions": [
-      "BTS/MRT Map",
-      "Grab vs Bolt",
-      "Airport Link"
-    ]
+    "suggestions": [],
+    "survey": {
+      "title": "Car Rental Preferences Survey",
+      "analyzing": "Analyzing your travel needs to find the optimal fleet option...",
+      "buttons": {
+        "next": "Next Step",
+        "back": "Back",
+        "submit": "Submit Request",
+        "skip": "Skip"
+      },
+      "questions": {
+        "rental_type": {
+          "question": "Which rental option do you prefer?",
+          "options": ["Self-Drive", "With Driver"]
+        },
+        "pickup_city": {
+          "question": "Which city would you like to pick up the vehicle?",
+          "options": ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Krabi", "Koh Samui"]
+        },
+        "duration_days": {
+          "question": "How many days do you want to rent the car?",
+          "placeholder": "Enter number of days (e.g., 5)"
+        },
+        "passengers_luggage": {
+          "question": "How many passengers and large bags are traveling?",
+          "options": [
+            "1-3 Passengers (Under 2 large bags)",
+            "4-5 Passengers (2-3 large bags)",
+            "6-9 Passengers (4+ large bags)"
+          ]
+        },
+        "car_class": {
+          "question": "What vehicle style fits your journey best?",
+          "options": ["Compact Hatchback", "Standard Sedan", "Family SUV", "Luxury Sedan", "VIP Van (9 Seater)"]
+        },
+        "self_drive_license": {
+          "question": "Do you hold a valid International Driving Permit (IDP) or Thai Driving License?",
+          "options": ["Yes, I have one", "No, I do not"]
+        },
+        "self_drive_deposit": {
+          "question": "Do you agree to secure the refundable security deposit (typically via credit card hold)?",
+          "options": ["Yes, I agree", "No, I do not"]
+        },
+        "driver_hours": {
+          "question": "What daily driving duration do you require?",
+          "options": [
+            "Half-Day (Up to 5 Hours)",
+            "Full-Day (Up to 10-12 Hours)",
+            "Airport Point-to-Point Transfer Only"
+          ]
+        },
+        "driver_language": {
+          "question": "Which language capability do you prefer for your driver?",
+          "options": ["Thai Only", "Basic English & Thai", "Burmese & Thai"]
+        },
+        "addons": {
+          "question": "Select required add-ons (Multiple Choice):",
+          "options": ["Child Safety Seat", "GPS Navigation Unit", "Premium Full Coverage Insurance", "Additional Driver Registration"]
+        },
+        "pickup_date": {
+          "question": "Please specify your tentative rental start date or month:",
+          "placeholder": "e.g., October 15, or Mid-December"
+        }
+      }
+    }
   },
   "vatRefund": {
     "title": "VAT Refund Guide",
@@ -107,16 +164,165 @@ const ENGLISH_UI = {
   "budgetSubtitle": "Smart Travel Tips",
   "learnMore": "Learn more",
   "accommodation": {
-    "title": "Accommodation",
-    "modalTitle": "Thailand Accommodation Guide",
-    "chatTitle": "Accommodation Help",
-    "detailsTitle": "Accommodation Details",
-    "guideLink": "Accommodation Guide Link",
-    "suggestions": [
-      "Luxury Hotels",
-      "Boutique Hostels",
-      "Beach Resorts"
-    ]
+    title: "ACCOMMODATION CO-PILOT",
+    modalTitle: "Comprehensive Guide to Accommodations in Thailand",
+    detailsTitle: "Accommodations",
+    suggestions: [],
+    survey: {
+      title: "Accommodation Preferences Survey",
+      analyzing: "Analyzing your preferences to find the perfect stay...",
+      buttons: {
+        next: "Next Step",
+        back: "Back",
+        submit: "Submit Survey",
+        skip: "Skip"
+      },
+      questions: {
+        city: {
+          question: "Which city would you like to stay in?",
+          options: ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Krabi", "Ayutthaya", "Koh Samui"]
+        },
+        nights: {
+          question: "How many nights do you want to stay?",
+          placeholder: "Enter number of nights (e.g., 5)"
+        },
+        area_general: {
+          question: "Which area would you like to stay in?",
+          options: ["City Center / Downtown", "Beachfront / Coastal", "Quiet / Nature", "Historic / Cultural"]
+        },
+        budget: {
+          question: "What is your budget per night?",
+          options: ["Budget: Under $30", "Mid-range: $30 - $100", "Luxury: $100 - $250", "Ultra Luxury: $250+"]
+        },
+        type: {
+          question: "What type of accommodation do you prefer?",
+          options: ["Hotel", "Resort", "Hostel", "Guesthouse", "Villa / Apartment"]
+        },
+        stars: {
+          question: "What star rating do you prefer?",
+          options: ["1-2 Stars", "3 Stars", "4 Stars", "5 Stars / Luxury", "No preference"]
+        },
+        bangkok_vibe: {
+          question: "Which area fits your vibe in Bangkok?",
+          options: [
+            "Sukhumvit (Shopping & Nightlife)",
+            "Siam/Pratunam (Family Shopping & Markets)",
+            "Silom/Sathorn (Business & Upscale Dining)",
+            "Riverside (Luxury & Cultural Sightseeing)"
+          ]
+        },
+        phuket_beach: {
+          question: "What kind of beach experience do you prefer in Phuket?",
+          options: [
+            "Patong (Nightlife & Crowded Beach)",
+            "Kata / Karon (Family-friendly & Surfing)",
+            "Bangtao / Laguna (Luxury Resorts & Quieter)",
+            "Phuket Old Town (Culture & Cafes - No Beach)"
+          ]
+        },
+        transit_proximity: {
+          question: "How important is it to be within walking distance to the BTS (Skytrain) or MRT (Subway)?",
+          options: [
+            "Must be within a 5-minute walk",
+            "Nice to have, but not a dealbreaker",
+            "Not important (Planning to use private vans/taxis)"
+          ]
+        },
+        beach_proximity: {
+          question: "What is your preferred proximity to the beach?",
+          options: [
+            "Direct Beachfront (No roads to cross)",
+            "Walking distance to the beach (under 10 mins)",
+            "Don't mind driving/taking a shuttle to the beach"
+          ]
+        },
+        airport_pickup: {
+          question: "Would you like us to arrange a private airport pickup to your accommodation?",
+          options: [
+            "Yes, please quote me for a private car/van.",
+            "No, I will manage via taxi/Grab."
+          ]
+        },
+        guests: {
+          question: "How many guests are traveling?",
+          placeholder: "Enter number of guests (e.g., 2 adults, 1 child)"
+        },
+        room_type: {
+          question: "What room type fits you best?",
+          options: ["Standard / Basic Room", "Deluxe / Superior Room", "Suite", "Family Room", "Shared Dormitory Bed"]
+        },
+        amenities: {
+          question: "Select required amenities (Multiple Choice):",
+          options: ["Free Wi-Fi", "Swimming Pool", "Gym / Fitness", "Air Conditioning", "Breakfast Included", "Spa & Wellness"]
+        },
+        checkin_date: {
+          question: "Please specify your tentative check-in date or month:",
+          placeholder: "e.g., October 15, or Mid-December"
+        }
+      }
+    }
+  },
+  "carRental": {
+    title: "CAR RENTAL ASSISTANT",
+    modalTitle: "Comprehensive Guide to Car Rentals in Thailand",
+    detailsTitle: "Car Rentals",
+    suggestions: [],
+    survey: {
+      title: "Car Rental Preferences Survey",
+      analyzing: "Analyzing your preferences to find the perfect rental...",
+      buttons: {
+        next: "Next Step",
+        back: "Back",
+        submit: "Submit Survey",
+        skip: "Skip"
+      },
+      questions: {
+        rental_type: {
+          question: "Would you prefer to drive yourself or hire a driver?",
+          options: ["Self-Drive (I will drive)", "With Driver (Chauffeur service)"]
+        },
+        pickup_location: {
+          question: "Where would you like to pick up the car?",
+          placeholder: "Enter pickup location (e.g., Suvarnabhumi Airport, Bangkok City)"
+        },
+        dropoff_location: {
+          question: "Where would you like to drop off the car?",
+          placeholder: "Enter drop-off location (e.g., Phuket Airport, Hotel)"
+        },
+        rental_dates: {
+          question: "What are your rental dates?",
+          placeholder: "Enter dates (e.g., Dec 15-20, 2026)"
+        },
+        vehicle_type: {
+          question: "What type of vehicle do you prefer?",
+          options: ["Economy Car", "SUV / 4WD", "Luxury Car", "Van / Minibus"]
+        },
+        driver_age: {
+          question: "What is the primary driver's age?",
+          placeholder: "Enter driver's age (e.g., 30)"
+        },
+        driver_license: {
+          question: "Do you have a valid international driving permit?",
+          options: ["Yes, I have an IDP", "No, I only have a local license", "I need assistance with this"]
+        },
+        driver_language: {
+          question: "What language should the driver speak? (Multiple Choice)",
+          options: ["English", "Thai", "Chinese", "Japanese", "Korean"]
+        },
+        additional_services: {
+          question: "Select additional services needed (Multiple Choice):",
+          options: ["GPS Navigation", "Child Seat", "Full Insurance Coverage", "Airport Pickup", "24/7 Support"]
+        },
+        budget: {
+          question: "What is your daily budget?",
+          options: ["Budget: Under $30/day", "Mid-range: $30 - $80/day", "Luxury: $80 - $150/day", "Premium: $150+/day"]
+        },
+        special_requests: {
+          question: "Any special requests or requirements?",
+          placeholder: "Enter any special requests (e.g., vegetarian driver, specific route)"
+        }
+      }
+    }
   },
   "tools": {
     "currency": "Currency Converter",
@@ -205,7 +411,8 @@ const ENGLISH_UI = {
     "statusActive": "Concierge Active",
     "safe": "Safe travels!",
     "bookNow": "Book Now",
-    "bookNowSubtitle": "Connect with a Human Operator"
+    "bookNowSubtitle": "Connect with a Human Operator",
+    "action": "Book Now"
   },
   "destinationTabs": {
     "mustVisit": "Must Visit",
@@ -497,19 +704,76 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "culturalGuideLink": "คู่มือมารยาทและวัฒนธรรม (Dos & Don'ts)",
   "lawsRegulationsLink": "ระเบียบข้อบังคับที่สำคัญสำหรับปี 2026",
   "transport": {
-    "title": "Transport",
+    "title": "บริการขนส่ง & รถเช่า",
     "detailsTitle": "การเดินทางในประเทศไทย — สำหรับข้อมูลเพิ่มเติม",
-    "appsGuideLink": "แอปและเว็บไซต์ที่จำเป็นสำหรับการเดินทางในประเทศไทย คลิกที่นี่เพื่อข้อมูลเพิ่มเติม!",
-    "transportGuideLink": "คู่มือการเดินทาง",
     "modalTitle": "คู่มือการเดินทางทั่วประเทศไทย",
     "modalSubtitle": "การเดินทาง",
-    "statusActive": "Transport Concierge Active",
-    "destinationLabel": "Destination",
-    "suggestions": [
-      "แผนที่ BTS/MRT",
-      "Grab vs Bolt",
-      "Airport Link"
-    ]
+    "destinationLabel": "จุดหมายปลายทาง",
+    "suggestions": [],
+    "survey": {
+      "title": "แบบสอบถามความต้องการเช่ารถ",
+      "analyzing": "กำลังวิเคราะห์ความต้องการของคุณเพื่อหาตัวเลือกการเช่ารถที่ดีที่สุด...",
+      "buttons": {
+        "next": "ขั้นตอนถัดไป",
+        "back": "ย้อนกลับ",
+        "submit": "ส่งข้อมูล",
+        "skip": "ข้าม"
+      },
+      "questions": {
+        "rental_type": {
+          "question": "ต้องการบริการเช่ารถประเภทใด?",
+          "options": ["ขับเอง (Self-Drive)", "พร้อมคนขับ (With Driver)"]
+        },
+        "pickup_city": {
+          "question": "ต้องการรับรถที่เมืองใด?",
+          "options": ["กรุงเทพฯ", "ภูเก็ต", "เชียงใหม่", "พัทยา", "กระบี่", "เกาะสมุย"]
+        },
+        "duration_days": {
+          "question": "ต้องการเช่ารถเป็นเวลาทั้งหมดกี่วัน?",
+          "placeholder": "ระบุจำนวนวัน (เช่น 5)"
+        },
+        "passengers_luggage": {
+          "question": "จำนวนผู้โดยสารและกระเป๋าเดินทางทั้งหมด?",
+          "options": [
+            "ผู้โดยสาร 1-3 ท่าน (กระเป๋าเดินทางขนาดใหญ่ไม่เกิน 2 ใบ)",
+            "ผู้โดยสาร 4-5 ท่าน (กระเป๋าเดินทางขนาดใหญ่ 2-3 ใบ)",
+            "ผู้โดยสาร 6-9 ท่าน (กระเป๋าเดินทางขนาดใหญ่ 4 ใบขึ้นไป)"
+          ]
+        },
+        "car_class": {
+          "question": "รถยนต์ประเภทใดที่เหมาะกับการเดินทางของคุณที่สุด?",
+          "options": ["รถเล็กคอมแพ็ค", "รถเก๋งซีดานมาตรฐาน", "รถครอบครัว SUV", "รถเก๋งหรูหรา", "รถตู้ VIP (9 ที่นั่ง)"]
+        },
+        "self_drive_license": {
+          "question": "คุณมีใบอนุญาตขับขี่สากล (IDP) หรือใบขับขี่ไทยที่ยังไม่หมดอายุหรือไม่?",
+          "options": ["ใช่ ฉันมี", "ไม่มี"]
+        },
+        "self_drive_deposit": {
+          "question": "คุณยินดีวางเงินมัดจำประกันภัยความเสียหาย (โดยทั่วไปผ่านวงเงินบัตรเครดิต) หรือไม่?",
+          "options": ["ใช่ ยินดีมัดจำ", "ไม่สะดวกมัดจำ"]
+        },
+        "driver_hours": {
+          "question": "ระยะเวลาใช้งานคนขับรถต่อวันที่ต้องการคือเท่าใด?",
+          "options": [
+            "ครึ่งวัน (ไม่เกิน 5 ชั่วโมง)",
+            "เต็มวัน (ไม่เกิน 10-12 ชั่วโมง)",
+            "เฉพาะบริการรับส่งสนามบิน"
+          ]
+        },
+        "driver_language": {
+          "question": "ทักษะภาษาของคนขับรถที่คุณต้องการคือภาษาใด?",
+          "options": ["เฉพาะภาษาไทย", "ภาษาอังกฤษขั้นพื้นฐาน & ภาษาไทย", "ภาษาเมียนมา & ภาษาไทย"]
+        },
+        "addons": {
+          "question": "เลือกบริการเสริมเพิ่มเติม (เลือกได้หลายข้อ):",
+          "options": ["เบาะนั่งนิรภัยสำหรับเด็ก", "ระบบนำทาง GPS", "ประกันภัยชั้น 1 แบบไม่มีค่าเสียหายส่วนแรก", "ลงทะเบียนคนขับสำรองเพิ่ม"]
+        },
+        "pickup_date": {
+          "question": "โปรดระบุวันที่หรือเดือนที่คุณต้องการรับรถ:",
+          "placeholder": "เช่น 15 ตุลาคม หรือ กลางเดือนธันวาคม"
+        }
+      }
+    }
   },
   "vatRefund": {
     "title": "คู่มือการขอคืนภาษี (VAT)",
@@ -548,16 +812,165 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     }
   },
   "accommodation": {
-    "title": "Accommodation",
-    "modalTitle": "คู่มือที่พักในประเทศไทย",
-    "chatTitle": "ความช่วยเหลือด้านที่พัก",
-    "detailsTitle": "รายละเอียดที่พัก",
-    "guideLink": "ลิงก์คู่มือที่พัก",
-    "suggestions": [
-      "โรงแรมหรู",
-      "โฮสเทลบูติก",
-      "รีสอร์ทติดชายหาด"
-    ]
+    title: "ผู้ช่วยจองที่พัก",
+    modalTitle: "คู่มือแนะนำที่พักในประเทศไทยอย่างครบถ้วน",
+    detailsTitle: "ที่พัก",
+    suggestions: [],
+    survey: {
+      title: "แบบสอบถามความต้องการที่พัก",
+      analyzing: "กำลังวิเคราะห์ความต้องการของคุณเพื่อหาที่พักที่สมบูรณ์แบบ...",
+      buttons: {
+        next: "ขั้นตอนถัดไป",
+        back: "ย้อนกลับ",
+        submit: "ส่งข้อมูล",
+        skip: "ข้าม"
+      },
+      questions: {
+        city: {
+          question: "คุณต้องการพักที่เมืองไหน?",
+          options: ["กรุงเทพฯ", "ภูเก็ต", "เชียงใหม่", "พัทยา", "กระบี่", "อยุธยา", "เกาะสมุย"]
+        },
+        nights: {
+          question: "คุณต้องการพักทั้งหมดกี่คืน?",
+          placeholder: "ระบุจำนวนคืน (เช่น 5)"
+        },
+        area_general: {
+          question: "คุณต้องการพักในพื้นที่แถบไหน?",
+          options: ["ใจกลางเมือง / ย่านธุรกิจ", "ริมหาด / ใกล้ทะเล", "เงียบสงบ / ใกล้ชิดธรรมชาติ", "ย่านประวัติศาสตร์ / วัฒนธรรม"]
+        },
+        budget: {
+          question: "งบประมาณต่อคืนของคุณคือเท่าไหร่?",
+          options: ["ประหยัด: ต่ำกว่า $30", "ระดับกลาง: $30 - $100", "หรูหรา: $100 - $250", "ระดับซุปเปอร์ลักชัวรี่: $250+"]
+        },
+        type: {
+          question: "คุณชอบที่พักประเภทไหน?",
+          options: ["โรงแรม", "รีสอร์ท", "โฮสเทล", "เกสต์เฮ้าส์", "วิลล่า / อพาร์ทเมนท์"]
+        },
+        stars: {
+          question: "คุณต้องการที่พักระดับกี่ดาว?",
+          options: ["1-2 ดาว", "3 ดาว", "4 ดาว", "5 ดาว / หรูหรา", "ไม่ระบุเฉพาะเจาะจง"]
+        },
+        bangkok_vibe: {
+          question: "ย่านไหนในกรุงเทพฯ ที่ตรงกับสไตล์ของคุณมากที่สุด?",
+          options: [
+            "สุขุมวิท (ช้อปปิ้ง & ไนท์ไลฟ์)",
+            "สยาม/ประตูน้ำ (ช้อปปิ้งสำหรับครอบครัว & ตลาดนัด)",
+            "สีลม/สาทร (ย่านธุรกิจ & ร้านอาหารระดับหรู)",
+            "ริมแม่น้ำเจ้าพระยา (หรูหรา & ท่องเที่ยวเชิงวัฒนธรรม)"
+          ]
+        },
+        phuket_beach: {
+          question: "คุณชอบประสบการณ์ชายหาดแบบไหนในภูเก็ต?",
+          options: [
+            "ป่าตอง (ไนท์ไลฟ์ & ชายหาดคึกคัก)",
+            "กะตะ / กะรน (เหมาะสำหรับครอบครัว & เล่นเซิร์ฟ)",
+            "บางเทา / ลากูน่า (รีสอร์ทหรู & เงียบสงบกว่า)",
+            "ตัวเมืองภูเก็ต (วัฒนธรรม & คาเฟ่ - ไม่มีชายหาด)"
+          ]
+        },
+        transit_proximity: {
+          question: "การอยู่ใกล้สถานีรถไฟฟ้า BTS หรือ MRT ในระยะเดินได้ มีความสำคัญอย่างไร?",
+          options: [
+            "ต้องอยู่ในระยะเดินไม่เกิน 5 นาที",
+            "มีก็ดี แต่ไม่มีก็ไม่เป็นไร",
+            "ไม่สำคัญ (วางแผนใช้รถตู้ส่วนตัวหรือแท็กซี่)"
+          ]
+        },
+        beach_proximity: {
+          question: "คุณชอบระยะห่างจากชายหาดแบบไหน?",
+          options: [
+            "ติดชายหาดโดยตรง (ไม่ต้องข้ามถนน)",
+            "ระยะเดินไปชายหาดได้ (ต่ำกว่า 10 นาที)",
+            "ไม่ติดเรื่องการขับรถหรือนั่งรถรับส่งไปชายหาด"
+          ]
+        },
+        airport_pickup: {
+          question: "ต้องการให้เราจัดเตรียมรถรับส่งส่วนตัวจากสนามบินไปยังที่พักหรือไม่?",
+          options: [
+            "ใช่ โปรดเสนอราคารถยนต์ส่วนตัว/รถตู้",
+            "ไม่ ฉันจะจัดการเดินทางด้วยแท็กซี่/Grab เอง"
+          ]
+        },
+        guests: {
+          question: "มีผู้เดินทางทั้งหมดกี่ท่าน?",
+          placeholder: "ระบุจำนวนผู้เดินทาง (เช่น ผู้ใหญ่ 2 เด็ก 1)"
+        },
+        room_type: {
+          question: "ห้องพักประเภทไหนที่เหมาะกับคุณที่สุด?",
+          options: ["ห้องมาตรฐาน / ทั่วไป", "ห้องดีลักซ์ / ซูพีเรีย", "ห้องสวีท", "ห้องครอบครัว", "เตียงในห้องพักรวม"]
+        },
+        amenities: {
+          question: "เลือกสิ่งอำนวยความสะดวกที่ต้องการ (เลือกได้หลายข้อ):",
+          options: ["ฟรี Wi-Fi", "สระว่ายน้ำ", "ฟิตเนส", "เครื่องปรับอากาศ", "รวมอาหารเช้า", "สปาและบริการนวด"]
+        },
+        checkin_date: {
+          question: "โปรดระบุวันที่หรือเดือนที่คุณคาดว่าจะเช็คอิน:",
+          placeholder: "เช่น 15 ตุลาคม หรือ กลางเดือนธันวาคม"
+        }
+      }
+    }
+  },
+  "carRental": {
+    title: "ผู้ช่วยเช่ารถ",
+    modalTitle: "คู่มือแนะนำการเช่ารถในประเทศไทยอย่างครบถ้วน",
+    detailsTitle: "การเช่ารถ",
+    suggestions: [],
+    survey: {
+      title: "แบบสอบถามความต้องการการเช่ารถ",
+      analyzing: "กำลังวิเคราะห์ความต้องการของคุณเพื่อหารถเช่าที่เหมาะสม...",
+      buttons: {
+        next: "ขั้นตอนถัดไป",
+        back: "ย้อนกลับ",
+        submit: "ส่งข้อมูล",
+        skip: "ข้าม"
+      },
+      questions: {
+        rental_type: {
+          question: "คุณต้องการขับรถเองหรือจ้างคนขับ?",
+          options: ["ขับเอง (Self-Drive)", "มีคนขับ (With Driver)"]
+        },
+        pickup_location: {
+          question: "คุณต้องการรับรถที่ไหน?",
+          placeholder: "ระบุสถานที่รับรถ (เช่น สนามบินสุวรรณภูมิ, ใจกลางกรุงเทพฯ)"
+        },
+        dropoff_location: {
+          question: "คุณต้องการคืนรถที่ไหน?",
+          placeholder: "ระบุสถานที่คืนรถ (เช่น สนามบินภูเก็ต, โรงแรม)"
+        },
+        rental_dates: {
+          question: "วันที่เช่ารถของคุณคือเมื่อไหร่?",
+          placeholder: "ระบุวันที่ (เช่น 15-20 ธันวาคม 2026)"
+        },
+        vehicle_type: {
+          question: "คุณต้องการประเภทรถแบบไหน?",
+          options: ["รถเศรษฐกิจ (Economy)", "SUV / 4WD", "รถหรูหรา (Luxury)", "รถตู้ / มินิบัส (Van)"]
+        },
+        driver_age: {
+          question: "อายุของคนขับหลักคือเท่าไหร่?",
+          placeholder: "ระบุอายุคนขับ (เช่น 30)"
+        },
+        driver_license: {
+          question: "คุณมีใบอนุญาตขับขี่ระหว่างประเทศหรือไม่?",
+          options: ["ใช่ ฉันมี IDP", "ไม่ ฉันมีเพียงใบอนุญาตท้องถิ่น", "ฉันต้องการความช่วยเหลือเรื่องนี้"]
+        },
+        driver_language: {
+          question: "คนขับควรพูดภาษาอะไร? (เลือกได้หลายข้อ)",
+          options: ["ภาษาอังกฤษ", "ภาษาไทย", "ภาษาจีน", "ภาษาญี่ปุ่น", "ภาษาเกาหลี"]
+        },
+        additional_services: {
+          question: "เลือกบริการเสริมที่ต้องการ (เลือกได้หลายข้อ):",
+          options: ["GPS Navigation", "เบาะนั่งเด็ก", "ประกันครอบคลุมทั้งหมด", "รับส่งสนามบิน", "สนับสนุน 24/7"]
+        },
+        budget: {
+          question: "งบประมาณต่อวันของคุณคือเท่าไหร่?",
+          options: ["ประหยัด: ต่ำกว่า $30/วัน", "ระดับกลาง: $30 - $80/วัน", "หรูหรา: $80 - $150/วัน", "พรีเมียม: $150+/วัน"]
+        },
+        special_requests: {
+          question: "มีความต้องการพิเศษอื่นๆ หรือไม่?",
+          placeholder: "ระบุความต้องการพิเศษ (เช่น คนขับมังสวิรัติ, เส้นทางเฉพาะ)"
+        }
+      }
+    }
   },
   "tools": {
     "currency": "Currency Converter",
@@ -646,7 +1059,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "statusActive": "คอนเซียร์จทำงานอยู่",
     "safe": "Safe travels!",
     "bookNow": "จองเลย",
-    "bookNowSubtitle": "เชื่อมต่อกับเจ้าหน้าที่มนุษย์"
+    "bookNowSubtitle": "เชื่อมต่อกับเจ้าหน้าที่มนุษย์",
+    "action": "จองเลย"
   },
   "destinationTabs": {
     "mustVisit": "สถานที่ต้องไป",
@@ -915,19 +1329,76 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "culturalGuideLink": "ယဉ်ကျေးမှုဆိုင်ရာ Dos & Don'ts လမ်းညွှန်",
   "lawsRegulationsLink": "၂၀၂၆ ခုနှစ်အတွက် အရေးကြီးသော စည်းမျဉ်းများ",
   "transport": {
-    "title": "သယ်ယူပို့ဆောင်ရေး",
-    "detailsTitle": "ထိုင်းနိုင်ငံအတွင်း သယ်ယူပို့ဆောင်ရေး — ပိုမိုသိရှိလိုပါက",
-    "appsGuideLink": "ထိုင်းနိုင်ငံ သယ်ယူပို့ဆောင်ရေးအတွက် အဓိက အက်ပ်များနှင့် ဝဘ်ဆိုဒ်များ။ ပိုမိုသိရှိလိုပါက ဤနေရာကိုနှိပ်ပါ!",
-    "transportGuideLink": "သယ်ယူပို့ဆောင်ရေး လမ်းညွှန်",
+    "title": "သယ်ယူပို့ဆောင်ရေးနှင့် ကားအငှား",
+    "detailsTitle": "ထိုင်းနိုင်ငံတွင် သယ်ယူပို့ဆောင်ရေး — နောက်ထပ်အချက်အလက်အတွက်",
     "modalTitle": "ထိုင်းနိုင်ငံ တစ်နိုင်ငံလုံး သယ်ယူပို့ဆောင်ရေး လမ်းညွှန်",
     "modalSubtitle": "သယ်ယူပို့ဆောင်ရေး",
-    "statusActive": "Transport Concierge Active",
-    "destinationLabel": "Destination",
-    "suggestions": [
-      "BTS/MRT မြေပုံ",
-      "Grab နှင့် Bolt နှိုင်းယှဉ်ချက်",
-      "လေယာဉ်ကွင်းရထား (Airport Link)"
-    ]
+    "destinationLabel": "ခရီးစဉ်",
+    "suggestions": [],
+    "survey": {
+      "title": "ကားအငှားဆိုင်ရာ လိုလားချက်များစစ်တမ်း",
+      "analyzing": "အကောင်းဆုံးသော ကားအငှားအစီအစဉ်များအား ပြင်ဆင်ရန် ဆန်းစစ်နေပါသည်...",
+      "buttons": {
+        "next": "နောက်တစ်ဆင့်",
+        "back": "နောက်ပြန်",
+        "submit": "ပေးပို့မည်",
+        "skip": "ကျော်မည်"
+      },
+      "questions": {
+        "rental_type": {
+          "question": "မည်သည့်အငှားစနစ်ကို အသုံးပြုလိုပါသလဲ။",
+          "options": ["ကိုယ်တိုင်မောင်း (Self-Drive)", "ဒရိုင်ဘာနှင့်တကွ (With Driver)"]
+        },
+        "pickup_city": {
+          "question": "မည်သည့်မြို့တွင် ကားစတင်ငှားရမ်းလိုပါသလဲ။",
+          "options": ["ဘန်ကောက်", "ဖူးခက်", "ချင်းမိုင်", "ပတ္တရား", "ကရာဘီ", "ကိုစမွေ"]
+        },
+        "duration_days": {
+          "question": "ရက်ပေါင်းမည်မျှ ငှားရမ်းလိုပါသလဲ။",
+          "placeholder": "ငှားရမ်းမည့်ရက်ဦးရေ ထည့်ပါ (ဥပမာ- ၅)"
+        },
+        "passengers_luggage": {
+          "question": "ခရီးသည်ဦးရေနှင့် အိတ်အရေအတွက် မည်မျှရှိပါသလဲ။",
+          "options": [
+            "ခရီးသည် ၁-၃ ဦး (အိတ်အသေး ၂ လုံးအောက်)",
+            "ခရီးသည် ၄-၅ ဦး (အိတ်ကြီး ၂-၃ လုံး)",
+            "ခရီးသည် ၆-၉ ဦး (အိတ်ကြီး ၄ လုံးနှင့်အထက်)"
+          ]
+        },
+        "car_class": {
+          "question": "မည်သည့်ကားအမျိုးအစားကို ပိုနှစ်သက်ပါသလဲ။",
+          "options": ["Compact (စီးတီးကားအသေး)", "Sedan (ရိုးရိုးကား)", "Family SUV (မိသားစုစီးကားမြင့်)", "Luxury Sedan (ဇိမ်ခံကား)", "VIP Van (၉ ဦးစီးဗန်ကားကြီး)"]
+        },
+        "self_drive_license": {
+          "question": "နိုင်ငံတကာမောင်းနှင်ခွင့်လိုင်စင် (IDP) သို့မဟုတ် ထိုင်းနိုင်ငံမောင်းနှင်ခွင့်လိုင်စင် ရှိပါသလား။",
+          "options": ["ရှိပါသည်။", "မရှိပါ။"]
+        },
+        "self_drive_deposit": {
+          "question": "ကားယူဆောင်ချိန်တွင် ပေးဆောင်ရမည့် ပြန်အမ်းရမည့် စပေါ်ငွေ (Security Deposit Credit Card Hold) ကို သဘောတူပါသလား။",
+          "options": ["သဘောတူပါသည်။", "သဘောမတူပါ။"]
+        },
+        "driver_hours": {
+          "question": "တစ်နေ့လျှင် ဒရိုင်ဘာကို မည်မျှကြာမောင်းနှင်စေလိုပါသလဲ။",
+          "options": [
+            "တစ်ဝက်တစ်ပျက် (၅ နာရီအထိ)",
+            "တစ်နေ့တာလုံး (၁၀-၁၂ နာရီအထိ)",
+            "လေဆိပ်အကြို/အပို့ သာ"
+          ]
+        },
+        "driver_language": {
+          "question": "ဒရိုင်ဘာ မည်သည့်ဘာသာစကားပြောဆိုနိုင်သည်ကို ပိုနှစ်သက်ပါသလဲ။",
+          "options": ["ထိုင်းဘာသာစကား သာ", "ထိုင်းနှင့် အခြေခံအင်္ဂလိပ်ဘာသာစကား", "ထိုင်းနှင့် မြန်မာဘာသာစကား"]
+        },
+        "addons": {
+          "question": "လိုအပ်သော အပိုဝန်ဆောင်မှုများကို ရွေးချယ်ပါ (အများအပြားရွေးချယ်နိုင်သည်):",
+          "options": ["ကလေးဘေးကင်းရေးထိုင်ခုံ", "GPS လမ်းညွှန်စနစ်", "အပြည့်အဝအာမခံ (No-Excess)", "အပိုဒရိုင်ဘာ စာရင်းသွင်းခြင်း"]
+        },
+        "pickup_date": {
+          "question": "ကားစတင်ရယူမည့် ရက်စွဲ သို့မဟုတ် လ ကို ရိုက်ထည့်ပေးပါ:",
+          "placeholder": "ဥပမာ- အေောက်တိုဘာ ၁၅ သို့မဟုတ် ဒီဇင်ဘာလလယ်"
+        }
+      }
+    }
   },
   "vatRefund": {
     "title": "VAT ပြန်အမ်းငွေ လမ်းညွှန်",
@@ -952,16 +1423,165 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "budgetSubtitle": "စမတ်ခရီးသွားအကြံပြုချက်များ",
   "learnMore": "ထပ်မံလေ့လာရန်",
   "accommodation": {
-    "title": "တည်းခိုရန်နေရာများ",
-    "modalTitle": "ထိုင်းနိုင်ငံ တည်းခိုနေထိုင်ရေး လမ်းညွှန်",
-    "chatTitle": "တည်းခိုနေထိုင်မှု အကူအညီ",
-    "detailsTitle": "တည်းခိုနေထိုင်မှု အသေးစိတ်",
-    "guideLink": "တည်းခိုနေထိုင်မှု ลမ်းညွှန် လင့်ခ်",
-    "suggestions": [
-      "ဇိမ်ခံဟိုတယ်များ",
-      "ဘူးတစ်ဟိုတယ်များ",
-      "ကမ်းခြေအပန်းဖြေစခန်းများ"
-    ]
+    title: "တည်းခိုနေထိုင်ရေး လမ်းညွှန်",
+    modalTitle: "ထိုင်းနိုင်ငံတွင် တည်းခိုနေထိုင်မှုအတွက် ကျယ်ပြန့်သောလမ်းညွှန်",
+    detailsTitle: "တည်းခိုနေထိုင်မှုများ",
+    suggestions: [],
+    survey: {
+      title: "တည်းခိုနေထိုင်မှုဆိုင်ရာ လိုလားချက်များစစ်တမ်း",
+      analyzing: "အကောင်းဆုံးတည်းခိုရန်နေရာ ရှာဖွေရန် သင်၏အချက်အလက်များကို ဆန်းစစ်နေပါသည်...",
+      buttons: {
+        next: "နောက်တစ်ဆင့်",
+        back: "နောက်ပြန်",
+        submit: "ပေးပို့မည်",
+        skip: "ကျော်မည်"
+      },
+      questions: {
+        city: {
+          question: "မည်သည့်မြို့တွင် တည်းခိုလိုပါသလဲ။",
+          options: ["ဘန်ကောက်", "ဖူးခက်", "ချင်းမိုင်", "ပတ္တရား", "ကရာဘီ", "အယုဒ္ဓယ", "ကိုစမွေ"]
+        },
+        nights: {
+          question: "ဘယ်နှစ်ည တည်းခိုရန် စီစဉ်ထားပါသလဲ။",
+          placeholder: "တည်းခိုမည့်ညဦးရေ ထည့်ပါ (ဥပမာ- ၅ ည)"
+        },
+        area_general: {
+          question: "မည်သည့်ဧရိယာတွင် တည်းခိုလိုပါသလဲ။",
+          options: ["မြို့လယ်ခေါင် / စည်ကားရာနေရာ", "ကမ်းခြေ / ပင်လယ်နား", "တိတ်ဆိတ် / သဘာဝပတ်ဝန်းကျင်", "သမိုင်းဝင် / ယဉ်ကျေးမှုနယ်မြေ"]
+        },
+        budget: {
+          question: "တစ်ညလျှင် ဘတ်ဂျက်မည်မျှ သတ်မှတ်ထားပါသလဲ။",
+          options: ["ဘတ်ဂျက်သက်သာ: $30 အောက်", "အလယ်အလတ်: $30 - $100", "ဇိမ်ခံ: $100 - $250", "အဆင့်မြင့်ဇိမ်ခံ: $250+"]
+        },
+        type: {
+          question: "မည်သည့် တည်းခိုနေထိုင်မှုအမျိုးအစားကို ပိုကြိုက်ပါသလဲ။",
+          options: ["ဟိုတယ်", "ရီဆော့ထ်", "ဟိုစတယ်လ် (အိပ်ဆောင်)", "တည်းခိုခန်း", "ဗီလာ / အပါတ်မန့်"]
+        },
+        stars: {
+          question: "မည်သည့် ကြယ်ပွင့်အဆင့်အတန်းကို ပိုကြိုက်ပါသလဲ။",
+          options: ["၁-၂ ကြယ်ပွင့်", "၃ ကြယ်ပွင့်", "၄ ကြယ်ပွင့်", "၅ ကြယ်ပွင့် / ဇိမ်ခံ", "သတ်မှတ်ချက်မရှိပါ"]
+        },
+        bangkok_vibe: {
+          question: "ဘန်ကောက်မြို့၏ မည်သည့်ပတ်ဝန်းကျင်ဇုန်က သင်နှင့် အကိုက်ညီဆုံး ဖြစ်မလဲ။",
+          options: [
+            "ဆူခုမ်းဗစ် (စျေးဝယ်ခြင်းနှင့် ညဘက်အပန်းဖြေခြင်း)",
+            "စီယမ်/ပရာတူနမ် (မိသားစုစျေးဝယ်ခြင်းနှင့် ဈေးများ)",
+            "ဆီလုံ/စားသောက် (စီးပွားရေးနှင့် အဆင့်မြင့်စားသောက်ဆိုင်များ)",
+            "မြစ်ဘေးဧရိယာ (ဇိမ်ခံနှင့် ယဉ်ကျေးမှုလည်ပတ်စရာများ)"
+          ]
+        },
+        phuket_beach: {
+          question: "မည်သို့သော ကမ်းခြေအမျိုးအစားကို ပိုနှစ်သက်ပါသလဲ။",
+          options: [
+            "ပတွန်း (ညဘက်အပန်းဖြေခြင်းနှင့် စည်ကားသောကမ်းခြေ)",
+            "ကတာ / ကာရွန် (မိသားစုနှင့် အသင့်တော်ဆုံးနှင့် ရေလှိုင်းစီးခြင်း)",
+            "ဘန်တောင် / လာဂူနာ (ဇိမ်ခံအပန်းဖြေစခန်းများနှင့် ပိုမိုတိတ်ဆိတ်သောနေရာ)",
+            "ဖူးခက်မြို့ဟောင်း (ယဉ်ကျေးမှုနှင့် ကဖေးများ - ကမ်းခြေမရှိပါ)"
+          ]
+        },
+        transit_proximity: {
+          question: "BTS (မိုးပျံရထား) သို့မဟုတ် MRT (မြေအောက်ရထား) ဘူတာများနှင့် လမ်းလျှောက်အကွာအဝေးအတွင်း ရှိရန် မည်မျှအရေးကြီးပါသလဲ။",
+          options: [
+            "၅ မိနစ်အတွင်း လမ်းလျှောက်နိုင်ရမည်",
+            "ရှိလျှင်ပိုကောင်းသော်လည်း မရှိလည်းရသည်",
+            "အရေးမကြီးပါ (ကိုယ်ပိုင်ကား သို့မဟုတ် တက္ကစီကိုသာ သုံးမည်)"
+          ]
+        },
+        beach_proximity: {
+          question: "ကမ်းခြေနှင့် မည်မျှနီးကပ်မှုကို လိုချင်ပါသလဲ။",
+          options: [
+            "ကမ်းခြေရှေ့တည့်တည့် (လမ်းဖြတ်ကူးစရာမလိုပါ)",
+            "ကမ်းခြေသို့ လမ်းလျှောက်အကွာအဝေး (၁၀ မိနစ်အောက်)",
+            "ကားမောင်းသွားရခြင်း သို့မဟုတ် ကားကြိုပို့သုံးရခြင်းကို ဂရုမစိုက်ပါ"
+          ]
+        },
+        airport_pickup: {
+          question: "တည်းခိုမည့်နေရာသို့ လေဆိပ်မှ ကိုယ်ပိုင်ကားဖြင့် ကြိုဆိုပို့ဆောင်ပေးရန် လိုအပ်ပါသလား။",
+          options: [
+            "ဟုတ်ကဲ့၊ ကိုယ်ပိုင်ကား သို့မဟုတ် ဗန်ကား ဈေးနှုန်းတွက်ချက်ပေးပါ။",
+            "မလိုပါ၊ တက္ကစီ သို့မဟုတ် Grab ဖြင့်သာ ကိုယ်တိုင်သွားပါမည်။"
+          ]
+        },
+        guests: {
+          question: "ခရီးသွားမည့် လူဦးရေ မည်မျှရှိပါသလဲ။",
+          placeholder: "လူဦးရေထည့်ပါ (ဥပမာ- လူကြီး ၂ ဦး၊ ကလေး ၁ ဦး)"
+        },
+        room_type: {
+          question: "မည်သည့် အခန်းအမျိုးအစားက အသင့်တော်ဆုံး ဖြစ်မလဲ။",
+          options: ["ရိုးရိုးခန်း (Standard)", "အဆင့်မြှင့်ခန်း (Deluxe)", "ဆွိခန်း (Suite)", "မိသားစုခန်း", "စုပေါင်းအိပ်ခန်း ကုတင်"]
+        },
+        amenities: {
+          question: "လိုအပ်သော ဝန်ဆောင်မှုများကို ရွေးချယ်ပါ (အများအပြား ရွေးချယ်နိုင်သည်):",
+          options: ["အခမဲ့ ဝိုင်ဖိုင်", "ရေကူးကန်", "အားကစားခန်းမ", "လေအေးပေးစက်", "နံနက်စာ ပါဝင်ပြီး", "စပါးနှင့် အနှိပ်ခန်း"]
+        },
+        checkin_date: {
+          question: "တည်းခိုမည့် ရက်စွဲ သို့မဟုတ် လ ကို ရိုက်ထည့်ပေးပါ:",
+          placeholder: "ဥပမာ- အောက်တိုဘာ ၁၅ သို့မဟုတ် ဒီဇင်ဘာလလယ်"
+        }
+      }
+    }
+  },
+  "carRental": {
+    title: "ကားအငှား လမ်းညွှန်",
+    modalTitle: "ထိုင်းနိုင်ငံတွင် ကားအငှားအတွက် ကျယ်ပြန့်သောလမ်းညွှန်",
+    detailsTitle: "ကားအငှားများ",
+    suggestions: [],
+    survey: {
+      title: "ကားအငှား လိုလားချက်များစစ်တမ်း",
+      analyzing: "သင့်အတွက် သင့်တော်သော ကားအငှားရှာဖွေရန် ဆန်းစစ်နေပါသည်...",
+      buttons: {
+        next: "နောက်တစ်ဆင့်",
+        back: "နောက်ပြန်",
+        submit: "ပေးပို့မည်",
+        skip: "ကျော်မည်"
+      },
+      questions: {
+        rental_type: {
+          question: "ကိုယ်တိုင် မောင်းမည် သို့မဟုတ် ကားမောင်းသူငှားမည်?",
+          options: ["ကိုယ်တိုင်မောင်း (Self-Drive)", "ကားမောင်းသူနှင့်အတူ (With Driver)"]
+        },
+        pickup_location: {
+          question: "ကားကို ဘယ်မှာ ယူမည်နည်း?",
+          placeholder: "ကားယူရမည့်နေရာ ထည့်ပါ (ဥပမာ- ဆူဝါနပူမီ လေဆိပ်, ဘန်ကောက်မြို့လယ်)"
+        },
+        dropoff_location: {
+          question: "ကားကို ဘယ်မှာ ပြန်ပေးမည်နည်း?",
+          placeholder: "ကားပြန်ပေးရမည့်နေရာ ထည့်ပါ (ဥပမာ- ဖူးခက် လေဆိပ်, ဟိုတယ်)"
+        },
+        rental_dates: {
+          question: "ကားအငှားရက်စွဲများ ဘယ်သားလဲ?",
+          placeholder: "ရက်စွဲများ ထည့်ပါ (ဥပမာ- ဒီဇင်ဘာ ၁၅-၂၀, ၂၀၂၆)"
+        },
+        vehicle_type: {
+          question: "မည်သည့် ကားအမျိုးအစား လိုချင်ပါသလဲ?",
+          options: ["စီးပွားဖြစ်ကား (Economy)", "SUV / 4WD", "ဇိမ်ခံကား (Luxury)", "ဗန်း / မီနီဘတ်စ် (Van)"]
+        },
+        driver_age: {
+          question: "အဓိက ကားမောင်းသူ၏ အသက်က ဘယ်လောက်လဲ?",
+          placeholder: "ကားမောင်းသူ၏ အသက် ထည့်ပါ (ဥပမာ- ၃၀)"
+        },
+        driver_license: {
+          question: "သင့်တွင် နိုင်ငံတကာ မောင်းနှင်ခွန်လက်မှတ် ရှိပါသလား?",
+          options: ["ဟုတ်ပါသည်၊ ကျွန်ုပ်တွင် IDP ရှိပါသည်", "မရှိပါ၊ ဒေသခံ လိုင်စင်သာ ရှိပါသည်", "ဤအကြောင်းအတွက် အကူအညီလိုပါသည်"]
+        },
+        driver_language: {
+          question: "ကားမောင်းသူသည် ဘာဘာသာစကား ပြောနိုင်ရမည်နည်း? (တစ်ခုထက်မက ရွေးနိုင်သည်)",
+          options: ["အင်္ဂလိပ်", "ထိုင်း", "တရုတ်", "ဂျပန်", "ကိုရီးယား"]
+        },
+        additional_services: {
+          question: "လိုအပ်သော နောက်ထပ်ဝန်ဆောင်မှုများကို ရွေးချယ်ပါ (တစ်ခုထက်မက ရွေးနိုင်သည်):",
+          options: ["GPS Navigation", "ကလေးခုံပေါင်", "အပြည့်အဝ အာမခံ", "လေဆိပ်မှ လာရောက်ပို့ဆောင်မှု", "၂၄/၇ အကူအညီ"]
+        },
+        budget: {
+          question: "တစ်ရက်လျှင် သင့်ဘတ်ဂျက်က ဘယ်လောက်လဲ?",
+          options: ["စီးပွားဖြစ်: တစ်ရက်လျှင် $30 အောက်", "အလယ်အလတ်: တစ်ရက်လျှင် $30 - $80", "ဇိမ်ခံ: တစ်ရက်လျှင် $80 - $150", "ပရီမီယံ: တစ်ရက်လျှင် $150+"]
+        },
+        special_requests: {
+          question: "အထူးလိုအပ်ချက်များ ရှိပါသလား?",
+          placeholder: "အထူးလိုအပ်ချက်များ ထည့်ပါ (ဥပမာ- သက်ကြွားစားသော ကားမောင်းသူ, သတ်မှတ်ထားသော လမ်းကြောင်း)"
+        }
+      }
+    }
   },
   "tools": {
     "currency": "Currency Converter",
@@ -1050,7 +1670,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "statusActive": "ဝန်ဆောင်မှုပေးရန် အဆင်သင့်ရှိသည်",
     "safe": "Safe travels!",
     "bookNow": "ဘွတ်ကင်လုပ်ပါ",
-    "bookNowSubtitle": "လူသားလက်ထောက်နှင့် ချိတ်ဆက်ပါ"
+    "bookNowSubtitle": "လူသားလက်ထောက်နှင့် ချိတ်ဆက်ပါ",
+    "action": "ဘွတ်ကင်လုပ်ပါ"
   },
   "destinationTabs": {
     "mustVisit": "သွားရောက်ရမည့်နေရာများ",
@@ -1333,19 +1954,76 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "culturalGuideLink": "Guía de Qué Hacer y Qué No Hacer en Cultura",
   "lawsRegulationsLink": "Regulaciones cruciales para 2026",
   "transport": {
-    "title": "Transporte",
+    "title": "TRANSPORTE Y ALQUILER DE AUTOS",
     "detailsTitle": "Transporte en Tailandia — Para más información",
-    "appsGuideLink": "Aplicaciones y sitios web esenciales para el transporte en Tailandia. ¡Haga clic aquí para más información!",
-    "transportGuideLink": "Guía de Transporte",
     "modalTitle": "Guía de Transporte Nacional en Tailandia",
     "modalSubtitle": "Transporte",
-    "statusActive": "Conserje de Transporte Activo",
     "destinationLabel": "Destino",
-    "suggestions": [
-      "Mapa BTS/MRT",
-      "Grab vs Bolt",
-      "Airport Link"
-    ]
+    "suggestions": [],
+    "survey": {
+      "title": "Encuesta de preferencias de alquiler de autos",
+      "analyzing": "Analizando sus requerimientos para encontrar las mejores opciones...",
+      "buttons": {
+        "next": "Siguiente",
+        "back": "Atrás",
+        "submit": "Enviar",
+        "skip": "Omitir"
+      },
+      "questions": {
+        "rental_type": {
+          "question": "¿Qué tipo de alquiler de auto prefiere?",
+          "options": ["Sin chofer (Self-Drive)", "Con chofer (Chófer privado)"]
+        },
+        "pickup_city": {
+          "question": "¿En qué ciudad le gustaría recoger el auto?",
+          "options": ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Krabi", "Koh Samui"]
+        },
+        "duration_days": {
+          "question": "¿Cuántos días desea alquilar el auto?",
+          "placeholder": "Ingrese el número de días (ej. 5)"
+        },
+        "passengers_luggage": {
+          "question": "¿Cuántos pasajeros y equipaje llevan?",
+          "options": [
+            "1-3 Pasajeros (Menos de 2 maletas grandes)",
+            "4-5 Pasajeros (2-3 maletas grandes)",
+            "6-9 Pasajeros (4 o más maletas grandes)"
+          ]
+        },
+        "car_class": {
+          "question": "¿Qué estilo de vehículo se adapta mejor a su viaje?",
+          "options": ["Compacto", "Sedán estándar", "SUV familiar", "Sedán de lujo", "Van VIP (9 asientos)"]
+        },
+        "self_drive_license": {
+          "question": "¿Tiene un Permiso Internacional de Conducir (IDP) o licencia de conducir tailandesa vigente?",
+          "options": ["Sí, lo tengo", "No, no lo tengo"]
+        },
+        "self_drive_deposit": {
+          "question": "¿Acepta realizar el depósito de garantía reembolsable (generalmente mediante retención en tarjeta de crédito)?",
+          "options": ["Sí, acepto", "No, no acepto"]
+        },
+        "driver_hours": {
+          "question": "¿Qué duración de conducción diaria necesita?",
+          "options": [
+            "Medio día (Hasta 5 horas)",
+            "Día completo (Hasta 10-12 horas)",
+            "Solo traslado ida/vuelta al aeropuerto"
+          ]
+        },
+        "driver_language": {
+          "question": "¿Qué idioma prefiere que hable el chofer?",
+          "options": ["Solo tailandés", "Inglés básico y tailandés", "Birmano y tailandés"]
+        },
+        "addons": {
+          "question": "Seleccione los adicionales requeridos (Selección múltiple):",
+          "options": ["Asiento de seguridad infantil", "Navegador GPS", "Seguro premium sin franquicia", "Registro de conductor adicional"]
+        },
+        "pickup_date": {
+          "question": "Especifique la fecha o mes tentativo de inicio del alquiler:",
+          "placeholder": "Ej: 15 de octubre, o mediados de diciembre"
+        }
+      }
+    }
   },
   "vatRefund": {
     "title": "Guía de Reembolso de IVA",
@@ -1370,16 +2048,165 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "budgetSubtitle": "Consejos inteligentes para viajeros",
   "learnMore": "Más información",
   "accommodation": {
-    "title": "Alojamiento",
-    "modalTitle": "Guía de Alojamiento en Tailandia",
-    "chatTitle": "Ayuda con Alojamiento",
-    "detailsTitle": "Detalles del Alojamiento",
-    "guideLink": "Enlace a la Guía de Alojamiento",
-    "suggestions": [
-      "Hoteles de Lujo",
-      "Hostales Boutique",
-      "Resorts de Playa"
-    ]
+    title: "ASISTENTE DE ALOJAMIENTO",
+    modalTitle: "Guía Integral de Alojamientos en Tailandia",
+    detailsTitle: "Alojamientos",
+    suggestions: [],
+    survey: {
+      title: "Encuesta de preferencias de alojamiento",
+      analyzing: "Analizando sus preferencias para encontrar la estancia perfecta...",
+      buttons: {
+        next: "Siguiente",
+        back: "Atrás",
+        submit: "Enviar",
+        skip: "Omitir"
+      },
+      questions: {
+        city: {
+          question: "¿En qué ciudad le gustaría hospedarse?",
+          options: ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Krabi", "Ayutthaya", "Koh Samui"]
+        },
+        nights: {
+          question: "¿Cuántas noches planea quedarse?",
+          placeholder: "Ingrese el número de noches (ej. 5)"
+        },
+        area_general: {
+          question: "¿En qué tipo de zona le gustaría hospedarse?",
+          options: ["Centro de la ciudad / Zona comercial", "Frente al mar / Costero", "Tranquilo / Naturaleza", "Histórico / Cultural"]
+        },
+        budget: {
+          question: "¿Cuál es su presupuesto por noche?",
+          options: ["Económico: Menos de $30", "Gama media: $30 - $100", "Lujo: $100 - $250", "Ultra lujo: $250+"]
+        },
+        type: {
+          question: "¿Qué tipo de alojamiento prefiere?",
+          options: ["Hotel", "Resort", "Hostal", "Casa de huéspedes", "Villa / Departamento"]
+        },
+        stars: {
+          question: "¿Qué categoría de estrellas prefiere?",
+          options: ["1-2 Estrellas", "3 Estrellas", "4 Estrellas", "5 Estrellas / Lujo", "Sin preferencia"]
+        },
+        bangkok_vibe: {
+          question: "¿Qué zona de Bangkok se adapta mejor a su estilo?",
+          options: [
+            "Sukhumvit (Compras y vida nocturna)",
+            "Siam/Pratunam (Compras familiares y mercados)",
+            "Silom/Sathorn (Negocios y alta cocina)",
+            "Riverside (Lujo y visitas culturales)"
+          ]
+        },
+        phuket_beach: {
+          question: "¿Qué tipo de ambiente de playa prefiere en Phuket?",
+          options: [
+            "Patong (Vida nocturna y playa concurrida)",
+            "Kata / Karon (Familiar y surf)",
+            "Bangtao / Laguna (Resorts de lujo y tranquilidad)",
+            "Phuket Old Town (Cultura y cafés - sin playa)"
+          ]
+        },
+        transit_proximity: {
+          question: "¿Qué tan importante es hospedarse a poca distancia del BTS (Skytrain) o del MRT (Metro)?",
+          options: [
+            "Indispensable (menos de 5 minutos a pie)",
+            "Sería bueno, pero no determinante",
+            "No es importante (planeo usar minivan privada o taxi)"
+          ]
+        },
+        beach_proximity: {
+          question: "¿Cuál es su proximidad preferida a la beach?",
+          options: [
+            "Primera línea de playa (sin calles que cruzar)",
+            "A poca distancia a pie (menos de 10 minutos)",
+            "No me importa ir en auto o usar transporte del hotel"
+          ]
+        },
+        airport_pickup: {
+          question: "¿Le gustaría que organicemos un traslado privado desde el aeropuerto hasta su alojamiento?",
+          options: [
+            "Sí, por favor cotícenme un auto/van privado.",
+            "No, me trasladaré por mi cuenta en taxi/Grab."
+          ]
+        },
+        guests: {
+          question: "¿Cuántos huéspedes viajan?",
+          placeholder: "Ingrese el número de huéspedes (ej. 2 adultos, 1 niño)"
+        },
+        room_type: {
+          question: "What room type fits you best?",
+          options: ["Habitación estándar / básica", "Habitación Deluxe / Superior", "Suite", "Habitación familiar", "Cama en dormitorio compartido"]
+        },
+        amenities: {
+          question: "Seleccione los servicios requeridos (Selección múltiple):",
+          options: ["Wi-Fi gratis", "Piscina", "Gimnasio", "Aire acondicionado", "Desayuno incluido", "Spa y bienestar"]
+        },
+        checkin_date: {
+          question: "Especifique su fecha o mes tentativo de llegada:",
+          placeholder: "Ej: 15 de octubre, o mediados de diciembre"
+        }
+      }
+    }
+  },
+  "carRental": {
+    title: "ASISTENTE DE ALQUILER DE COCHES",
+    modalTitle: "Guía Integral de Alquiler de Coches en Tailandia",
+    detailsTitle: "Alquiler de Coches",
+    suggestions: [],
+    survey: {
+      title: "Encuesta de preferencias de alquiler de coches",
+      analyzing: "Analizando sus preferencias para encontrar el alquiler perfecto...",
+      buttons: {
+        next: "Siguiente",
+        back: "Atrás",
+        submit: "Enviar",
+        skip: "Omitir"
+      },
+      questions: {
+        rental_type: {
+          question: "¿Prefiere conducir usted mismo o contratar un conductor?",
+          options: ["Conducir yo mismo (Self-Drive)", "Con conductor (Servicio de chófer)"]
+        },
+        pickup_location: {
+          question: "¿Dónde le gustaría recoger el coche?",
+          placeholder: "Ingrese lugar de recogida (ej. Aeropuerto Suvarnabhumi, Centro de Bangkok)"
+        },
+        dropoff_location: {
+          question: "¿Dónde le gustaría devolver el coche?",
+          placeholder: "Ingrese lugar de devolución (ej. Aeropuerto de Phuket, Hotel)"
+        },
+        rental_dates: {
+          question: "¿Cuáles son sus fechas de alquiler?",
+          placeholder: "Ingrese fechas (ej. 15-20 de diciembre, 2026)"
+        },
+        vehicle_type: {
+          question: "¿Qué tipo de vehículo prefiere?",
+          options: ["Coche económico", "SUV / 4WD", "Coche de lujo", "Furgoneta / Minibus"]
+        },
+        driver_age: {
+          question: "¿Cuál es la edad del conductor principal?",
+          placeholder: "Ingrese edad del conductor (ej. 30)"
+        },
+        driver_license: {
+          question: "¿Tiene un permiso de conducción internacional válido?",
+          options: ["Sí, tengo un IDP", "No, solo tengo un permiso local", "Necesito ayuda con esto"]
+        },
+        driver_language: {
+          question: "¿Qué idioma debería hablar el conductor? (Selección múltiple)",
+          options: ["Inglés", "Tailandés", "Chino", "Japonés", "Coreano"]
+        },
+        additional_services: {
+          question: "Seleccione servicios adicionales necesarios (Selección múltiple):",
+          options: ["Navegación GPS", "Silla para niños", "Seguro completo", "Recogida en aeropuerto", "Soporte 24/7"]
+        },
+        budget: {
+          question: "¿Cuál es su presupuesto diario?",
+          options: ["Económico: Menos de $30/día", "Gama media: $30 - $80/día", "Lujo: $80 - $150/día", "Premium: $150+/día"]
+        },
+        special_requests: {
+          question: "¿Alguna solicitud especial o requisito?",
+          placeholder: "Ingrese solicitudes especiales (ej. conductor vegetariano, ruta específica)"
+        }
+      }
+    }
   },
   "tools": {
     "currency": "Conversor de Moneda",
@@ -1468,7 +2295,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "statusActive": "Conserje Activo",
     "safe": "¡Buen viaje!",
     "bookNow": "Reservar Ahora",
-    "bookNowSubtitle": "Conectar con un Operador Humano"
+    "bookNowSubtitle": "Conectar con un Operador Humano",
+    "action": "Reservar Ahora"
   },
   "destinationTabs": {
     "mustVisit": "Lugares imprescindibles",
@@ -1751,19 +2579,76 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "culturalGuideLink": "Guide de l'étiquette culturelle À faire et à ne pas faire",
   "lawsRegulationsLink": "Réglementations cruciales pour 2026",
   "transport": {
-    "title": "Transport",
+    "title": "TRANSPORT & LOCATION DE VOITURE",
     "detailsTitle": "Transport en Thaïlande — Pour plus d'informations",
-    "appsGuideLink": "Applications et sites web essentiels pour le transport en Thaïlande. Cliquez ici pour plus d'informations !",
-    "transportGuideLink": "Guide de Transport",
-    "modalTitle": "Guide des Transports Nationaux en Thaïlande",
+    "modalTitle": "Guide national des transports en Thaïlande",
     "modalSubtitle": "Transport",
-    "statusActive": "Concierge de Transport Actif",
     "destinationLabel": "Destination",
-    "suggestions": [
-      "Carte BTS/MRT",
-      "Grab vs Bolt",
-      "Ligne Aéroportuaire"
-    ]
+    "suggestions": [],
+    "survey": {
+      "title": "Enquête sur les préférences de location de voiture",
+      "analyzing": "Analyse de vos besoins pour vous proposer la meilleure offre...",
+      "buttons": {
+        "next": "Suivant",
+        "back": "Retour",
+        "submit": "Envoyer la demande",
+        "skip": "Passer"
+      },
+      "questions": {
+        "rental_type": {
+          "question": "Quelle option de location préférez-vous ?",
+          "options": ["Sans chauffeur (Autonomie)", "Avec chauffeur"]
+        },
+        "pickup_city": {
+          "question": "Dans quelle ville souhaitez-vous récupérer la voiture ?",
+          "options": ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Krabi", "Koh Samui"]
+        },
+        "duration_days": {
+          "question": "Combien de jours souhaitez-vous louer la voiture ?",
+          "placeholder": "Entrez le nombre de jours (ex. : 5)"
+        },
+        "passengers_luggage": {
+          "question": "Combien de passagers et de bagages prévoyez-vous ?",
+          "options": [
+            "1 à 3 passagers (Moins de 2 grands sacs)",
+            "4 à 5 passagers (2 à 3 grands sacs)",
+            "6 à 9 passagers (4 grands sacs ou plus)"
+          ]
+        },
+        "car_class": {
+          "question": "Quel type de véhicule correspond le mieux à votre voyage ?",
+          "options": ["Citadine compacte", "Berline standard", "SUV familial", "Berline de luxe", "Van VIP (9 places)"]
+        },
+        "self_drive_license": {
+          "question": "Détenez-vous un permis de conduire international (PCI) ou un permis thaïlandais ?",
+          "options": ["Oui, j'en possède un", "Non, je n'en ai pas"]
+        },
+        "self_drive_deposit": {
+          "question": "Acceptez-vous le dépôt de garantie remboursable (généralement via empreinte de carte de crédit) ?",
+          "options": ["Oui, j'accepte", "Non, je refuse"]
+        },
+        "driver_hours": {
+          "question": "De quelle durée de conduite quotidienne avez-vous besoin ?",
+          "options": [
+            "Demi-journée (Jusqu'à 5 heures)",
+            "Journée complète (Jusqu'à 10-12 heures)",
+            "Transfert aéroport simple uniquement"
+          ]
+        },
+        "driver_language": {
+          "question": "Quelle langue préférez-vous que votre chauffeur parle ?",
+          "options": ["Thaïlandais uniquement", "Anglais de base & Thaïlandais", "Birman & Thaïlandais"]
+        },
+        "addons": {
+          "question": "Sélectionnez les options souhaitées (Choix multiples) :",
+          "options": ["Siège de sécurité enfant", "GPS de navigation", "Assurance tous risques sans franchise", "Conducteur additionnel"]
+        },
+        "pickup_date": {
+          "question": "Veuillez préciser la date ou le mois de début de la location :",
+          "placeholder": "Ex. : 15 octobre, ou mi-décembre"
+        }
+      }
+    }
   },
   "vatRefund": {
     "title": "Guide de Remboursement TVA",
@@ -1788,16 +2673,165 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "budgetSubtitle": "Conseils de voyage intelligents",
   "learnMore": "En savoir plus",
   "accommodation": {
-    "title": "Hébergement",
-    "modalTitle": "Guide de l'Hébergement en Thaïlande",
-    "chatTitle": "Aide à l'Hébergement",
-    "detailsTitle": "Détails de l'Hébergement",
-    "guideLink": "Lien vers le Guide de l'Hébergement",
-    "suggestions": [
-      "Hôtels de Luxe",
-      "Auberges de Charme",
-      "Complexes Balnéaires"
-    ]
+    title: "ASSISTANT HÉBERGEMENT",
+    modalTitle: "Guide Complet des Hébergements en Thaïlande",
+    detailsTitle: "Hébergements",
+    suggestions: [],
+    survey: {
+      title: "Enquête sur les préférences d'hébergement",
+      analyzing: "Analyse de vos préférences pour trouver le séjour parfait...",
+      buttons: {
+        next: "Suivant",
+        back: "Retour",
+        submit: "Envoyer",
+        skip: "Passer"
+      },
+      questions: {
+        city: {
+          question: "Dans quelle ville souhaitez-vous séjourner ?",
+          options: ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Krabi", "Ayutthaya", "Koh Samui"]
+        },
+        nights: {
+          question: "Combien de nuits souhaitez-vous séjourner ?",
+          placeholder: "Entrez le nombre de nuits (ex. : 5)"
+        },
+        area_general: {
+          question: "Dans quel type de quartier souhaitez-vous séjourner ?",
+          options: ["Centre-ville / Quartier animé", "Bord de mer / Côte", "Calme / Nature", "Historique / Culturel"]
+        },
+        budget: {
+          question: "Quel est votre budget par nuit ?",
+          options: ["Économique : Moins de 30 $", "Intermédiaire : 30 $ - 100 $", "Luxe : 100 $ - 250 $", "Très haut de gamme : 250 $ et plus"]
+        },
+        type: {
+          question: "Quel type d'hébergement préférez-vous ?",
+          options: ["Hôtel", "Complexe hôtelier (Resort)", "Auberge de jeunesse", "Maison d'hôtes", "Villa / Appartement"]
+        },
+        stars: {
+          question: "Quelle catégorie d'étoiles préférez-vous ?",
+          options: ["1-2 Étoiles", "3 Étoiles", "4 Étoiles", "5 Étoiles / Grand luxe", "Pas de préférence"]
+        },
+        bangkok_vibe: {
+          question: "Quel quartier correspond le mieux à vos attentes à Bangkok ?",
+          options: [
+            "Sukhumvit (Shopping & Vie nocturne)",
+            "Siam/Pratunam (Shopping familial & Marchés)",
+            "Silom/Sathorn (Affaires & Restaurants gastronomiques)",
+            "Riverside (Luxe & Visites culturelles)"
+          ]
+        },
+        phuket_beach: {
+          question: "Quel type d'ambiance de plage préférez-vous à Phuket ?",
+          options: [
+            "Patong (Vie nocturne & Plage animée)",
+            "Kata / Karon (Idéal pour les familles & Surf)",
+            "Bangtao / Laguna (Complexes de luxe & Plus calme)",
+            "Phuket Old Town (Culture & Cafés - Pas de plage)"
+          ]
+        },
+        transit_proximity: {
+          question: "Quelle est l'importance de séjourner à distance de marche du BTS (Skytrain) ou du MRT (Métro) ?",
+          options: [
+            "Indispensable (à moins de 5 minutes à pied)",
+            "Appréciable, mais pas indispensable",
+            "Pas important (prévision de déplacements en van privé ou taxi)"
+          ]
+        },
+        beach_proximity: {
+          question: "Quelle est votre proximité préférée de la plage ?",
+          options: [
+            "Accès direct à la plage (pas de route à traverser)",
+            "À distance de marche (moins de 10 minutes)",
+            "Pas de problème pour utiliser une voiture ou une navette"
+          ]
+        },
+        airport_pickup: {
+          question: "Souhaitez-vous que nous organisions un transfert privé depuis l'aéroport vers votre hébergement ?",
+          options: [
+            "Oui, merci de m'envoyer un devis pour une voiture/un van privé.",
+            "Non, je me déplacerai par mes propres moyens en taxi/Grab."
+          ]
+        },
+        guests: {
+          question: "Combien de personnes voyagent ?",
+          placeholder: "Entrez le nombre de voyageurs (ex. : 2 adultes, 1 enfant)"
+        },
+        room_type: {
+          question: "Quel type de chambre vous convient le mieux ?",
+          options: ["Chambre standard", "Chambre Deluxe / Supérieure", "Suite", "Chambre familiale", "Lit en dortoir partagé"]
+        },
+        amenities: {
+          question: "Sélectionnez les équipements requis (Choix multiples) :",
+          options: ["Wi-Fi gratuit", "Piscine", "Salle de sport", "Climatisation", "Petit-déjeuner inclus", "Spa et massages"]
+        },
+        checkin_date: {
+          question: "Veuillez préciser votre date ou mois d'arrivée provisoire :",
+          placeholder: "Ex. : 15 octobre, ou mi-décembre"
+        }
+      }
+    }
+  },
+  "carRental": {
+    title: "ASSISTANT LOCATION DE VOITURE",
+    modalTitle: "Guide Complet de Location de Voitures en Thaïlande",
+    detailsTitle: "Location de Voitures",
+    suggestions: [],
+    survey: {
+      title: "Enquête sur les préférences de location de voitures",
+      analyzing: "Analyse de vos préférences pour trouver la location parfaite...",
+      buttons: {
+        next: "Suivant",
+        back: "Retour",
+        submit: "Envoyer",
+        skip: "Passer"
+      },
+      questions: {
+        rental_type: {
+          question: "Préférez-vous conduire vous-même ou engager un chauffeur ?",
+          options: ["Conduire moi-même (Self-Drive)", "Avec chauffeur (Service de chauffeur)"]
+        },
+        pickup_location: {
+          question: "Où souhaitez-vous récupérer le véhicule ?",
+          placeholder: "Entrez le lieu de récupération (ex. Aéroport Suvarnabhumi, Centre de Bangkok)"
+        },
+        dropoff_location: {
+          question: "Où souhaitez-vous retourner le véhicule ?",
+          placeholder: "Entrez le lieu de retour (ex. Aéroport de Phuket, Hôtel)"
+        },
+        rental_dates: {
+          question: "Quelles sont vos dates de location ?",
+          placeholder: "Entrez les dates (ex. 15-20 décembre 2026)"
+        },
+        vehicle_type: {
+          question: "Quel type de véhicule préférez-vous ?",
+          options: ["Voiture économique", "SUV / 4WD", "Voiture de luxe", "Fourgonnette / Minibus"]
+        },
+        driver_age: {
+          question: "Quel est l'âge du conducteur principal ?",
+          placeholder: "Entrez l'âge du conducteur (ex. 30)"
+        },
+        driver_license: {
+          question: "Avez-vous un permis de conduire international valide ?",
+          options: ["Oui, j'ai un IDP", "Non, j'ai seulement un permis local", "J'ai besoin d'aide pour cela"]
+        },
+        driver_language: {
+          question: "Quelle langue le chauffeur doit-il parler ? (Choix multiples)",
+          options: ["Anglais", "Thaïlandais", "Chinois", "Japonais", "Coréen"]
+        },
+        additional_services: {
+          question: "Sélectionnez les services supplémentaires nécessaires (Choix multiples) :",
+          options: ["Navigation GPS", "Siège enfant", "Assurance complète", "Récupération à l'aéroport", "Support 24/7"]
+        },
+        budget: {
+          question: "Quel est votre budget quotidien ?",
+          options: ["Économique : Moins de 30 $/jour", "Intermédiaire : 30 $ - 80 $/jour", "Luxe : 80 $ - 150 $/jour", "Premium : 150 $+/jour"]
+        },
+        special_requests: {
+          question: "Avez-vous des demandes spéciales ou des exigences ?",
+          placeholder: "Entrez les demandes spéciales (ex. chauffeur végétarien, itinéraire spécifique)"
+        }
+      }
+    }
   },
   "tools": {
     "currency": "Convertisseur de Devises",
@@ -1886,7 +2920,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "statusActive": "Concierge Activo",
     "safe": "Bon voyage !",
     "bookNow": "Réserver Maintenant",
-    "bookNowSubtitle": "Connecter avec un Opérateur Humain"
+    "bookNowSubtitle": "Connecter avec un Opérateur Humain",
+    "action": "Réserver Maintenant"
   },
   "destinationTabs": {
     "mustVisit": "Incontournables",
@@ -2169,19 +3204,76 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "culturalGuideLink": "Kulturelle Do's & Don'ts Leitfaden",
   "lawsRegulationsLink": "Wichtige Vorschriften für 2026",
   "transport": {
-    "title": "Transport",
+    "title": "TRANSPORT & MIETWAGEN",
     "detailsTitle": "Transport in Thailand — Für weitere Informationen",
-    "appsGuideLink": "Wichtige Apps und Websites für den Transport in Thailand. Klicken Sie hier für weitere Informationen!",
-    "transportGuideLink": "Transportleitfaden",
-    "modalTitle": "Thailands landesweiter Transportleitfaden",
+    "modalTitle": "Thailand-weiter Transportführer",
     "modalSubtitle": "Transport",
-    "statusActive": "Transport-Concierge Aktiv",
-    "destinationLabel": "Zielort",
-    "suggestions": [
-      "BTS/MRT Karte",
-      "Grab vs Bolt",
-      "Flughafenzug"
-    ]
+    "destinationLabel": "Reiseziel",
+    "suggestions": [],
+    "survey": {
+      "title": "Mietwagen-Präferenzumfrage",
+      "analyzing": "Ihre Anforderungen werden analysiert, um die besten Mietwagenoptionen zu finden...",
+      "buttons": {
+        "next": "Weiter",
+        "back": "Zurück",
+        "submit": "Absenden",
+        "skip": "Überspringen"
+      },
+      "questions": {
+        "rental_type": {
+          "question": "Welche Art von Mietwagenservice bevorzugen Sie?",
+          "options": ["Selbstfahrer (Self-Drive)", "Mit Fahrer (Privater Chauffeur)"]
+        },
+        "pickup_city": {
+          "question": "In welcher Stadt möchten Sie das Auto abholen?",
+          "options": ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Krabi", "Koh Samui"]
+        },
+        "duration_days": {
+          "question": "Wie viele Tage möchten Sie das Auto mieten?",
+          "placeholder": "Anzahl der Tage eingeben (z. B. 5)"
+        },
+        "passengers_luggage": {
+          "question": "Wie viele Passagiere und Gepäckstücke haben Sie?",
+          "options": [
+            "1-3 Passagiere (Unter 2 große Koffer)",
+            "4-5 Passagiere (2-3 große Koffer)",
+            "6-9 Passagiere (4+ große Koffer)"
+          ]
+        },
+        "car_class": {
+          "question": "Welche Fahrzeugklasse entspricht Ihren Anforderungen?",
+          "options": ["Kleinwagen", "Standard-Limousine", "Familien-SUV", "Luxusklasse-Limousine", "VIP-Van (9-Sitzer)"]
+        },
+        "self_drive_license": {
+          "question": "Besitzen Sie einen internationalen Führerschein (IFS) oder thailändischen Führerschein?",
+          "options": ["Ja, besitze ich", "Nein, besitze ich nicht"]
+        },
+        "self_drive_deposit": {
+          "question": "Stimmen Sie der Hinterlegung der Kaution zu (idR. per Kreditkarten-Block)?",
+          "options": ["Ja, ich stimme zu", "Nein, ich lehne ab"]
+        },
+        "driver_hours": {
+          "question": "Welche tägliche Einsatzdauer des Fahrers benötigen Sie?",
+          "options": [
+            "Halbtags (Bis zu 5 Stunden)",
+            "Ganztags (Bis zu 10-12 Stunden)",
+            "Nur Flughafentransfer (A nach B)"
+          ]
+        },
+        "driver_language": {
+          "question": "Welche Sprachkenntnisse bevorzugen Sie für Ihren Fahrer?",
+          "options": ["Nur Thailändisch", "Englisch & Thailändisch", "Burmesisch & Thailändisch"]
+        },
+        "addons": {
+          "question": "Wählen Sie Extras (Mehrfachauswahl):",
+          "options": ["Kindersitz", "GPS-Navigationsgerät", "Vollkasko ohne Selbstbeteiligung", "Zusatzfahrer-Registrierung"]
+        },
+        "pickup_date": {
+          "question": "Bitte geben Sie den voraussichtlichen Mietbeginn oder Monat an:",
+          "placeholder": "z. B. 15. Oktober oder Mitte Dezember"
+        }
+      }
+    }
   },
   "vatRefund": {
     "title": "MwSt.-Rückerstattungsleitfaden",
@@ -2206,16 +3298,165 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "budgetSubtitle": "Intelligente Reisetipps",
   "learnMore": "Mehr erfahren",
   "accommodation": {
-    "title": "Unterkunft",
-    "modalTitle": "Thailand Unterkunftsleitfaden",
-    "chatTitle": "Unterkunftshilfe",
-    "detailsTitle": "Unterkunftsdetails",
-    "guideLink": "Link zum Unterkunftsleitfaden",
-    "suggestions": [
-      "Luxushotels",
-      "Boutique-Hostels",
-      "Strandresorts"
-    ]
+    title: "UNTERKUNFT-COPILOT",
+    modalTitle: "Umfassender Leitfaden für Unterkünfte in Thailand",
+    detailsTitle: "Unterkünfte",
+    suggestions: [],
+    survey: {
+      title: "Befragung zu Unterkunftspräferenzen",
+      analyzing: "Wir analysieren Ihre Präferenzen für den perfekten Aufenthalt...",
+      buttons: {
+        next: "Weiter",
+        back: "Zurück",
+        submit: "Absenden",
+        skip: "Überspringen"
+      },
+      questions: {
+        city: {
+          question: "In welcher Stadt möchten Sie übernachten?",
+          options: ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Krabi", "Ayutthaya", "Koh Samui"]
+        },
+        nights: {
+          question: "Wie viele Nächte möchten Sie bleiben?",
+          placeholder: "Anzahl der Nächte eingeben (z. B. 5)"
+        },
+        area_general: {
+          question: "In welcher Gegend möchten Sie übernachten?",
+          options: ["Stadtzentrum / Innenstadt", "Am Strand / Küste", "Ruhig / Natur", "Historisch / Kulturell"]
+        },
+        budget: {
+          question: "Wie hoch ist Ihr Budget pro Nacht?",
+          options: ["Günstig: Unter $30", "Mittelklasse: $30 - $100", "Luxus: $100 - $250", "Premium-Luxus: $250+"]
+        },
+        type: {
+          question: "Welche Unterkunftsart bevorzugen Sie?",
+          options: ["Hotel", "Resort", "Hostel", "Guesthouse", "Villa / Apartment"]
+        },
+        stars: {
+          question: "Welche Sternebewertung bevorzugen Sie?",
+          options: ["1-2 Sterne", "3 Sterne", "4 Sterne", "5 Sterne / Luxus", "Keine Präferenz"]
+        },
+        bangkok_vibe: {
+          question: "Welche Gegend in Bangkok passt am besten zu Ihrer Stimmung?",
+          options: [
+            "Sukhumvit (Shopping & Nachtleben)",
+            "Siam/Pratunam (Familienshopping & Märkte)",
+            "Silom/Sathorn (Business & gehobene Gastronomie)",
+            "Riverside (Luxus & kulturelle Sehenswürdigkeiten)"
+          ]
+        },
+        phuket_beach: {
+          question: "Welche Art von Stranderlebnis bevorzugen Sie in Phuket?",
+          options: [
+            "Patong (Nachtleben & belebter Strand)",
+            "Kata / Karon (Familienfreundlich & Surfen)",
+            "Bangtao / Laguna (Luxusresorts & ruhiger)",
+            "Phuket Old Town (Kultur & Cafés - kein Strand)"
+          ]
+        },
+        transit_proximity: {
+          question: "Wie wichtig ist es Ihnen, in Gehweite zur BTS (Skytrain) oder MRT (U-Bahn) zu sein?",
+          options: [
+            "Muss innerhalb von 5 Minuten zu Fuß erreichbar sein",
+            "Schön zu haben, aber kein K.-o.-Kriterium",
+            "Nicht wichtig (plane, private Vans/Taxis zu nutzen)"
+          ]
+        },
+        beach_proximity: {
+          question: "Wie nah möchten Sie am Strand sein?",
+          options: [
+            "Direkt am Strand (keine Straßen zu überqueren)",
+            "Gehweite zum Strand (unter 10 Min.)",
+            "Fahrt oder Shuttle zum Strand ist in Ordnung"
+          ]
+        },
+        airport_pickup: {
+          question: "Möchten Sie, dass wir einen privaten Flughafentransfer zu Ihrer Unterkunft arrangieren?",
+          options: [
+            "Ja, bitte Angebot für ein privates Auto/einen Van zusenden.",
+            "Nein, ich kümmere mich selbst per Taxi/Grab darum."
+          ]
+        },
+        guests: {
+          question: "Wie viele Gäste reisen mit?",
+          placeholder: "Anzahl der Gäste eingeben (z. B. 2 Erwachsene, 1 Kind)"
+        },
+        room_type: {
+          question: "Welcher Zimmertyp passt am besten?",
+          options: ["Standard-Zimmer", "Deluxe- / Superior-Zimmer", "Suite", "Familienzimmer", "Bett im Schlafsaal"]
+        },
+        amenities: {
+          question: "Wählen Sie die gewünschte Ausstattung (Mehrfachauswahl):",
+          options: ["Kostenloses WLAN", "Pool", "Fitnessstudio", "Klimaanlage", "Inklusive Frühstück", "Wellness & Spa"]
+        },
+        checkin_date: {
+          question: "Bitte geben Sie Ihr voraussichtliches Anreisedatum oder den Monat ein:",
+          placeholder: "z. B. 15. Oktober oder Mitte Dezember"
+        }
+      }
+    }
+  },
+  "carRental": {
+    title: "MIETWAGEN-ASSISTENT",
+    modalTitle: "Umfassender Leitfaden für Mietwagen in Thailand",
+    detailsTitle: "Mietwagen",
+    suggestions: [],
+    survey: {
+      title: "Befragung zu Mietwagenpräferenzen",
+      analyzing: "Wir analysieren Ihre Präferenzen für den perfekten Mietwagen...",
+      buttons: {
+        next: "Weiter",
+        back: "Zurück",
+        submit: "Absenden",
+        skip: "Überspringen"
+      },
+      questions: {
+        rental_type: {
+          question: "Möchten Sie selbst fahren oder einen Chauffeur engagieren?",
+          options: ["Selbst fahren (Self-Drive)", "Mit Chauffeur (Chauffeurservice)"]
+        },
+        pickup_location: {
+          question: "Wo möchten Sie das Auto abholen?",
+          placeholder: "Abholort eingeben (z. B. Flughafen Suvarnabhumi, Bangkok Zentrum)"
+        },
+        dropoff_location: {
+          question: "Wo möchten Sie das Auto zurückgeben?",
+          placeholder: "Rückgabeort eingeben (z. B. Flughafen Phuket, Hotel)"
+        },
+        rental_dates: {
+          question: "Wann sind Ihre Mietdaten?",
+          placeholder: "Daten eingeben (z. B. 15.-20. Dezember 2026)"
+        },
+        vehicle_type: {
+          question: "Welche Fahrzeugart bevorzugen Sie?",
+          options: ["Wirtschaftswagen", "SUV / 4WD", "Luxuswagen", "Kleinbus / Minibus"]
+        },
+        driver_age: {
+          question: "Wie alt ist der Hauptfahrer?",
+          placeholder: "Alter des Fahrers eingeben (z. B. 30)"
+        },
+        driver_license: {
+          question: "Haben Sie einen gültigen internationalen Führerschein?",
+          options: ["Ja, ich habe einen IDP", "Nein, ich habe nur einen lokalen Führerschein", "Ich brauche Hilfe dabei"]
+        },
+        driver_language: {
+          question: "Welche Sprache soll der Chauffeur sprechen? (Mehrfachauswahl)",
+          options: ["Englisch", "Thailändisch", "Chinesisch", "Japanisch", "Koreanisch"]
+        },
+        additional_services: {
+          question: "Wählen Sie zusätzliche benötigte Services (Mehrfachauswahl):",
+          options: ["GPS-Navigation", "Kindersitz", "Vollkaskoversicherung", "Flughafentransfer", "24/7-Support"]
+        },
+        budget: {
+          question: "Was ist Ihr Tagesbudget?",
+          options: ["Günstig: Unter $30/Tag", "Mittelklasse: $30 - $80/Tag", "Luxus: $80 - $150/Tag", "Premium: $150+/Tag"]
+        },
+        special_requests: {
+          question: "Haben Sie besondere Wünsche oder Anforderungen?",
+          placeholder: "Besondere Wünsche eingeben (z. B. vegetarischer Chauffeur, bestimmte Route)"
+        }
+      }
+    }
   },
   "tools": {
     "currency": "Währungsrechner",
@@ -2304,7 +3545,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "statusActive": "Concierge Aktiv",
     "safe": "Gute Reise!",
     "bookNow": "Jetzt Buchen",
-    "bookNowSubtitle": "Mit einem menschlichen Mitarbeiter verbinden"
+    "bookNowSubtitle": "Mit einem menschlichen Mitarbeiter verbinden",
+    "action": "Jetzt Buchen"
   },
   "destinationTabs": {
     "mustVisit": "Sehenswürdigkeiten",

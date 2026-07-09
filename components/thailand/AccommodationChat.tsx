@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
-import { motion } from 'motion/react';
-import { Send, Home, Loader2, MessageSquare, Calendar } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Send, Home, Loader2, MessageSquare, ChevronLeft, Check, Square, CheckSquare } from 'lucide-react';
 import { getConciergeResponse } from '@/services/geminiService';
 import { ChatMessage, ThaiLanguage } from '@/types/country';
 import { UI_TRANSLATIONS } from '@/lib/i18n';
@@ -15,18 +15,42 @@ interface Props {
   language: ThaiLanguage;
 }
 
+// Complete dynamic sequence path. Conditions are verified dynamically.
+const STEP_SEQUENCE = [
+  'city',
+  'nights',
+  'area_general',
+  'budget',
+  'type',
+  'stars',
+  'bangkok_vibe',       // Conditional: ONLY if city === 'Bangkok'
+  'phuket_beach',       // Conditional: ONLY if city === 'Phuket'
+  'transit_proximity',  // Conditional: ONLY if city === 'Bangkok'
+  'beach_proximity',    // Conditional: ONLY if beach destination (Phuket, Pattaya, Krabi, Koh Samui)
+  'airport_pickup',
+  'guests',
+  'room_type',
+  'amenities',
+  'checkin_date'
+];
+
 export default function AccommodationChat({ language }: Props) {
   const uiT = useMemo(() => UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN, [language]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [showBookNow, setShowBookNow] = useState(false);
-  const [showHumanChat, setShowHumanChat] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [currentStepId, setCurrentStepId] = useState<string>('city');
+  const [stepHistory, setStepHistory] = useState<string[]>(['city']);
+  const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+  const [textInput, setTextInput] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showBookNow, setShowBookNow] = useState<boolean>(false);
+  const [showHumanChat, setShowHumanChat] = useState<boolean>(false);
+  const [surveyCompleted, setSurveyCompleted] = useState<boolean>(false);
+  const [mounted, setMounted] = useState<boolean>(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const t = uiT.accommodation || UI_TRANSLATIONS.EN.accommodation;
-  const commonT = uiT.chat || UI_TRANSLATIONS.EN.chat;
+  const t = useMemo(() => uiT.accommodation || UI_TRANSLATIONS.EN.accommodation, [uiT]);
+  const commonT = useMemo(() => uiT.chat || UI_TRANSLATIONS.EN.chat, [uiT]);
 
   useEffect(() => {
     setMounted(true);
@@ -36,7 +60,7 @@ export default function AccommodationChat({ language }: Props) {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isLoading]);
+  }, [messages, isLoading, currentStepId]);
 
   useEffect(() => {
     if (showHumanChat) {
@@ -49,71 +73,153 @@ export default function AccommodationChat({ language }: Props) {
     };
   }, [showHumanChat]);
 
-  const handleSend = async (customMessage?: string) => {
-    const userMessage = customMessage || input.trim();
-    if (!userMessage || isLoading) return;
+  const activeSurvey = t.survey;
 
-    setShowBookNow(false);
-    if (!customMessage) setInput('');
-    
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+  const currentSurveyStep = useMemo(() => {
+    if (!activeSurvey || !activeSurvey.questions) return null;
+    return activeSurvey.questions[currentStepId as keyof typeof activeSurvey.questions];
+  }, [activeSurvey, currentStepId]);
+
+  // Logic solver to find the next logical step ID considering conditional rules
+  const getNextStepId = (currentId: string, currentAnswers: Record<string, any>): string | null => {
+    const currentIndex = STEP_SEQUENCE.indexOf(currentId);
+    if (currentIndex === -1 || currentIndex === STEP_SEQUENCE.length - 1) return null;
+
+    for (let i = currentIndex + 1; i < STEP_SEQUENCE.length; i++) {
+      const nextId = STEP_SEQUENCE[i];
+      const selectedCity = currentAnswers['city'];
+
+      if (nextId === 'bangkok_vibe' && selectedCity !== 'Bangkok') continue;
+      if (nextId === 'phuket_beach' && selectedCity !== 'Phuket') continue;
+      if (nextId === 'transit_proximity' && selectedCity !== 'Bangkok') continue;
+
+      const isBeachDest = ['Phuket', 'Pattaya', 'Krabi', 'Koh Samui'].includes(selectedCity);
+      if (nextId === 'beach_proximity' && !isBeachDest) continue;
+
+      return nextId;
+    }
+    return null;
+  };
+
+  const proceedToNext = (updatedAnswers: Record<string, any>, stepDisplayValue: string | string[]) => {
+    const currentQuestion = currentSurveyStep?.question || "";
+    const displayString = Array.isArray(stepDisplayValue) ? stepDisplayValue.join(', ') : stepDisplayValue;
+
+    setMessages(prev => [
+      ...prev,
+      { role: 'assistant', content: `**${currentQuestion}**` },
+      { role: 'user', content: displayString }
+    ]);
+
+    const nextId = getNextStepId(currentStepId, updatedAnswers);
+
+    if (nextId) {
+      setCurrentStepId(nextId);
+      setStepHistory(prev => [...prev, nextId]);
+      setTextInput('');
+    } else {
+      triggerAISubmission(updatedAnswers);
+    }
+  };
+
+  const handleSelectOption = (option: string) => {
+    const updatedAnswers = { ...answers, [currentStepId]: option };
+    setAnswers(updatedAnswers);
+    proceedToNext(updatedAnswers, option);
+  };
+
+  const handleTextSubmit = () => {
+    const val = textInput.trim();
+    if (!val) return;
+    const updatedAnswers = { ...answers, [currentStepId]: val };
+    setAnswers(updatedAnswers);
+    proceedToNext(updatedAnswers, val);
+  };
+
+  const toggleAmenity = (amenity: string) => {
+    setSelectedAmenities(prev =>
+      prev.includes(amenity)
+        ? prev.filter(item => item !== amenity)
+        : [...prev, amenity]
+    );
+  };
+
+  const handleNextMultipleChoice = () => {
+    const chosen = selectedAmenities.length > 0 ? selectedAmenities : ["None selected"];
+    const updatedAnswers = { ...answers, [currentStepId]: chosen };
+    setAnswers(updatedAnswers);
+    proceedToNext(updatedAnswers, chosen);
+  };
+
+  const triggerAISubmission = async (finalAnswers: Record<string, any>) => {
+    setSurveyCompleted(true);
     setIsLoading(true);
 
-    const history = messages.map(m => ({
-      role: (m.role === 'user' ? 'user' : 'model') as 'user' | 'model',
-      parts: [{ text: m.content }]
-    }));
+    const questionsMap = activeSurvey.questions;
+    let formattedSummary = `THAILAND ACCOMMODATION SURVEY DETAILS:\n`;
+    
+    STEP_SEQUENCE.forEach(stepId => {
+      if (finalAnswers[stepId]) {
+        const qText = questionsMap[stepId as keyof typeof questionsMap]?.question || stepId;
+        const ansVal = Array.isArray(finalAnswers[stepId]) ? finalAnswers[stepId].join(', ') : finalAnswers[stepId];
+        formattedSummary += `- ${qText}: ${ansVal}\n`;
+      }
+    });
 
-    const contextPrompt = `You are a specialized accommodation concierge for Thailand. Help the traveler with specific advice about hotels (1-5 stars), guesthouses, hostels, and booking platforms like Agoda. Answer this: ${userMessage}
+    const promptContext = `You are an elite boutique accommodation concierge expert for Thailand. 
+A traveler has finished our dynamic configuration survey:
 
-RESPONSE RULES — MANDATORY:
-1. Direct answers only. No intro sentences like 'Hello! I am ThaiGuide...'. Go straight to the answer.
-2. No filler. No repetition. No restating the question.
-3. Maximum 3 follow-up suggestions only if relevant.
-4. Never list your own capabilities unless asked.
-5. Out-of-scope question → one sentence decline in user's language only. Nothing else.`;
+${formattedSummary}
+
+RESPONSE RULES (MANDATORY):
+1. Respond exclusively in the user's interface language matching parameter (${language}).
+2. Provide direct, highly structured expert recommendations. Avoid generic introductions.
+3. Suggest 3 specific zones or elite hotel profiles fitting their exact configuration.
+4. Highlight why each option aligns with their stated details (budget, beach preference, MRT/BTS transit proximity, etc.).
+5. Ensure your response is professional and beautifully formatted. At the end, state that our live support team is ready to process immediate bookings.`;
 
     try {
-      const response = await getConciergeResponse(contextPrompt, history, language);
+      const response = await getConciergeResponse(promptContext, [], language);
       setMessages(prev => [...prev, { role: 'assistant', content: response }]);
-      
-      const keywords = [
-        // English
-        'hotel', 'tour', 'flight', 'ticket', 'car rental', 'airport transfer',
-        'day tour', 'join tour', 'package tour', 'customize tour', 'vip tour', 'entrance ticket',
-        // Myanmar
-        'ဟိုတယ်', 'ခရီးစဉ်', 'လေယာဉ်', 'လက်မှတ်', 'ကားငှား', 'လေဆိပ်ပို့',
-        'တစ်နေ့ခရီး', 'ပက်ကေ့ခ်ျ', 'ကားအငှား',
-        // Thai
-        'โรงแรม', 'ทัวร์', 'เที่ยวบิน', 'ตั๋ว', 'เช่ารถ', 'รับส่งสนามบิน',
-        // Chinese
-        '酒店', '旅游', '航班', '门票', '租车', '机场接送',
-        // Japanese
-        'ホテル', 'ツアー', 'フライト', 'チケット', 'レンタカー', '空港送迎',
-        // Korean
-        '호텔', '투어', '항공편', '티켓', '렌터카', '공항 픽업',
-        // German
-        'hotel', 'tour', 'flug', 'ticket', 'mietwagen', 'flughafentransfer',
-        // French
-        'hôtel', 'tour', 'vol', 'billet', 'location de voiture', 'transfert aéroport',
-        // Spanish
-        'hotel', 'tour', 'vuelo', 'entrada', 'alquiler de coche', 'traslado aeropuerto'
-      ];
-      const responseLower = response.toLowerCase();
-      const hasKeyword = keywords.some(keyword => responseLower.includes(keyword));
-      if (hasKeyword) {
-        setShowBookNow(true);
-      }
-    } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' }]);
+      setShowBookNow(true);
+    } catch (err) {
+      setMessages(prev => [
+        ...prev, 
+        { role: 'assistant', content: 'An issue occurred compiling recommendations. Please click Book Now to coordinate with our operational desk directly.' }
+      ]);
+      setShowBookNow(true);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
+  };
+
+  const handleBack = () => {
+    if (stepHistory.length > 1) {
+      const newHistory = [...stepHistory];
+      newHistory.pop(); // Remove current step
+      const previousStepId = newHistory[newHistory.length - 1];
+      
+      setCurrentStepId(previousStepId);
+      setStepHistory(newHistory);
+      setMessages(prev => prev.slice(0, -2)); // Undo last Q&A bubble state
+    }
+  };
+
+  const handleReset = () => {
+    setMessages([]);
+    setCurrentStepId('city');
+    setStepHistory(['city']);
+    setAnswers({});
+    setSelectedAmenities([]);
+    setTextInput('');
+    setSurveyCompleted(false);
+    setShowBookNow(false);
   };
 
   const modalContent = showHumanChat ? (
     <div className="fixed inset-0 z-[9999] flex items-end md:items-center justify-center">
       <div
-        className="absolute inset-0 bg-black/60"
+        className="absolute inset-0 bg-black/60 backdrop-blur-xs"
         onClick={() => setShowHumanChat(false)}
       />
       <div className="relative w-full h-full md:w-auto md:h-auto md:max-w-lg md:max-h-[85vh] flex flex-col">
@@ -125,8 +231,16 @@ RESPONSE RULES — MANDATORY:
     </div>
   ) : null;
 
+  // Render logic for different step input types
+  const isShortAnswer = ['nights', 'guests', 'checkin_date'].includes(currentStepId);
+  const isMultipleChoice = currentStepId === 'amenities';
+
+  // Type guard for steps with options
+  const hasOptions = currentSurveyStep && 'options' in currentSurveyStep;
+  const hasPlaceholder = currentSurveyStep && 'placeholder' in currentSurveyStep;
+
   return (
-    <div className="flex flex-col h-[450px] w-full bg-white rounded-2xl overflow-hidden border border-gold-soft/30 shadow-sm">
+    <div className="flex flex-col h-[480px] w-full bg-white rounded-2xl overflow-hidden border border-gold-soft/30 shadow-xs">
       {/* Header */}
       <div className="p-4 bg-sacred-bg border-b border-gray-100 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -135,37 +249,45 @@ RESPONSE RULES — MANDATORY:
           </div>
           <div>
             <h4 className="text-xs font-bold uppercase tracking-widest leading-none mb-1 text-sacred-green">{t.title}</h4>
-            <p className="text-[9px] text-gray-500 font-medium tracking-tight">Expert Housing Advice</p>
+            <p className="text-[9px] text-gray-500 font-medium tracking-tight">Dynamic Stay Customization</p>
           </div>
         </div>
+        {stepHistory.length > 1 && !surveyCompleted && (
+          <button 
+            onClick={handleBack}
+            className="flex items-center gap-1 text-[10px] uppercase font-bold text-gray-500 hover:text-gold-deep transition-colors"
+          >
+            <ChevronLeft size={14} />
+            {activeSurvey.buttons.back}
+          </button>
+        )}
+        {surveyCompleted && (
+          <button 
+            onClick={handleReset}
+            className="text-[10px] uppercase font-bold text-gold-deep hover:underline"
+          >
+            Reset
+          </button>
+        )}
       </div>
 
-      {/* Messages */}
+      {/* Messages View Area */}
       <div 
         ref={scrollRef}
         className="flex-grow overflow-y-auto p-4 space-y-4 bg-sacred-bg/20"
       >
-        {messages.length <= 1 && (
-          <div className="space-y-6 py-4">
-            <div className="text-center opacity-70">
-              <MessageSquare size={24} className="mx-auto mb-3 text-gold-soft" />
-              <p className="text-xs font-serif italic mb-2 tracking-wide text-gray-800">{commonT.welcome}</p>
-            </div>
-            
-            <div className="grid grid-cols-1 gap-2 px-4">
-              {t.suggestions.map((suggestion: string, idx: number) => (
-                <button
-                  key={idx}
-                  onClick={() => handleSend(suggestion)}
-                  className="text-left p-3 text-[10px] font-bold uppercase tracking-widest bg-white border border-gray-100 rounded-xl hover:border-gold-deep hover:text-gold-deep transition-all shadow-sm"
-                >
-                  {suggestion}
-                </button>
-              ))}
-            </div>
+        {messages.length === 0 && !surveyCompleted && (
+          <div className="text-center opacity-70 py-4">
+            <MessageSquare size={24} className="mx-auto mb-3 text-gold-soft" />
+            <p className="text-xs font-serif italic mb-1 tracking-wide text-gray-800">
+              {activeSurvey.title}
+            </p>
+            <p className="text-[10px] text-gray-500 font-medium tracking-tight">
+              Answer the questions below to secure personalized recommendations.
+            </p>
           </div>
         )}
-        
+
         {messages.map((m, i) => (
           <motion.div
             key={i}
@@ -173,54 +295,142 @@ RESPONSE RULES — MANDATORY:
             animate={{ opacity: 1, y: 0 }}
             className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
-            <div className={`max-w-[90%] rounded-2xl p-3 shadow-sm ${
+            <div className={`max-w-[90%] rounded-2xl p-3 shadow-2xs ${
               m.role === 'user' 
-                ? 'bg-sacred-green text-white rounded-tr-none' 
-                : 'bg-white border border-gold-soft/20 text-gray-900 rounded-tl-none'
+                ? 'bg-sacred-green text-white rounded-tr-none text-right' 
+                : 'bg-white border border-gold-soft/20 text-gray-900 rounded-tl-none text-left'
             }`}>
-              <div className="prose prose-sm max-w-none prose-p:leading-relaxed prose-headings:font-serif prose-headings:text-sacred-green prose-hr:my-4 prose-hr:border-gold-soft/20 text-left">
+              <div className="prose prose-sm max-w-none prose-p:leading-relaxed text-xs">
                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>{m.content}</ReactMarkdown>
               </div>
             </div>
           </motion.div>
         ))}
+
         {isLoading && (
           <div className="flex justify-start">
             <div className="bg-white border border-gray-100 rounded-2xl p-3 rounded-tl-none flex items-center gap-2">
               <Loader2 size={12} className="animate-spin text-gold-deep" />
+              <span className="text-[10px] text-gray-500">{activeSurvey.analyzing}</span>
             </div>
           </div>
         )}
       </div>
 
-      {/* Input */}
-      <div className="p-3 bg-white border-t border-gray-100">
-        <div className="relative flex items-center">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder={commonT.placeholder}
-            className="w-full bg-sacred-bg/50 border border-transparent rounded-xl py-2 pl-4 pr-10 text-xs focus:outline-none focus:border-gold-soft transition-all placeholder:text-gray-400"
-          />
-          <button
-            onClick={() => handleSend()}
-            disabled={isLoading || !input.trim()}
-            className="absolute right-1.5 p-1.5 bg-gold-deep text-white rounded-lg hover:bg-gold-soft transition-colors disabled:opacity-50"
-          >
-            <Send size={14} />
-          </button>
+      {/* Dynamic Selector Panels */}
+      {!surveyCompleted && currentSurveyStep && (
+        <div className="p-4 bg-white border-t border-gray-100 space-y-3">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[9px] uppercase font-bold tracking-wider text-gold-deep">
+              Survey Progress
+            </span>
+            <div className="flex gap-1 h-1 w-24 bg-gray-100 rounded-full overflow-hidden">
+              <div 
+                className="bg-gold-deep transition-all duration-300"
+                style={{ width: `${(stepHistory.length / STEP_SEQUENCE.length) * 100}%` }}
+              />
+            </div>
+          </div>
+          <p className="text-xs font-serif font-semibold text-gray-900 leading-tight mb-2">
+            {currentSurveyStep.question}
+          </p>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentStepId}
+              initial={{ opacity: 0, x: 15 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -15 }}
+              transition={{ duration: 0.2 }}
+              className="max-h-[160px] overflow-y-auto pr-1"
+            >
+              {/* Type 1: Single Choice Buttons */}
+              {!isShortAnswer && !isMultipleChoice && hasOptions && (
+                <div className="grid grid-cols-1 gap-1.5">
+                  {(currentSurveyStep as { options: string[]; question: string }).options.map((option: string, idx: number) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleSelectOption(option)}
+                      className="p-2 text-left text-[10px] font-bold uppercase tracking-wider border border-gray-200 rounded-lg hover:border-gold-deep hover:text-gold-deep transition-all bg-sacred-bg/20 hover:bg-white"
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Type 2: Multiple Choice Amenities */}
+              {isMultipleChoice && hasOptions && (
+                <div className="space-y-2">
+                  <div className="grid grid-cols-2 gap-1.5">
+                    {(currentSurveyStep as { options: string[]; question: string }).options.map((option: string, idx: number) => {
+                      const isChecked = selectedAmenities.includes(option);
+                      return (
+                        <button
+                          key={idx}
+                          onClick={() => toggleAmenity(option)}
+                          className={`flex items-center gap-2 p-2 text-left text-[10px] font-bold uppercase tracking-wider border rounded-lg transition-all ${
+                            isChecked 
+                              ? 'border-gold-deep bg-gold-deep/5 text-gold-deep' 
+                              : 'border-gray-200 bg-sacred-bg/20 hover:border-gold-deep'
+                          }`}
+                        >
+                          {isChecked ? <CheckSquare size={13} /> : <Square size={13} />}
+                          <span className="truncate">{option}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <button
+                    onClick={handleNextMultipleChoice}
+                    className="w-full mt-2 py-2 px-4 bg-sacred-green hover:bg-sacred-green/90 text-white font-bold uppercase text-[10px] tracking-widest rounded-lg flex items-center justify-center gap-1.5 transition-colors"
+                  >
+                    <Check size={12} />
+                    {activeSurvey.buttons.next}
+                  </button>
+                </div>
+              )}
+
+              {/* Type 3: Short Answer Inputs */}
+              {isShortAnswer && (
+                <div className="space-y-2">
+                  <div className="relative flex items-center">
+                    <input
+                      type="text"
+                      value={textInput}
+                      onChange={(e) => setTextInput(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleTextSubmit()}
+                      placeholder={hasPlaceholder ? (currentSurveyStep as { placeholder: string; question: string }).placeholder : commonT.placeholder}
+                      className="w-full bg-sacred-bg/50 border border-transparent rounded-xl py-2 pl-4 pr-12 text-xs focus:outline-none focus:border-gold-soft transition-all placeholder:text-gray-400 font-medium"
+                      autoFocus
+                    />
+                    <button
+                      onClick={handleTextSubmit}
+                      disabled={!textInput.trim()}
+                      className="absolute right-1.5 p-1.5 bg-gold-deep text-white rounded-lg hover:bg-gold-soft transition-colors disabled:opacity-45"
+                    >
+                      <Send size={14} />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
-        {showBookNow && (
+      )}
+
+      {/* Book Now Button display */}
+      {showBookNow && (
+        <div className="p-3 bg-white border-t border-gray-100 flex flex-col items-center gap-2">
+          <p className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">Ready to secure arrangements?</p>
           <button
             onClick={() => setShowHumanChat(true)}
-            className="mt-3 w-full bg-[#22c55e] text-white font-semibold py-3 px-4 rounded-xl hover:bg-[#16a34a] transition-colors"
+            className="w-full bg-sacred-green text-white font-bold uppercase tracking-widest text-[11px] py-3 px-4 rounded-xl hover:bg-opacity-90 transition-colors shadow-sm flex items-center justify-center gap-2"
           >
-            📅 Book Now
+            📅 Book Stay Now
           </button>
-        )}
-      </div>
+        </div>
+      )}
 
       {mounted && createPortal(modalContent, document.body)}
     </div>

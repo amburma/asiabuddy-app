@@ -7,6 +7,7 @@ import ConciergeChat from './ConciergeChat'
 import TransportChat from './TransportChat'
 import FoodChat from './FoodChat'
 import AccommodationChat from './AccommodationChat'
+import CarRentalChat from './CarRentalChat'
 import TripPlannerChat from './TripPlannerChat'
 import MedicalChat from './MedicalChat'
 import NightlifeChat from './NightlifeChat'
@@ -21,7 +22,8 @@ import { NIGHTLIFE_GUIDE_MARKDOWN } from '@/data/thailand/nightlifeGuide'
 import { SHOPPING_GUIDE_MARKDOWN } from '@/data/thailand/shoppingGuide'
 import { ACCOMMODATION_GUIDE } from '@/data/thailand/accommodationGuide'
 import { FOOD_GUIDE_MARKDOWN } from '@/data/thailand/foodGuide'
-import { Plane, Stethoscope, Music, ShoppingBag, Home, Utensils, Bus, MessageSquare, X, Ticket, Calculator, ShieldCheck, Gavel } from 'lucide-react'
+import { CAR_RENTAL_GUIDE } from '@/data/thailand/carRentalGuide'
+import { Plane, Stethoscope, Music, ShoppingBag, Home, Utensils, Bus, MessageSquare, X, Ticket, Calculator, ShieldCheck, Gavel, Car } from 'lucide-react'
 
 export default function ChatWidgets() {
   const [language, setLanguage] = useState<ThaiLanguage>(() => {
@@ -46,6 +48,7 @@ export default function ChatWidgets() {
   const [showMedicalModal, setShowMedicalModal] = useState(false);
   const [showNightlifeModal, setShowNightlifeModal] = useState(false);
   const [showShoppingModal, setShowShoppingModal] = useState(false);
+  const [showCarRentalModal, setShowCarRentalModal] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [showWebFormModal, setShowWebFormModal] = useState(false);
   const [showHumanOperatorChat, setShowHumanOperatorChat] = useState(false);
@@ -127,6 +130,29 @@ export default function ChatWidgets() {
             <div className="w-12 h-1 bg-gold-deep mt-2 rounded-full" />
           </div>
           <ShoppingChat language={language} />
+        </div>
+      </GuideModal>
+
+      {/* Car Rental Modal */}
+      <GuideModal
+        isOpen={showCarRentalModal}
+        onClose={() => setShowCarRentalModal(false)}
+        title="Comprehensive Guide to Car Rentals in Thailand"
+        subtitle="Car Rentals"
+        icon={<Car size={20} />}
+        footer="Car Rental Guide • AsiaBuddy Services"
+      >
+        <div className="markdown-body">
+          <MarkdownRenderer content={CAR_RENTAL_GUIDE[language] || CAR_RENTAL_GUIDE['EN']} />
+        </div>
+        <div className="mt-12 pt-12 border-t border-gray-100">
+          <div className="mb-6">
+            <h3 className="text-lg font-serif text-sacred-green">
+              Ask any Thailand Car Rental you want to know.
+            </h3>
+            <div className="w-12 h-1 bg-gold-deep mt-2 rounded-full" />
+          </div>
+          <CarRentalChat language={language} />
         </div>
       </GuideModal>
 
