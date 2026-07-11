@@ -105,7 +105,7 @@ RESPONSE RULES — MANDATORY:
             </h4>
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">{t.statusActive || 'Medical Concierge Active'}</span>
+              <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">{t.statusActive}</span>
             </div>
           </div>
         </div>
@@ -125,7 +125,7 @@ RESPONSE RULES — MANDATORY:
               <Heart size={32} />
             </div>
             <div>
-              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">{t.suggestionsLabel || 'Common Medical Inquiries'}</p>
+              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">{t.suggestionsLabel}</p>
               <div className="flex flex-wrap justify-center gap-2">
                 {t.suggestions.map((s: string, i: number) => (
                   <button

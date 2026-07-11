@@ -2,7 +2,6 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { getRecentChatHistory, ChatHistory } from '../lib/database';
 import { getPricingDataForAI, getTourDataForAI, getPolicyDataForAI } from './googleSheets';
 
-let currentKeyIndex = 0;
 
 function getApiKeys(): string[] {
   const keys = [
@@ -14,22 +13,18 @@ function getApiKeys(): string[] {
   return keys;
 }
 
-function getNextApiKey(excludeIndices: Set<number> = new Set()): string {
+function getNextApiKey(excludeIndices: Set<number> = new Set()): { key: string; index: number } {
   const keys = getApiKeys();
+  const availableIndices = keys
+    .map((_, i) => i)
+    .filter(i => !excludeIndices.has(i));
   
-  // Find next available key that hasn't been tried
-  let attempts = 0;
-  while (attempts < keys.length) {
-    if (!excludeIndices.has(currentKeyIndex)) {
-      const key = keys[currentKeyIndex];
-      currentKeyIndex = (currentKeyIndex + 1) % keys.length;
-      return key;
-    }
-    currentKeyIndex = (currentKeyIndex + 1) % keys.length;
-    attempts++;
+  if (availableIndices.length === 0) {
+    throw new Error('All API keys exhausted');
   }
   
-  throw new Error('All API keys exhausted');
+  const randomIndex = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+  return { key: keys[randomIndex], index: randomIndex };
 }
 
 // Cache data to avoid repeated API calls
@@ -281,8 +276,8 @@ export async function generateAIResponse(
   // Try each available key
   for (let attempt = 0; attempt < keys.length; attempt++) {
     try {
-      const apiKey = getNextApiKey(triedKeyIndices);
-      triedKeyIndices.add((currentKeyIndex - 1 + keys.length) % keys.length);
+      const { key: apiKey, index: keyIndex } = getNextApiKey(triedKeyIndices);
+      triedKeyIndices.add(keyIndex);
       
       const genAI = new GoogleGenerativeAI(apiKey);
 
@@ -360,8 +355,8 @@ export async function generateAIResponseWithoutContext(
   // Try each available key
   for (let attempt = 0; attempt < keys.length; attempt++) {
     try {
-      const apiKey = getNextApiKey(triedKeyIndices);
-      triedKeyIndices.add((currentKeyIndex - 1 + keys.length) % keys.length);
+      const { key: apiKey, index: keyIndex } = getNextApiKey(triedKeyIndices);
+      triedKeyIndices.add(keyIndex);
       
       const genAI = new GoogleGenerativeAI(apiKey);
       

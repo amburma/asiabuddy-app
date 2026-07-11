@@ -40,7 +40,25 @@ export async function POST(request: NextRequest) {
     await addChatMessage(telegramId, 'user', message, country);
 
     // Get AI response with chat history context for Thailand
-    const aiResponse = await generateAIResponse(telegramId, message, country, `${getSystemInstruction('thailand')}\n\nABSOLUTE LANGUAGE RULE — HIGHEST PRIORITY — NO EXCEPTIONS:\nDetect the language of the user's latest message.\nRespond EXCLUSIVELY in that same language. No mixing. No switching.\nBurmese/Myanmar input → Burmese reply ONLY.\nEnglish input → English reply ONLY.\nThai input → Thai reply ONLY.\nGerman input → German reply ONLY.\nSpanish input → Spanish reply ONLY.\nFrench input → French reply ONLY.\nAny other language → reply in that same language ONLY.\nNever default to English or Thai.\nEven decline messages must be in user's language.`);
+    let aiResponse: string;
+    try {
+      aiResponse = await generateAIResponse(telegramId, message, country, `${getSystemInstruction('thailand')}\n\nABSOLUTE LANGUAGE RULE — HIGHEST PRIORITY — NO EXCEPTIONS:\nDetect the language of the user's latest message.\nRespond EXCLUSIVELY in that same language. No mixing. No switching.\nBurmese/Myanmar input → Burmese reply ONLY.\nEnglish input → English reply ONLY.\nThai input → Thai reply ONLY.\nGerman input → German reply ONLY.\nSpanish input → Spanish reply ONLY.\nFrench input → French reply ONLY.\nAny other language → reply in that same language ONLY.\nNever default to English or Thai.\nEven decline messages must be in user's language.`);
+    } catch (geminiError: any) {
+      // Detect if all 3 API keys failed (Gemini API error)
+      const errorMessage = geminiError?.message || String(geminiError);
+      if (errorMessage.includes('All API keys exhausted') || 
+          errorMessage.includes('503') ||
+          errorMessage.includes('SERVICE_UNAVAILABLE') ||
+          errorMessage.includes('Gemini API')) {
+        // Return fallback response instead of throwing
+        return NextResponse.json(
+          { success: false, fallback: true, reason: 'ai_unavailable' },
+          { status: 200, headers: corsHeaders }
+        );
+      }
+      // For other errors, let them propagate to the outer catch block
+      throw geminiError;
+    }
 
     // Save AI response to Supabase with country='thailand'
     await addChatMessage(telegramId, 'model', aiResponse, country);

@@ -30,6 +30,7 @@ export default function PhrasesChat({ language }: Props) {
   const [isTyping, setIsTyping] = useState(false);
   const [showBookNow, setShowBookNow] = useState(false);
   const [showHumanChat, setShowHumanChat] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const phrases = ESSENTIAL_PHRASES[language] || ESSENTIAL_PHRASES['EN'];
@@ -103,8 +104,12 @@ export default function PhrasesChat({ language }: Props) {
       if (hasKeyword) {
         setShowBookNow(true);
       }
-    } catch (error) {
-      setMessages(prev => [...prev, { role: 'bot', content: 'Sorry, something went wrong. Please try again.' }]);
+    } catch (error: any) {
+      if (error.fallback === true) {
+        setShowFallback(true);
+      } else {
+        setMessages(prev => [...prev, { role: 'bot', content: 'Sorry, something went wrong. Please try again.' }]);
+      }
     } finally {
       setIsTyping(false);
     }
@@ -117,8 +122,8 @@ export default function PhrasesChat({ language }: Props) {
       {/* Header */}
       <div className="p-8 border-b border-gray-100 bg-sacred-bg/30">
         <div className="max-w-2xl mx-auto text-center space-y-2">
-          <h2 className="text-3xl font-serif text-sacred-green">{uiT.tools?.phrases || 'Essential Phrases'}</h2>
-          <p className="text-sm text-gold-deep font-medium italic">{uiT.tools?.phrasesSubtitle || 'Basics, Audio & Pronunciation Guide'}</p>
+          <h2 className="text-3xl font-serif text-sacred-green">{uiT.tools.phrases}</h2>
+          <p className="text-sm text-gold-deep font-medium italic">{uiT.tools.phrasesSubtitle}</p>
         </div>
       </div>
 
@@ -127,16 +132,16 @@ export default function PhrasesChat({ language }: Props) {
         <div className="max-w-2xl mx-auto space-y-12">
           {/* Polite Particles */}
           <div className="bg-sacred-bg/20 p-6 rounded-3xl border border-gold-soft/10">
-            <h3 className="text-xl font-serif text-sacred-green mb-3">{uiT.tools?.politeParticlesTitle || 'The Golden Rule: Polite Particles'}</h3>
+            <h3 className="text-xl font-serif text-sacred-green mb-3">{uiT.tools.politeParticlesTitle}</h3>
             <p className="text-sm text-gray-700 leading-relaxed italic mb-4">
-              {uiT.tools?.politeParticlesDesc || 'In Thai, politeness is conveyed by adding a particle at the end of almost every sentence.'}
+              {uiT.tools.politeParticlesDesc}
             </p>
             <div className="flex gap-4">
               <div className="px-4 py-2 bg-white rounded-xl border border-gold-soft/20 text-xs font-bold text-sacred-green shadow-sm">
-                {uiT.tools?.maleParticle || 'Male: Krap'}
+                {uiT.tools.maleParticle}
               </div>
               <div className="px-4 py-2 bg-white rounded-xl border border-gold-soft/20 text-xs font-bold text-sacred-green shadow-sm">
-                {uiT.tools?.femaleParticle || 'Female: Ka'}
+                {uiT.tools.femaleParticle}
               </div>
             </div>
           </div>
@@ -171,7 +176,7 @@ export default function PhrasesChat({ language }: Props) {
           </div>
 
           <div className="space-y-6 pt-4">
-             <h4 className="text-[10px] uppercase tracking-[0.2em] font-bold text-gold-deep border-b border-gold-soft/10 pb-2">Traveler Tips</h4>
+             <h4 className="text-[10px] uppercase tracking-[0.2em] font-bold text-gold-deep border-b border-gold-soft/10 pb-2">{uiT.tools.travelerTips}</h4>
              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {tips.map((tip, idx) => (
                   <div key={idx} className="p-5 bg-white rounded-2xl border border-gold-soft/10 shadow-sm space-y-2 hover:border-gold-deep transition-all">
@@ -192,7 +197,7 @@ export default function PhrasesChat({ language }: Props) {
               <MessageSquare size={16} />
             </div>
             <h4 className="text-sm font-bold uppercase tracking-widest text-sacred-green">
-              {uiT.tools?.phrasesChatHeading || 'Ask any Essential Phrases you want to know.'}
+              {uiT.tools.phrasesChatHeading}
             </h4>
           </div>
 
@@ -205,7 +210,7 @@ export default function PhrasesChat({ language }: Props) {
                     <Sparkles size={32} />
                   </div>
                   <p className="text-[11px] text-gray-500 leading-relaxed uppercase tracking-widest font-medium">
-		Ask anything about Thai phrases and language.
+		{uiT.tools.phrasesChatIntro}
                   </p>
                   <div className="flex flex-wrap justify-center gap-2">
                     {suggestedQuestions.map((q, idx) => (
@@ -272,6 +277,22 @@ export default function PhrasesChat({ language }: Props) {
                   </div>
                 </div>
               )}
+              {showFallback && (
+                <div className="flex items-start gap-4">
+                  <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center flex-shrink-0 shadow-sm">
+                    <Bot size={14} />
+                  </div>
+                  <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 max-w-[80%]">
+                    <p className="text-xs text-gray-800 mb-3">{uiT.chat.aiBusyFallback}</p>
+                    <button
+                      onClick={() => setShowHumanChat(true)}
+                      className="bg-sacred-green text-white px-4 py-2 rounded-lg text-xs font-semibold hover:bg-opacity-90 transition-colors"
+                    >
+                      {uiT.chat.bookNowCta}
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="p-4 bg-gray-50 border-t border-gray-100">
@@ -281,7 +302,7 @@ export default function PhrasesChat({ language }: Props) {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                  placeholder={uiT.tools?.phrasesChat?.placeholder || 'Ask any phrase...'}
+                  placeholder={uiT.tools.phrasesChat.placeholder}
                   className="w-full pl-6 pr-14 py-3 bg-white border border-gold-soft/20 rounded-2xl text-xs focus:ring-2 focus:ring-gold-deep/20 focus:border-gold-deep outline-none transition-all"
                 />
                 <button
@@ -297,13 +318,13 @@ export default function PhrasesChat({ language }: Props) {
                   onClick={() => setShowHumanChat(true)}
                   className="mt-3 w-full bg-[#22c55e] text-white font-semibold py-3 px-4 rounded-xl hover:bg-[#16a34a] transition-colors"
                 >
-                  📅 Book Now
+                  📅 {uiT.chat.bookNowCta}
                 </button>
               )}
             </div>
           </div>
           <p className="text-[9px] text-gray-400 text-center uppercase tracking-widest font-bold">
-            Translations & Phonetics powered by AsiaBuddy AI
+            {uiT.tools.phrasesFooter}
           </p>
         </div>
       </div>

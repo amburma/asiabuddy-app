@@ -45,54 +45,11 @@ export default function TripPlannerChat({ language }: Props) {
   const [showBookNow, setShowBookNow] = useState(false);
   const [showHumanChat, setShowHumanChat] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = UI_TRANSLATIONS[language]?.chat || UI_TRANSLATIONS.EN.chat;
-
-  const labels: Record<string, any> = {
-    MM: {
-      header: "ထိုင်းခရီးစဉ် စီစဉ်ပေးသူ",
-      subHeader: "သင့်ခရီးစဉ်ကို အဆင့်ဆင့် စီစဉ်ကြပါစို့",
-      q1: "ဘယ်မြို့တွေကို သွားရောက်ချင်ပါသလဲ? (ဥပမာ- ဘန်ကောက်၊ ဖူးခက်၊ ချင်းမိုင်)",
-      q2: "ခရီးစဉ်က ဘယ်လောက်ကြာမှာလဲ? (ဥပမာ- ၅ ရက် ၄ ည)",
-      q3: "လူဦးရေ ဘယ်လောက်ပါမလဲ?",
-      adults: "လူကြီး",
-      infants: "ကလေးငယ်",
-      q4: "ဘယ်လိုတည်းခိုခန်းမျိုးကို နှစ်သက်ပါသလဲ?",
-      accOptions: ["ဟိုတယ် (Hotel)", "ဂက်စ်ဟောက်စ် (Guesthouse)", "ဟော်တယ် (Hostel)", "သတ်မှတ်မထားပါ"],
-      q5: "ဘတ်ဂျက်က ဘယ်လိုရှိပါသလဲ?",
-      budgetOptions: ["အသက်သာဆုံး (Budget)", "အလယ်အလတ် (Mid-range)", "ဇိမ်ခံ (Luxury)"],
-      q6: "အဓိက စိတ်ဝင်စားမှုက ဘာဖြစ်မလဲ?",
-      interestOptions: ["ယဉ်ကျေးမှု/ဘုရားကျောင်း", "ကမ်းခြေ/ကျွန်း", "ဈေးဝယ်ခြင်း", "အစားအစာ", "စွန့်စားမှု"],
-      q7: "အခြား အထူးလိုအပ်ချက်များ ရှိပါသလား? (ဥပမာ- သက်သတ်လွတ်စားသူ၊ ဘီးတပ်ကုလားထိုင် လိုအပ်သူ)",
-      next: "နောက်တစ်ခု",
-      submit: "အစီအစဉ် ထုတ်ပေးပါ",
-      restart: "အစမှ ပြန်စမည်",
-      generating: "သင့်အတွက် အကောင်းဆုံး ခရီးစဉ်ကို ရေးဆွဲနေသည်..."
-    },
-    EN: {
-      header: "Automated Trip Planner",
-      subHeader: "Let's plan your perfect Thailand trip step-by-step",
-      q1: "Which destinations are you interested in? (e.g., Bangkok, Phuket, Chiang Mai)",
-      q2: "How long is your trip? (e.g., 5 days 4 nights)",
-      q3: "How many people are traveling?",
-      adults: "Adults",
-      infants: "Infants",
-      q4: "What type of accommodation do you prefer?",
-      accOptions: ["Hotel", "Guesthouse", "Hostel", "No Preference"],
-      q5: "What is your budget level?",
-      budgetOptions: ["Budget", "Mid-range", "Luxury"],
-      q6: "What is your primary interest?",
-      interestOptions: ["Culture/Temples", "Beaches/Islands", "Shopping", "Food", "Adventure"],
-      q7: "Any special requirements? (e.g., Halal food, wheelchair access, traveling with pets)",
-      next: "Next",
-      submit: "Generate Plan",
-      restart: "Start Over",
-      generating: "Crafting your personalized itinerary..."
-    }
-  };
-
-  const l = labels[language] || labels['EN'];
+  const l = UI_TRANSLATIONS[language]?.tripPlanner || UI_TRANSLATIONS.EN.tripPlanner;
 
   useEffect(() => {
     setMounted(true);
@@ -172,8 +129,12 @@ RESPONSE RULES — MANDATORY:
       if (hasKeyword) {
         setShowBookNow(true);
       }
-    } catch (error) {
-      setMessages([{ role: 'assistant', content: 'Sorry, something went wrong. Please try again.' }]);
+    } catch (error: any) {
+      if (error.fallback === true) {
+        setShowFallback(true);
+      } else {
+        setMessages([{ role: 'assistant', content: t.aiBusyFallback }]);
+      }
     }
     setIsLoading(false);
   };
@@ -253,7 +214,7 @@ RESPONSE RULES — MANDATORY:
                   type="number" min="1"
                   className="w-full p-3 bg-white border border-gray-200 rounded-xl text-xs outline-none"
                   value={plan.adults}
-                  onChange={e => setPlan({...plan, adults: parseInt(e.target.value)})}
+                  onChange={e => setPlan({...plan, adults: parseInt(e.target.value) || 1})}
                 />
               </div>
               <div className="space-y-2">
@@ -262,7 +223,7 @@ RESPONSE RULES — MANDATORY:
                   type="number" min="0"
                   className="w-full p-3 bg-white border border-gray-200 rounded-xl text-xs outline-none"
                   value={plan.infants}
-                  onChange={e => setPlan({...plan, infants: parseInt(e.target.value)})}
+                  onChange={e => setPlan({...plan, infants: parseInt(e.target.value) || 0})}
                 />
               </div>
             </div>
@@ -404,6 +365,17 @@ RESPONSE RULES — MANDATORY:
                     </div>
                   </motion.div>
                 ))}
+                {showFallback && (
+                  <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4">
+                    <p className="text-xs text-gray-800 mb-3">{t.aiBusyFallback}</p>
+                    <button
+                      onClick={() => setShowHumanChat(true)}
+                      className="bg-sacred-green text-white px-4 py-2 rounded-lg text-xs font-semibold hover:bg-opacity-90 transition-colors"
+                    >
+                      {t.bookNowCta}
+                    </button>
+                  </div>
+                )}
                 <button 
                   onClick={() => {
                     setShowBookNow(false);
@@ -419,7 +391,7 @@ RESPONSE RULES — MANDATORY:
                     onClick={() => setShowHumanChat(true)}
                     className="w-full py-3 bg-[#22c55e] text-white rounded-xl text-[10px] font-bold uppercase tracking-widest flex items-center justify-center gap-2"
                   >
-                    📅 Book Now
+                    {t.bookNowCta}
                   </button>
                 )}
 

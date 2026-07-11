@@ -21,6 +21,7 @@ export default function ConciergeChat({ language }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [showBookNow, setShowBookNow] = useState(false);
   const [showHumanChat, setShowHumanChat] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = uiT.chat || UI_TRANSLATIONS.EN.chat;
@@ -85,8 +86,12 @@ RESPONSE RULES — MANDATORY:
       if (hasKeyword) {
         setShowBookNow(true);
       }
-    } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' }]);
+    } catch (error: any) {
+      if (error.fallback === true) {
+        setShowFallback(true);
+      } else {
+        setMessages(prev => [...prev, { role: 'assistant', content: t.aiBusyFallback }]);
+      }
     }
     setIsLoading(false);
   };
@@ -164,6 +169,19 @@ RESPONSE RULES — MANDATORY:
             </div>
           </div>
         )}
+        {showFallback && (
+          <div className="flex justify-start">
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 rounded-tl-none max-w-[85%]">
+              <p className="text-sm text-gray-800 mb-3">{t.aiBusyFallback}</p>
+              <button
+                onClick={() => setShowHumanChat(true)}
+                className="bg-sacred-green text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-opacity-90 transition-colors"
+              >
+                {t.bookNowCta}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Input */}
@@ -190,7 +208,7 @@ RESPONSE RULES — MANDATORY:
             onClick={() => setShowHumanChat(true)}
             className="mt-3 w-full bg-[#22c55e] text-white font-semibold py-3 px-4 rounded-xl hover:bg-[#16a34a] transition-colors"
           >
-            📅 Book Now
+            {t.bookNowCta}
           </button>
         )}
       </div>

@@ -21,6 +21,7 @@ export default function MedicalChat({ language }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [showBookNow, setShowBookNow] = useState(false);
   const [showHumanChat, setShowHumanChat] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = uiT.medical || UI_TRANSLATIONS.EN.medical;
@@ -87,8 +88,12 @@ RESPONSE RULES — MANDATORY:
       if (hasKeyword) {
         setShowBookNow(true);
       }
-    } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' }]);
+    } catch (error: any) {
+      if (error.fallback === true) {
+        setShowFallback(true);
+      } else {
+        setMessages(prev => [...prev, { role: 'assistant', content: chatT.aiBusyFallback }]);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -107,14 +112,14 @@ RESPONSE RULES — MANDATORY:
             </h4>
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-              <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">{t.statusActive || 'Medical Concierge Active'}</span>
+              <span className="text-[9px] text-gray-400 font-bold uppercase tracking-tighter">{t.statusActive}</span>
             </div>
           </div>
         </div>
         <button 
           onClick={() => setMessages([])}
           className="p-2 hover:bg-gray-100 rounded-lg text-gray-400 transition-colors"
-          title="Reset Chat"
+          title={chatT.resetChatTitle}
         >
           <RefreshCcw size={14} />
         </button>
@@ -127,7 +132,7 @@ RESPONSE RULES — MANDATORY:
               <Heart size={32} />
             </div>
             <div>
-              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">{t.suggestionsLabel || 'Common Medical Inquiries'}</p>
+              <p className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-4">{t.suggestionsLabel}</p>
               <div className="flex flex-wrap justify-center gap-2">
                 {t.suggestions.map((s: string, i: number) => (
                   <button
@@ -169,6 +174,19 @@ RESPONSE RULES — MANDATORY:
             </div>
           </div>
         )}
+        {showFallback && (
+          <div className="flex justify-start">
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 rounded-tl-none max-w-[85%]">
+              <p className="text-[11px] text-gray-800 mb-3">{chatT.aiBusyFallback}</p>
+              <button
+                onClick={() => setShowHumanChat(true)}
+                className="bg-sacred-green text-white px-4 py-2 rounded-lg text-[11px] font-semibold hover:bg-opacity-90 transition-colors"
+              >
+                {chatT.bookNowCta}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="p-4 bg-white border-t border-gray-100">
@@ -199,7 +217,7 @@ RESPONSE RULES — MANDATORY:
             onClick={() => setShowHumanChat(true)}
             className="mt-3 w-full bg-[#22c55e] text-white font-semibold py-3 px-4 rounded-xl hover:bg-[#16a34a] transition-colors"
           >
-            📅 Book Now
+            {chatT.bookNowCta}
           </button>
         )}
       </div>

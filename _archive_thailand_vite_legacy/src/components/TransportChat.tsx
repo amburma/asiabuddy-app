@@ -103,7 +103,7 @@ RESPONSE RULES — MANDATORY:
           </div>
           <div>
             <h4 className="text-xs font-bold uppercase tracking-widest leading-none mb-1 text-sacred-green">{t.title}</h4>
-            <p className="text-[9px] text-gray-500 font-medium tracking-tight">{t.destinationLabel || 'Destination'}: {destination}</p>
+            <p className="text-[9px] text-gray-500 font-medium tracking-tight">{t.destinationLabel}: {destination}</p>
           </div>
         </div>
       </div>

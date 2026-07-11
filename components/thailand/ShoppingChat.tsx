@@ -21,6 +21,7 @@ export default function ShoppingChat({ language }: Props) {
   const [isLoading, setIsLoading] = useState(false);
   const [showBookNow, setShowBookNow] = useState(false);
   const [showHumanChat, setShowHumanChat] = useState(false);
+  const [showFallback, setShowFallback] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = uiT.shopping || UI_TRANSLATIONS.EN.shopping;
@@ -87,8 +88,12 @@ RESPONSE RULES — MANDATORY:
       if (hasKeyword) {
         setShowBookNow(true);
       }
-    } catch (error) {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, something went wrong. Please try again.' }]);
+    } catch (error: any) {
+      if (error.fallback === true) {
+        setShowFallback(true);
+      } else {
+        setMessages(prev => [...prev, { role: 'assistant', content: commonT.aiBusyFallback }]);
+      }
     }
     setIsLoading(false);
   };
@@ -105,7 +110,7 @@ RESPONSE RULES — MANDATORY:
             <h4 className="text-xs font-bold uppercase tracking-widest leading-none mb-1 text-sacred-green">{t.title}</h4>
             <div className="flex items-center gap-1.5">
               <span className="w-1 h-1 rounded-full bg-orange-500 animate-pulse" />
-              <p className="text-[9px] text-gray-500 font-bold uppercase tracking-tighter">ThaiGuide Active</p>
+              <p className="text-[9px] text-gray-500 font-bold uppercase tracking-tighter">{t.statusActive}</p>
             </div>
           </div>
         </div>
@@ -162,6 +167,19 @@ RESPONSE RULES — MANDATORY:
             </div>
           </div>
         )}
+        {showFallback && (
+          <div className="flex justify-start">
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-3 rounded-tl-none max-w-[90%]">
+              <p className="text-xs text-gray-800 mb-2">{commonT.aiBusyFallback}</p>
+              <button
+                onClick={() => setShowHumanChat(true)}
+                className="bg-sacred-green text-white px-3 py-2 rounded-lg text-xs font-semibold hover:bg-opacity-90 transition-colors"
+              >
+                {commonT.bookNowCta}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Input */}
@@ -188,7 +206,7 @@ RESPONSE RULES — MANDATORY:
             onClick={() => setShowHumanChat(true)}
             className="mt-3 w-full bg-[#22c55e] text-white font-semibold py-3 px-4 rounded-xl hover:bg-[#16a34a] transition-colors"
           >
-            📅 Book Now
+            {commonT.bookNowCta}
           </button>
         )}
       </div>

@@ -58,12 +58,26 @@ export async function getConciergeResponse(
     }
 
     const data = await response.json();
+    
+    // Check if API returned a fallback response (AI unavailable)
+    if (data.fallback === true && data.reason === 'ai_unavailable') {
+      const fallbackError = new Error('AI_UNAVAILABLE') as Error & { fallback: boolean };
+      fallbackError.fallback = true;
+      throw fallbackError;
+    }
+    
     return (
       data.response ||
       "Server အရမ်း Busy ဖြစ်နေလို့ ခဏနေမှ ပြန်အသုံးပြုပေးပါ။"
     );
   } catch (error: any) {
     console.error("Concierge Chat Error:", error);
+    
+    // Re-throw fallback errors so components can handle them
+    if (error.fallback === true) {
+      throw error;
+    }
+    
     return language === "MM"
       ? "အဆင်မပြေဖြစ်နေပါသည်။ ခဏနေမှ ပြန်လာပေးပါ။ 🙏"
       : "Server အရမ်း Busy ဖြစ်နေလို့ ခဏနေမှ ပြန်အသုံးပြုပေးပါ။";

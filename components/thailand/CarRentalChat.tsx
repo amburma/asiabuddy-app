@@ -44,6 +44,7 @@ export default function CarRentalChat({ language }: Props) {
   const [showHumanChat, setShowHumanChat] = useState<boolean>(false);
   const [surveyCompleted, setSurveyCompleted] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
+  const [showFallback, setShowFallback] = useState<boolean>(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = useMemo(() => uiT.carRental || UI_TRANSLATIONS.EN.carRental, [uiT]);
@@ -156,8 +157,8 @@ export default function CarRentalChat({ language }: Props) {
 
   const handleNextMultipleChoice = () => {
     const chosen = currentStepId === 'driver_language' 
-      ? (selectedLanguages.length > 0 ? selectedLanguages : ["None selected"])
-      : (selectedServices.length > 0 ? selectedServices : ["None selected"]);
+      ? (selectedLanguages.length > 0 ? selectedLanguages : [t.noneSelected || "None selected"])
+      : (selectedServices.length > 0 ? selectedServices : [t.noneSelected || "None selected"]);
     const updatedAnswers = { ...answers, [currentStepId]: chosen };
     setAnswers(updatedAnswers);
     proceedToNext(updatedAnswers, chosen);
@@ -194,12 +195,16 @@ RESPONSE RULES (MANDATORY):
       const response = await getConciergeResponse(promptContext, [], language);
       setMessages(prev => [...prev, { role: 'assistant', content: response }]);
       setShowBookNow(true);
-    } catch (err) {
-      setMessages(prev => [
-        ...prev, 
-        { role: 'assistant', content: 'An issue occurred compiling recommendations. Please click Book Now to coordinate with our operational desk directly.' }
-      ]);
-      setShowBookNow(true);
+    } catch (err: any) {
+      if (err.fallback === true) {
+        setShowFallback(true);
+      } else {
+        setMessages(prev => [
+          ...prev, 
+          { role: 'assistant', content: commonT.aiBusyFallback }
+        ]);
+        setShowBookNow(true);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -262,7 +267,7 @@ RESPONSE RULES (MANDATORY):
           </div>
           <div>
             <h4 className="text-xs font-bold uppercase tracking-widest leading-none mb-1 text-sacred-green">{t.title}</h4>
-            <p className="text-[9px] text-gray-500 font-medium tracking-tight">Dynamic Rental Customization</p>
+            <p className="text-[9px] text-gray-500 font-medium tracking-tight">{t.subtitle}</p>
           </div>
         </div>
         {stepHistory.length > 1 && !surveyCompleted && (
@@ -279,7 +284,7 @@ RESPONSE RULES (MANDATORY):
             onClick={handleReset}
             className="text-[10px] uppercase font-bold text-gold-deep hover:underline"
           >
-            Reset
+            {commonT.resetButtonLabel}
           </button>
         )}
       </div>
@@ -296,7 +301,7 @@ RESPONSE RULES (MANDATORY):
               {activeSurvey.title}
             </p>
             <p className="text-[10px] text-gray-500 font-medium tracking-tight">
-              Answer the questions below to secure personalized recommendations.
+              {t.emptyState}
             </p>
           </div>
         )}
@@ -328,6 +333,19 @@ RESPONSE RULES (MANDATORY):
             </div>
           </div>
         )}
+        {showFallback && (
+          <div className="flex justify-start">
+            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-3 rounded-tl-none max-w-[90%]">
+              <p className="text-xs text-gray-800 mb-2">{commonT.aiBusyFallback}</p>
+              <button
+                onClick={() => setShowHumanChat(true)}
+                className="bg-sacred-green text-white px-3 py-2 rounded-lg text-xs font-semibold hover:bg-opacity-90 transition-colors"
+              >
+                {commonT.bookNowCta}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Dynamic Selector Panels */}
@@ -335,7 +353,7 @@ RESPONSE RULES (MANDATORY):
         <div className="p-4 bg-white border-t border-gray-100 space-y-3">
           <div className="flex items-center justify-between mb-1">
             <span className="text-[9px] uppercase font-bold tracking-wider text-gold-deep">
-              Survey Progress
+              {commonT.surveyProgressLabel}
             </span>
             <div className="flex gap-1 h-1 w-24 bg-gray-100 rounded-full overflow-hidden">
               <div 
@@ -467,12 +485,12 @@ RESPONSE RULES (MANDATORY):
       {/* Book Now Button display */}
       {showBookNow && (
         <div className="p-3 bg-white border-t border-gray-100 flex flex-col items-center gap-2">
-          <p className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">Ready to secure arrangements?</p>
+          <p className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">{t.readyToBook}</p>
           <button
             onClick={() => setShowHumanChat(true)}
             className="w-full bg-sacred-green text-white font-bold uppercase tracking-widest text-[11px] py-3 px-4 rounded-xl hover:bg-opacity-90 transition-colors shadow-sm flex items-center justify-center gap-2"
           >
-            🚗 Book Rental Now
+            {t.bookStayButton}
           </button>
         </div>
       )}
