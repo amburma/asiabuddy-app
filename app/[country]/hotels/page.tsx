@@ -5,6 +5,7 @@ import { translateText } from '@/lib/translate'
 import HotelServiceCard from '@/components/shared/services/HotelServiceCard'
 import { getAgodaLinksByCity } from '@/lib/queries/agodaLinks'
 import Navbar from '@/components/shared/Navbar'
+import AccommodationChatWrapper from '@/components/shared/AccommodationChatWrapper'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -105,6 +106,23 @@ export default async function HotelsPage({
           </div>
         </div>
       </div>
+
+      {/* Accommodation Chat Section */}
+      {country === 'thailand' && (
+        <section className="bg-sacred-bg py-12 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-8">
+              <h2 className="text-xs font-bold tracking-[0.2em] text-amber-600 uppercase text-center mb-2">
+                FIND YOUR PERFECT STAY
+              </h2>
+              <div className="w-12 h-0.5 bg-amber-500 mx-auto" />
+            </div>
+            <div className="max-w-2xl mx-auto">
+              <AccommodationChatWrapper language={targetLanguage as any} />
+            </div>
+          </div>
+        </section>
+      )}
 
       <div className="bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-6 py-16">

@@ -2645,3 +2645,46 @@ task is considered done)
 
 - 🟢 All 29 GYG activities share one identical placeholder image — gyg_links.image_url is NULL for every row across all 12 cities. Task 4's placeholder fix works correctly; the sameness is because no real per-activity photos have been sourced yet. When time allows: find a real photo per activity (GYG dashboard / Google Places / licensed stock) and update gyg_links.image_url per row via Supabase SQL Editor.
 - 🟢 Satun has no real GYG activity — substituted with an extra Chiang Mai activity in Session 24. Revisit later if a real Satun product becomes available on GYG.
+
+---
+
+## Session 26 — 12 July 2026 — Gemini 503 Fix + Hotels Chat Box Wired
+
+### ✅ Completed This Session
+
+**Gemini 503 overload → /api/web-chat 500 error (RESOLVED):**
+- Root cause: gemini-2.5-flash-lite returning 503 (overload) on free-tier
+  round-robin keys, surfacing as an unhandled 500 to the user
+- Fix: graceful degradation fallback implemented — localized "temporarily
+  busy" UI message + HumanOperatorChat CTA shown instead of raw error
+- i18n fixes: hardcoded English strings in chat components replaced with
+  UI_TRANSLATIONS lookups (same pattern as Session 21 i18n work)
+- Confirmed resolved by user ✅
+
+**AccommodationChat.tsx wired into /thailand/hotels:**
+- Existing component (components/thailand/AccommodationChat.tsx, already
+  built with full survey-style checkbox questions + complete i18n across
+  all 6 languages) imported and rendered on the hotels page
+- `npx tsc --noEmit` passed with 0 errors (local verification)
+- No console errors on local run
+- STATUS: Reported complete by user via local testing — NOT yet
+  independently screenshot-verified across languages (same caveat
+  pattern as Session 17's TourServiceCard item). Follow-up needed:
+  confirm exact props passed (country/language/city) are dynamic
+  (from NEXT_LOCALE cookie + city selector), not hardcoded, before
+  marking fully closed.
+
+### ⏳ Still Outstanding — Not Addressed This Session
+- Confirm whether urgent infra tasks (Gemini API key rotation,
+  VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY added to Vercel Vite
+  project env vars + redeploy) are done or still pending — status
+  unconfirmed as of this session, carry to next session for explicit
+  check.
+- All other 🔴/🟡/🟢 backlog items from Session 19's consolidated
+  review remain open except those explicitly marked resolved in
+  Sessions 20-25 (Tailwind token verification, Navbar 7-route
+  click-test, featured tours, agoda/transfer real data, flight_links
+  table, destination/tours/budget-tips translations MM/TH/DE/FR/ES,
+  modal title translations MM/TH, GYG activity photos, Satun activity,
+  Vercel legacy Vite deletion, Cookie Consent Banner verify, PWA
+  offline, B2B bank transfer for invoice).
