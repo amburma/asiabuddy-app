@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-07-13T09:18:50.607Z",
+  "flights": {
+    "page": "/thailand/flights",
+    "widgetLoaded": false,
+    "fieldFound": false,
+    "fieldFocusable": false,
+    "fieldEditable": false,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\flights-origin-not-found.png",
+    "notes": "Widget script not loaded"
+  },
+  "hotels": {
+    "page": "/thailand/hotels",
+    "chatWidgetFound": false,
+    "questionFieldFound": false,
+    "questionFocusable": false,
+    "questionEditable": false,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\hotels-widget-not-found.png",
+    "notes": "AccommodationChat widget not found on page"
+  }
+}

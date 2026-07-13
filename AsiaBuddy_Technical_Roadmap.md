@@ -2648,43 +2648,200 @@ task is considered done)
 
 ---
 
-## Session 26 — 12 July 2026 — Gemini 503 Fix + Hotels Chat Box Wired
+## Session 26 — 13 July 2026 — Gemini 503 Fix, Hotels Chat Wired, Flights Page SEO/SSR + Bug Fixes
 
 ### ✅ Completed This Session
 
 **Gemini 503 overload → /api/web-chat 500 error (RESOLVED):**
-- Root cause: gemini-2.5-flash-lite returning 503 (overload) on free-tier
-  round-robin keys, surfacing as an unhandled 500 to the user
-- Fix: graceful degradation fallback implemented — localized "temporarily
-  busy" UI message + HumanOperatorChat CTA shown instead of raw error
-- i18n fixes: hardcoded English strings in chat components replaced with
-  UI_TRANSLATIONS lookups (same pattern as Session 21 i18n work)
+- Root cause: gemini-2.5-flash-lite returning 503 (overload) on free-
+  tier round-robin keys, surfacing as an unhandled 500 to the user
+- Fix: graceful degradation fallback implemented — localized
+  "temporarily busy" UI message + HumanOperatorChat CTA shown instead
+  of raw error
+- i18n fixes: hardcoded English strings in chat components replaced
+  with UI_TRANSLATIONS lookups
 - Confirmed resolved by user ✅
 
 **AccommodationChat.tsx wired into /thailand/hotels:**
-- Existing component (components/thailand/AccommodationChat.tsx, already
-  built with full survey-style checkbox questions + complete i18n across
-  all 6 languages) imported and rendered on the hotels page
-- `npx tsc --noEmit` passed with 0 errors (local verification)
-- No console errors on local run
-- STATUS: Reported complete by user via local testing — NOT yet
-  independently screenshot-verified across languages (same caveat
-  pattern as Session 17's TourServiceCard item). Follow-up needed:
-  confirm exact props passed (country/language/city) are dynamic
-  (from NEXT_LOCALE cookie + city selector), not hardcoded, before
-  marking fully closed.
+- Existing component (components/thailand/AccommodationChat.tsx,
+  already built with full survey-style checkbox questions + complete
+  i18n across all 6 languages) imported and rendered on the hotels page
+- Confirmed via local testing, no errors ✅
 
-### ⏳ Still Outstanding — Not Addressed This Session
+**Flights page discovered already live with Aviasales/Travelpayouts
+widgets (not the "Coming Soon" placeholder from Session 22):**
+- Two live widgets confirmed working: Aviasales search form (origin/
+  destination/dates/passengers) and a "Multiple Airlines" flexible-
+  date flight card, both via Travelpayouts affiliate embeds
+- This resolves the Session 22 flight_links backlog item via a
+  third-party widget approach instead of building a custom Supabase
+  table + query function
+
+**Flights page SEO/SSR enhancement (multi-round fix):**
+- Added SSR static content: localized `<h1>` "Flights to Thailand",
+  intro paragraph (popular gateways, best booking time, visa reminder
+  link), FAQ section (3-5 Q&As), all via new `flights` namespace in
+  lib/i18n.ts across all 6 languages (EN/MM/TH/DE/FR/ES)
+- Added cross-sell section ("Continue Planning Your Trip") linking to
+  /thailand/hotels, /thailand/tours, /thailand/activities
+- Added distinguishing labels above each widget (search vs flexible-
+  date use case)
+- **Bug found & fixed — SSR bailout:** new static content was initially
+  only present in Next.js hydration JSON, not raw HTML (verified via
+  curl/Invoke-WebRequest + Select-String). Root cause:
+  `export const dynamic = 'force-dynamic'` was forcing the whole page
+  client-side rather than scoping the bailout to just the third-party
+  widget. Fixed by removing force-dynamic, wrapping ONLY the Aviasales
+  widget in `next/dynamic(..., { ssr: false })` via new
+  AviasalesSearchWidgetWrapper.tsx client component, keeping static
+  content as server-rendered siblings. Re-verified: h1/FAQ/cross-sell
+  now confirmed present as actual `<h1>`/`<h2>`/`<h3>`/`<p>` tags in
+  raw HTML ✅
+- **Bug found & fixed — language switching regression:** removing
+  force-dynamic broke NEXT_LOCALE cookie-based language rendering
+  (MM/TH fell back to English). Fixed by re-adding
+  `export const dynamic = 'force-dynamic'` directly on
+  flights/page.tsx (page-level, coexists correctly with the widget-
+  level `ssr:false` dynamic import — these are different Next.js APIs
+  despite the naming collision). Re-verified widget SSR content still
+  intact after this change ✅
+- **Bug found & fixed — broken visa link:** "Check visa requirements"
+  link pointed to non-existent route `/thailand/visa` (visa guide is
+  modal-only sitewide, triggered via `openGuideModal` custom event, no
+  standalone page route exists). Fixed by creating
+  components/shared/VisaModalTrigger.tsx (client component dispatching
+  the existing custom event) — reuses existing modal architecture, no
+  duplication.
+- **Bug found & fixed — visa modal not appearing despite working event
+  chain:** console logging confirmed dispatch → listener →
+  handleOpenModal('visa') fired correctly every time, but modal was
+  visually suppressed because ChatWidgetGrid (which owns the modal) was
+  wrapped in `<div className="hidden">` on the flights page —
+  `display:none` on an ancestor suppresses descendant fixed-position
+  modals too. Fixed by adding a `hideGrid` prop to ChatWidgetGrid
+  (hides only its own TravelToolbox grid UI via conditional render, not
+  display:none) — component stays fully mounted so its modals remain
+  functional. Confirmed working: visa modal now opens correctly with
+  visaGuide.ts content ✅
+- **Bug found & fixed — hydration error from locale-dependent date
+  formatting:** FlightServiceCard.tsx's "price checked" relative-time
+  text used `.toLocaleDateString('en-US')`, which still produced
+  different server vs. client output depending on Node.js/OS locale
+  configuration differences, causing a React hydration mismatch
+  ("7/4/2026" server vs "04/07/2026" client). Fixed by replacing with
+  a manually-constructed fixed MM/DD/YYYY format
+  (getMonth/getDate/getFullYear + padStart), guaranteeing byte-
+  identical server/client output regardless of locale. Confirmed: no
+  other files in the codebase use unlocalized
+  toLocaleDateString/toLocaleTimeString (searched, zero other matches)
+  — this was an isolated bug, not a sitewide pattern ✅
+- All fixes verified together: `npx tsc --noEmit` passing (0 errors)
+  throughout, no hydration errors, no console errors, visa modal
+  confirmed opening correctly by user in browser ✅
+
+### Architecture Notes (additions)
+- **New pattern learned:** `export const dynamic = 'force-dynamic'`
+  (page-level SSR opt-in for cookie/locale reading) and
+  `next/dynamic(..., { ssr: false })` (component-level client-only
+  bailout for a specific widget) are DIFFERENT APIs despite similar
+  names — they can and should coexist: page-level force-dynamic
+  ensures cookie-based i18n works, while component-level
+  dynamic+ssr:false scopes the client-only bailout to just the
+  third-party widget instead of the whole page. Future third-party
+  widget integrations needing both SEO content and client-only embeds
+  should follow this same combined pattern.
+- **New pattern learned:** Never wrap a component that owns modal
+  state in a `display:none`/`hidden` ancestor if the component's
+  modals need to be independently visible later — use a prop-based
+  "hide my own visible UI but stay mounted" pattern instead (see
+  ChatWidgetGrid's new `hideGrid` prop) so descendant fixed/absolute-
+  positioned modals aren't accidentally suppressed by an ancestor's
+  display:none.
+- **New pattern learned:** Always use explicit, manually-constructed
+  date formatting (not `toLocaleDateString()` even with an explicit
+  locale argument) for any date text that renders in both SSR and
+  client contexts, since Node.js server locale configuration can still
+  differ from the fixed 'en-US' argument in some environments — manual
+  getMonth/getDate/getFullYear construction is the safer guaranteed-
+  identical pattern.
+- flight_links Supabase table backlog item (Session 19/22) is now
+  effectively superseded — flights are served via Aviasales/
+  Travelpayouts affiliate widget embeds instead of custom Supabase
+  data + query functions.
+
+### ⏳ Still Outstanding (carried forward, not addressed this session)
 - Confirm whether urgent infra tasks (Gemini API key rotation,
   VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY added to Vercel Vite
-  project env vars + redeploy) are done or still pending — status
-  unconfirmed as of this session, carry to next session for explicit
-  check.
-- All other 🔴/🟡/🟢 backlog items from Session 19's consolidated
-  review remain open except those explicitly marked resolved in
-  Sessions 20-25 (Tailwind token verification, Navbar 7-route
-  click-test, featured tours, agoda/transfer real data, flight_links
-  table, destination/tours/budget-tips translations MM/TH/DE/FR/ES,
-  modal title translations MM/TH, GYG activity photos, Satun activity,
-  Vercel legacy Vite deletion, Cookie Consent Banner verify, PWA
-  offline, B2B bank transfer for invoice).
+  project env vars + redeploy) are done or still pending
+- Tailwind design tokens verification (sacred-bg, sacred-green,
+  gold-deep, gold-soft)
+- Navbar 7-route click-test (Session 18)
+- Mark 2-6 tours as featured=true
+- Agoda/Transfer real affiliate data (still placeholder)
+- Destination/Tours/Budget Tips modal translations (MM/TH/DE/FR/ES
+  columns still empty)
+- Modal title translations gap (MM/TH) for transport/visa/travelTypes/
+  accommodation/food/infoModalTitle
+- GYG activity real photos (all 29 still share one placeholder image)
+- Satun real GYG activity (still substituted with Chiang Mai)
+- Vercel legacy Vite project deletion
+- Cookie Consent Banner production verify
+- PWA Offline feature (not started)
+- B2B bank transfer details for PDF invoice (not started)
+
+---
+
+## Session 26 — 13 July 2026 — Gemini 503 Fix, Hotels + Flights SEO/SSR Wired
+
+### ✅ Completed This Session
+
+**Gemini 503 overload → /api/web-chat 500 error (RESOLVED):**
+- Root cause: gemini-2.5-flash-lite returning 503 on free-tier round-robin keys, surfacing as unhandled 500
+- Fix: graceful degradation fallback — localized "temporarily busy" UI + HumanOperatorChat CTA instead of raw error; hardcoded English strings in chat components replaced with i18n lookups
+- Confirmed resolved by user ✅
+
+**Flights page confirmed live with real affiliate widgets (not the Session 22 "Coming Soon" placeholder):**
+- Aviasales search widget + "Multiple Airlines" flexible-date card, both via Travelpayouts affiliate embeds, marker ID confirmed consistent (746660) across both widgets
+- Resolves the flight_links Supabase table backlog item via third-party embed instead of custom table + query function
+
+**Flights page SEO/SSR content added:**
+- New `flights` i18n namespace (6 languages) with localized h1, intro paragraph, FAQ section (3-5 Q&As), cross-sell links to hotels/tours/activities
+- Multi-round SSR bailout debugging: initial implementation only reached the Next.js hydration JSON payload, not raw HTML. Root cause traced through several iterations to: AviasalesSearchWidgetWrapper no longer needs `next/dynamic({ssr:false})` — since Next.js 15+ disallows ssr:false in Server Components AND the widget already uses useEffect internally (which naturally skips SSR on its own) — direct import works correctly. Final verified state: real `<h1>`, `<h2>` (FAQ), and cross-sell `<h3>` tags confirmed present in raw HTML via curl/Invoke-WebRequest + Select-String (not JSON payload strings) ✅
+
+**Hotels page — AccommodationChat wired + SEO/SSR content added:**
+- Existing AccommodationChat.tsx (survey-style checkboxes, full 6-language i18n, previously built) wired into /thailand/hotels
+- Same SEO/SSR pattern applied as flights: new `hotels` i18n namespace, localized h1/intro/FAQ/cross-sell, verified as real HTML tags (not JSON payload) in raw SSR output
+- AccommodationChatWrapper structured as direct import (client component, no next/dynamic needed) positioned as sibling to static content, matching the working flights pattern
+
+**Bugs found & fixed during this session's debugging:**
+1. **Broken visa link** — flights page's "Check visa requirements" linked to non-existent `/thailand/visa` route (visa guide is modal-only sitewide). Fixed via new VisaModalTrigger.tsx dispatching the existing `openGuideModal` custom event — reuses existing modal architecture.
+2. **Visa modal not appearing despite working event chain** — ChatWidgetGrid (which owns the visa modal) was wrapped in `<div className="hidden">` on the flights page; `display:none` on an ancestor suppresses descendant fixed-position modals too. Fixed with a new `hideGrid` prop on ChatWidgetGrid (hides only its own grid UI via conditional render, keeps component mounted so its modals stay functional). Confirmed working: visa modal opens correctly ✅
+3. **Hydration error from locale-dependent date formatting** — FlightServiceCard.tsx's "price checked" text used `.toLocaleDateString('en-US')`, which still produced different server vs. client output across environment locale differences. Fixed with manually-constructed fixed MM/DD/YYYY format (getMonth/getDate/getFullYear + padStart) for guaranteed identical output. Confirmed: isolated bug, no other files in the codebase use unlocalized toLocaleDateString/toLocaleTimeString ✅
+4. **404 regression on both /thailand/flights and /thailand/hotels** — mid-session, both pages started returning 404 in the browser. Root cause: corrupted Next.js `.next` build cache (malformed TypeScript in `.next/dev/types/`) from the extensive dynamic-import restructuring this session, unrelated to source code correctness. Fixed by deleting `.next` cache directory and restarting dev server fresh. Confirmed both routes return 200 after fix ✅
+
+**Full verification completed (browser-level, not just curl/tsc):**
+- Flights: Aviasales widget loads (minor unrelated third-party 400 from suggest.apistp.com autocomplete API — does not block widget functionality)
+- Hotels: AccommodationChat survey confirmed interactive via screenshot — clicking through multiple questions advances the survey correctly in MM language, zero console errors (only benign font-preload warnings)
+- Language switching (EN/MM/TH) confirmed working on both pages — MM screenshot shows correct Burmese h1, intro, and survey UI
+- `npx tsc --noEmit` — 0 errors throughout
+
+### Architecture Notes (additions)
+- **Next.js 15+ dynamic import pattern clarified:** `{ ssr: false }` is NOT allowed directly in Server Component dynamic() calls in Next.js 15+. For client components that already use useEffect/browser-only APIs internally, a direct import (no next/dynamic wrapper at all) is sufficient — the component naturally skips SSR for its own interactive parts while still allowing the page's other static content to be server-rendered normally. This supersedes the earlier-documented "wrap only the widget in dynamic+ssr:false" pattern from earlier in this same session — use direct import instead going forward for any similar third-party widget integration.
+- **Never wrap a component owning modal state in `display:none`/`hidden`** — use a conditional-render prop pattern instead (see ChatWidgetGrid's `hideGrid` prop) so descendant fixed/absolute-positioned modals aren't suppressed by an ancestor's display:none.
+- **Always use manual date construction**, never `.toLocaleDateString()` even with an explicit locale argument, for any date text rendered in both SSR and client contexts.
+- **New troubleshooting note:** if a page suddenly 404s after heavy dynamic-import/SSR restructuring work with no corresponding `notFound()` call in the source, check for corrupted `.next` build cache before assuming a source code bug — delete `.next` and restart fresh.
+- flight_links Supabase table backlog item (Session 19/22) is now superseded — flights served via Aviasales/Travelpayouts widget embeds.
+
+### ⏳ Still Outstanding (carried forward)
+- Confirm whether urgent infra tasks (Gemini API key rotation, VITE_SUPABASE env vars in Vercel Vite project + redeploy) are done
+- Tailwind design tokens verification (sacred-bg, sacred-green, gold-deep, gold-soft)
+- Navbar 7-route click-test (Session 18)
+- Mark 2-6 tours as featured=true
+- Agoda/Transfer real affiliate data (still placeholder)
+- Destination/Tours/Budget Tips modal translations (MM/TH/DE/FR/ES)
+- Modal title translations gap (MM/TH)
+- GYG activity real photos + Satun activity
+- Vercel legacy Vite project deletion
+- Cookie Consent Banner production verify
+- PWA Offline feature, B2B bank transfer for invoice (not started)
+- Minor: suggest.apistp.com 400 error from Aviasales widget's own autocomplete API — third-party, non-blocking, noted for awareness only

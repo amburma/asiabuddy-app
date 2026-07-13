@@ -701,6 +701,34 @@ const ENGLISH_UI = {
         "answer": "For the best fares, book 2-3 months in advance for peak seasons (December-February). Shoulder seasons (March-May, September-November) often offer better prices and fewer crowds."
       }
     }
+  },
+  "hotels": {
+    "title": "Hotels in Thailand",
+    "intro": "Find the perfect place to stay in Thailand. Budget options start around 500-1,000 THB per night for guesthouses, while mid-range hotels range from 1,500-4,000 THB. Popular areas include Sukhumvit in Bangkok for nightlife and shopping, Patong in Phuket for beach access, and the Old City in Chiang Mai for culture. Book in advance during peak season (December-February) for the best rates and availability.",
+    "continuePlanning": "Continue Planning Your Trip",
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "What's the best area to stay in Bangkok?",
+        "answer": "Sukhumvit is ideal for nightlife and shopping with easy BTS access. Siam/Pratunam offers family-friendly shopping and markets. Silom/Sathorn is the business district with upscale dining. Riverside provides luxury hotels with cultural sightseeing nearby."
+      },
+      "q2": {
+        "question": "Do I need to book in advance during high season?",
+        "answer": "Yes, booking 2-3 months ahead is recommended for peak season (December-February), especially in popular destinations like Phuket, Krabi, and Chiang Mai. Shoulder seasons offer better rates and more availability with shorter booking windows."
+      },
+      "q3": {
+        "question": "Is it safe to book directly vs through an agent?",
+        "answer": "Both options are generally safe. Booking directly with hotels can sometimes offer better rates or flexible cancellation. Reputable agents provide bundled deals and local support. Always verify reviews and check cancellation policies regardless of booking method."
+      },
+      "q4": {
+        "question": "What's the typical budget range per night?",
+        "answer": "Budget guesthouses and hostels: 500-1,500 THB ($15-45). Mid-range hotels: 1,500-4,000 THB ($45-120). Luxury resorts: 4,000-10,000+ THB ($120-300+). Prices vary significantly by location and season."
+      },
+      "q5": {
+        "question": "Are beachfront hotels worth the extra cost?",
+        "answer": "Beachfront properties offer convenience and views but command premium prices. Hotels within walking distance (5-10 minutes) often provide better value. Consider how much time you'll spend at the beach versus exploring other attractions when deciding."
+      }
+    }
   }
 };
 
@@ -1410,6 +1438,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "สำหรับราคาที่ดีที่สุด จองล่วงหน้า 2-3 เดือนสำหรับฤดูกาลหนาแน่น (ธันวาคม-กุมภาพันธ์) ฤดูกาลปานกลาง (มีนาคม-พฤษภาคม, กันยายน-พฤศจิกายน) มักมีราคาที่ดีกว่าและคนน้อยกว่า"
       }
     }
+  },
+  "hotels": {
+    "title": "โรงแรมในประเทศไทย",
+    "intro": "ค้นหาที่พักที่เหมาะสมที่สุดในประเทศไทย ตัวเลือกราคาประหยัดเริ่มต้นที่ประมาณ 500-1,000 บาทต่อคืนสำหรับเกสต์เฮาส์ ส่วนโรงแรมระดับกลางอยู่ที่ 1,500-4,000 บาท พื้นที่ยอดนิยมได้แก่ สุขุมวิทในกรุงเทพฯ สำหรับชีวิตกลางคืนและการช้อปปิ้ง ป่าตองในภูเก็ตสำหรับการเข้าถึงชายหาด และเมืองเก่าในเชียงใหม่สำหรับวัฒนธรรม ควรจองล่วงหน้าในฤดูกาลหนาแน่น (ธันวาคม-กุมภาพันธ์) เพื่อรับราคาที่ดีที่สุดและห้องว่าง",
+    "continuePlanning": "วางแผนการเดินทางต่อ",
+    "faq": {
+      "title": "คำถามที่พบบ่อย",
+      "q1": {
+        "question": "พื้นที่ไหนดีที่สุดสำหรับเข้าพักในกรุงเทพฯ?",
+        "answer": "สุขุมวิทเหมาะสำหรับชีวิตกลางคืนและการช้อปปิ้งพร้อมการเข้าถึง BTS ง่าย สยาม/ประตูน้ำเสนอการช้อปปิ้งเป็นครอบครัวและตลาด สีลม/สาทรเป็นย่านธุรกิจที่มีร้านอาหารระดับสูง ริมฝั่งแม่น้ำมีโรงแรมหรูหราพร้อมแหล่งท่องเที่ยวทางวัฒนธรรมใกล้เคียง"
+      },
+      "q2": {
+        "question": "ฉันต้องจองล่วงหน้าในฤดูกาลหนาแน่นหรือไม่?",
+        "answer": "ใช่ การจองล่วงหน้า 2-3 เดือนแนะนำสำหรับฤดูกาลหนาแน่น (ธันวาคม-กุมภาพันธ์) โดยเฉพาะในจุดหมายปลายทางยอดนิยมเช่น ภูเก็ต กระบี่ และเชียงใหม่ ฤดูกาลปานกลางมักมีราคาดีกว่าและห้องว่างมากขึ้นพร้อมระยะเวลาจองที่สั้นลง"
+      },
+      "q3": {
+        "question": "การจองโดยตรงกับโรงแรมปลอดภัยหรือไม่เมื่อเทียบกับตัวแทน?",
+        "answer": "ทั้งสองตัวเลือกโดยทั่วไปปลอดภัย การจองโดยตรงกับโรงแรมบางครั้งอาจมีราคาดีกว่าหรือการยกเลิกที่ยืดหยุ่น ตัวแทนที่เชื่อถือได้มอบแพ็กเกจและการสนับสนุนในพื้นที่ ตรวจสอบรีวิวและนโยบายการยกเลิกเสมอไม่ว่าจะจองวิธีใด"
+      },
+      "q4": {
+        "question": "งบประมาณต่อคืนโดยทั่วไปอยู่ที่เท่าไหร่?",
+        "answer": "เกสต์เฮาส์และโฮสเทลราคาประหยัด: 500-1,500 บาท ($15-45) โรงแรมระดับกลาง: 1,500-4,000 บาท ($45-120) รีสอร์ทหรูหรา: 4,000-10,000+ บาท ($120-300+) ราคาแตกต่างอย่างมากตามสถานที่และฤดูกาล"
+      },
+      "q5": {
+        "question": "โรงแรมริมชายหาดคุ้มค่ากับราคาที่สูงขึ้นหรือไม่?",
+        "answer": "ที่พักริมชายหาดเสนอความสะดวกสบายและวิวแต่มีราคาพรีเมียม โรงแรมที่อยู่ในระยะเดินถึง (5-10 นาที) มักให้คุณค่าที่ดีกว่า พิจารณาเวลาที่คุณจะใช้ที่ชายหาดเทียบกับการสำรวจสถานที่ท่องเที่ยวอื่นเมื่อตัดสินใจ"
+      }
+    }
   }
 },
   MM: {
@@ -2103,11 +2159,39 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       },
       "q4": {
         "question": "ဘယ်လေဆိပ်သို့ လေယာဉ်ပျံသန်းသင့်လဲ?",
-        "answer": "ဆူဝါန်နဘူမီ (BKK) သည် နိုင်ငံတကာ လေယာဉ်ခရီးစဉ်အများစုကို လက်ခံပြီး Airport Rail Link ဖြင့် မြို့နှငင့် ဆက်သွယ်ထားသည်။ ဒွန်မောင် (DMK) သည် တန်ဖိုးနိမ့် လေကြောင်းလိုင်းများနှင့် ပြည်တွင်း လေယာဉ်ခရီးစဉ်များကို ဝန်ဆောင်ပြီး ကော�င်းမွန်သော သယ်ယူပို့ဆောင်ရေး ဆက်သွယ်မှုများ ရှိသည်။"
+        "answer": "ဆူဝါန်နဘူမီ (BKK) သည် နိုင်ငံတကာ လေယာဉ်ခရီးစဉ်အများစုကို လက်ခံပြီး Airport Rail Link ဖြင့် မြို့နှငင့် ဆက်သွယ်ထားသည်။ ဒွန်မောင် (DMK) သည် တန်ဖိုးနိမ့် လေကြောင်းလိုင်းများနှင့် ပြည်တွင်း လေယာဉ်ခရီးစဉ်များကို ဝန်ဆောင်ပြီး ကောင်းမွန်သော သယ်ယူပို့ဆောင်ရေး ဆက်သွယ်မှုများ ရှိသည်။"
       },
       "q5": {
         "question": "လေယာဉ်ခရီးစဉ်ကို ဘယ်အချိန်မှာ ဘွတ်ကင်လုပ်သင့်လဲ?",
         "answer": "အကောင်းဆုံး စျေးနှုန်းများအတွက် လူဦးရေများပြားသော ရာသီ (ဒီဇင်ဘာ-ဖေဖော်ဝါရီ) အတွက် ခရီးစဉ်ထွက်ခွာမည့်ရက် ၂-၃ လ အလိုက် ဘွတ်ကင်လုပ်ပါ။ အလယ်အလတ် ရာသီများ (မတ်-မေ၊ စက်တင်ဘာ-နိုဝင်ဘာ) တွင် ပိုမိုကောင်းမွန်သော စျေးနှုန်းများနှင့် လူဦးရေ နည်းပါးသော အခွင့်အလမ်းများ ရရှိနိုင်သည်။"
+      }
+    }
+  },
+  "hotels": {
+    "title": "ထိုင်းနိုင်ငံရှိ ဟိုတယ်များ",
+    "intro": "ထိုင်းနိုင်ငံတွင် သင့်အတွက် သင့်တော်ဆုံး နေရာကို ရှာဖွေပါ။ ဘတ်ဂျက်ရွေးချယ်စရာများသည် ဧည့်လမ်းညွှန်များအတွက် တစ်ညလျှင် ခန့်မှန်း ၅၀၀-၁,၀၀၀ ဘတ်မှ စတင်ပြီး အလယ်အလတ် ဟိုတယ်များသည် ၁,၅၀၀-၄,၀၀၀ ဘတ် ရှိသည်။ လူကြိုက်များသော နေရာများတွင် ဘန်ကောက်ရှိ ဆူခုမ်ဗစ် ညဘက်ဘဝနှင့် ဈေးဝယ်ထွက်ရန်အတွက်၊ ဖူးကက်ရှိ ပါတောင် ပင်လယ်ကမ်းခြေသို့ သွားရန်အတွက်နှင့် ချင်းမိုင်ရှိ ရှေးဟောင်းမြို့ ယဉ်ကျေးမှုအတွက် ပါဝင်သည်။ အကောင်းဆုံး နှုန်းနှင့် နေရာရရန် လူဦးရေများသော ရာသီ (ဒီဇင်ဘာ-ဖေဖော်ဝါရီ) တွင် ၂-၃ လ ကြိုတင် ဘွတ်ကင်လုပ်ပါ။",
+    "continuePlanning": "သင့်ခရီးစဉ်ကို ဆက်လက် စီစဉ်ဆောင်ပါ",
+    "faq": {
+      "title": "မကြာခဏ မေးလေ့ရှိသော မေးခွန်းများ",
+      "q1": {
+        "question": "ဘန်ကောက်တွင် နေရာလိုက်ရန် အကောင်းဆုံး နေရာက ဘာလဲ?",
+        "answer": "ဆူခုမ်ဗစ်သည် BTS လွယ်ကူစွာ သွားလာနိုင်သော ညဘက်ဘဝနှင့် ဈေးဝယ်ထွက်ရန်အတွက် အကောင်းဆုံးဖြစ်သည်။ ဆိုင်ယမ်/ပရာတူနမ်သည် မိသားစု ဈေးဝယ်ထွက်ရန်နှင့် ဈေးများကို ပေးသည်။ ဆီလုံ/သာသွန်သည် အဆင့်မြင့် စားေသာက်ရေး စီးပွားရေး ဒေသဖြစ်သည်။ မြစ်ကမ်းနားသည် ယဉ်ကျေးမှု ကြည့်ရှုရန် နီးစပ်သော ဥဿရဓ ဟိုတယ်များရှိသည်။"
+      },
+      "q2": {
+        "question": "လူဦးရေများသော ရာသီတွင် ကြိုတင် ဘွတ်ကင်လုပ်ရန် လိုအပ်ပါသလား?",
+        "answer": "ဟုတ်ကြောင်း၊ လူကြိုက်များသော ဖူးကက်၊ ကရာဘီ နှင့် ချင်းမိုင် ကဲ့သို့သော နေရာများတွင် လူဦးရေများသော ရာသီ (ဒီဇင်ဘာ-ဖေဖော်ဝါရီ) အတွက် ၂-၃ လ ကြိုတင် ဘွတ်ကင်လုပ်ရန် အကြံပြုသည်။ အလယ်အလတ် ရာသီများသည် ပိုမိုကောင်းမွန်သော နှုန်းနှင့် ပိုမိုများသော နေရာများကို ပေးသည်။"
+      },
+      "q3": {
+        "question": "တိုက်ရိုက် ဘွတ်ကင်လုပ်ခြင်းနှင့် ကိုယ်စားလှယ်မှ ဘွတ်ကင်လုပ်ခြင်း ဘယ်ဟာက ပိုလုံခြုံသလဲ?",
+        "answer": "နှစ်မျိုးလုံးသည် ယေဘုယျအားဖြင့် လုံခြုံသည်။ တိုက်ရိုက် ဘွတ်ကင်လုပ်ခြင်းသည် တစ်ခါတစ်ရံ ပိုကောင်းသော နှုန်းများ သို့မဟုတ် ပြန်ဖျက်နိုင်သော နှုန်းများကို ပေးနိုင်သည်။ ယုံကြည်ရသော ကိုယ်စားလှယ်များသည် ပေါင်းစပ်ထားသော အထူးကမ္ဘာများနှင့် ဒေသဆိုင်ရာ ပံ့ပိုးမှုကို ပေးသည်။ ဘယ်နည်းနှင့် ဘွတ်ကင်လုပ်သည်ဖြစ်စေ သုံးသပ်မှုများနှင့် ပြန်ဖျက်မူဝါဒများကို အမြဲ စစ်ဆေးပါ။"
+      },
+      "q4": {
+        "question": "တစ်ညလျှင် ပုံမှန် ဘတ်ဂျက် အတိုင်းအတာက ဘာလဲ?",
+        "answer": "ဘတ်ဂျက် ဧည့်လမ်းညွှန်များနှင့် ဟိုစတယ်များ: ၅၀၀-၁,၅၀၀ ဘတ် ($15-45)။ အလယ်အလတ် ဟိုတယ်များ: ၁,၅၀၀-၄,၀၀၀ ဘတ် ($45-120)။ ဥဿရဓ ရီဆို့များ: ၄,၀၀၀-၁၀,၀၀၀+ ဘတ် ($120-300+)။ နှုန်းများသည် နေရာနှင့် ရာသီအပေါ် မူတည်၍ သိသာထစ်စစ် ကွဲပြားသည်။"
+      },
+      "q5": {
+        "question": "ပင်လယ်ကမ်းခြေ ဟိုတယ်များသည် ဈေးကြီးသည့်အတွက် တန်ဖိုးရှိပါသလား?",
+        "answer": "ပင်လယ်ကမ်းခေါင် နေရာများသည် အဆင်ပြေချင်းနှင့် မြင်ကွင်းများကို ပေးသော်လည်း ပရီမီယံ စျေးနှုန်းများရှိသည်။ လမ်းလျှောက်သွားနိုင်သော (၅-၁၀ မိနစ်) ဟိုတယ်များသည် ပိုကောင်းသော တန်ဖိုးကို ပေးတတ်သည်။ ဆုံးဖြတ်ရာတွင် ပင်လယ်ကမ်းခြေတွင် သင်နေရမည့် အချိန်နှင့် အခြား ကြည့်ရှုရန် နေရာများကို စူးစမ်းရာတွင် သုံးသပ်ပါ။"
       }
     }
   }
@@ -2810,6 +2894,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "Para las mejores tarifas, reserva con 2-3 meses de anticipación para temporadas altas (diciembre-febrero). Las temporadas intermedias (marzo-mayo, septiembre-noviembre) a menudo ofrecen mejores precios y menos multitudes."
       }
     }
+  },
+  "hotels": {
+    "title": "Hoteles en Tailandia",
+    "intro": "Encuentra el lugar perfecto para quedarse en Tailandia. Las opciones económicas comienzan alrededor de 500-1,000 THB por noche para guesthouses, mientras que los hoteles de gama media oscilan entre 1,500-4,000 THB. Las áreas populares incluyen Sukhumvit en Bangkok para vida nocturna y compras, Patong en Phuket para acceso a la playa, y la Ciudad Vieja en Chiang Mai para cultura. Reserva con anticipación durante la temporada alta (diciembre-febrero) para las mejores tarifas y disponibilidad.",
+    "continuePlanning": "Continúa Planeando Tu Viaje",
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "q1": {
+        "question": "¿Cuál es la mejor área para quedarse en Bangkok?",
+        "answer": "Sukhumvit es ideal para vida nocturna y compras con fácil acceso al BTS. Siam/Pratunam ofrece compras familiares y mercados. Silom/Sathorn es el distrito financiero con restaurantes de alta gama. Riverside ofrece hoteles de lujo con sitios culturales cercanos."
+      },
+      "q2": {
+        "question": "¿Necesito reservar con anticipación durante la temporada alta?",
+        "answer": "Sí, se recomienda reservar 2-3 meses antes para la temporada alta (diciembre-febrero), especialmente en destinos populares como Phuket, Krabi y Chiang Mai. Las temporadas intermedias ofrecen mejores tarifas y más disponibilidad con ventanas de reserva más cortas."
+      },
+      "q3": {
+        "question": "¿Es seguro reservar directamente vs a través de un agente?",
+        "answer": "Ambas opciones son generalmente seguras. Reservar directamente con hoteles a veces puede ofrecer mejores tarifas o cancelación flexible. Los agentes de confianza ofrecen paquetes y soporte local. Siempre verifica reseñas y políticas de cancelación independientemente del método de reserva."
+      },
+      "q4": {
+        "question": "¿Cuál es el rango de presupuesto típico por noche?",
+        "answer": "Guesthouses y hostales económicos: 500-1,500 THB ($15-45). Hoteles de gama media: 1,500-4,000 THB ($45-120). Resorts de lujo: 4,000-10,000+ THB ($120-300+). Los precios varían significativamente por ubicación y temporada."
+      },
+      "q5": {
+        "question": "¿Vale la pena el costo extra de los hoteles frente a la playa?",
+        "answer": "Las propiedades frente a la playa ofrecen conveniencia y vistas pero tienen precios premium. Los hoteles a distancia caminable (5-10 minutos) a menudo ofrecen mejor valor. Considera cuánto tiempo pasarás en la playa versus explorar otras atracciones al decidir."
+      }
+    }
   }
 },
   FR: {
@@ -3510,6 +3622,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "Pour les meilleurs tarifs, réservez 2-3 mois à l'avance pour les saisons de pointe (décembre-février). Les saisons intermédiaires (mars-mai, septembre-novembre) offrent souvent de meilleurs prix et moins de foule."
       }
     }
+  },
+  "hotels": {
+    "title": "Hôtels en Thaïlande",
+    "intro": "Trouvez l'hébergement parfait en Thaïlande. Les options économiques commencent autour de 500-1,000 THB par nuit pour les guesthouses, tandis que les hôtels de gamme moyenne vont de 1,500-4,000 THB. Les zones populaires incluent Sukhumvit à Bangkok pour la vie nocturne et les achats, Patong à Phuket pour l'accès à la plage, et la Vieille Ville à Chiang Mai pour la culture. Réservez à l'avance pendant la haute saison (décembre-février) pour les meilleurs tarifs et disponibilité.",
+    "continuePlanning": "Continuer à Planifier Votre Voyage",
+    "faq": {
+      "title": "Questions Fréquentes",
+      "q1": {
+        "question": "Quelle est la meilleure zone pour séjourner à Bangkok?",
+        "answer": "Sukhumvit est idéal pour la vie nocturne et les achats avec un accès facile au BTS. Siam/Pratunam offre des achats familiaux et des marchés. Silom/Sathorn est le quartier d'affaires avec des restaurants haut de gamme. Riverside offre des hôtels de luxe avec des sites culturels à proximité."
+      },
+      "q2": {
+        "question": "Dois-je réserver à l'avance pendant la haute saison?",
+        "answer": "Oui, il est recommandé de réserver 2-3 mois à l'avance pour la haute saison (décembre-février), surtout dans les destinations populaires comme Phuket, Krabi et Chiang Mai. Les saisons intermédiaires offrent de meilleurs tarifs et plus de disponibilité avec des fenêtres de réservation plus courtes."
+      },
+      "q3": {
+        "question": "Est-il sûr de réserver directement vs via une agence?",
+        "answer": "Les deux options sont généralement sûres. Réserver directement avec les hôtels peut parfois offrir de meilleurs tarifs ou une annulation flexible. Les agences réputées offrent des forfaits et un support local. Vérifiez toujours les avis et les politiques d'annulation quelle que soit la méthode de réservation."
+      },
+      "q4": {
+        "question": "Quelle est la fourchette de budget typique par nuit?",
+        "answer": "Guesthouses et auberges économiques: 500-1,500 THB ($15-45). Hôtels de gamme moyenne: 1,500-4,000 THB ($45-120). Resorts de luxe: 4,000-10,000+ THB ($120-300+). Les prix varient considérablement selon l'emplacement et la saison."
+      },
+      "q5": {
+        "question": "Les hôtels en bord de mer valent-ils le coût supplémentaire?",
+        "answer": "Les propriétés en bord de mer offrent commodité et vues mais ont des prix premium. Les hôtels à distance de marche (5-10 minutes) offrent souvent une meilleure valeur. Considérez combien de temps vous passerez à la plage versus explorer d'autres attractions lors de votre décision."
+      }
+    }
   }
 },
   DE: {
@@ -4208,6 +4348,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "q5": {
         "question": "Wann ist der beste Zeitpunkt für Flugbuchungen?",
         "answer": "Für die besten Tarife buchen Sie 2-3 Monate im Voraus für Hauptsaisons (Dezember-Februar). Nebensaisons (März-Mai, September-November) bieten oft bessere Preise und weniger Menschenmengen."
+      }
+    }
+  },
+  "hotels": {
+    "title": "Hotels in Thailand",
+    "intro": "Finden Sie die perfekte Unterkunft in Thailand. Budgetoptionen beginnen bei etwa 500-1,000 THB pro Nacht für Guesthouses, während Mittelklassehotels zwischen 1,500-4,000 THB liegen. Beliebte Gebiete sind Sukhumvit in Bangkok für Nachtleben und Einkaufen, Patong in Phuket für Strandzugang und die Altstadt in Chiang Mai für Kultur. Buchen Sie im Voraus während der Hauptsaison (Dezember-Februar) für die besten Preise und Verfügbarkeit.",
+    "continuePlanning": "Reise Weiter Planen",
+    "faq": {
+      "title": "Häufig Gestellte Fragen",
+      "q1": {
+        "question": "Welcher Bereich ist am besten für einen Aufenthalt in Bangkok?",
+        "answer": "Sukhumvit ist ideal für Nachtleben und Einkaufen mit einfachem BTS-Zugang. Siam/Pratunam bietet familienfreundliches Einkaufen und Märkte. Silom/Sathorn ist das Geschäftsviertel mit gehobenen Restaurants. Riverside bietet Luxushotels mit kulturellen Sehenswürdigkeiten in der Nähe."
+      },
+      "q2": {
+        "question": "Muss ich während der Hauptsaison im Voraus buchen?",
+        "answer": "Ja, eine Buchung 2-3 Monate im Voraus wird für die Hauptsaison (Dezember-Februar) empfohlen, besonders in beliebten Zielen wie Phuket, Krabi und Chiang Mai. Nebensaisons bieten bessere Preise und mehr Verfügbarkeit mit kürzeren Buchungszeiträumen."
+      },
+      "q3": {
+        "question": "Ist es sicher, direkt vs über einen Agenten zu buchen?",
+        "answer": "Beide Optionen sind im Allgemeinen sicher. Direktes Buchen bei Hotels kann manchmal bessere Preise oder flexible Stornierung bieten. Seriöse Agenten bieten Pakete und lokale Unterstützung. Überprüfen Sie immer Bewertungen und Stornierungsrichtlinien unabhängig von der Buchungsmethode."
+      },
+      "q4": {
+        "question": "Was ist der typische Budgetbereich pro Nacht?",
+        "answer": "Budget-Guesthouses und Hostels: 500-1,500 THB ($15-45). Mittelklassehotels: 1,500-4,000 THB ($45-120). Luxusresorts: 4,000-10,000+ THB ($120-300+). Preise variieren je nach Standort und Saison erheblich."
+      },
+      "q5": {
+        "question": "Lohnen sich Strandhotels den Aufpreis?",
+        "answer": "Strandfront-Eigenschaften bieten Komfort und Aussicht, haben aber Premium-Preise. Hotels in Gehweite (5-10 Minuten) bieten oft besseren Wert. Berücksichtigen Sie, wie viel Zeit Sie am Strand verbringen im Vergleich zum Erkunden anderer Attraktionen bei Ihrer Entscheidung."
       }
     }
   }

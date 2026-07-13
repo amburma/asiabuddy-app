@@ -1,0 +1,22 @@
+[
+  {
+    "page": "/thailand/flights",
+    "widget": "Aviasales",
+    "scriptLoaded": false,
+    "widgetInjected": null,
+    "originFieldFound": false,
+    "originFieldFocusable": false,
+    "originFieldEditable": false,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\flights-aviasales-test.png",
+    "notes": "Origin field not found - widget may be in iframe/shadow DOM or not fully loaded"
+  },
+  {
+    "page": "/thailand/hotels",
+    "widget": "AccommodationChat",
+    "chatWidgetFound": false,
+    "firstQuestionFound": false,
+    "firstQuestionClickable": false,
+    "screenshotPath": "C:\\Users\\Thuta_Dell\\Documents\\GitHub\\asiabuddy-main\\debug-output\\screenshots\\hotels-accommodation-chat-test.png",
+    "notes": "AccommodationChat widget not found on page"
+  }
+]
