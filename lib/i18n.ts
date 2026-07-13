@@ -670,6 +670,37 @@ const ENGLISH_UI = {
     "servicesList": "Hotel • Flight • Tickets • Transfer • Car Rental • Tours",
     "backToHome": "Back to Home",
     "chatNote": "For bookings & inquiries, use our Live Support Chat on the home page."
+  },
+  "flights": {
+    "title": "Flights to Thailand",
+    "intro": "Book your flight to Thailand with ease. Most international flights arrive at Suvarnabhumi Airport (BKK) or Don Mueang Airport (DMK) in Bangkok. For the best prices, book 2-3 months in advance and check visa requirements before you travel.",
+    "visaLinkText": "Check visa requirements",
+    "searchSpecificDates": "Search Specific Dates",
+    "flexibleDates": "Flexible Dates — Find Cheapest",
+    "continuePlanning": "Continue Planning Your Trip",
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "How long is a direct flight to Bangkok?",
+        "answer": "Direct flights to Bangkok from major Asian hubs typically take 2-4 hours. From Europe, direct flights range from 11-13 hours. From North America, expect 15-20 hours with a stopover."
+      },
+      "q2": {
+        "question": "What airlines fly to Thailand?",
+        "answer": "Major international airlines including Thai Airways, Singapore Airlines, Emirates, Qatar Airways, and Cathay Pacific serve Bangkok. Budget carriers like AirAsia and Nok Air also offer regional connections."
+      },
+      "q3": {
+        "question": "Do I need a visa on arrival?",
+        "answer": "Visa requirements depend on your nationality. Many countries receive 30-day visa exemption, while others may need to apply in advance. Check our visa guide for the latest requirements."
+      },
+      "q4": {
+        "question": "Which airport should I fly into?",
+        "answer": "Suvarnabhumi (BKK) handles most international flights and is connected to the city by Airport Rail Link. Don Mueang (DMK) serves budget airlines and domestic flights, also with good transport connections."
+      },
+      "q5": {
+        "question": "What is the best time to book flights?",
+        "answer": "For the best fares, book 2-3 months in advance for peak seasons (December-February). Shoulder seasons (March-May, September-November) often offer better prices and fewer crowds."
+      }
+    }
   }
 };
 
@@ -1348,6 +1379,37 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "servicesList": "โรงแรม • เที่ยวบิน • ตั๋ว • การเดินทาง • เช่ารถ • ทัวร์",
     "backToHome": "กลับไปหน้าแรก",
     "chatNote": "สำหรับการจองและสอบถาม ให้ใช้แชทสนับสนุนสดของเราบนหน้าแรก"
+  },
+  "flights": {
+    "title": "เที่ยวบินไปประเทศไทย",
+    "intro": "จองเที่ยวบินไปประเทศไทยได้อย่างง่ายดาย เที่ยวบินสายการบินระหว่างประเทศส่วนใหญ่มาถึงที่ท่าอากาศยานสุวรรณภูมิ (BKK) หรือท่าอากาศยานดอนเมือง (DMK) ในกรุงเทพฯ สำหรับราคาที่ดีที่สุด ควรจองล่วงหน้า 2-3 เดือน และตรวจสอบข้อกำหนดวีซ่าก่อนเดินทาง",
+    "visaLinkText": "ตรวจสอบข้อกำหนดวีซ่า",
+    "searchSpecificDates": "ค้นหาวันที่เฉพาะเจาะจง",
+    "flexibleDates": "วันที่ยืดหยุ่น — ค้นหาราคาถูกที่สุด",
+    "continuePlanning": "วางแผนการเดินทางต่อ",
+    "faq": {
+      "title": "คำถามที่พบบ่อย",
+      "q1": {
+        "question": "เที่ยวบินตรงไปกรุงเทพฯ ใช้เวลานานเท่าไหร่?",
+        "answer": "เที่ยวบินตรงไปกรุงเทพฯ จากฮับสำคัญในเอเชียใช้เวลาประมาณ 2-4 ชั่วโมง จากยุโรปใช้เวลา 11-13 ชั่วโมง จากอเมริกาเหนือคาดว่าใช้เวลา 15-20 ชั่วโมงพร้อมการแวะพัก"
+      },
+      "q2": {
+        "question": "สายการบินไหนบินไปประเทศไทยบ้าง?",
+        "answer": "สายการบินระหว่างประเทศหลักๆ เช่น การบินไทย สิงคโปร์แอร์ไลน์์ เอมิเรตส์ คาตาร์แอร์เวย์ และแคธเปย์แปซิฟิก ให้บริการที่กรุงเทพฯ สายการบินต้นทุนต่ำเช่น แอร์เอเชียและนกแอร์ก็มีเส้นทางภูมิภาค"
+      },
+      "q3": {
+        "question": "ฉันต้องการวีซ่าเมื่อมาถึงหรือไม่?",
+        "answer": "ข้อกำหนดวีซ่าขึ้นอยู่กับสัญชาติของคุณ หลายประเทศได้รับการยกเว้นวีซ่า 30 วัน ในขณะที่บางประเทศอาจต้องสมัครล่วงหน้า ตรวจสอบคู่มือวีซ่าของเราสำหรับข้อกำหนดล่าสุด"
+      },
+      "q4": {
+        "question": "ฉันควรบินไปที่สนามบินไหน?",
+        "answer": "สุวรรณภูมิ (BKK) รองรับเที่ยวบินระหว่างประเทศส่วนใหญ่และเชื่อมต่อกับเมืองด้วย Airport Rail Link ดอนเมือง (DMK) ให้บริการสายการบินต้นทุนต่ำและเที่ยวบินภายในประเทศ พร้อมการเชื่อมต่อการเดินทางที่ดี"
+      },
+      "q5": {
+        "question": "เวลาไหนที่ดีที่สุดในการจองเที่ยวบิน?",
+        "answer": "สำหรับราคาที่ดีที่สุด จองล่วงหน้า 2-3 เดือนสำหรับฤดูกาลหนาแน่น (ธันวาคม-กุมภาพันธ์) ฤดูกาลปานกลาง (มีนาคม-พฤษภาคม, กันยายน-พฤศจิกายน) มักมีราคาที่ดีกว่าและคนน้อยกว่า"
+      }
+    }
   }
 },
   MM: {
@@ -2017,6 +2079,37 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "servicesList": "ဟိုတယ် • လေယာဉ် • လက်မှတ် • သယ်ယူပို့ဆောင်ရေး • ကားအငှား • ခရီးစဉ်များ",
     "backToHome": "ပင်မစာမျက်နှာသို့ ပြန်သွားပါ",
     "chatNote": "ဘွတ်ကင်နှင့် စုံစမ်းမေးမြန်းရန်အတွက် ပင်မစာမျက်နှာရှိ တိုက်ရိုက်စကားပြောဝန်ဆောင်မှုကို အသုံးပြုပါ"
+  },
+  "flights": {
+    "title": "ထိုင်းနိုင်ငံသို့ လေယာဉ်ခရီးစဉ်များ",
+    "intro": "ထိုင်းနိုင်ငံသို့ လေယာဉ်ခရီးစဉ်ကို လွယ်ကူစွာ ဘွတ်ကင်လုပ်ပါ။ နိုင်ငံတကာ လေယာဉ်ခရီးစဉ်အများစုသည် ဘန်ကောက်မြို့ရှိ ဆူဝါန်နဘူမီ လေဆိပ် (BKK) သို့မဟုတ် ဒွန်မောင် လေဆိပ် (DMK) သို့ ဆိုက်ရောက်ကြသည်။ အကောင်းဆုံး စျေးနှုန်းများအတွက် ခရီးစဉ်ထွက်ခွာမည့်ရက် ၂-၃ လ အလိုက် ဘွတ်ကင်လုပ်ပြီး ခရီးစဉ်ထွက်ခွာမည့်အခါ ဗီဇာလိုအပ်ချက်များကို စစ်ဆေးပါ။",
+    "visaLinkText": "ဗီဇာလိုအပ်ချက်များ စစ်ဆေးပါ",
+    "searchSpecificDates": "သတ်မှတ်ထားသော ရက်စွဲများကို ရှာဖွေပါ",
+    "flexibleDates": "ရက်စွဲများ ပြောင်းလဲနိုင် — အပေါ်ဆုံးစျေးကို ရှာဖွေပါ",
+    "continuePlanning": "သင့်ခရီးစဉ်ကို ဆက်လက် စီစဉ်ဆောင်ပါ",
+    "faq": {
+      "title": "မကြာခဏ မေးလေ့ရှိသော မေးခွန်းများ",
+      "q1": {
+        "question": "ဘန်ကောက်သို့ တိုက်ရိုက် လေယာဉ်ခရီးစဉ်သည် ကြာမြင့်မည့်ကာလ?",
+        "answer": "အာရှ၏ အဓိက လေယာဉ်ကွင်းများမှ ဘန်ကောက်သို့ တိုက်ရိုက် လေယာဉ်ခရီးစဉ်များသည် ပျမ်းမျှအားဖြင့် ၂-၄ နာရီ ကြာမြင့်သည်။ ဥရောပမှ တိုက်ရိုက် လေယာဉ်ခရီးစဉ်များသည် ၁၁-၁၃ နာရီ ကြာမြင့်သည်။ မြောက်အမေရိကမှ ဆိုပါက အလယ်ရပ်နားဖြင့် ၁၅-၂၀ နာရီ ကြာမြင့်ပါသည်။"
+      },
+      "q2": {
+        "question": "ထိုင်းနိုင်ငံသို့ လေယာဉ်များ ပြေးဆိုင်သည့် လေကြောင်းလိုင်းများကား ဘာတွေလဲ?",
+        "answer": "ထိုင်းအဲယားဝေးစ်၊ စင်္ကာပူရ် လေကြောင်းလိုင်း၊ အီမာရိတ်၊ ကာတာ၊ ကက်သေးပက်စစ် စသော အဓိက နိုင်ငံတကာ လေကြောင်းလိုင်းများသည် ဘန်ကောက်သို့ ဝန်ဆောင်မှုပေးကြသည်။ အဲယားအေးရှားနှင့် နော့ခ် လေကြောင်းလိုင်းကဲ့သို့သော တန်ဖိုးနိမ့် လေကြောင်းလိုင်းများသည်လည်း ဒေသဆိုင်ရာ ခရီးစဉ်များကို ပေးဆောင်ကြသည်။"
+      },
+      "q3": {
+        "question": "ဗီဇာ လိုအပ်ပါသလား?",
+        "answer": "ဗီဇာလိုအပ်ချက်များသည် သင့်နိုင်ငံသားအပေါ် မူတည်သည်။ နိုင်ငံအများစုသည် ၃၀ ရက် ဗီဇာကင်းလွတ်ခွင့်ကို ရရှိကြသည်။ အချို့နိုင်ငံများသည် ကြိုတင် လျှောက်ထားရန် လိုအပ်သည်။ နောက်ဆုံး လိုအပ်ချက်များအတွက် ကျွန်ုပ်တို့၏ ဗီဇာလမ်းညွှန်ကို စစ်ဆေးပါ။"
+      },
+      "q4": {
+        "question": "ဘယ်လေဆိပ်သို့ လေယာဉ်ပျံသန်းသင့်လဲ?",
+        "answer": "ဆူဝါန်နဘူမီ (BKK) သည် နိုင်ငံတကာ လေယာဉ်ခရီးစဉ်အများစုကို လက်ခံပြီး Airport Rail Link ဖြင့် မြို့နှငင့် ဆက်သွယ်ထားသည်။ ဒွန်မောင် (DMK) သည် တန်ဖိုးနိမ့် လေကြောင်းလိုင်းများနှင့် ပြည်တွင်း လေယာဉ်ခရီးစဉ်များကို ဝန်ဆောင်ပြီး ကော�င်းမွန်သော သယ်ယူပို့ဆောင်ရေး ဆက်သွယ်မှုများ ရှိသည်။"
+      },
+      "q5": {
+        "question": "လေယာဉ်ခရီးစဉ်ကို ဘယ်အချိန်မှာ ဘွတ်ကင်လုပ်သင့်လဲ?",
+        "answer": "အကောင်းဆုံး စျေးနှုန်းများအတွက် လူဦးရေများပြားသော ရာသီ (ဒီဇင်ဘာ-ဖေဖော်ဝါရီ) အတွက် ခရီးစဉ်ထွက်ခွာမည့်ရက် ၂-၃ လ အလိုက် ဘွတ်ကင်လုပ်ပါ။ အလယ်အလတ် ရာသီများ (မတ်-မေ၊ စက်တင်ဘာ-နိုဝင်ဘာ) တွင် ပိုမိုကောင်းမွန်သော စျေးနှုန်းများနှင့် လူဦးရေ နည်းပါးသော အခွင့်အလမ်းများ ရရှိနိုင်သည်။"
+      }
+    }
   }
 },
   ES: {
@@ -2686,6 +2779,37 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "servicesList": "Hotel • Vuelo • Entradas • Traslado • Alquiler de Coche • Tours",
     "backToHome": "Volver al Inicio",
     "chatNote": "Para reservas y consultas, usa nuestro Chat de Soporte en Vivo en la página de inicio."
+  },
+  "flights": {
+    "title": "Vuelos a Tailandia",
+    "intro": "Reserva tu vuelo a Tailandia con facilidad. La mayoría de los vuelos internacionales llegan al Aeropuerto Suvarnabhumi (BKK) o al Aeropuerto Don Mueang (DMK) en Bangkok. Para los mejores precios, reserva con 2-3 meses de anticipación y verifica los requisitos de visa antes de viajar.",
+    "visaLinkText": "Ver requisitos de visa",
+    "searchSpecificDates": "Buscar Fechas Específicas",
+    "flexibleDates": "Fechas Flexibles — Encontrar Más Barato",
+    "continuePlanning": "Continúa Planeando Tu Viaje",
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "q1": {
+        "question": "¿Cuánto dura un vuelo directo a Bangkok?",
+        "answer": "Los vuelos directos a Bangkok desde principales hubs asiáticos suelen durar 2-4 horas. Desde Europa, los vuelos directos duran 11-13 horas. Desde América del Norte, espera 15-20 horas con escala."
+      },
+      "q2": {
+        "question": "¿Qué aerolíneas vuelan a Tailandia?",
+        "answer": "Las principales aerolíneas internacionales como Thai Airways, Singapore Airlines, Emirates, Qatar Airways y Cathay Pacific sirven a Bangkok. Las aerolíneas de bajo costo como AirAsia y Nok Air también ofrecen conexiones regionales."
+      },
+      "q3": {
+        "question": "¿Necesito visa a la llegada?",
+        "answer": "Los requisitos de visa dependen de tu nacionalidad. Muchos países reciben exención de visa de 30 días, mientras que otros pueden necesitar solicitarla con anticipación. Consulta nuestra guía de visa para los requisitos más recientes."
+      },
+      "q4": {
+        "question": "¿En qué aeropuerto debería volar?",
+        "answer": "Suvarnabhumi (BKK) maneja la mayoría de vuelos internacionales y está conectado a la ciudad por el Airport Rail Link. Don Mueang (DMK) sirve a aerolíneas de bajo costo y vuelos domésticos, también con buenas conexiones de transporte."
+      },
+      "q5": {
+        "question": "¿Cuál es el mejor momento para reservar vuelos?",
+        "answer": "Para las mejores tarifas, reserva con 2-3 meses de anticipación para temporadas altas (diciembre-febrero). Las temporadas intermedias (marzo-mayo, septiembre-noviembre) a menudo ofrecen mejores precios y menos multitudes."
+      }
+    }
   }
 },
   FR: {
@@ -3355,6 +3479,37 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "servicesList": "Hôtel • Vol • Billets • Transfert • Location de Voiture • Circuits",
     "backToHome": "Retour à l'Accueil",
     "chatNote": "Pour les réservations et les demandes, utilisez notre Chat de Support en Direct sur la page d'accueil."
+  },
+  "flights": {
+    "title": "Vols vers la Thaïlande",
+    "intro": "Réservez votre vol vers la Thaïlande facilement. La plupart des vols internationaux arrivent à l'aéroport Suvarnabhumi (BKK) ou à l'aéroport Don Mueang (DMK) à Bangkok. Pour les meilleurs prix, réservez 2-3 mois à l'avance et vérifiez les exigences de visa avant de voyager.",
+    "visaLinkText": "Vérifier les exigences de visa",
+    "searchSpecificDates": "Rechercher des Dates Spécifiques",
+    "flexibleDates": "Dates Flexibles — Trouver le Moins Cher",
+    "continuePlanning": "Continuer à Planifier Votre Voyage",
+    "faq": {
+      "title": "Questions Fréquentes",
+      "q1": {
+        "question": "Combien de temps dure un vol direct vers Bangkok?",
+        "answer": "Les vols directs vers Bangkok depuis les hubs asiatiques majeurs prennent généralement 2-4 heures. Depuis l'Europe, les vols directs durent 11-13 heures. Depuis l'Amérique du Nord, comptez 15-20 heures avec escale."
+      },
+      "q2": {
+        "question": "Quelles compagnies aériennes desservent la Thaïlande?",
+        "answer": "Les principales compagnies internationales comme Thai Airways, Singapore Airlines, Emirates, Qatar Airways et Cathay Pacific desservent Bangkok. Les compagnies low-cost comme AirAsia et Nok Air offrent également des connexions régionales."
+      },
+      "q3": {
+        "question": "Ai-je besoin d'un visa à l'arrivée?",
+        "answer": "Les exigences de visa dépendent de votre nationalité. De nombreux pays bénéficient d'une exemption de visa de 30 jours, tandis que d'autres peuvent devoir faire une demande à l'avance. Consultez notre guide visa pour les exigences les plus récentes."
+      },
+      "q4": {
+        "question": "Dans quel aéroport devrais-je voler?",
+        "answer": "Suvarnabhumi (BKK) gère la plupart des vols internationaux et est connecté à la ville par l'Airport Rail Link. Don Mueang (DMK) dessert les compagnies low-cost et les vols domestiques, également avec de bonnes connexions de transport."
+      },
+      "q5": {
+        "question": "Quel est le meilleur moment pour réserver des vols?",
+        "answer": "Pour les meilleurs tarifs, réservez 2-3 mois à l'avance pour les saisons de pointe (décembre-février). Les saisons intermédiaires (mars-mai, septembre-novembre) offrent souvent de meilleurs prix et moins de foule."
+      }
+    }
   }
 },
   DE: {
@@ -4024,6 +4179,37 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "servicesList": "Hotel • Flug • Tickets • Transfer • Autovermietung • Touren",
     "backToHome": "Zurück zur Startseite",
     "chatNote": "Für Buchungen und Anfragen nutzen Sie unseren Live-Support-Chat auf der Startseite."
+  },
+  "flights": {
+    "title": "Flüge nach Thailand",
+    "intro": "Buchen Sie Ihren Flug nach Thailand ganz einfach. Die meisten internationalen Flüge landen am Flughafen Suvarnabhumi (BKK) oder am Flughafen Don Mueang (DMK) in Bangkok. Für die besten Preise buchen Sie 2-3 Monate im Voraus und prüfen Sie die Visumanforderungen vor der Reise.",
+    "visaLinkText": "Visumanforderungen prüfen",
+    "searchSpecificDates": "Bestimmte Daten Suchen",
+    "flexibleDates": "Flexible Daten — Günstigsten Finden",
+    "continuePlanning": "Reise Weiter Planen",
+    "faq": {
+      "title": "Häufig Gestellte Fragen",
+      "q1": {
+        "question": "Wie lange dauert ein Direktflug nach Bangkok?",
+        "answer": "Direktflüge nach Bangkok von großen asiatischen Hubs dauern typischerweise 2-4 Stunden. Aus Europa dauern Direktflüge 11-13 Stunden. Aus Nordamerika rechnen Sie mit 15-20 Stunden mit Zwischenstopp."
+      },
+      "q2": {
+        "question": "Welche Fluggesellschaften fliegen nach Thailand?",
+        "answer": "Große internationale Fluggesellschaften wie Thai Airways, Singapore Airlines, Emirates, Qatar Airways und Cathay Pacific bedienen Bangkok. Billigfluggesellschaften wie AirAsia und Nok Air bieten ebenfalls regionale Verbindungen an."
+      },
+      "q3": {
+        "question": "Benötige ich ein Visum bei Ankunft?",
+        "answer": "Die Visumanforderungen hängen von Ihrer Staatsangehörigkeit ab. Viele Länder erhalten eine 30-tägige Visumbefreiung, während andere im Voraus beantragen müssen. Überprüfen Sie unseren Visaleitfaden für die aktuellen Anforderungen."
+      },
+      "q4": {
+        "question": "Auf welchen Flughafen sollte ich fliegen?",
+        "answer": "Suvarnabhumi (BKK) bedient die meisten internationalen Flüge und ist mit der Stadt durch den Airport Rail Link verbunden. Don Mueang (DMK) bedient Billigfluggesellschaften und Inlandsflüge, ebenfalls mit guten Transportverbindungen."
+      },
+      "q5": {
+        "question": "Wann ist der beste Zeitpunkt für Flugbuchungen?",
+        "answer": "Für die besten Tarife buchen Sie 2-3 Monate im Voraus für Hauptsaisons (Dezember-Februar). Nebensaisons (März-Mai, September-November) bieten oft bessere Preise und weniger Menschenmengen."
+      }
+    }
   }
 }
 };

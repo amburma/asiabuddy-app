@@ -7,4 +7,6 @@ const FloatingChatButton = dynamic(
   { ssr: false, loading: () => null }
 )
 
-export default FloatingChatButton
+export default function FloatingChatButtonLoader({ language }: { language: string }) {
+  return <FloatingChatButton language={language} />
+}

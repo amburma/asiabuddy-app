@@ -28,6 +28,7 @@ const TripPlannerChat = dynamic(() => import('../thailand/TripPlannerChat'), { s
 
 interface ChatWidgetGridProps {
   language?: string
+  hideGrid?: boolean
 }
 
 const MedicalChat = dynamic(() => import('../thailand/MedicalChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
@@ -37,7 +38,7 @@ const PhrasesChat = dynamic(() => import('../thailand/PhrasesChat'), { ssr: fals
 const LawsGuide = dynamic(() => import('./LawsGuide'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
 const EtiquetteGuide = dynamic(() => import('./EtiquetteGuide'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
 
-export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridProps) {
+export default function ChatWidgetGrid({ language: langProp, hideGrid = false }: ChatWidgetGridProps) {
   const [language, setLanguage] = useState<ThaiLanguage>(
     (langProp?.toUpperCase() as ThaiLanguage) || 'EN'
   )
@@ -100,10 +101,12 @@ export default function ChatWidgetGrid({ language: langProp }: ChatWidgetGridPro
 
   return (
     <>
-      <TravelToolbox
-        language={language}
-        onOpenModal={handleOpenModal}
-      />
+      {!hideGrid && (
+        <TravelToolbox
+          language={language}
+          onOpenModal={handleOpenModal}
+        />
+      )}
 
       {/* Travel Types Modal */}
       <GuideModal
