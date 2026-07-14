@@ -4,6 +4,8 @@ import { translateText } from '@/lib/translate'
 import TourServiceCard from '@/components/shared/services/TourServiceCard'
 import { getGygLinksByCity } from '@/lib/queries/gygLinks'
 import Navbar from '@/components/shared/Navbar'
+import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
+import { MapPin, Calendar, Plane } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -38,11 +40,15 @@ export default async function ActivitiesPage({
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
 
   const cookieStore = await cookies()
-  const targetLanguage = (cookieStore.get('NEXT_LOCALE')?.value ?? 'EN').toUpperCase()
+  const targetLanguage = normalizeLocale(cookieStore.get('NEXT_LOCALE')?.value)
 
   const { city: cityParam } = await searchParams
   const city = cityParam || 'bangkok'
   const gygLinks = await getGygLinksByCity(city)
+
+  const t = UI_TRANSLATIONS[targetLanguage].activities
+  const servicesStrip = UI_TRANSLATIONS[targetLanguage].servicesStrip
+  const destinationTabs = UI_TRANSLATIONS[targetLanguage].destinationTabs
 
   const cities = [
     { slug: 'bangkok', name: 'Bangkok' },
@@ -117,7 +123,7 @@ export default async function ActivitiesPage({
               <span className="h-[1px] w-16 bg-gold-deep/70" />
             </div>
             <h1 className="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-sacred-green leading-tight">
-              {translatedData.titleText}
+              {t.title}
             </h1>
           </div>
         </div>
@@ -140,6 +146,13 @@ export default async function ActivitiesPage({
               </Link>
             ))}
           </div>
+
+          {/* Intro Section */}
+          <div className="mb-12 max-w-3xl">
+            <p className="text-gray-700 text-lg leading-relaxed mb-4">
+              {t.intro}
+            </p>
+          </div>
         </div>
         <div className="max-w-7xl mx-auto px-6 py-8">
 
@@ -153,24 +166,96 @@ export default async function ActivitiesPage({
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {gygLinks.map((activity) => (
-                <div key={activity.id} className="w-full">
-                  <TourServiceCard
-                    tour={{
-                      activity_name: activity.activity_name,
-                      image_url: activity.image_url || '',
-                      price_from: activity.price_from,
-                      rating: activity.rating,
-                      reviews_count: activity.reviews_count,
-                      duration: activity.duration || 'Flexible',
-                      gyg_url: activity.gyg_url,
-                    }}
-                    language={targetLanguage as any}
-                  />
+            <>
+              {/* Activity Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {gygLinks.map((activity) => (
+                  <div key={activity.id} className="w-full">
+                    <TourServiceCard
+                      tour={{
+                        activity_name: activity.activity_name,
+                        image_url: activity.image_url || '',
+                        price_from: activity.price_from,
+                        rating: activity.rating,
+                        reviews_count: activity.reviews_count,
+                        duration: activity.duration || 'Flexible',
+                        gyg_url: activity.gyg_url,
+                      }}
+                      language={targetLanguage as any}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* FAQ Section */}
+              <div className="mb-16 max-w-3xl">
+                <h2 className="font-serif text-2xl md:text-3xl font-bold text-sacred-green mb-8">
+                  {t.faq.title}
+                </h2>
+                <div className="space-y-6">
+                  {[
+                    { q: t.faq.q1.question, a: t.faq.q1.answer },
+                    { q: t.faq.q2.question, a: t.faq.q2.answer },
+                    { q: t.faq.q3.question, a: t.faq.q3.answer },
+                    { q: t.faq.q4.question, a: t.faq.q4.answer },
+                    { q: t.faq.q5.question, a: t.faq.q5.answer },
+                  ].map((item, index) => (
+                    <div key={index} className="bg-white border border-gray-200 rounded-lg p-6">
+                      <h3 className="font-semibold text-gray-800 mb-2 flex items-start gap-2">
+                        <span className="text-[#D4AF37] mt-1">Q{index + 1}.</span>
+                        {item.q}
+                      </h3>
+                      <p className="text-gray-600 ml-6">{item.a}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+
+              {/* Cross-sell Section */}
+              <div className="border-t border-gray-200 pt-16">
+                <h2 className="font-serif text-2xl md:text-3xl font-bold text-sacred-green mb-8">
+                  {t.continuePlanning}
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <Link 
+                    href={`/${country}/hotels`}
+                    className="bg-white border border-gray-200 hover:border-[#D4AF37] rounded-lg p-6 transition-all duration-300 group"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <MapPin className="w-6 h-6 text-[#D4AF37]" />
+                      <h3 className="font-semibold text-gray-800 group-hover:text-[#D4AF37] transition-colors">
+                        {servicesStrip.hotel}
+                      </h3>
+                    </div>
+                    <p className="text-gray-600 text-sm">Find accommodations for your stay</p>
+                  </Link>
+                  <Link 
+                    href={`/${country}/flights`}
+                    className="bg-white border border-gray-200 hover:border-[#D4AF37] rounded-lg p-6 transition-all duration-300 group"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <Plane className="w-6 h-6 text-[#D4AF37]" />
+                      <h3 className="font-semibold text-gray-800 group-hover:text-[#D4AF37] transition-colors">
+                        {servicesStrip.flight}
+                      </h3>
+                    </div>
+                    <p className="text-gray-600 text-sm">Book your travel to Thailand</p>
+                  </Link>
+                  <Link 
+                    href={`/${country}/tickets`}
+                    className="bg-white border border-gray-200 hover:border-[#D4AF37] rounded-lg p-6 transition-all duration-300 group"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <Calendar className="w-6 h-6 text-[#D4AF37]" />
+                      <h3 className="font-semibold text-gray-800 group-hover:text-[#D4AF37] transition-colors">
+                        {servicesStrip.tickets}
+                      </h3>
+                    </div>
+                    <p className="text-gray-600 text-sm">Book tickets and attractions</p>
+                  </Link>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </div>

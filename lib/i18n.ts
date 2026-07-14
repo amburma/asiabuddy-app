@@ -770,6 +770,34 @@ const ENGLISH_UI = {
         "answer": "Online booking through Klook is typically 10-30% cheaper than on-site prices. You'll also avoid queues and guarantee availability. Some attractions offer exclusive online discounts and add-ons not available at the gate."
       }
     }
+  },
+  "activities": {
+    "title": "Tours & Activities in Thailand",
+    "intro": "Discover curated tours and experiences across Thailand with GetYourGuide. From cooking classes in Chiang Mai to snorkeling adventures in Krabi, explore authentic local activities led by expert guides. Whether you're seeking cultural immersion, outdoor adventures, or hidden gems, find the perfect experience for your journey.",
+    "continuePlanning": "Continue Planning Your Trip",
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "What types of activities are available?",
+        "answer": "GetYourGuide offers a wide range including cultural tours, cooking classes, adventure activities like zip-lining and kayaking, day trips to islands, historical site visits, and food tours. Options vary by city and season."
+      },
+      "q2": {
+        "question": "How do I receive my booking confirmation?",
+        "answer": "After booking, you'll receive an email confirmation with your voucher. Most activities accept mobile vouchers—simply show your phone at the meeting point. Some tours require printed vouchers, which will be clearly indicated in your confirmation."
+      },
+      "q3": {
+        "question": "What is the cancellation policy?",
+        "answer": "Cancellation policies vary by activity. Many tours offer free cancellation up to 24-72 hours before the start time. Always check the specific policy on the activity page before booking. Refunds are processed to your original payment method."
+      },
+      "q4": {
+        "question": "Are tours available in different languages?",
+        "answer": "Yes, many tours are offered in multiple languages including English, Chinese, Japanese, Korean, and European languages. Check the activity details for available language options and select your preferred language when booking."
+      },
+      "q5": {
+        "question": "Should I book activities in advance?",
+        "answer": "For popular experiences and small-group tours, booking 1-2 weeks ahead is recommended, especially during peak season (November-February). This ensures availability and often includes better pricing. Last-minute bookings may have limited options."
+      }
+    }
   }
 };
 
@@ -1535,6 +1563,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "การจองออนไลน์ผ่าน Klook โดยทั่วไปถูกกว่าราคาที่สถานที่ 10-30% คุณจะหลีกเลี่ยงคิวและรับประกันห้องว่าง สถานที่ท่องเที่ยวบางแห่งเสนอส่วนลดออนไลน์พิเศษและสิ่งเพิ่มเติมที่ไม่มีที่ประตู"
       }
     }
+  },
+  "activities": {
+    "title": "ทัวร์และกิจกรรมในประเทศไทย",
+    "intro": "ค้นพบทัวร์และประสบการณ์ที่คัดสรรทั่วประเทศไทยกับ GetYourGuide จากคลาสทำอาหารในเชียงใหม่ไปจนถึงการผจญภัยดำน้ำตื้นในกระบี่ สำรวจกิจกรรมท้องถิ่นแท้จริงที่นำโดยไกด์ผู้เชี่ยวชาญ ไม่ว่าคุณกำลังมองหาการดื่มด่ำทางวัฒนธรรม การผจญภัยกลางแจ้ง หรือสถานที่ลับ ค้นหาประสบการณ์ที่เหมาะสมสำหรับการเดินทางของคุณ",
+    "continuePlanning": "วางแผนการเดินทางต่อ",
+    "faq": {
+      "title": "คำถามที่พบบ่อย",
+      "q1": {
+        "question": "มีกิจกรรมประเภทใดบ้าง?",
+        "answer": "GetYourGuide นำเสนอหลากหลายประเภทรวมถึงทัวร์วัฒนธรรม คลาสทำอาหาร กิจกรรมผจญภัยเช่น ไซด์ไลน์และคายัค ทัวร์วันเดินทางไปเกาะ เยี่ยมชมสถานที่ทางมรดก และทัวร์อาหาร ตัวเลือกแตกต่างกันไปตามเมืองและฤดูกาล"
+      },
+      "q2": {
+        "question": "ฉันจะได้รับการยืนยันการจองอย่างไร?",
+        "answer": "หลังจากจอง คุณจะได้รับอีเมลยืนยันพร้อมวอชเชอร์ กิจกรรมส่วนใหญ่ยอมรับวอชเชอร์มือถือ เพียงแสดงโทรศัพท์ของคุณที่จุดนัดพบ ทัวร์บางรายการอาจต้องการวอชเชอร์พิมพ์ ซึ่งจะระบุไว้อย่างชัดเจนในการยืนยันของคุณ"
+      },
+      "q3": {
+        "question": "นโยบายการยกเลิกคืออะไร?",
+        "answer": "นโยบายการยกเลิกแตกต่างกันไปตามกิจกรรม ทัวร์หลายรายการเสนอการยกเลิกฟรีถึง 24-72 ชั่วโมงก่อนเวลาเริ่ม ตรวจสอบนโยบายเฉพาะในหน้ากิจกรรมเสมอก่อนจอง การคืนเงินจะดำเนินการไปยังวิธีการชำระเงินเดิมของคุณ"
+      },
+      "q4": {
+        "question": "มีทัวร์ในภาษาต่างๆ หรือไม่?",
+        "answer": "ใช่ ทัวร์หลายรายการนำเสนอในหลายภาษารวมถึงภาษาอังกฤษ จีน ญี่ปุ่น เกาหลี และภาษายุโรป ตรวจสอบรายละเอียดกิจกรรมสำหรับตัวเลือกภาษาที่มีและเลือกภาษาที่ต้องการเมื่อจอง"
+      },
+      "q5": {
+        "question": "ฉันควรจองกิจกรรมล่วงหน้าหรือไม่?",
+        "answer": "สำหรับประสบการณ์ยอดนิยมและทัวร์กลุ่มเล็ก แนะนำให้จองล่วงหน้า 1-2 สัปดาห์ โดยเฉพาะในฤดูกาลหนาแน่น (พฤศจิกายน-กุมภาพันธ์) นี่รับประกันความพร้อมและมักรวมราคาที่ดีกว่า การจองในนาทีสุดท้ายอาจมีตัวเลือกจำกัด"
+      }
+    }
   }
 },
   MM: {
@@ -2289,6 +2345,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "q5": {
         "question": "နေရာတွင် သို့မဟုတ် အွန်လိုတွင် ဘွတ်ကင်လုပ်ခြင်းသည် ပိုသက်သာပါသလား?",
         "answer": "Klook မှတစ်ဆင့် အွန်လိုင်း ဘွတ်ကင်လုပ်ခြင်းသည် နေရာတွင် စျေးနှုန်းထက် ပျမ်းမျှအားဖြင့် ၁၀-၃၀% ပိုသက်သာသည်။ သင်သည် စားပွဲချင်းမရှောင်ပဲ နေရာရရန် အာမခံနိုင်သည်။ နေရာအချို့သည် တံခါးတွင် မရရှိနိုင်သော သီးသန့် အွန်လိုင်း လျှော့စျေးများနှင့် ထပ်ပေါင်းများကို ပေးသည်။"
+      }
+    }
+  },
+  "activities": {
+    "title": "ထိုင်းနိုင်ငံရှိ ခရီးစဉ်များနှင့် လှုပ်ရှားမှုများ",
+    "intro": "GetYourGuide ဖြင့် ထိုင်းနိုင်ငံတစ်ဝှမ်းရှိ ရွေးချယ်ထားသော ခရီးစဉ်များနှင့် အတွေ့အကြုံများကို ရှာဖွေပါ။ ချီင်းမိုင်ရှိ ဟင်းချက်သင်တန်းများမှ ကရာဘီရှိ ငါးဖမ်းခရီးစဉ်များအထိ ကျွမ်းကျင်သူ လမ်းညွှန်များဖြက် ဦပြည့်သော ဒေသခံ လှုပ်ရှားမှုများကို စူးစမ်းပါ။ ယဉ်ကျေးမှု နက်နဲစွာ နေထိုင်ခြင်း၊ ပွင့်လင်းသော စွန့်စားခရီးစဉ်များ သို့မဟုတ် လျှို့ဝှက်နေရာများကို ရှာဖွေနေပါက သင့်ခရီးစဉ်အတွက် သင့်တော်သော အတွေ့အကြုံကို ရှာဖွေပါ။",
+    "continuePlanning": "သင့်ခရီးစဉ်ကို ဆက်လက် စီစဉ်ဆောင်ပါ",
+    "faq": {
+      "title": "မကြာခဏ မေးလေ့ရှိသော မေးခွန်းများ",
+      "q1": {
+        "question": "လှုပ်ရှားမှု အမျိုးအစားများ ရှိပါသလား?",
+        "answer": "GetYourGuide သည် ယဉ်ကျေးမှု ခရီးစဉ်များ၊ ဟင်းချက်သင်တန်းများ၊ ဇိုင်းလိုင်းနှင့် ကာယာက် စသည့် စွန့်စားလှုပ်ရှားမှုများ၊ ကျွန်းများသို့ တစ်ရက်ခရီးစဉ်များ၊ သမိုင်းဝင်နေရာများသို့ လည်ပတ်ခြင်းနှင့် အစားအသောက် ခရီးစဉ်များ အပါအဝင် ကျယ်ပြန့်သော အမျိုးအစားများကို ပေးသည်။ ရွေးချယ်စရာများသည် မြို့နှင့် ရာသီအလိုက် ကွဲပြားသည်။"
+      },
+      "q2": {
+        "question": "ငါ့ ဘွတ်ကင် အတည်ပြုချက်ကို မည်သို့ ရရှိမည်နည်း?",
+        "answer": "ဘွတ်ကင်လုပ်ပြီးနောက် သင်သည် သင့်ဘောက်ချာဖြင့် အီးမေးလ် အတည်ပြုချက်ကို ရရှိမည်ဖြစ်သည်။ လှုပ်ရှားမှုအများစုသည် မိုဘိုင်း ဘောက်ချာများကို လက်ခံသည်—တွေ့ဆုံရာ နေရာတွင် သင့်ဖုန်းကို ပြရုံဖြင့် လုံလောက်သည်။ ခရီးစဉ်အချို့သည် ပုံနှိပ်ထားသော ဘောက်ချာများကို လိုအပ်ပြီး ၎င်းတို့ကို သင့်အတည်ပြုချက်တွင် ရှင်းလင်းဖော်ပြထားလိမ့်မည်။"
+      },
+      "q3": {
+        "question": "ပယ်ဖျက်မူဝါဒမှာ ဘာလဲ?",
+        "answer": "ပယ်ဖျက်မူဝါဒများသည် လှုပ်ရှားမှုအလိုက် ကွဲပြားသည်။ ခရီးစဉ်အများစုသည် စတင်မည့်အချိန်မတိုင်မီ ၂၄-၇၂ နာရီအထိ အခမဲ့ ပယ်ဖျက်နိုင်သည်။ ဘွတ်ကင်လုပ်မည့်အခါ အမြဲ လှုပ်ရှားမှု စာမျက်နှာပေါ်ရှိ သီးသန့် မူဝါဒကို စစ်ဆေးပါ။ ပြန်ပေးချေခြင်းများသည် သင့်မူရင်း ငွေပေးချေမှု နည်းလမ်းသို့ လုပ်ဆောင်ပေးလိမ့်မည်။"
+      },
+      "q4": {
+        "question": "ခရီးစဉ်များကို ဘာသာစကားများဖြင့် ရရှိနိုင်ပါသလား?",
+        "answer": "ဟုတ်ကြောင်း၊ ခရီးစဉ်အများစုကို အင်္ဂလိပ်၊ တရုတ်၊ ဂျပန်၊ ကိုရီးယား နှင့်ဥရောပ ဘာသာစကားများ အပါအဝင် ဘာသာစကားများစွာဖြင့် ပေးသည်။ ရရှိနိုင်သော ဘာသာစကား ရွေးချယ်စရာများအတွက် လှုပ်ရှားမှု အသေးစိတ်များကို စစ်ဆေးပါ ဘွတ်ကင်လုပ်သည့်အခါ သင်နှစ်သက်သော ဘာသာစကားကို ရွေးချယ်ပါ။"
+      },
+      "q5": {
+        "question": "ငါသည် လှုပ်ရှားမှုများကို ကြိုတင် ဘွတ််ကင်လုပ်သင့်ပါသလား?",
+        "answer": "လူကြိုက်များသော အတွေ့အကြုံများနှင့် အုပ်စုသေး ခရီးစဉ်များအတွက် အထူးသဖြင့် လူဦးရေများသော ရာသီ (နိုဝင်ဘာ-ဖေဖော်ဝါရီ) တွင် ၁-၂ ပတ် ကြိုတင် ဘွတ်ကင်လုပ်ရန် အကြံပြုသည်။ ဤသည်သည် ရရန်နိုင်ခြင်းကို အာမခံပြီး မကြာခဏ ပိုကောင်းသော စျေးနှုန်းများကို ပါဝင်သည်။ နောက်ဆုံး မိနစ်ဘွတ်ကင်လုပ်ခြင်းသည် ရွေးချယ်စရာ ကန့်သတ်ချက်ရှိနိုင်သည်။"
       }
     }
   }
@@ -3047,6 +3131,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "La reserva en línea a través de Klook es típicamente 10-30% más barata que los precios en el sitio. También evitarás las filas y garantizarás disponibilidad. Algunas atracciones ofrecen descuentos en línea exclusivos y complementos no disponibles en la puerta."
       }
     }
+  },
+  "activities": {
+    "title": "Tours y Actividades en Tailandia",
+    "intro": "Descubre tours y experiencias curadas en toda Tailandia con GetYourGuide. Desde clases de cocina en Chiang Mai hasta aventuras de snorkel en Krabi, explora actividades locales auténticas guiadas por expertos. Ya sea que busques inmersión cultural, aventuras al aire libre o joyas ocultas, encuentra la experiencia perfecta para tu viaje.",
+    "continuePlanning": "Continúa Planeando Tu Viaje",
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "q1": {
+        "question": "¿Qué tipos de actividades están disponibles?",
+        "answer": "GetYourGuide ofrece una amplia gama que incluye tours culturales, clases de cocina, actividades de aventura como tirolina y kayak, excursiones de un día a islas, visitas a sitios históricos y tours gastronómicos. Las opciones varían por ciudad y temporada."
+      },
+      "q2": {
+        "question": "¿Cómo recibo mi confirmación de reserva?",
+        "answer": "Después de reservar, recibirás un correo electrónico de confirmación con tu voucher. La mayoría de las actividades aceptan vouchers móviles—simplemente muestra tu teléfono en el punto de encuentro. Algunos tours requieren vouchers impresos, lo que se indicará claramente en tu confirmación."
+      },
+      "q3": {
+        "question": "¿Cuál es la política de cancelación?",
+        "answer": "Las políticas de cancelación varían según la actividad. Muchos tours ofrecen cancelación gratuita hasta 24-72 horas antes de la hora de inicio. Siempre verifica la política específica en la página de la actividad antes de reservar. Los reembolsos se procesan a tu método de pago original."
+      },
+      "q4": {
+        "question": "¿Hay tours disponibles en diferentes idiomas?",
+        "answer": "Sí, muchos tours se ofrecen en múltiples idiomas incluyendo inglés, chino, japonés, coreano y idiomas europeos. Verifica los detalles de la actividad para las opciones de idioma disponibles y selecciona tu idioma preferido al reservar."
+      },
+      "q5": {
+        "question": "¿Debo reservar actividades con anticipación?",
+        "answer": "Para experiencias populares y tours de grupos pequeños, se recomienda reservar 1-2 semanas antes, especialmente durante temporada alta (noviembre-febrero). Esto garantiza disponibilidad y a menudo incluye mejores precios. Las reservas de última hora pueden tener opciones limitadas."
+      }
+    }
   }
 },
   FR: {
@@ -3803,6 +3915,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "La réservation en ligne via Klook est généralement 10-30% moins chère que les prix sur place. Vous éviterez également les files et garantirez la disponibilité. Certaines attractions offrent des remises en ligne exclusives et des extras non disponibles à l'entrée."
       }
     }
+  },
+  "activities": {
+    "title": "Tours et Activités en Thaïlande",
+    "intro": "Découvrez des circuits et expériences curés à travers la Thaïlande avec GetYourGuide. Des cours de cuisine à Chiang Mai aux aventures de snorkeling à Krabi, explorez des activités locales authentiques guidées par des experts. Que vous cherchiez une immersion culturelle, des aventures en plein air ou des trésors cachés, trouvez l'expérience parfaite pour votre voyage.",
+    "continuePlanning": "Continuer à Planifier Votre Voyage",
+    "faq": {
+      "title": "Questions Fréquentes",
+      "q1": {
+        "question": "Quels types d'activités sont disponibles?",
+        "answer": "GetYourGuide propose une large gamme incluant des circuits culturels, des cours de cuisine, des activités d'aventure comme la tyrolienne et le kayak, des excursions d'une journée aux îles, des visites de sites historiques et des circuits gastronomiques. Les options varient selon la ville et la saison."
+      },
+      "q2": {
+        "question": "Comment reçois-je ma confirmation de réservation?",
+        "answer": "Après avoir réservé, vous recevrez un email de confirmation avec votre voucher. La plupart des activités acceptent les vouchers mobiles—montrez simplement votre téléphone au point de rencontre. Certains circuits nécessitent des vouchers imprimés, ce qui sera clairement indiqué dans votre confirmation."
+      },
+      "q3": {
+        "question": "Quelle est la politique d'annulation?",
+        "answer": "Les politiques d'annulation varient selon l'activité. De nombreux circuits offrent une annulation gratuite jusqu'à 24-72 heures avant l'heure de début. Vérifiez toujours la politique spécifique sur la page de l'activité avant de réserver. Les remboursements sont traités vers votre méthode de paiement originale."
+      },
+      "q4": {
+        "question": "Les circuits sont-ils disponibles dans différentes langues?",
+        "answer": "Oui, de nombreux circuits sont proposés en plusieurs langues dont l'anglais, le chinois, le japonais, le coréen et les langues européennes. Vérifiez les détails de l'activité pour les options de langue disponibles et sélectionnez votre langue préférée lors de la réservation."
+      },
+      "q5": {
+        "question": "Dois-je réserver des activités à l'avance?",
+        "answer": "Pour les expériences populaires et les circuits en petits groupes, il est recommandé de réserver 1-2 semaines à l'avance, surtout en haute saison (novembre-février). Cela garantit la disponibilité et inclut souvent de meilleurs prix. Les réservations de dernière minute peuvent avoir des options limitées."
+      }
+    }
   }
 },
   DE: {
@@ -4557,6 +4697,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "q5": {
         "question": "Ist es günstiger, vor Ort oder online zu buchen?",
         "answer": "Online-Buchen über Klook ist typischerweise 10-30% günstiger als Vor-Ort-Preise. Sie vermeiden auch Warteschlangen und garantieren Verfügbarkeit. Einige Attraktionen bieten exklusive Online-Rabatte und Extras, die nicht am Eingang erhältlich sind."
+      }
+    }
+  },
+  "activities": {
+    "title": "Touren und Aktivitäten in Thailand",
+    "intro": "Entdecken Sie kuratierte Touren und Erlebnisse in ganz Thailand mit GetYourGuide. Von Kochkursen in Chiang Mai bis hin zu Schnorchelabenteuern in Krabi, erkunden Sie authentische lokale Aktivitäten unter Leitung von Experten. Ob kulturelle Immersion, Outdoor-Abenteuer oder versteckte Perlen—finden Sie das perfekte Erlebnis für Ihre Reise.",
+    "continuePlanning": "Reise Weiter Planen",
+    "faq": {
+      "title": "Häufig Gestellte Fragen",
+      "q1": {
+        "question": "Welche Arten von Aktivitäten sind verfügbar?",
+        "answer": "GetYourGuide bietet eine breite Palette inklusive kultureller Touren, Kochkursen, Abenteueraktivitäten wie Ziplining und Kajak, Tagesausflügen zu Inseln, Besuchen historischer Stätten und Food-Touren. Die Optionen variieren je nach Stadt und Saison."
+      },
+      "q2": {
+        "question": "Wie erhalte ich meine Buchungsbestätigung?",
+        "answer": "Nach der Buchung erhalten Sie eine E-Mail-Bestätigung mit Ihrem Gutschein. Die meisten Aktivitäten akzeptieren mobile Gutscheine—zeigen Sie einfach Ihr Telefon am Treffpunkt. Einige Touren erfordern gedruckte Gutscheine, was in Ihrer Bestätigung klar angegeben wird."
+      },
+      "q3": {
+        "question": "Was ist die Stornierungsrichtlinie?",
+        "answer": "Stornierungsrichtlinien variieren je nach Aktivität. Viele Touren bieten kostenlose Stornierung bis zu 24-72 Stunden vor Startzeit. Überprüfen Sie immer die spezifische Richtlinie auf der Aktivitätsseite vor der Buchung. Erstattungen werden an Ihre ursprüngliche Zahlungsmethode verarbeitet."
+      },
+      "q4": {
+        "question": "Sind Touren in verschiedenen Sprachen verfügbar?",
+        "answer": "Ja, viele Touren werden in mehreren Sprachen angeboten einschließlich Englisch, Chinesisch, Japanisch, Koreanisch und europäischen Sprachen. Überprüfen Sie die Aktivitätsdetails für verfügbare Sprachoptionen und wählen Sie Ihre bevorzugte Sprache bei der Buchung."
+      },
+      "q5": {
+        "question": "Sollte ich Aktivitäten im Voraus buchen?",
+        "answer": "Für beliebte Erlebnisse und Kleingruppen-Touren wird empfohlen, 1-2 Wochen im Voraus zu buchen, besonders in der Hauptsaison (November-Februar). Dies garantiert Verfügbarkeit und beinhaltet oft bessere Preise. Last-Minute-Buchungen können begrenzte Optionen haben."
       }
     }
   }

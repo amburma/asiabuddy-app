@@ -2907,3 +2907,35 @@ widgets (not the "Coming Soon" placeholder from Session 22):**
 
 ### 📋 Backlog (proposed future work)
 - 🟡 **Restructure lib/i18n.ts before adding a second country** — lib/i18n.ts has grown to ~148KB covering all languages × all services for Thailand only. Before adding a second country (e.g. Singapore), consider splitting into `lib/i18n/<country>/<service>.ts` files (with a shared `lib/i18n/common.ts` for nav/shared UI strings) to keep the file maintainable and reduce the blast radius of any single edit — the MM brace bug this session is a concrete example of how a single large file makes small syntax mistakes hard to spot and far-reaching once introduced.
+
+---
+
+## Session 28 — 14 July 2026 — Activities Page SEO/SSR Rollout + Locale Diagnosis
+
+**Summary:** Applied the same SSR-crawlable SEO content treatment used on /thailand/tickets (Session prior) to /thailand/activities — h1, intro paragraph, FAQ section, cross-sell cards — without disturbing the existing GYG (GetYourGuide) affiliate data, 12-city selector, or the page's existing `translateText()` mechanism used for dynamic UI labels. Along the way, diagnosed and resolved a section-ordering bug and a sitewide MM/TH locale regression that turned out to be a stale dev server process rather than a code defect.
+
+**Work completed:**
+- Added an `activities` i18n namespace to lib/i18n.ts, mirroring the `tickets` namespace structure, covering all 6 languages (EN/MM/TH/DE/FR/ES) with complete title, intro, FAQ (5 Q&As), and cross-sell translations
+- Confirmed and preserved the page's existing dual-translation setup: `translateText()` remains used for dynamic runtime UI labels with interpolated values (e.g. country name, activity count), while the new static SEO content uses `UI_TRANSLATIONS[locale].activities` — the two mechanisms coexist deliberately and were not merged
+- Wired h1, intro paragraph, FAQ section, and a "Continue Planning Your Trip" cross-sell section (linking to hotels/flights/tickets, excluding activities itself, reusing existing shared servicesStrip-style label keys rather than creating duplicates) into app/[country]/activities/page.tsx as server-rendered JSX
+- Confirmed `export const dynamic = 'force-dynamic'` present (unchanged)
+- No `next/dynamic({ssr:false})` used anywhere
+
+**Bugs found and fixed this session:**
+
+1. **Section ordering bug** — initial placement put the FAQ and cross-sell sections between the intro paragraph and the GYG activity card list, pushing the actual service cards (the core content) to the very bottom of the page below the FAQ. Fixed by reordering to match the tickets page pattern: h1 → city selector → intro → GYG cards → FAQ → cross-sell. Confirmed visually via screenshot.
+
+2. **False-positive SSR bailout alarm** — a raw-HTML verification check initially appeared to show the page h1 missing from server-rendered HTML on both activities AND the previously-verified-working tickets page. Root cause was a testing artifact, not a real bug: the search used guessed title text instead of the actual source string, and didn't account for HTML entity encoding (`&` rendering as `&amp;`). Once corrected to use exact strings sourced from lib/i18n.ts and a structural `<h1>` regex, both pages confirmed fully SSR-correct. Lesson: always pull exact expected strings from source before writing a verification search, never guess.
+
+3. **Sitewide MM/TH locale fallback (false alarm, resolved by restart)** — a real-looking regression appeared where both MM and TH locale cookies fell back to English on ALL pages, including completely untouched files like hotels/page.tsx. Investigation ruled out code causes methodically: `normalizeLocale()` manually traced and confirmed correct for both MM and TH; `git diff` confirmed zero changes to hotels/page.tsx; cache-busting query params had no effect. This fingerprint (works-for-nothing, on unedited files, unaffected by cache params) pointed to a stale dev server process rather than a code bug — most likely triggered by an earlier unrelated cleanup step in this same working session that deleted an unused NavbarServer.tsx file without a subsequent clean restart. Resolved by the user performing a manual `.next` cache delete + dev server restart (not performed by the AI agent, which had no access to the running server process).
+
+**Verification completed (confirmed working, user-tested locally):**
+- `npx tsc --noEmit` — 0 errors
+- Raw SSR HTML (exact-string + structural regex method) confirmed h1, intro, FAQ, and cross-sell present as genuine server-rendered markup, not just hydration JSON, on activities — with tickets re-confirmed clean as a control
+- City selector regression: Bangkok (default) + Pattaya both confirmed working, GYG activity cards unaffected
+- Corrected section order confirmed visually via screenshot: GYG cards now render above FAQ, matching tickets' pattern
+- Cross-sell links confirmed resolving to real routes, no 404s, none linking back to activities itself
+- Regression on hotels/flights/tickets confirmed clean post-restart
+
+**Notable process note (worth flagging for future sessions):**
+- A verification round nearly led to an incorrect fix (removing `force-dynamic`, which would have reintroduced the Session 26 language regression) based on a locale-fallback symptom that was actually caused by a stale dev process. Methodical elimination (checking the pure function's logic in isolation, confirming zero file changes via git diff, testing an untouched file) prevented an unnecessary and harmful code change. Recommendation for future sessions: after any file deletion or heavy restructuring, do a clean dev server restart before extended verification testing, to avoid chasing phantom regressions.
