@@ -1,5 +1,18 @@
 import { SupportedLanguage } from '@/types/country';
 
+const SUPPORTED_LOCALES: SupportedLanguage[] = ['EN', 'TH', 'MM', 'ES', 'FR', 'DE'];
+
+export function normalizeLocale(locale: string | undefined | null): SupportedLanguage {
+  if (!locale) return 'EN';
+  
+  const upper = locale.toUpperCase();
+  if (SUPPORTED_LOCALES.includes(upper as SupportedLanguage)) {
+    return upper as SupportedLanguage;
+  }
+  
+  return 'EN';
+}
+
 const ENGLISH_UI = {
   "brand": {
     "name": "ThaiGuide",
@@ -727,6 +740,34 @@ const ENGLISH_UI = {
       "q5": {
         "question": "Are beachfront hotels worth the extra cost?",
         "answer": "Beachfront properties offer convenience and views but command premium prices. Hotels within walking distance (5-10 minutes) often provide better value. Consider how much time you'll spend at the beach versus exploring other attractions when deciding."
+      }
+    }
+  },
+  "tickets": {
+    "title": "Tickets & Activities in Thailand",
+    "intro": "Book tickets and activities across Thailand with instant confirmation through Klook. From temple tours in Bangkok to island hopping in Phuket, skip the lines and secure your spot in advance. Popular experiences include cultural shows, adventure tours, and attraction passes. Booking ahead guarantees availability and often includes exclusive discounts.",
+    "continuePlanning": "Continue Planning Your Trip",
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "Do I need to book tickets in advance?",
+        "answer": "For popular attractions like Grand Palace tours, island hopping trips, and cultural shows, booking 1-2 weeks ahead is recommended, especially during peak season (December-February). This guarantees your spot and often includes skip-the-line access."
+      },
+      "q2": {
+        "question": "Are e-tickets accepted at attractions?",
+        "answer": "Yes, most Klook partners accept mobile e-tickets. Simply show your QR code at the entrance. Some attractions may require physical tickets which can be collected at designated counters. Check your booking confirmation for specific instructions."
+      },
+      "q3": {
+        "question": "What if I need to cancel my booking?",
+        "answer": "Cancellation policies vary by attraction. Many tickets offer free cancellation up to 24-48 hours before the activity. Always review the cancellation policy before booking. Refunds are typically processed back to your original payment method."
+      },
+      "q4": {
+        "question": "Are there combo tickets for multiple attractions?",
+        "answer": "Yes, combo passes are available for popular destinations like Bangkok city tours and island packages. These often provide better value than individual tickets and include transportation between attractions. Look for 'combo' or 'pass' options when browsing."
+      },
+      "q5": {
+        "question": "Is it cheaper to book on-site or online?",
+        "answer": "Online booking through Klook is typically 10-30% cheaper than on-site prices. You'll also avoid queues and guarantee availability. Some attractions offer exclusive online discounts and add-ons not available at the gate."
       }
     }
   }
@@ -1466,6 +1507,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "ที่พักริมชายหาดเสนอความสะดวกสบายและวิวแต่มีราคาพรีเมียม โรงแรมที่อยู่ในระยะเดินถึง (5-10 นาที) มักให้คุณค่าที่ดีกว่า พิจารณาเวลาที่คุณจะใช้ที่ชายหาดเทียบกับการสำรวจสถานที่ท่องเที่ยวอื่นเมื่อตัดสินใจ"
       }
     }
+  },
+  "tickets": {
+    "title": "ตั๋วและกิจกรรมในประเทศไทย",
+    "intro": "จองตั๋วและกิจกรรมทั่วประเทศไทยพร้อมการยืนยันทันทีผ่าน Klook จากทัวร์วัดในกรุงเทพฯ ไปจนถึงการเที่ยวเกาะในภูเก็ต เลี่ยงคิวและจองที่นั่งล่วงหน้า ประสบการณ์ยอดนิยมได้แก่ การแสดงวัฒนธรรม ทัวร์ผจญภัย และบัตรผ่านสถานที่ท่องเที่ยว การจองล่วงหน้ารับประกันห้องว่างและมักมีส่วนลดพิเศษ",
+    "continuePlanning": "วางแผนการเดินทางต่อ",
+    "faq": {
+      "title": "คำถามที่พบบ่อย",
+      "q1": {
+        "question": "ฉันต้องจองตั๋วล่วงหน้าหรือไม่?",
+        "answer": "สำหรับสถานที่ท่องเที่ยวยอดนิยมเช่น ทัวร์วัดพระเก้า ทัวร์เกาะ และการแสดงวัฒนธรรม แนะนำให้จองล่วงหน้า 1-2 สัปดาห์ โดยเฉพาะในฤดูกาลหนาแน่น (ธันวาคม-กุมภาพันธ์) นี่รับประกันที่นั่งของคุณและมักรวมการเข้าแบบไม่ต้องคิว"
+      },
+      "q2": {
+        "question": "อี-ตั๋วได้รับการยอมรับที่สถานที่ท่องเที่ยวหรือไม่?",
+        "answer": "ใช่ พาร์ทเนอร์ Klook ส่วนใหญ่ยอมรับอี-ตั๋วมือถือ เพียงแสดง QR code ของคุณที่ทางเข้า สถานที่บางแห่งอาจต้องการตั๋วจริงซึ่งสามารถรับได้ที่เคาน์เตอร์ที่กำหนด ตรวจสอบการยืนยันการจองของคุณสำหรับคำแนะนำเฉพาะ"
+      },
+      "q3": {
+        "question": "ถ้าฉันต้องการยกเลิกการจองของฉันจะทำอย่างไร?",
+        "answer": "นโยบายการยกเลิกแตกต่างกันไปตามสถานที่ท่องเที่ยว ตั๋วหลายใบเสนอการยกเลิกฟรีถึง 24-48 ชั่วโมงก่อนกิจกรรม ตรวจสอบนโยบายการยกเลิกเสมอก่อนจอง การคืนเงินมักดำเนินการกลับไปยังวิธีการชำระเงินเดิมของคุณ"
+      },
+      "q4": {
+        "question": "มีตั๋วคอมโบสำหรับสถานที่ท่องเที่ยวหลายแห่งหรือไม่?",
+        "answer": "ใช่ บัตรผ่านคอมโบมีให้สำหรับจุดหมายปลายทางยอดนิยมเช่น ทัวร์เมืองกรุงเทพฯ และแพ็กเกจเกาะ เหล่านี้มักให้คุณค่าที่ดีกว่าตั๋วแยกและรวมการเดินทางระหว่างสถานที่ท่องเที่ยว มองหาตัวเลือก 'คอมโบ' หรือ 'ผ่าน' เมื่อเรียกดู"
+      },
+      "q5": {
+        "question": "จองที่สถานที่หรือออนไลน์ถูกกว่ากัน?",
+        "answer": "การจองออนไลน์ผ่าน Klook โดยทั่วไปถูกกว่าราคาที่สถานที่ 10-30% คุณจะหลีกเลี่ยงคิวและรับประกันห้องว่าง สถานที่ท่องเที่ยวบางแห่งเสนอส่วนลดออนไลน์พิเศษและสิ่งเพิ่มเติมที่ไม่มีที่ประตู"
+      }
+    }
   }
 },
   MM: {
@@ -2192,6 +2261,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "q5": {
         "question": "ပင်လယ်ကမ်းခြေ ဟိုတယ်များသည် ဈေးကြီးသည့်အတွက် တန်ဖိုးရှိပါသလား?",
         "answer": "ပင်လယ်ကမ်းခေါင် နေရာများသည် အဆင်ပြေချင်းနှင့် မြင်ကွင်းများကို ပေးသော်လည်း ပရီမီယံ စျေးနှုန်းများရှိသည်။ လမ်းလျှောက်သွားနိုင်သော (၅-၁၀ မိနစ်) ဟိုတယ်များသည် ပိုကောင်းသော တန်ဖိုးကို ပေးတတ်သည်။ ဆုံးဖြတ်ရာတွင် ပင်လယ်ကမ်းခြေတွင် သင်နေရမည့် အချိန်နှင့် အခြား ကြည့်ရှုရန် နေရာများကို စူးစမ်းရာတွင် သုံးသပ်ပါ။"
+      }
+    }
+  },
+  "tickets": {
+    "title": "ထိုင်းနိုင်ငံရှိ လက်မှတ်များနှင့် လှုပ်ရှားမှုများ",
+    "intro": "Klook မှတစ်ဆင့် ထိုင်းနိုင်ငံတစ်ဝှမ်းတွင် လက်မှတ်များနှင့် လှုပ်ရှားမှုများကို ချက်ချင်း အတည်ပြုဖြင့် ဘွတ်ကင်လုပ်ပါ။ ဘန်ကောက်ရှိ ဘုရားကျောင်းခရီးစဉ်များမှ ဖူးကက်ရှိ ကျွန်းခရီးစဉ်များအထိ စားပွဲချင်းမရှောင်ပဲ ကြိုတင် နေရာချထားပါ။ လူကြိုက်များသော အတွေ့အကြုံများတွင် ယဉ်ကျေးမှု ပြပွဲများ၊ စွန့်စားခရီးစဉ်များနှင့် ဆိုင်ရာ နေရာများသို့ ဝင်ရောက်ခွင့် ပါဝင်သည်။ ကြိုတင် ဘွတ်ကင်လုပ်ခြင်းသည် နေရာရရန် အာမခံပြီး မကြာခဏ သီးသန့် လျှော့စျေးများလည်း ပါဝင်သည်။",
+    "continuePlanning": "သင့်ခရီးစဉ်ကို ဆက်လက် စီစဉ်ဆောင်ပါ",
+    "faq": {
+      "title": "မကြာခဏ မေးလေ့ရှိသော မေးခွန်းများ",
+      "q1": {
+        "question": "လက်မှတ်များကို ကြိုတင် ဘွတ်ကင်လုပ်ရန် လိုအပ်ပါသလား?",
+        "answer": "လူကြိုက်များသော နေရာများဖြစ်သည့် ဂရင်းပေါ်လစ် ခရီးစဉ်များ၊ ကျွန်းခရီးစဉ်များနှင့် ယဉ်ကျေးမှု ပြပွဲများအတွက် လူဦးရေများသော ရာသီ (ဒီဇင်ဘာ-ဖေဖော်ဝါရီ) တွင် ၁-၂ ပတ် ကြိုတင် ဘွတ်ကင်လုပ်ရန် အကြံပြုသည်။ ဤသည်သည် သင့်နေရာကို အာမခံပြီး မကြာခဏ စားပွဲချင်းမရှောင်ပဲ ဝင်နိုင်ခွင့်ကို ပါဝင်သည်။"
+      },
+      "q2": {
+        "question": "အီလက်ထရွန်းနစ် လက်မှတ်များကို နေရာများတွင် လက်ခံပါသလား?",
+        "answer": "ဟုတ်ကြောင်း၊ Klook ပါတ်နာများ အများစုသည် မိုဘိုင်း အီလက်ထရွန်းနစ် လက်မှတ်များကို လက်ခံသည်။ ဝင်ပေါက်တွင် သင့် QR code ကို ပြရုံဖြင့် လုံလောက်သည်။ နေရာအချို့သည် သတ်မှတ်ထားသော ကောင်တာများတွင် ရရှိနိုင်သော ရုပ်စုံ လက်မှတ်များကို လိုအပ်နိုင်သည်။ သီးသန့် ညွှန်ကြားချက်များအတွက် သင့် ဘွတ်ကင် အတည်ပြုချက်ကို စစ်ဆေးပါ။"
+      },
+      "q3": {
+        "question": "ငါ့ ဘွတ်ကင်ကို ပယ်ဖျက်လိုလျှင် ဘာလုပ်ရမလဲ?",
+        "answer": "ပယ်ဖျက်မူဝါဒများသည် နေရာအလိုက် ကွဲပြားသည်။ လက်မှတ်အများစုသည် လှုပ်ရှားမှု မစတင်မီ ၂၄-၄၈ နာရီအထိ အခမဲ့ ပယ်ဖျက်နိုင်သည်။ ဘွတ်ကင်လုပ်မည့်အခါ အမြဲ ပယ်ဖျက်မူဝါဒကို စစ်ဆေးပါ။ ပြန်ပေးချေခြင်းများသည် ယေဘုယျအားဖြင့် သင့် မူရင်း ငွေပေးချေမှု နည်းလမ်းသို့ ပြန်လည် လုပ်ဆောင်သည်။"
+      },
+      "q4": {
+        "question": "နေရာများစွာအတွက် ပေါင်းစပ် လက်မှတ်များ ရှိပါသလား?",
+        "answer": "ဟုတ်ကြောင်း၊ ဘန်ကောက် မြို့တော် ခရီးစဉ်များနှင့် ကျွန်း ပက်ကေ့ချ်များကဲ့သို့သော လူကြိုက်များသော နေရာများအတွက် ပေါင်းစပ် ပါ့စ်များ ရရှိနိုင်သည်။ ဤသည်များသည် တစ်ခုချင်း လက်မှတ်များထက် ပိုကောင်းသော တန်ဖိုးကို ပေးတတ်ပြီး နေရာများကြား သယ်ယူပို့ဆောင်ရေနှင့် ပါဝင်သည်။ ကြည့်ရှုသည့်အခါ 'combo' သို့မဟုတ် 'pass' ရွေးချယ်စရာများကို ရှာဖွေပါ။"
+      },
+      "q5": {
+        "question": "နေရာတွင် သို့မဟုတ် အွန်လိုတွင် ဘွတ်ကင်လုပ်ခြင်းသည် ပိုသက်သာပါသလား?",
+        "answer": "Klook မှတစ်ဆင့် အွန်လိုင်း ဘွတ်ကင်လုပ်ခြင်းသည် နေရာတွင် စျေးနှုန်းထက် ပျမ်းမျှအားဖြင့် ၁၀-၃၀% ပိုသက်သာသည်။ သင်သည် စားပွဲချင်းမရှောင်ပဲ နေရာရရန် အာမခံနိုင်သည်။ နေရာအချို့သည် တံခါးတွင် မရရှိနိုင်သော သီးသန့် အွန်လိုင်း လျှော့စျေးများနှင့် ထပ်ပေါင်းများကို ပေးသည်။"
       }
     }
   }
@@ -2922,6 +3019,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "Las propiedades frente a la playa ofrecen conveniencia y vistas pero tienen precios premium. Los hoteles a distancia caminable (5-10 minutos) a menudo ofrecen mejor valor. Considera cuánto tiempo pasarás en la playa versus explorar otras atracciones al decidir."
       }
     }
+  },
+  "tickets": {
+    "title": "Entradas y Actividades en Tailandia",
+    "intro": "Reserva entradas y actividades en toda Tailandia con confirmación instantánea a través de Klook. Desde tours de templos en Bangkok hasta excursiones isleñas en Phuket, evita las filas y asegura tu lugar con anticipación. Las experiencias populares incluyen espectáculos culturales, tours de aventura y pases de atracciones. Reservar con anticipación garantiza disponibilidad y a menudo incluye descuentos exclusivos.",
+    "continuePlanning": "Continúa Planeando Tu Viaje",
+    "faq": {
+      "title": "Preguntas Frecuentes",
+      "q1": {
+        "question": "¿Necesito reservar entradas con anticipación?",
+        "answer": "Para atracciones populares como tours del Gran Palacio, excursiones isleñas y espectáculos culturales, se recomienda reservar 1-2 semanas antes, especialmente durante la temporada alta (diciembre-febrero). Esto garantiza tu lugar y a menudo incluye acceso sin filas."
+      },
+      "q2": {
+        "question": "¿Se aceptan e-tickets en las atracciones?",
+        "answer": "Sí, la mayoría de los socios de Klook aceptan e-tickets móviles. Simplemente muestra tu código QR en la entrada. Algunas atracciones pueden requerir tickets físicos que se pueden recoger en mostradores designados. Verifica tu confirmación de reserva para instrucciones específicas."
+      },
+      "q3": {
+        "question": "¿Qué pasa si necesito cancelar mi reserva?",
+        "answer": "Las políticas de cancelación varían por atracción. Muchas entradas ofrecen cancelación gratuita hasta 24-48 horas antes de la actividad. Siempre revisa la política de cancelación antes de reservar. Los reembolsos generalmente se procesan de vuelta a tu método de pago original."
+      },
+      "q4": {
+        "question": "¿Hay entradas combinadas para múltiples atracciones?",
+        "answer": "Sí, hay pases combinados disponibles para destinos populares como tours de la ciudad de Bangkok y paquetes isleños. Estos a menudo ofrecen mejor valor que las entradas individuales e incluyen transporte entre atracciones. Busca opciones de 'combo' o 'pase' al navegar."
+      },
+      "q5": {
+        "question": "¿Es más barato reservar en el sitio o en línea?",
+        "answer": "La reserva en línea a través de Klook es típicamente 10-30% más barata que los precios en el sitio. También evitarás las filas y garantizarás disponibilidad. Algunas atracciones ofrecen descuentos en línea exclusivos y complementos no disponibles en la puerta."
+      }
+    }
   }
 },
   FR: {
@@ -3648,6 +3773,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "q5": {
         "question": "Les hôtels en bord de mer valent-ils le coût supplémentaire?",
         "answer": "Les propriétés en bord de mer offrent commodité et vues mais ont des prix premium. Les hôtels à distance de marche (5-10 minutes) offrent souvent une meilleure valeur. Considérez combien de temps vous passerez à la plage versus explorer d'autres attractions lors de votre décision."
+      }
+    }
+  },
+  "tickets": {
+    "title": "Billets et Activités en Thaïlande",
+    "intro": "Réservez des billets et des activités dans toute la Thaïlande avec confirmation instantanée via Klook. Des visites de temples à Bangkok aux excursions insulaires à Phuket, évitez les files et sécurisez votre place à l'avance. Les expériences populaires incluent des spectacles culturels, des visites d'aventure et des passes d'attractions. Réserver à l'avance garantit la disponibilité et inclut souvent des remises exclusives.",
+    "continuePlanning": "Continuer à Planifier Votre Voyage",
+    "faq": {
+      "title": "Questions Fréquentes",
+      "q1": {
+        "question": "Dois-je réserver des billets à l'avance?",
+        "answer": "Pour les attractions populaires comme les visites du Grand Palais, les excursions insulaires et les spectacles culturels, il est recommandé de réserver 1-2 semaines à l'avance, surtout pendant la haute saison (décembre-février). Cela garantit votre place et inclut souvent l'accès sans file."
+      },
+      "q2": {
+        "question": "Les e-tickets sont-ils acceptés aux attractions?",
+        "answer": "Oui, la plupart des partenaires Klook acceptent les e-tickets mobiles. Montrez simplement votre code QR à l'entrée. Certaines attractions peuvent nécessiter des billets physiques qui peuvent être récupérés aux guichets désignés. Vérifiez votre confirmation de réservation pour les instructions spécifiques."
+      },
+      "q3": {
+        "question": "Que se passe-t-il si je dois annuler ma réservation?",
+        "answer": "Les politiques d'annulation varient par attraction. De nombreux billets offrent une annulation gratuite jusqu'à 24-48 heures avant l'activité. Vérifiez toujours la politique d'annulation avant de réserver. Les remboursements sont généralement traités vers votre méthode de paiement originale."
+      },
+      "q4": {
+        "question": "Y a-t-il des billets combinés pour plusieurs attractions?",
+        "answer": "Oui, des passes combinés sont disponibles pour des destinations populaires comme les visites de ville de Bangkok et les packages insulaires. Ils offrent souvent une meilleure valeur que les billets individuels et incluent le transport entre les attractions. Recherchez les options 'combo' ou 'pass' lors de la navigation."
+      },
+      "q5": {
+        "question": "Est-ce moins cher de réserver sur place ou en ligne?",
+        "answer": "La réservation en ligne via Klook est généralement 10-30% moins chère que les prix sur place. Vous éviterez également les files et garantirez la disponibilité. Certaines attractions offrent des remises en ligne exclusives et des extras non disponibles à l'entrée."
       }
     }
   }
@@ -4378,6 +4531,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "Strandfront-Eigenschaften bieten Komfort und Aussicht, haben aber Premium-Preise. Hotels in Gehweite (5-10 Minuten) bieten oft besseren Wert. Berücksichtigen Sie, wie viel Zeit Sie am Strand verbringen im Vergleich zum Erkunden anderer Attraktionen bei Ihrer Entscheidung."
       }
     }
+  },
+  "tickets": {
+    "title": "Tickets und Aktivitäten in Thailand",
+    "intro": "Buchen Sie Tickets und Aktivitäten in ganz Thailand mit sofortiger Bestätigung über Klook. Von Tempeltouren in Bangkok bis zu Inselhüpftouren in Phuket, vermeiden Sie Warteschlangen und sichern Sie Ihren Platz im Voraus. Beliebte Erlebnisse umfassen kulturelle Shows, Abenteuertouren und Attraktionspässe. Vorab-Buchen garantiert Verfügbarkeit und beinhaltet oft exklusive Rabatte.",
+    "continuePlanning": "Reise Weiter Planen",
+    "faq": {
+      "title": "Häufig Gestellte Fragen",
+      "q1": {
+        "question": "Muss ich Tickets im Voraus buchen?",
+        "answer": "Für beliebte Attraktionen wie Grand-Palast-Touren, Inselhüpftouren und kulturelle Shows wird empfohlen, 1-2 Wochen im Voraus zu buchen, besonders während der Hauptsaison (Dezember-Februar). Dies garantiert Ihren Platz und beinhaltet oft Skip-the-Line-Zugang."
+      },
+      "q2": {
+        "question": "Werden E-Tickets an Attraktionen akzeptiert?",
+        "answer": "Ja, die meisten Klook-Partner akzeptieren mobile E-Tickets. Zeigen Sie einfach Ihren QR-Code am Eingang. Einige Attraktionen erfordern möglicherweise physische Tickets, die an bezeichneten Schaltern abgeholt werden können. Überprüfen Sie Ihre Buchungsbestätigung für spezifische Anweisungen."
+      },
+      "q3": {
+        "question": "Was passiert, wenn ich meine Buchung stornieren muss?",
+        "answer": "Stornierungsrichtlinien variieren je nach Attraktion. Viele Tickets bieten kostenlose Stornierung bis zu 24-48 Stunden vor der Aktivität. Überprüfen Sie immer die Stornierungsrichtlinie vor der Buchung. Erstattungen werden typischerweise auf Ihre ursprüngliche Zahlungsmethode verarbeitet."
+      },
+      "q4": {
+        "question": "Gibt es Kombitickets für mehrere Attraktionen?",
+        "answer": "Ja, Kombipässe sind für beliebte Ziele wie Bangkok-Stadttouren und Insel-Pakete verfügbar. Diese bieten oft besseren Wert als einzelne Tickets und beinhalten Transport zwischen Attraktionen. Suchen Sie nach 'Combo'- oder 'Pass'-Optionen beim Stöbern."
+      },
+      "q5": {
+        "question": "Ist es günstiger, vor Ort oder online zu buchen?",
+        "answer": "Online-Buchen über Klook ist typischerweise 10-30% günstiger als Vor-Ort-Preise. Sie vermeiden auch Warteschlangen und garantieren Verfügbarkeit. Einige Attraktionen bieten exklusive Online-Rabatte und Extras, die nicht am Eingang erhältlich sind."
+      }
+    }
   }
-}
+},
 };

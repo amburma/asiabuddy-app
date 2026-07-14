@@ -50,6 +50,7 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^16.2.10",
+    "@playwright/test": "^1.61.1",
     "@types/canvas-confetti": "^1.9.0",
     "@types/node": "latest",
     "@types/nodemailer": "^8.0.0",

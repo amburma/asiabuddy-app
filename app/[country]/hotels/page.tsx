@@ -4,7 +4,7 @@ import HotelServiceCard from '@/components/shared/services/HotelServiceCard'
 import { getAgodaLinksByCity } from '@/lib/queries/agodaLinks'
 import Navbar from '@/components/shared/Navbar'
 import AccommodationChatWrapper from '@/components/shared/AccommodationChatWrapper'
-import { UI_TRANSLATIONS } from '@/lib/i18n'
+import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
 import { SupportedLanguage } from '@/types/country'
 import { MapPin, Calendar, Clock, Plane } from 'lucide-react'
 import dynamicImport from 'next/dynamic'
@@ -42,7 +42,7 @@ export default async function HotelsPage({
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
 
   const cookieStore = await cookies()
-  const targetLanguage = (cookieStore.get('NEXT_LOCALE')?.value ?? 'EN').toUpperCase() as SupportedLanguage
+  const targetLanguage = normalizeLocale(cookieStore.get('NEXT_LOCALE')?.value)
 
   const defaultCity = 'bangkok'
   const agodaLinks = await getAgodaLinksByCity(defaultCity)

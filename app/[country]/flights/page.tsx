@@ -6,7 +6,7 @@ import { getFlightLinksByCity } from '@/lib/queries/flightLinks'
 import Navbar from '@/components/shared/Navbar'
 import AviasalesSearchWidgetWrapper from '@/components/shared/AviasalesSearchWidgetWrapper'
 import VisaModalTrigger from '@/components/shared/VisaModalTrigger'
-import { UI_TRANSLATIONS } from '@/lib/i18n'
+import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
 import { SupportedLanguage } from '@/types/country'
 import { Plane, Calendar, MapPin, Clock } from 'lucide-react'
 import dynamicImport from 'next/dynamic'
@@ -44,12 +44,14 @@ export default async function FlightsPage({
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
 
   const cookieStore = await cookies()
-  const targetLanguage = (cookieStore.get('NEXT_LOCALE')?.value ?? 'EN').toUpperCase() as SupportedLanguage
+  const targetLanguage = normalizeLocale(cookieStore.get('NEXT_LOCALE')?.value)
 
   const defaultCity = 'bangkok'
   const flightLinks = await getFlightLinksByCity(defaultCity)
 
   const t = UI_TRANSLATIONS[targetLanguage].flights
+  const servicesStrip = UI_TRANSLATIONS[targetLanguage].servicesStrip
+  const destinationTabs = UI_TRANSLATIONS[targetLanguage].destinationTabs
 
   return (
     <div className="min-h-screen bg-white">
@@ -164,38 +166,38 @@ export default async function FlightsPage({
                 {t.continuePlanning}
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <Link 
+                <Link
                   href={`/${country}/hotels`}
                   className="bg-white border border-gray-200 hover:border-[#D4AF37] rounded-lg p-6 transition-all duration-300 group"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <MapPin className="w-6 h-6 text-[#D4AF37]" />
                     <h3 className="font-semibold text-gray-800 group-hover:text-[#D4AF37] transition-colors">
-                      Hotels
+                      {servicesStrip.hotel}
                     </h3>
                   </div>
                   <p className="text-gray-600 text-sm">Find accommodations for your stay</p>
                 </Link>
-                <Link 
+                <Link
                   href={`/${country}/tours`}
                   className="bg-white border border-gray-200 hover:border-[#D4AF37] rounded-lg p-6 transition-all duration-300 group"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <Clock className="w-6 h-6 text-[#D4AF37]" />
                     <h3 className="font-semibold text-gray-800 group-hover:text-[#D4AF37] transition-colors">
-                      Tours
+                      {UI_TRANSLATIONS[targetLanguage].tours}
                     </h3>
                   </div>
                   <p className="text-gray-600 text-sm">Explore guided experiences</p>
                 </Link>
-                <Link 
+                <Link
                   href={`/${country}/activities`}
                   className="bg-white border border-gray-200 hover:border-[#D4AF37] rounded-lg p-6 transition-all duration-300 group"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <Plane className="w-6 h-6 text-[#D4AF37]" />
                     <h3 className="font-semibold text-gray-800 group-hover:text-[#D4AF37] transition-colors">
-                      Activities
+                      {destinationTabs.activities}
                     </h3>
                   </div>
                   <p className="text-gray-600 text-sm">Book local experiences</p>

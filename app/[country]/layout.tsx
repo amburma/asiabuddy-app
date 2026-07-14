@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import FloatingChatButtonLoader from '@/components/shared/FloatingChatButtonLoader'
+import { normalizeLocale } from '@/lib/i18n'
 
 export const dynamic = 'force-dynamic'
 
@@ -73,7 +74,7 @@ export default async function CountryLayout({
 }) {
   const { country } = await params
   const cookieStore = await cookies()
-  const language = cookieStore.get('NEXT_LOCALE')?.value ?? 'EN'
+  const language = normalizeLocale(cookieStore.get('NEXT_LOCALE')?.value)
 
   return (
     <div className="min-h-screen" data-country={country}>
