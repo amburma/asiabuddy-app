@@ -2845,3 +2845,65 @@ widgets (not the "Coming Soon" placeholder from Session 22):**
 - Cookie Consent Banner production verify
 - PWA Offline feature, B2B bank transfer for invoice (not started)
 - Minor: suggest.apistp.com 400 error from Aviasales widget's own autocomplete API — third-party, non-blocking, noted for awareness only
+
+---
+
+## Session 27 — 14 July 2026 — Tickets Page SEO/SSR Rollout + MM Locale Object Bug Fix
+
+### ✅ Completed This Session
+
+**Summary:** Applied the same SSR-crawlable SEO content treatment from Session 26 (hotels/flights) to /thailand/tickets — h1, intro paragraph, FAQ section, cross-sell cards — without rebuilding the existing Session 23 Klook data/city-selector functionality. In the process, found and fixed three real bugs: missing MM/TH translations in the new tickets namespace, hardcoded English cross-sell labels on both tickets and flights pages, and a critical JS object-literal syntax bug (missing closing brace) in the MM locale block of lib/i18n.ts that caused ALL THREE pages (flights, tickets, hotels) to render hotels page content whenever the MM locale cookie was set.
+
+**Work completed:**
+- Added a `tickets` i18n namespace to lib/i18n.ts, mirroring the structure of the existing `hotels`/`flights` namespaces, covering all 6 languages (EN/MM/TH/DE/FR/ES)
+- Wired h1, intro paragraph, FAQ section (3-5 Q&As), and a "Continue Planning Your Trip" cross-sell section (linking to hotels/flights/activities, excluding tickets itself) into app/[country]/tickets/page.tsx as server-rendered JSX, sitting alongside the existing Session-23 12-city selector and TicketServiceCard list without restructuring either
+- Confirmed `export const dynamic = 'force-dynamic'` present on the tickets page (needed for NEXT_LOCALE cookie-based rendering)
+- No `next/dynamic({ssr:false})` used anywhere — followed the corrected Session 26 pattern (direct import for any client-only pieces) rather than the superseded ssr:false approach
+
+**Bugs found and fixed this session:**
+
+1. **Missing MM/TH translations in new tickets namespace** — the initial tickets namespace add only had complete EN content; MM and TH fell back to English on first pass. Fixed by filling in full MM and TH translations for h1/intro/FAQ/cross-sell.
+
+2. **Hardcoded English cross-sell labels (tickets page)** — the cross-sell card labels ("Hotels", "Flights", "Activities") were hardcoded in English instead of using existing i18n keys. Fixed by reusing the existing shared translation keys (the same ones used in the servicesStrip section) instead of creating new duplicate keys.
+
+3. **Hardcoded English cross-sell labels (flights page — pre-existing, found during regression check)** — the same hardcoded-label bug was discovered on /thailand/flights independently of this session's tickets work. Fixed the same way, reusing shared i18n keys.
+
+4. **Critical: missing closing brace on the MM locale object in lib/i18n.ts (~line 2295)** — the MM locale object (opening ~line 1540) was missing its closing `}` before the ES locale key began. This JS object-literal malformation caused `UI_TRANSLATIONS[MM].flights` and `UI_TRANSLATIONS[MM].tickets` lookups to resolve incorrectly, causing ALL THREE pages (flights, tickets, hotels) to render hotels page content whenever the MM cookie was set — while TH and EN were unaffected. Root cause confirmed via manual brace-balance read of the file. Fixed by adding the missing closing brace. Re-verified via raw HTML fetch that all three pages now correctly resolve their own content under both MM and TH cookies, and that EN (no cookie) still works correctly on all three pages.
+
+**Verification completed (confirmed working, user-tested locally):**
+- `npx tsc --noEmit` — 0 errors
+- Raw HTML (not just hydration JSON) confirmed to contain the new h1/FAQ/cross-sell tags on /thailand/tickets
+- City selector regression: Bangkok (default) + Pattaya both confirmed working, Klook ticket cards unaffected
+- All 6 combinations of {flights, tickets, hotels} × {MM, TH} cookies confirmed returning correct, page-specific, correctly-localized content (no more cross-page content bleed)
+- EN (no cookie) confirmed correct on all three pages
+- Cross-sell links on /thailand/tickets confirmed resolving to real routes, no 404s, none linking back to tickets itself
+- Regression on /thailand/hotels and /thailand/flights confirmed clean — no side effects from shared lib/i18n.ts edits
+
+**Notable friction this session (worth flagging for future sessions):**
+- The dev server crashed/refused connections multiple times mid-session during heavy fetch-testing loops; always resolved by a clean restart and waiting for full "Ready" compilation before firing test requests. Not traced to a specific code cause — likely a resource/quota-adjacent issue rather than an application bug.
+- A `@playwright/test`-based automated test approach was attempted and abandoned mid-session in favor of the existing manual curl/browser verification method (which had already been working reliably in prior sessions) — no new test framework was added to the project.
+
+**Housekeeping:**
+- Deleted 51 root-level debug HTML snapshot files (flights-*.html, hotels-*.html, tickets-*.html, prod_thailand.html) — these were one-off raw-HTML snapshots produced during SSR/locale debugging across several sessions via `Invoke-WebRequest ... | Out-File`. They are NOT Vite artifacts and NOT content drafts — actual page content lives in lib/i18n.ts and app/[country]/*/page.tsx. Safe to delete; no content exists only in these files.
+- Added `/*.html` to .gitignore at project root to prevent this recurring (only ignores root-level .html files, not any .html that may legitimately exist inside subdirectories)
+- Going forward, raw-HTML verification during debugging should pipe directly to `Select-String` rather than writing to a file (`Invoke-WebRequest ... | Select-Object -ExpandProperty Content | Select-String -Pattern "..."`) — no file output needed for one-off checks. If a persistent file output is ever genuinely needed for debugging, it should go in a gitignored scratch location (e.g. `/scripts/debug-output/`), never the project root.
+
+### Architecture Notes (additions)
+- **MM locale object syntax bug impact:** A single missing closing brace in a large (~148KB) i18n file can cause far-reaching cross-page content bleed that's hard to spot during development. This reinforces the need for the proposed lib/i18n.ts restructuring (see backlog below) before adding a second country.
+
+### ⏳ Still Outstanding (carried forward)
+- Confirm whether urgent infra tasks (Gemini API key rotation, VITE_SUPABASE env vars in Vercel Vite project + redeploy) are done
+- Tailwind design tokens verification (sacred-bg, sacred-green, gold-deep, gold-soft)
+- Navbar 7-route click-test (Session 18)
+- Mark 2-6 tours as featured=true
+- Agoda/Transfer real affiliate data (still placeholder)
+- Destination/Tours/Budget Tips modal translations (MM/TH/DE/FR/ES)
+- Modal title translations gap (MM/TH)
+- GYG activity real photos + Satun activity
+- Vercel legacy Vite project deletion
+- Cookie Consent Banner production verify
+- PWA Offline feature, B2B bank transfer for invoice (not started)
+- Minor: suggest.apistp.com 400 error from Aviasales widget's own autocomplete API — third-party, non-blocking
+
+### 📋 Backlog (proposed future work)
+- 🟡 **Restructure lib/i18n.ts before adding a second country** — lib/i18n.ts has grown to ~148KB covering all languages × all services for Thailand only. Before adding a second country (e.g. Singapore), consider splitting into `lib/i18n/<country>/<service>.ts` files (with a shared `lib/i18n/common.ts` for nav/shared UI strings) to keep the file maintainable and reduce the blast radius of any single edit — the MM brace bug this session is a concrete example of how a single large file makes small syntax mistakes hard to spot and far-reaching once introduced.
