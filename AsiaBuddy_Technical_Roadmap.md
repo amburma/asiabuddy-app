@@ -2939,3 +2939,51 @@ widgets (not the "Coming Soon" placeholder from Session 22):**
 
 **Notable process note (worth flagging for future sessions):**
 - A verification round nearly led to an incorrect fix (removing `force-dynamic`, which would have reintroduced the Session 26 language regression) based on a locale-fallback symptom that was actually caused by a stale dev process. Methodical elimination (checking the pure function's logic in isolation, confirming zero file changes via git diff, testing an untouched file) prevented an unnecessary and harmful code change. Recommendation for future sessions: after any file deletion or heavy restructuring, do a clean dev server restart before extended verification testing, to avoid chasing phantom regressions.
+
+---
+
+## Session 29 — Affiliate Program Research & Priority Planning
+
+## Affiliate Program Status (confirmed via Travelpayouts dashboard, mid-July 2026)
+
+- **Klook (Tickets)** — ✅ Done. Direct account (affiliate.klook.com), AID 126322, approved, real links live. No action needed.
+- **GYG/GetYourGuide (Activities)** — ✅ Done. Direct account (partner.getyourguide.com), approved, real links live. No action needed.
+- **Aviasales (Flights)** — ✅ Live via Travelpayouts widget-embed, marker ID 746660. Confirmed appears in Travelpayouts "Available" programs list (40% reward rate, 30-day cookie). No action needed.
+- **Agoda (Hotel)** — 🟡 PENDING. Applied via Travelpayouts, awaiting approval (~4 days elapsed as of this session, no response yet). agoda_links table remains placeholder until approved.
+- **12Go (Transfer)** — 🔴 BLOCKED. Application under review, then found in Travelpayouts' "25 unavailable programs" list — reason given: "Your website doesn't currently have enough traffic. Submit for review once it has stable monthly traffic for at least three consecutive months." Cannot proceed until traffic threshold met.
+- **WayAway** — Deprecated, superseded by Aviasales widget-embed (already noted in earlier sessions). No further action.
+
+## Decision: Interim Transfer Provider
+
+Since 12Go is traffic-blocked with no clear timeline, use **Kiwitaxi** (Travelpayouts: 9-11% reward rate, 30-day cookie, deep-link based — same integration pattern as originally planned for 12Go) as the interim/primary provider for transfer_links table. Apply for Kiwitaxi affiliate program via Travelpayouts. If/when 12Go becomes available later, swap provider in transfer_links (same pattern as any provider swap — no architecture change needed, just data source).
+
+## Next Session Priority Order (documented, not yet executed)
+
+Tier 1 (safety/blocking):
+1. Make placeholder affiliate links inert (e.preventDefault() + "Coming Soon" badge) across agoda_links/klook_links/transfer_links
+2. Verify Tailwind design tokens (sacred-bg, sacred-green, gold-deep, gold-soft) exist in tailwind.config theme.extend.colors
+3. Manual navbar 7-route click-test (carried forward from Session 18)
+
+Tier 2 (transfer page UI/UX, data-independent — can start immediately):
+4. Trip-type selector (Airport→Hotel / Hotel→Airport / Point-to-point tabs)
+5. Vehicle-tier badge/filter (Sedan/Van/Minivan)
+6. Wire TransportChat.tsx into transfers page (direct import, AccommodationChat pattern)
+7. FAQ section (meet-and-greet, flight-delay handling, cancellation policy)
+8. Cross-sell cards (Hotels/Tickets/Activities)
+9. Populate transfer_links with Kiwitaxi placeholder rows once Kiwitaxi Travelpayouts application is submitted/approved
+
+Tier 3 (content cleanup, parallel-safe):
+10. Source real photos for 29 GYG activities (all currently share 1 placeholder image)
+11. Mark 2-6 tours as featured=true
+12. Find real Satun GYG activity (currently substituted with extra Chiang Mai activity)
+13. Fill modal translation gaps (Destination/Tours/Budget Tips — MM/TH/DE/FR/ES)
+
+Tier 4 (infra housekeeping):
+14. Confirm Gemini API key rotation + VITE_SUPABASE env vars in legacy Vercel Vite project
+15. Delete legacy Vite Vercel project
+16. Cookie Consent Banner production verify
+17. Consider restructuring lib/i18n.ts (148KB) into lib/i18n/<country>/<service>.ts before adding a second country
+
+Blocked, no ETA: Agoda real data (awaiting approval), 12Go real data (traffic-gated, Kiwitaxi is interim substitute above).
+
+Do not begin implementation in this update — this is a documentation/planning commit only.

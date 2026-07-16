@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /partner-invite-2026
+
+Sitemap: https://asiabuddy.app/sitemap.xml

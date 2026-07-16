@@ -3,6 +3,13 @@ import type { NextRequest } from 'next/server'
 
 const VALID_COUNTRIES = ['thailand', 'singapore', 'vietnam', 'japan']
 
+const EXCLUDED_PATHS = [
+  '/partner-invite-2026',
+  '/payment-proof',
+  '/sales',
+  '/privacy-policy',
+]
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
@@ -16,6 +23,11 @@ export function proxy(request: NextRequest) {
       pathname.startsWith('/thailand/clogin') ||
       pathname.startsWith('/thailand/blog') ||
       pathname.startsWith('/admin')) {
+    return NextResponse.next()
+  }
+
+  // Don't block excluded paths (private/utility routes)
+  if (EXCLUDED_PATHS.some((path) => pathname.startsWith(path))) {
     return NextResponse.next()
   }
 
