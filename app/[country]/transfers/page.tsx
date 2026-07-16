@@ -4,6 +4,8 @@ import { translateText } from '@/lib/translate'
 import TransferServiceCard from '@/components/shared/services/TransferServiceCard'
 import { getTransferLinksByCity } from '@/lib/queries/transferLinks'
 import Navbar from '@/components/shared/Navbar'
+import TransportChatWrapper from '@/components/shared/TransportChatWrapper'
+import { normalizeLocale } from '@/lib/i18n'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -36,7 +38,7 @@ export default async function TransfersPage({
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
 
   const cookieStore = await cookies()
-  const targetLanguage = (cookieStore.get('NEXT_LOCALE')?.value ?? 'EN').toUpperCase()
+  const targetLanguage = normalizeLocale(cookieStore.get('NEXT_LOCALE')?.value)
 
   const defaultCity = 'bangkok'
   const transferLinks = await getTransferLinksByCity(defaultCity)
@@ -107,6 +109,13 @@ export default async function TransfersPage({
 
       <div className="bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto px-6 py-16">
+
+          {/* Transport Chat Widget */}
+          {country === 'thailand' && (
+            <div className="mb-12">
+              <TransportChatWrapper language={targetLanguage as any} />
+            </div>
+          )}
 
           {transferLinks.length === 0 ? (
             <div className="min-h-[400px] flex flex-col items-center justify-center text-center py-24">
