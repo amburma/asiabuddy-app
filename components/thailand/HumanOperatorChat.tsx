@@ -68,13 +68,8 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
   }
   const welcome = welcomeMessages[langKey] || welcomeMessages['en'];
 
-  // Build greeting with context summary if provided
-  const greetingWithContext = contextSummary
-    ? `${welcome.greeting}\n\nThe user already provided this information during their survey: ${contextSummary}. Do not re-ask these questions. Briefly confirm the details are correct, then proceed directly to next steps.`
-    : welcome.greeting;
-
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'assistant', content: greetingWithContext },
+    { role: 'assistant', content: welcome.greeting },
     { role: 'assistant', content: welcome.disclaimer }
   ]);
   const [input, setInput] = useState('');
@@ -262,7 +257,8 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
           message: userMessage,
           history: validHistory,
           language: language,
-          salesperson_id
+          salesperson_id,
+          contextSummary: contextSummary
         })
       });
 

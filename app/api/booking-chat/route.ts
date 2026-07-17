@@ -19,7 +19,7 @@ export async function OPTIONS() {
  */
 export async function POST(request: Request) {
   try {
-    const { message, history, language, bookingContext, salesperson_id } = await request.json();
+    const { message, history, language, bookingContext, salesperson_id, contextSummary } = await request.json();
 
     // Store salesperson_id for future use (currently no database operation in this route)
     const salespersonId = salesperson_id || null;
@@ -157,7 +157,15 @@ you right away."
 - Never show structural labels:
   [Hook] [Problem] [Benefit] [Offer] [CTA] — invisible always.
 
+${contextSummary ? `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+9. SURVEY CONTEXT — DO NOT RE-ASK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+The user already provided this information during their survey: ${contextSummary}.
+Do not re-ask these questions. Briefly confirm the details are correct, then proceed directly to next steps.` : ''}
+
 🌐 Language context: The user is communicating in ${language || 'English'}.`;
+
 
     // Initialize the model with Gemini Pro
     const model = genAI.getGenerativeModel({
@@ -173,25 +181,7 @@ you right away."
 
     // If history is provided, use startChat with history
     if (history && history.length > 0) {
-      // Validate history roles - must be "user" or "model" only
-      const invalidRole = history.find((h: any) => h.role && h.role !== 'user' && h.role !== 'model');
-      if (invalidRole) {
-        console.error('Invalid history role found:', invalidRole);
-        return NextResponse.json(
-          { error: 'Invalid chat history format' },
-          { status: 400, headers: corsHeaders }
-        );
-      }
-      console.error('DEBUG history received:', JSON.stringify(history?.slice(0, 3)));
-      const cleanHistory = (history ?? []).reduce(
-        (acc: Array<{ role: string; parts: Array<{ text: string }> }>, curr: { role: string; parts: Array<{ text: string }> }) => {
-          if (acc.length === 0 && curr.role !== 'user') return acc;
-          acc.push(curr);
-          return acc;
-        },
-        []
-      );
-      const chat = model.startChat({ history: cleanHistory });
+      const chat = model.startChat({ history });
       const result = await chat.sendMessage(message);
       responseText = result.response.text();
     } else {
