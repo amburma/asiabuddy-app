@@ -44,6 +44,7 @@ export default function TransportChat({ language, destination }: Props) {
   const [surveyCompleted, setSurveyCompleted] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
   const [showFallback, setShowFallback] = useState<boolean>(false);
+  const [contextSummary, setContextSummary] = useState<string>('');
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = useMemo(() => uiT.transport || UI_TRANSLATIONS.EN.transport, [uiT]);
@@ -178,6 +179,9 @@ export default function TransportChat({ language, destination }: Props) {
       }
     });
 
+    // Store context summary for HumanOperatorChat
+    setContextSummary(formattedSummary);
+
     const promptContext = `You are a professional logistics and transport concierge expert for ${destination}, Thailand.
 A customer has completed our dynamic car rental/vehicle requisition survey:
 
@@ -242,6 +246,7 @@ RESPONSE RULES (MANDATORY):
         <HumanOperatorChat
           language={language}
           onClose={() => setShowHumanChat(false)}
+          contextSummary={contextSummary}
         />
       </div>
     </div>

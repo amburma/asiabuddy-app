@@ -45,6 +45,7 @@ export default function CarRentalChat({ language }: Props) {
   const [surveyCompleted, setSurveyCompleted] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
   const [showFallback, setShowFallback] = useState<boolean>(false);
+  const [contextSummary, setContextSummary] = useState<string>('');
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = useMemo(() => uiT.carRental || UI_TRANSLATIONS.EN.carRental, [uiT]);
@@ -179,6 +180,9 @@ export default function CarRentalChat({ language }: Props) {
       }
     });
 
+    // Store context summary for HumanOperatorChat
+    setContextSummary(formattedSummary);
+
     const promptContext = `You are an elite car rental concierge expert for Thailand. 
 A traveler has finished our dynamic configuration survey:
 
@@ -244,6 +248,7 @@ RESPONSE RULES (MANDATORY):
         <HumanOperatorChat
           language={language}
           onClose={() => setShowHumanChat(false)}
+          contextSummary={contextSummary}
         />
       </div>
     </div>

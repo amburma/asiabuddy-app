@@ -12,6 +12,7 @@ interface Props {
   language: ThaiLanguage;
   onClose: () => void;
   salesperson_id?: string;
+  contextSummary?: string;
 }
 
 interface ContactDetails {
@@ -21,7 +22,7 @@ interface ContactDetails {
   socialHandles: string;
 }
 
-export default function HumanOperatorChat({ language, onClose, salesperson_id }: Props) {
+export default function HumanOperatorChat({ language, onClose, salesperson_id, contextSummary }: Props) {
   console.log('HumanOperatorChat received salesperson_id:', salesperson_id);
   const uiT = useMemo(() => UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN, [language]);
 
@@ -67,8 +68,13 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id }:
   }
   const welcome = welcomeMessages[langKey] || welcomeMessages['en'];
 
+  // Build greeting with context summary if provided
+  const greetingWithContext = contextSummary
+    ? `${welcome.greeting}\n\nThe user already provided this information during their survey: ${contextSummary}. Do not re-ask these questions. Briefly confirm the details are correct, then proceed directly to next steps.`
+    : welcome.greeting;
+
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { role: 'assistant', content: welcome.greeting },
+    { role: 'assistant', content: greetingWithContext },
     { role: 'assistant', content: welcome.disclaimer }
   ]);
   const [input, setInput] = useState('');

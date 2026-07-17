@@ -48,6 +48,7 @@ export default function AccommodationChat({ language }: Props) {
   const [surveyCompleted, setSurveyCompleted] = useState<boolean>(false);
   const [mounted, setMounted] = useState<boolean>(false);
   const [showFallback, setShowFallback] = useState<boolean>(false);
+  const [contextSummary, setContextSummary] = useState<string>('');
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = useMemo(() => uiT.accommodation || UI_TRANSLATIONS.EN.accommodation, [uiT]);
@@ -167,6 +168,9 @@ export default function AccommodationChat({ language }: Props) {
       }
     });
 
+    // Store context summary for HumanOperatorChat
+    setContextSummary(formattedSummary);
+
     const promptContext = `You are an elite boutique accommodation concierge expert for Thailand. 
 A traveler has finished our dynamic configuration survey:
 
@@ -231,6 +235,7 @@ RESPONSE RULES (MANDATORY):
         <HumanOperatorChat
           language={language}
           onClose={() => setShowHumanChat(false)}
+          contextSummary={contextSummary}
         />
       </div>
     </div>
