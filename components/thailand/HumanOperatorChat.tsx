@@ -243,11 +243,9 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
       role: msg.role === 'assistant' ? 'model' : msg.role,
       parts: [{ text: msg.content }]
     }));
+    const firstUserIndex = chatHistory.findIndex(m => m.role === 'user');
+    const validHistory = firstUserIndex === -1 ? [] : chatHistory.filter((_, index) => index >= firstUserIndex);
 
-    const validHistory = chatHistory.filter((_, index) => {
-      const firstUserIndex = chatHistory.findIndex(m => m.role === 'user');
-      return index >= firstUserIndex;
-    });
 
     try {
       const response = await fetch('https://asiabuddy.app/api/booking-chat', {

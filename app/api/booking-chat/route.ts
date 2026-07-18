@@ -33,7 +33,6 @@ export async function POST(request: Request) {
 
     // Initialize Gemini AI with server-side API key
     const apiKey = process.env.GEMINI_PRO_API_KEY;
-    console.error('DEBUG apiKey exists:', !!apiKey, 'key length:', apiKey?.length ?? 0);
     if (!apiKey) {
       console.error('GEMINI_PRO_API_KEY is not configured');
       return NextResponse.json(
