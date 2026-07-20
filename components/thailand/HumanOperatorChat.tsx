@@ -13,6 +13,7 @@ interface Props {
   onClose: () => void;
   salesperson_id?: string;
   contextSummary?: string;
+  isCarRentalFlow?: boolean;
 }
 
 interface ContactDetails {
@@ -22,7 +23,7 @@ interface ContactDetails {
   socialHandles: string;
 }
 
-export default function HumanOperatorChat({ language, onClose, salesperson_id, contextSummary }: Props) {
+export default function HumanOperatorChat({ language, onClose, salesperson_id, contextSummary, isCarRentalFlow }: Props) {
   console.log('HumanOperatorChat received salesperson_id:', salesperson_id);
   const uiT = useMemo(() => UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN, [language]);
 
@@ -248,7 +249,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
 
 
     try {
-      const response = await fetch('https://asiabuddy.app/api/booking-chat', {
+      const response = await fetch('/api/booking-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -256,7 +257,8 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
           history: validHistory,
           language: language,
           salesperson_id,
-          contextSummary: contextSummary
+          contextSummary: contextSummary,
+          isCarRentalFlow: isCarRentalFlow
         })
       });
 
@@ -326,7 +328,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
         salesperson_id
       };
       console.log("[DEBUG] Sending inquiry request", payload);
-      const response = await fetch('https://asiabuddy.app/api/inquiry', {
+      const response = await fetch('/api/inquiry', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

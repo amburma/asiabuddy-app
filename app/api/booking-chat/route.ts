@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { getAIKnowledgeBaseForAI } from '@/src/services/googleSheets';
+import { getSupabase } from '@/lib/supabase';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,7 +20,7 @@ export async function OPTIONS() {
  */
 export async function POST(request: Request) {
   try {
-    const { message, history, language, bookingContext, salesperson_id, contextSummary } = await request.json();
+    const { message, history, language, bookingContext, salesperson_id, contextSummary, isCarRentalFlow } = await request.json();
 
     // Store salesperson_id for future use (currently no database operation in this route)
     const salespersonId = salesperson_id || null;
@@ -42,6 +43,99 @@ export async function POST(request: Request) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
+
+    // Fetch real transfer pricing from Supabase
+    let transferPricingString = '';
+    try {
+      const supabase = getSupabase();
+      const { data: transferPricing, error } = await supabase
+        .from('transfer_links')
+        .select('provider, price_from, city, route_name, transport_type')
+        .eq('is_placeholder', false);
+
+
+      if (error) {
+        console.error('Error fetching transfer pricing:', error);
+        transferPricingString = '';
+      } else if (transferPricing && transferPricing.length > 0) {
+        let relevantPricing = transferPricing;
+        let contextMatched = false;
+        
+        if (bookingContext || contextSummary) {
+          const context = (bookingContext || contextSummary || '').toLowerCase();
+          // Try to match city from context
+          const cityMatch = transferPricing.filter((p: any) => 
+            context.includes(p.city) || 
+            context.includes(p.city.replace('-', ' '))
+          );
+          if (cityMatch.length > 0) {
+            relevantPricing = cityMatch;
+            contextMatched = true;
+          } else {
+            relevantPricing = []; // no match — don't show unrelated pricing
+          }
+        } else {
+          contextMatched = true; // no context to filter by — show all
+        }
+        
+        // Format pricing data: "kiwitaxi: from $25 (Bangkok - Suvarnabhumi Airport to City Center, sedan)"
+        if (relevantPricing.length > 0) {
+          transferPricingString = relevantPricing
+            .map((p: any) => `${p.provider}: from ${p.price_from} (${p.city} - ${p.route_name}, ${p.transport_type})`)
+            .join(', ');
+        }
+      }
+    } catch (error) {
+      console.error('Exception fetching transfer pricing:', error);
+      transferPricingString = '';
+    }
+
+    // Fetch real car rental pricing from Supabase if this is a car rental flow
+    let carRentalPricingString = '';
+    if (isCarRentalFlow) {
+      try {
+        const supabase = getSupabase();
+        const { data: carRentalPricing, error } = await supabase
+          .from('car_rental_links')
+          .select('provider, price_from, city, location_name, vehicle_type, rental_type')
+          .eq('is_placeholder', false);
+
+        if (error) {
+          console.error('Error fetching car rental pricing:', error);
+          carRentalPricingString = '';
+        } else if (carRentalPricing && carRentalPricing.length > 0) {
+          let relevantPricing = carRentalPricing;
+          let contextMatched = false;
+          
+          if (bookingContext || contextSummary) {
+            const context = (bookingContext || contextSummary || '').toLowerCase();
+            // Try to match city from context
+            const cityMatch = carRentalPricing.filter((p: any) => 
+              context.includes(p.city) || 
+              context.includes(p.city.replace('-', ' '))
+            );
+            if (cityMatch.length > 0) {
+              relevantPricing = cityMatch;
+              contextMatched = true;
+            } else {
+              relevantPricing = []; // no match — don't show unrelated pricing
+            }
+          } else {
+            contextMatched = true; // no context to filter by — show all
+          }
+          
+          // Format pricing data: "qeeq: from $30 (Bangkok - Suvarnabhumi Airport, self-drive, SUV)"
+          if (relevantPricing.length > 0) {
+            carRentalPricingString = relevantPricing
+              .map((p: any) => `${p.provider}: from ${p.price_from} (${p.city} - ${p.location_name}, ${p.rental_type}, ${p.vehicle_type})`)
+              .join(', ');
+          }
+        }
+      } catch (error) {
+        console.error('Exception fetching car rental pricing:', error);
+        carRentalPricingString = '';
+      }
+    }
 
     // Booking-focused system prompt
     const systemPrompt = `You are an expert, 24/7 Live Chat Tour Operator for AsiaBuddy.app.
@@ -94,12 +188,20 @@ NEVER default to English unless the user writes in English.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 - NEVER provide exact confirmed prices.
 - ALWAYS state: "Prices are subject to change."
-- If pricing is unknown: provide estimated reference range only.
-  Explicitly state it is an estimate, not a guaranteed price.
 - NEVER guarantee availability or rates.
 - NEVER confirm a final price on behalf of AsiaBuddy.
 - Final pricing is ALWAYS confirmed by the human operator
   after the customer submits the Contact Form.
+
+TRANSFER PRICING (REAL DATA FROM DATABASE):
+${transferPricingString ? `Use ONLY these real figures when discussing transfer pricing: ${transferPricingString}.` : 'Pricing will be confirmed by the operator.'}
+NEVER invent, guess, or estimate a transfer price number not derived from this data.
+If no matching real price exists for what the customer is asking about, say pricing will be confirmed by the operator instead of quoting a number.
+
+${carRentalPricingString ? `CAR RENTAL PRICING (REAL DATA FROM DATABASE):
+Use ONLY these real figures when discussing car rental pricing: ${carRentalPricingString}.
+NEVER invent, guess, or estimate a car rental price number not derived from this data.
+If no matching real price exists for what the customer is asking about, say pricing will be confirmed by the operator instead of quoting a number.` : ''}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 6. SALES APPROACH — PRIMARY GOAL

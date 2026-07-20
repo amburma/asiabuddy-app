@@ -183,7 +183,7 @@ export default function CarRentalChat({ language }: Props) {
     // Store context summary for HumanOperatorChat
     setContextSummary(formattedSummary);
 
-    const promptContext = `You are an elite car rental concierge expert for Thailand. 
+    const promptContext = `You are an elite car rental concierge expert for Thailand.
 A traveler has finished our dynamic configuration survey:
 
 ${formattedSummary}
@@ -193,10 +193,17 @@ RESPONSE RULES (MANDATORY):
 2. Provide direct, highly structured expert recommendations. Avoid generic introductions.
 3. Suggest 3 specific rental options or service providers fitting their exact configuration.
 4. Highlight why each option aligns with their stated details (budget, vehicle type, driver requirements, etc.).
-5. Ensure your response is professional and beautifully formatted. At the end, state that our live support team is ready to process immediate bookings.`;
+5. Ensure your response is professional and beautifully formatted. At the end, state that our live support team is ready to process immediate bookings.
+
+PRICING REQUIREMENTS (MANDATORY):
+When recommending options, you MUST reference the specific real pricing figures provided in your system instructions (the CAR RENTAL PRICING section). Quote the exact price for the vehicle type and rental_type (self-drive or with-driver) that best matches the customer's stated preference and budget. Do not say pricing is unavailable or defer entirely to the operator if a matching real price exists in the provided data — state that real price clearly, then note that final confirmation comes from the operator.
+
+If the customer's stated budget is below the real price, acknowledge the gap honestly and quote the actual real price anyway — do not hide it or avoid stating a number.`;
+
+    const userMessage = `I've completed the car rental survey. Please recommend a vehicle and pricing based on my details.`;
 
     try {
-      const response = await getConciergeResponse(promptContext, [], language);
+      const response = await getConciergeResponse(userMessage, [], language, promptContext, 'thailand', false, true);
       setMessages(prev => [...prev, { role: 'assistant', content: response }]);
       setShowBookNow(true);
     } catch (err: any) {
@@ -249,6 +256,7 @@ RESPONSE RULES (MANDATORY):
           language={language}
           onClose={() => setShowHumanChat(false)}
           contextSummary={contextSummary}
+          isCarRentalFlow={true}
         />
       </div>
     </div>

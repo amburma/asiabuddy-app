@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bus, Home, Loader2, MessageSquare, ChevronLeft, Check, Square, CheckSquare } from 'lucide-react';
+import { Send, Car, Loader2, MessageSquare, ChevronLeft, Check, Square, CheckSquare } from 'lucide-react';
 import { getConciergeResponse } from '@/services/geminiService';
 import { ChatMessage, ThaiLanguage } from '@/types/country';
 import { UI_TRANSLATIONS } from '@/lib/i18n';
@@ -17,23 +17,19 @@ interface Props {
 }
 
 const STEP_SEQUENCE = [
-  'pickup_city',
-  'duration_days',
-  'passengers_luggage',
-  'car_class',
-  'driver_hours',
-  'driver_language',
-  'addons',
-  'pickup_date'
+  'pickup_location',
+  'dropoff_location',
+  'date_time',
+  'passengers',
+  'luggage'
 ];
 
-export default function TransportChat({ language, destination }: Props) {
+export default function TransferChat({ language, destination }: Props) {
   const uiT = useMemo(() => UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN, [language]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [currentStepId, setCurrentStepId] = useState<string>('pickup_city');
-  const [stepHistory, setStepHistory] = useState<string[]>(['pickup_city']);
-  const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
-  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+  const [currentStepId, setCurrentStepId] = useState<string>('pickup_location');
+  const [stepHistory, setStepHistory] = useState<string[]>(['pickup_location']);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [textInput, setTextInput] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showBookNow, setShowBookNow] = useState<boolean>(false);
@@ -44,7 +40,7 @@ export default function TransportChat({ language, destination }: Props) {
   const [contextSummary, setContextSummary] = useState<string>('');
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const t = useMemo(() => uiT.transport || UI_TRANSLATIONS.EN.transport, [uiT]);
+  const t = useMemo(() => (uiT as any).transfer || uiT.transport || UI_TRANSLATIONS.EN.transport, [uiT]);
   const commonT = useMemo(() => uiT.chat || UI_TRANSLATIONS.EN.chat, [uiT]);
 
   useEffect(() => {
@@ -75,24 +71,22 @@ export default function TransportChat({ language, destination }: Props) {
     return activeSurvey.questions[currentStepId as keyof typeof activeSurvey.questions];
   }, [activeSurvey, currentStepId]);
 
-  const getNextStepId = (currentId: string, currentAnswers: Record<string, any>): string | null => {
+  const getNextStepId = (currentId: string): string | null => {
     const currentIndex = STEP_SEQUENCE.indexOf(currentId);
     if (currentIndex === -1 || currentIndex === STEP_SEQUENCE.length - 1) return null;
-
     return STEP_SEQUENCE[currentIndex + 1];
   };
 
-  const proceedToNext = (updatedAnswers: Record<string, any>, stepDisplayValue: string | string[]) => {
+  const proceedToNext = (updatedAnswers: Record<string, any>, stepDisplayValue: string) => {
     const currentQuestion = currentSurveyStep?.question || "";
-    const displayString = Array.isArray(stepDisplayValue) ? stepDisplayValue.join(', ') : stepDisplayValue;
 
     setMessages(prev => [
       ...prev,
       { role: 'assistant', content: `**${currentQuestion}**` },
-      { role: 'user', content: displayString }
+      { role: 'user', content: stepDisplayValue }
     ]);
 
-    const nextId = getNextStepId(currentStepId, updatedAnswers);
+    const nextId = getNextStepId(currentStepId);
 
     if (nextId) {
       setCurrentStepId(nextId);
@@ -103,12 +97,6 @@ export default function TransportChat({ language, destination }: Props) {
     }
   };
 
-  const handleSelectOption = (option: string) => {
-    const updatedAnswers = { ...answers, [currentStepId]: option };
-    setAnswers(updatedAnswers);
-    proceedToNext(updatedAnswers, option);
-  };
-
   const handleTextSubmit = () => {
     const val = textInput.trim();
     if (!val) return;
@@ -117,32 +105,16 @@ export default function TransportChat({ language, destination }: Props) {
     proceedToNext(updatedAnswers, val);
   };
 
-  const toggleAddon = (addon: string) => {
-    setSelectedAddons(prev =>
-      prev.includes(addon)
-        ? prev.filter(item => item !== addon)
-        : [...prev, addon]
-    );
-  };
-
-  const handleNextMultipleChoice = () => {
-    const chosen = selectedAddons.length > 0 ? selectedAddons : [t.noneSelected || "None selected"];
-    const updatedAnswers = { ...answers, [currentStepId]: chosen };
-    setAnswers(updatedAnswers);
-    proceedToNext(updatedAnswers, chosen);
-  };
-
   const triggerAISubmission = async (finalAnswers: Record<string, any>) => {
     setSurveyCompleted(true);
     setIsLoading(true);
 
-    const questionsMap = activeSurvey.questions;
-    let formattedSummary = `THAILAND CAR WITH DRIVER (CHAUFFEUR) SURVEY DETAILS (Destination: ${destination}):\n`;
+    let formattedSummary = `THAILAND TRANSFER SURVEY DETAILS (Destination: ${destination}):\n`;
     
     STEP_SEQUENCE.forEach(stepId => {
       if (finalAnswers[stepId]) {
-        const qText = questionsMap[stepId as keyof typeof questionsMap]?.question || stepId;
-        const ansVal = Array.isArray(finalAnswers[stepId]) ? finalAnswers[stepId].join(', ') : finalAnswers[stepId];
+        const qText = currentSurveyStep?.question || stepId;
+        const ansVal = finalAnswers[stepId];
         formattedSummary += `- ${qText}: ${ansVal}\n`;
       }
     });
@@ -150,23 +122,36 @@ export default function TransportChat({ language, destination }: Props) {
     // Store context summary for HumanOperatorChat
     setContextSummary(formattedSummary);
 
-    const promptContext = `You are a professional chauffeur service concierge expert for ${destination}, Thailand.
-A customer has completed our car with driver (chauffeur) survey:
+    const promptContext = `You are AsiaBuddy's Transfer & Airport Service concierge for ${destination}, Thailand.
 
+SERVICE CONTEXT (do not deviate — this is the only provider available):
+- We book transfers exclusively through Kiwitaxi: fixed-price, pre-booked private transfers with professional drivers.
+- Vehicle tiers available: Sedan (1-3 pax), Van (4-6 pax), Minivan (7+ pax / extra luggage)
+- Includes: meet & greet at arrival, flight monitoring (adjusts for delays), free cancellation up to 24h before pickup
+
+CUSTOMER SURVEY RESPONSE:
 ${formattedSummary}
+
+YOUR GOAL — map user needs to what Kiwitaxi actually offers:
+1. Based on passenger/luggage count, recommend the correct vehicle tier (never suggest a tier we don't offer)
+2. If user asks about price negotiation, bidding, or "cheapest possible option" — explain that Kiwitaxi uses fixed transparent pricing (no bidding), which avoids surprise costs common with marketplace-style transfer apps
+3. If the need falls outside what Kiwitaxi covers (e.g. multi-city route, >15 passengers, non-Thailand destination) — say so honestly, don't overpromise
+4. Summarize the match (route + vehicle tier) and prompt them toward "Book Now"
 
 RESPONSE RULES (MANDATORY):
 1. Respond exclusively in the user's interface language matching parameter (${language}).
-2. Provide direct, highly structured expert recommendations. Avoid generic introductions.
-3. Suggest the optimal car class and specific chauffeur package features fitting their survey profile.
-4. Highlight important local guidelines for chauffeur services (e.g., driver hours, language preferences, local etiquette).
-5. Keep the response factual and elegantly structured. At the end, state that our operations desk is standing by to coordinate booking quotes and secure the vehicle with driver.`;
+2. Be concise, warm, practical — like a local friend who knows the transfer options.
+3. Never invent providers, prices, or features not listed above.
+4. Keep the response factual and elegantly structured. At the end, prompt them toward "Book Now".`;
+
+    const userMessage = `I've completed the transfer survey. Please recommend a vehicle and pricing based on my details.`;
 
     try {
-      const response = await getConciergeResponse(promptContext, [], language);
+      const response = await getConciergeResponse(userMessage, [], language, promptContext, 'thailand', true);
       setMessages(prev => [...prev, { role: 'assistant', content: response }]);
       setShowBookNow(true);
     } catch (err: any) {
+      console.error('[ERROR] triggerAISubmission failed:', err);
       if (err.fallback === true) {
         setShowFallback(true);
       } else {
@@ -195,10 +180,9 @@ RESPONSE RULES (MANDATORY):
 
   const handleReset = () => {
     setMessages([]);
-    setCurrentStepId('pickup_city');
-    setStepHistory(['pickup_city']);
+    setCurrentStepId('pickup_location');
+    setStepHistory(['pickup_location']);
     setAnswers({});
-    setSelectedAddons([]);
     setTextInput('');
     setSurveyCompleted(false);
     setShowBookNow(false);
@@ -220,19 +204,18 @@ RESPONSE RULES (MANDATORY):
     </div>
   ) : null;
 
-  const isShortAnswer = ['duration_days', 'pickup_date'].includes(currentStepId);
-  const isMultipleChoice = currentStepId === 'addons';
+  const isShortAnswer = true; // All fields are text input
 
   return (
     <div className="flex flex-col h-[480px] w-full bg-white rounded-2xl overflow-hidden border border-gold-soft/30 shadow-xs">
       <div className="p-4 bg-sacred-bg border-b border-gray-100 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-gold-deep/10 flex items-center justify-center text-gold-deep">
-            <Bus size={18} />
+            <Car size={18} />
           </div>
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest leading-none mb-1 text-sacred-green">{t.title}</h4>
-            <p className="text-[9px] text-gray-500 font-medium tracking-tight">{t.destinationLabel}: {destination}</p>
+            <h4 className="text-xs font-bold uppercase tracking-widest leading-none mb-1 text-sacred-green">{t.title || 'Airport Transfers'}</h4>
+            <p className="text-[9px] text-gray-500 font-medium tracking-tight">{t.destinationLabel || 'Destination'}: {destination}</p>
           </div>
         </div>
         {stepHistory.length > 1 && !surveyCompleted && (
@@ -241,7 +224,7 @@ RESPONSE RULES (MANDATORY):
             className="flex items-center gap-1 text-[10px] uppercase font-bold text-gray-500 hover:text-gold-deep transition-colors"
           >
             <ChevronLeft size={14} />
-            {activeSurvey.buttons.back}
+            {activeSurvey?.buttons?.back || 'Back'}
           </button>
         )}
         {surveyCompleted && (
@@ -249,7 +232,7 @@ RESPONSE RULES (MANDATORY):
             onClick={handleReset}
             className="text-[10px] uppercase font-bold text-gold-deep hover:underline"
           >
-            {commonT.resetButtonLabel}
+            {commonT.resetButtonLabel || 'Reset'}
           </button>
         )}
       </div>
@@ -262,10 +245,10 @@ RESPONSE RULES (MANDATORY):
           <div className="text-center opacity-70 py-4">
             <MessageSquare size={24} className="mx-auto mb-3 text-gold-soft" />
             <p className="text-xs font-serif italic mb-1 tracking-wide text-gray-800">
-              {activeSurvey.title}
+              {activeSurvey?.title || 'Book Your Transfer'}
             </p>
             <p className="text-[10px] text-gray-500 font-medium tracking-tight">
-              {t.emptyState}
+              {t.emptyState || 'Answer a few questions to get started'}
             </p>
           </div>
         )}
@@ -293,7 +276,7 @@ RESPONSE RULES (MANDATORY):
           <div className="flex justify-start">
             <div className="bg-white border border-gray-100 rounded-2xl p-3 rounded-tl-none flex items-center gap-2">
               <Loader2 size={12} className="animate-spin text-gold-deep" />
-              <span className="text-[10px] text-gray-500">{activeSurvey.analyzing}</span>
+              <span className="text-[10px] text-gray-500">{activeSurvey?.analyzing || 'Finding best options...'}</span>
             </div>
           </div>
         )}
@@ -305,7 +288,7 @@ RESPONSE RULES (MANDATORY):
                 onClick={() => setShowHumanChat(true)}
                 className="bg-sacred-green text-white px-3 py-2 rounded-lg text-xs font-semibold hover:bg-opacity-90 transition-colors"
               >
-                {commonT.bookNowCta}
+                {commonT.bookNowCta || 'Book Now'}
               </button>
             </div>
           </div>
@@ -316,7 +299,7 @@ RESPONSE RULES (MANDATORY):
         <div className="p-4 bg-white border-t border-gray-100 space-y-3">
           <div className="flex items-center justify-between mb-1">
             <span className="text-[9px] uppercase font-bold tracking-wider text-gold-deep">
-              {commonT.surveyProgressLabel}
+              {commonT.surveyProgressLabel || 'Progress'}
             </span>
             <div className="flex gap-1 h-1 w-24 bg-gray-100 rounded-full overflow-hidden">
               <div 
@@ -338,51 +321,6 @@ RESPONSE RULES (MANDATORY):
               transition={{ duration: 0.2 }}
               className="max-h-[160px] overflow-y-auto pr-1"
             >
-              {!isShortAnswer && !isMultipleChoice && 'options' in currentSurveyStep && currentSurveyStep.options && (
-                <div className="grid grid-cols-1 gap-1.5">
-                  {currentSurveyStep.options.map((option: string, idx: number) => (
-                    <button
-                      key={idx}
-                      onClick={() => handleSelectOption(option)}
-                      className="p-2 text-left text-[10px] font-bold uppercase tracking-wider border border-gray-200 rounded-lg hover:border-gold-deep hover:text-gold-deep transition-all bg-sacred-bg/20 hover:bg-white"
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {isMultipleChoice && 'options' in currentSurveyStep && currentSurveyStep.options && (
-                <div className="space-y-2">
-                  <div className="grid grid-cols-2 gap-1.5">
-                    {currentSurveyStep.options.map((option: string, idx: number) => {
-                      const isChecked = selectedAddons.includes(option);
-                      return (
-                        <button
-                          key={idx}
-                          onClick={() => toggleAddon(option)}
-                          className={`flex items-center gap-2 p-2 text-left text-[10px] font-bold uppercase tracking-wider border rounded-lg transition-all ${
-                            isChecked 
-                              ? 'border-gold-deep bg-gold-deep/5 text-gold-deep' 
-                              : 'border-gray-200 bg-sacred-bg/20 hover:border-gold-deep'
-                          }`}
-                        >
-                          {isChecked ? <CheckSquare size={13} /> : <Square size={13} />}
-                          <span className="truncate">{option}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                  <button
-                    onClick={handleNextMultipleChoice}
-                    className="w-full mt-2 py-2 px-4 bg-sacred-green hover:bg-sacred-green/90 text-white font-bold uppercase text-[10px] tracking-widest rounded-lg flex items-center justify-center gap-1.5 transition-colors"
-                  >
-                    <Check size={12} />
-                    {activeSurvey.buttons.next}
-                  </button>
-                </div>
-              )}
-
               {isShortAnswer && (
                 <div className="space-y-2">
                   <div className="relative flex items-center">
@@ -391,7 +329,7 @@ RESPONSE RULES (MANDATORY):
                       value={textInput}
                       onChange={(e) => setTextInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleTextSubmit()}
-                      placeholder={'placeholder' in currentSurveyStep ? currentSurveyStep.placeholder : commonT.placeholder}
+                      placeholder={currentSurveyStep.placeholder || commonT.placeholder || 'Type your answer...'}
                       className="w-full bg-sacred-bg/50 border border-transparent rounded-xl py-2 pl-4 pr-12 text-xs focus:outline-none focus:border-gold-soft transition-all placeholder:text-gray-400 font-medium"
                       autoFocus
                     />
@@ -412,12 +350,12 @@ RESPONSE RULES (MANDATORY):
 
       {showBookNow && (
         <div className="p-3 bg-white border-t border-gray-100 flex flex-col items-center gap-2">
-          <p className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">{t.readyToBook}</p>
+          <p className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">{t.readyToBook || 'Ready to book?'}</p>
           <button
             onClick={() => setShowHumanChat(true)}
             className="w-full bg-sacred-green text-white font-bold uppercase tracking-widest text-[11px] py-3 px-4 rounded-xl hover:bg-opacity-90 transition-colors shadow-sm flex items-center justify-center gap-2"
           >
-            📅 {t.bookStayButton}
+            📅 {t.bookStayButton || 'Book Now'}
           </button>
         </div>
       )}

@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { getRecentChatHistory, ChatHistory } from '../lib/database';
 import { getPricingDataForAI, getTourDataForAI, getPolicyDataForAI } from './googleSheets';
+import { getSupabaseAdmin } from '../../lib/supabase';
 
 
 function getApiKeys(): string[] {
@@ -109,6 +110,38 @@ async function getPolicyDataWithCache(): Promise<string> {
     console.error('Error fetching policy data:', error);
     // Return cached data even if expired, or empty string if no cache
     return cachedPolicyData || '';
+  }
+}
+
+/**
+ * Fetch transfer pricing data from Supabase
+ * @returns Formatted transfer data string for AI
+ */
+async function getTransferDataFromSupabase(): Promise<string> {
+  try {
+    const { data, error } = await getSupabaseAdmin()
+      .from('transfer_links')
+      .select('city, route_name, provider, price_from, transport_type')
+      .eq('is_placeholder', false);
+    
+    if (error) {
+      console.error('Error fetching transfer data:', error);
+      return '';
+    }
+    
+    if (!data || data.length === 0) {
+      return '';
+    }
+    
+    // Format data for AI
+    const formatted = data.map(t => 
+      `${t.city} - ${t.route_name} (${t.provider}, ${t.transport_type}): ${t.price_from}`
+    ).join('\n');
+    
+    return `## Transfer Pricing Data (Thailand)\n${formatted}`;
+  } catch (error) {
+    console.error('Unexpected error fetching transfer data:', error);
+    return '';
   }
 }
 
@@ -233,13 +266,15 @@ function isQuotaResponseText(text: string): boolean {
  * @param userMessage - Current user message
  * @param country - Country for dynamic system instruction (default: 'thailand')
  * @param systemInstruction - Optional custom system instruction to override default
+ * @param isTransferFlow - Whether this is a transfer booking flow (default: false)
  * @returns AI response text
  */
 export async function generateAIResponse(
   telegramId: number,
   userMessage: string,
   country: string = 'thailand',
-  systemInstruction?: string
+  systemInstruction?: string,
+  isTransferFlow: boolean = false
 ): Promise<string> {
   const triedKeyIndices = new Set<number>();
   const keys = getApiKeys();
@@ -253,7 +288,12 @@ export async function generateAIResponse(
   let policyData = '';
   
   if (country === 'thailand') {
-    pricingData = await getPricingDataWithCache();
+    // For transfer flow, use Supabase transfer data instead of Google Sheets pricing
+    if (isTransferFlow) {
+      pricingData = await getTransferDataFromSupabase();
+    } else {
+      pricingData = await getPricingDataWithCache();
+    }
     tourData = await getTourDataWithCache();
     policyData = await getPolicyDataWithCache();
   }

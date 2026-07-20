@@ -104,10 +104,6 @@ const ENGLISH_UI = {
         "skip": "Skip"
       },
       "questions": {
-        "rental_type": {
-          "question": "Which rental option do you prefer?",
-          "options": ["Self-Drive", "With Driver"]
-        },
         "pickup_city": {
           "question": "Which city would you like to pick up the vehicle?",
           "options": ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Krabi", "Koh Samui"]
@@ -155,6 +151,51 @@ const ENGLISH_UI = {
         "pickup_date": {
           "question": "Please specify your tentative rental start date or month:",
           "placeholder": "e.g., October 15, or Mid-December"
+        }
+      }
+    }
+  },
+  "transfer": {
+    "title": "AIRPORT TRANSFERS",
+    "detailsTitle": "Airport & Point-to-Point Transfers — For more information",
+    "modalTitle": "Thailand Airport Transfer Guide",
+    "modalSubtitle": "Private Transfers",
+    "destinationLabel": "Destination",
+    "subtitle": "Fixed-Price Private Transfers",
+    "emptyState": "Tell us your pickup, drop-off, and passenger details for a fixed-price Kiwitaxi transfer.",
+    "readyToBook": "Ready to book your transfer?",
+    "bookStayButton": "📅 Book Transfer Now",
+    "noneSelected": "None selected",
+    "suggestions": [],
+    "survey": {
+      "title": "Airport Transfer Survey",
+      "analyzing": "Finding the best transfer option for your route...",
+      "buttons": {
+        "next": "Next Step",
+        "back": "Back",
+        "submit": "Submit Request",
+        "skip": "Skip"
+      },
+      "questions": {
+        "pickup_location": {
+          "question": "Where should we pick you up?",
+          "placeholder": "Enter pickup location (e.g., Suvarnabhumi Airport, Hotel)"
+        },
+        "dropoff_location": {
+          "question": "Where should we drop you off?",
+          "placeholder": "Enter drop-off location (e.g., Phuket Hotel, Airport)"
+        },
+        "date_time": {
+          "question": "What is your pickup date and time?",
+          "placeholder": "Enter date and time (e.g., Dec 15, 2026 at 2:30 PM)"
+        },
+        "passengers": {
+          "question": "How many passengers are traveling?",
+          "placeholder": "Enter number of passengers (e.g., 3)"
+        },
+        "luggage": {
+          "question": "How many large bags/suitcases do you have?",
+          "placeholder": "Enter number of large bags (e.g., 2)"
         }
       }
     }
@@ -897,10 +938,6 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "skip": "ข้าม"
       },
       "questions": {
-        "rental_type": {
-          "question": "ต้องการบริการเช่ารถประเภทใด?",
-          "options": ["ขับเอง (Self-Drive)", "พร้อมคนขับ (With Driver)"]
-        },
         "pickup_city": {
           "question": "ต้องการรับรถที่เมืองใด?",
           "options": ["กรุงเทพฯ", "ภูเก็ต", "เชียงใหม่", "พัทยา", "กระบี่", "เกาะสมุย"]
@@ -948,6 +985,51 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "pickup_date": {
           "question": "โปรดระบุวันที่หรือเดือนที่คุณต้องการรับรถ:",
           "placeholder": "เช่น 15 ตุลาคม หรือ กลางเดือนธันวาคม"
+        }
+      }
+    }
+  },
+  "transfer": {
+    "title": "บริการรับส่งสนามบิน",
+    "detailsTitle": "บริการรับส่งสนามบินและจุดต่อจุด — สำหรับข้อมูลเพิ่มเติม",
+    "modalTitle": "คู่มือบริการรับส่งสนามบินประเทศไทย",
+    "modalSubtitle": "บริการรับส่งส่วนตัว",
+    "destinationLabel": "จุดหมายปลายทาง",
+    "subtitle": "บริการรับส่งส่วนตัวราคาคงที่",
+    "emptyState": "แจ้งรายละเอียดจุดรับส่ง จุดส่ง และจำนวนผู้โดยสารของคุณสำหรับบริการรับส่ง Kiwitaxi ราคาคงที่",
+    "readyToBook": "พร้อมที่จะจองบริการรับส่งหรือยัง?",
+    "bookStayButton": "📅 จองบริการรับส่งเลย",
+    "noneSelected": "ไม่ได้เลือก",
+    "suggestions": [],
+    "survey": {
+      "title": "แบบสอบถามบริการรับส่งสนามบิน",
+      "analyzing": "กำลังค้นหาตัวเลือกบริการรับส่งที่ดีที่สุดสำหรับเส้นทางของคุณ...",
+      "buttons": {
+        "next": "ขั้นตอนถัดไป",
+        "back": "ย้อนกลับ",
+        "submit": "ส่งข้อมูล",
+        "skip": "ข้าม"
+      },
+      "questions": {
+        "pickup_location": {
+          "question": "ควรรับคุณที่ไหน?",
+          "placeholder": "ระบุจุดรับ (เช่น สนามบินสุวรรณภูมิ, โรงแรม)"
+        },
+        "dropoff_location": {
+          "question": "ควรส่งคุณที่ไหน?",
+          "placeholder": "ระบุจุดส่ง (เช่น โรงแรมภูเก็ต, สนามบิน)"
+        },
+        "date_time": {
+          "question": "วันและเวลารับคือเมื่อไหร่?",
+          "placeholder": "ระบุวันและเวลา (เช่น 15 ธ.ค. 2026 เวลา 14:30)"
+        },
+        "passengers": {
+          "question": "มีผู้โดยสารกี่คน?",
+          "placeholder": "ระบุจำนวนผู้โดยสาร (เช่น 3)"
+        },
+        "luggage": {
+          "question": "มีกระเป๋าเดินทางขนาดใหญ่กี่ใบ?",
+          "placeholder": "ระบุจำนวนกระเป๋าขนาดใหญ่ (เช่น 2)"
         }
       }
     }
@@ -1681,10 +1763,6 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "skip": "ကျော်မည်"
       },
       "questions": {
-        "rental_type": {
-          "question": "မည်သည့်အငှားစနစ်ကို အသုံးပြုလိုပါသလဲ။",
-          "options": ["ကိုယ်တိုင်မောင်း (Self-Drive)", "ဒရိုင်ဘာနှင့်တကွ (With Driver)"]
-        },
         "pickup_city": {
           "question": "မည်သည့်မြို့တွင် ကားစတင်ငှားရမ်းလိုပါသလဲ။",
           "options": ["ဘန်ကောက်", "ဖူးခက်", "ချင်းမိုင်", "ပတ္တရား", "ကရာဘီ", "ကိုစမွေ"]
@@ -1732,6 +1810,51 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "pickup_date": {
           "question": "ကားစတင်ရယူမည့် ရက်စွဲ သို့မဟုတ် လ ကို ရိုက်ထည့်ပေးပါ:",
           "placeholder": "ဥပမာ- အေောက်တိုဘာ ၁၅ သို့မဟုတ် ဒီဇင်ဘာလလယ်"
+        }
+      }
+    }
+  },
+  "transfer": {
+    "title": "လေဆိပ် သယ်ယူပို့ဆောင်ရေး",
+    "detailsTitle": "လေဆိပ်နှင့် အစမှ အဆုံး သယ်ယူပို့ဆောင်ရေး — နောက်ထပ်အချက်အလက်အတွက်",
+    "modalTitle": "ထိုင်းနိုင်ငံ လေဆိပ် သယ်ယူပို့ဆောင်ရေး လမ်းညွှန်",
+    "modalSubtitle": "ကိုယ်ပိုင် သယ်ယူပို့ဆောင်ရေး",
+    "destinationLabel": "ခရီးစဉ်",
+    "subtitle": "ကြေးနှုန်းပြတ်သား ကိုယ်ပိုင် သယ်ယူပို့ဆောင်ရေး",
+    "emptyState": "Kiwitaxi ကြေးနှုန်းပြတ်သား သယ်ယူပို့ဆောင်ရေးအတွက် သင့်ရဲ့ အထွက်အဝေ့ နေရာနှင့် ခရီးသည်ဦးရေ အသေးစိတ်ကို ပေးပို့ပါ",
+    "readyToBook": "သယ်ယူပို့ဆောင်ရေး ဘွတ်ကင်လုပ်ရန် အသင့်ဖြစ်ပြီလား?",
+    "bookStayButton": "📅 သယ်ယူပို့ဆောင်ရေး ဘွတ်ကင်လုပ်ပါ",
+    "noneSelected": "မရွေးချယ်ထားပါ",
+    "suggestions": [],
+    "survey": {
+      "title": "လေဆိပ် သယ်ယူပို့ဆောင်ရေး စစ်တမ်း",
+      "analyzing": "သင့်လမ်းကြောင်းအတွက် အကောင်းဆုံး သယ်ယူပို့ဆောင်ရေးအစီအစဉ်ကို ရှာဖွေနေပါသည်...",
+      "buttons": {
+        "next": "နောက်တစ်ဆင့်",
+        "back": "နောက်ပြန်",
+        "submit": "ပေးပို့မည်",
+        "skip": "ကျော်မည်"
+      },
+      "questions": {
+        "pickup_location": {
+          "question": "သင့်ကို ဘယ်နေရာမှ လက်ခံပေးသင့်လဲ?",
+          "placeholder": "အထွက်နေရာ ထည့်ပါ (ဥပမာ- ဆူဝါန်နာဖူး လေဆိပ်, ဟိုတယ်)"
+        },
+        "dropoff_location": {
+          "question": "သင့်ကို ဘယ်နေရာသို့ ပို့ဆောင်ပေးသင့်လဲ?",
+          "placeholder": "အဝေ့နေရာ ထည့်ပါ (ဥပမာ- ဖူးခက် ဟိုတယ်, လေဆိပ်)"
+        },
+        "date_time": {
+          "question": "သင့်အထွက် ရက်စွဲနှင့် အချိန်က ဘယ်လိုလဲ?",
+          "placeholder": "ရက်စွဲနှင့် အချိန် ထည့်ပါ (ဥပမာ- ဒီဇင်ဘာ ၁၅, ၂၀၂၆ နေ့လယ် ၂:၃၀)"
+        },
+        "passengers": {
+          "question": "ခရီးသည် မည်မျှ သွားပါသလဲ?",
+          "placeholder": "ခရီးသည်ဦးရေ ထည့်ပါ (ဥပမာ- ၃)"
+        },
+        "luggage": {
+          "question": "အိတ်ကြီးများ မည်မျှ ရှိပါသလဲ?",
+          "placeholder": "အိတ်ကြီးဦးရေ ထည့်ပါ (ဥပမာ- ၂)"
         }
       }
     }
@@ -2465,10 +2588,6 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "skip": "Omitir"
       },
       "questions": {
-        "rental_type": {
-          "question": "¿Qué tipo de alquiler de auto prefiere?",
-          "options": ["Sin chofer (Self-Drive)", "Con chofer (Chófer privado)"]
-        },
         "pickup_city": {
           "question": "¿En qué ciudad le gustaría recoger el auto?",
           "options": ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Krabi", "Koh Samui"]
@@ -2516,6 +2635,51 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "pickup_date": {
           "question": "Especifique la fecha o mes tentativo de inicio del alquiler:",
           "placeholder": "Ej: 15 de octubre, o mediados de diciembre"
+        }
+      }
+    }
+  },
+  "transfer": {
+    "title": "TRASLADOS AL AEROPUERTO",
+    "detailsTitle": "Traslados al Aeropuerto y Punto a Punto — Para más información",
+    "modalTitle": "Guía de Traslados al Aeropuerto en Tailandia",
+    "modalSubtitle": "Traslados Privados",
+    "destinationLabel": "Destino",
+    "subtitle": "Traslados Privados de Precio Fijo",
+    "emptyState": "Indíquenos su lugar de recogida, entrega y detalles de pasajeros para un traslado Kiwitaxi de precio fijo.",
+    "readyToBook": "¿Listo para reservar su traslado?",
+    "bookStayButton": "📅 Reservar Traslado Ahora",
+    "noneSelected": "Ninguno seleccionado",
+    "suggestions": [],
+    "survey": {
+      "title": "Encuesta de Traslados al Aeropuerto",
+      "analyzing": "Buscando la mejor opción de traslado para su ruta...",
+      "buttons": {
+        "next": "Siguiente Paso",
+        "back": "Atrás",
+        "submit": "Enviar Solicitud",
+        "skip": "Omitir"
+      },
+      "questions": {
+        "pickup_location": {
+          "question": "¿Dónde deberíamos recogerlo?",
+          "placeholder": "Ingrese lugar de recogida (ej. Aeropuerto Suvarnabhumi, Hotel)"
+        },
+        "dropoff_location": {
+          "question": "¿Dónde deberíamos dejarlo?",
+          "placeholder": "Ingrese lugar de entrega (ej. Hotel en Phuket, Aeropuerto)"
+        },
+        "date_time": {
+          "question": "¿Cuál es su fecha y hora de recogida?",
+          "placeholder": "Ingrese fecha y hora (ej. 15 de dic. 2026 a las 2:30 PM)"
+        },
+        "passengers": {
+          "question": "¿Cuántos pasajeros viajan?",
+          "placeholder": "Ingrese número de pasajeros (ej. 3)"
+        },
+        "luggage": {
+          "question": "¿Cuántas maletas grandes tiene?",
+          "placeholder": "Ingrese número de maletas grandes (ej. 2)"
         }
       }
     }
@@ -3249,10 +3413,6 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "skip": "Passer"
       },
       "questions": {
-        "rental_type": {
-          "question": "Quelle option de location préférez-vous ?",
-          "options": ["Sans chauffeur (Autonomie)", "Avec chauffeur"]
-        },
         "pickup_city": {
           "question": "Dans quelle ville souhaitez-vous récupérer la voiture ?",
           "options": ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Krabi", "Koh Samui"]
@@ -3300,6 +3460,51 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "pickup_date": {
           "question": "Veuillez préciser la date ou le mois de début de la location :",
           "placeholder": "Ex. : 15 octobre, ou mi-décembre"
+        }
+      }
+    }
+  },
+  "transfer": {
+    "title": "TRANSFERTS AÉROPORT",
+    "detailsTitle": "Transferts Aéroport et Point à Point — Pour plus d'informations",
+    "modalTitle": "Guide des Transferts Aéroport en Thaïlande",
+    "modalSubtitle": "Transferts Privés",
+    "destinationLabel": "Destination",
+    "subtitle": "Transferts Privés à Prix Fixe",
+    "emptyState": "Indiquez votre lieu de prise en charge, de dépôt et les détails des passagers pour un transfert Kiwitaxi à prix fixe.",
+    "readyToBook": "Prêt à réserver votre transfert ?",
+    "bookStayButton": "📅 Réserver le Transfert Maintenant",
+    "noneSelected": "Aucune sélection",
+    "suggestions": [],
+    "survey": {
+      "title": "Enquête sur les Transferts Aéroport",
+      "analyzing": "Recherche de la meilleure option de transfert pour votre itinéraire...",
+      "buttons": {
+        "next": "Étape Suivante",
+        "back": "Retour",
+        "submit": "Envoyer la Demande",
+        "skip": "Passer"
+      },
+      "questions": {
+        "pickup_location": {
+          "question": "Où devons-nous vous prendre en charge ?",
+          "placeholder": "Entrez le lieu de prise en charge (ex. Aéroport Suvarnabhumi, Hôtel)"
+        },
+        "dropoff_location": {
+          "question": "Où devons-nous vous déposer ?",
+          "placeholder": "Entrez le lieu de dépôt (ex. Hôtel à Phuket, Aéroport)"
+        },
+        "date_time": {
+          "question": "Quelle est votre date et heure de prise en charge ?",
+          "placeholder": "Entrez la date et l'heure (ex. 15 déc. 2026 à 14h30)"
+        },
+        "passengers": {
+          "question": "Combien de passagers voyagent ?",
+          "placeholder": "Entrez le nombre de passagers (ex. 3)"
+        },
+        "luggage": {
+          "question": "Combien de grandes valises avez-vous ?",
+          "placeholder": "Entrez le nombre de grandes valises (ex. 2)"
         }
       }
     }
@@ -4033,10 +4238,6 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "skip": "Überspringen"
       },
       "questions": {
-        "rental_type": {
-          "question": "Welche Art von Mietwagenservice bevorzugen Sie?",
-          "options": ["Selbstfahrer (Self-Drive)", "Mit Fahrer (Privater Chauffeur)"]
-        },
         "pickup_city": {
           "question": "In welcher Stadt möchten Sie das Auto abholen?",
           "options": ["Bangkok", "Phuket", "Chiang Mai", "Pattaya", "Krabi", "Koh Samui"]
@@ -4084,6 +4285,51 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "pickup_date": {
           "question": "Bitte geben Sie den voraussichtlichen Mietbeginn oder Monat an:",
           "placeholder": "z. B. 15. Oktober oder Mitte Dezember"
+        }
+      }
+    }
+  },
+  "transfer": {
+    "title": "FLUGHAFEN-TRANSFERS",
+    "detailsTitle": "Flughafen- und Punkt-zu-Punkt-Transfers — Für weitere Informationen",
+    "modalTitle": "Thailand Flughafen-Transfer-Leitfaden",
+    "modalSubtitle": "Private Transfers",
+    "destinationLabel": "Reiseziel",
+    "subtitle": "Private Transfers zum Festpreis",
+    "emptyState": "Teilen Sie uns Ihre Abhol- und Zielorte sowie Passagierdetails für einen Kiwitaxi-Transfer zum Festpreis mit.",
+    "readyToBook": "Bereit, Ihren Transfer zu buchen?",
+    "bookStayButton": "📅 Transfer Jetzt Buchen",
+    "noneSelected": "Keine Auswahl",
+    "suggestions": [],
+    "survey": {
+      "title": "Flughafen-Transfer-Umfrage",
+      "analyzing": "Suche nach der besten Transfer-Option für Ihre Route...",
+      "buttons": {
+        "next": "Nächster Schritt",
+        "back": "Zurück",
+        "submit": "Anfrage Senden",
+        "skip": "Überspringen"
+      },
+      "questions": {
+        "pickup_location": {
+          "question": "Wo sollen wir Sie abholen?",
+          "placeholder": "Abholort eingeben (z. B. Flughafen Suvarnabhumi, Hotel)"
+        },
+        "dropoff_location": {
+          "question": "Wo sollen wir Sie absetzen?",
+          "placeholder": "Zielort eingeben (z. B. Hotel in Phuket, Flughafen)"
+        },
+        "date_time": {
+          "question": "Wann ist Ihr Abholdatum und Ihre Abholzeit?",
+          "placeholder": "Datum und Uhrzeit eingeben (z. B. 15. Dez. 2026 um 14:30 Uhr)"
+        },
+        "passengers": {
+          "question": "Wie viele Passagiere reisen?",
+          "placeholder": "Anzahl der Passagiere eingeben (z. B. 3)"
+        },
+        "luggage": {
+          "question": "Wie viele große Koffer/Suitkoffer haben Sie?",
+          "placeholder": "Anzahl der großen Koffer eingeben (z. B. 2)"
         }
       }
     }

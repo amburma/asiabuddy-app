@@ -4,7 +4,7 @@ import { translateText } from '@/lib/translate'
 import TransferServiceCard from '@/components/shared/services/TransferServiceCard'
 import { getTransferLinksByCity } from '@/lib/queries/transferLinks'
 import Navbar from '@/components/shared/Navbar'
-import TransportChatWrapper from '@/components/shared/TransportChatWrapper'
+import TransferChatWrapper from '@/components/shared/TransferChatWrapper'
 import { normalizeLocale } from '@/lib/i18n'
 
 export const dynamic = 'force-dynamic'
@@ -113,7 +113,7 @@ export default async function TransfersPage({
           {/* Transport Chat Widget */}
           {country === 'thailand' && (
             <div className="mb-12">
-              <TransportChatWrapper language={targetLanguage as any} />
+              <TransferChatWrapper language={targetLanguage as any} />
             </div>
           )}
 
@@ -127,7 +127,13 @@ export default async function TransfersPage({
               </Link>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <>
+              <div className="mb-8">
+                <p className="text-sm text-gray-600 mb-2">
+                  Powered by <span className="font-semibold text-gold-deep">Kiwitaxi</span> — Reliable airport transfers across Thailand
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {transferLinks.map((transfer) => (
                 <div key={transfer.id} className="w-full">
                   <TransferServiceCard
@@ -150,6 +156,7 @@ export default async function TransfersPage({
                 </div>
               ))}
             </div>
+            </>
           )}
         </div>
       </div>

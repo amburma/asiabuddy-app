@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { addChatMessage, getRecentChatHistory } from '../../../src/lib/database';
 import { generateAIResponse, getSystemInstruction } from '../../../src/services/gemini';
+import { getSupabase } from '@/lib/supabase';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -19,7 +20,7 @@ export async function OPTIONS() {
  */
 export async function POST(request: NextRequest) {
   try {
-    const { message, sessionId } = await request.json();
+    const { message, sessionId, isTransferFlow, systemContext, isCarRentalFlow } = await request.json();
 
     if (!message || !sessionId) {
       return NextResponse.json(
@@ -36,13 +37,50 @@ export async function POST(request: NextRequest) {
 
     console.log(`Web chat message from session ${sessionId} (ID: ${telegramId}): ${message}`);
 
+    // Fetch real car rental pricing from Supabase if this is a car rental flow
+    let carRentalPricingString = '';
+    if (isCarRentalFlow) {
+      try {
+        const supabase = getSupabase();
+        const { data: carRentalPricing, error } = await supabase
+          .from('car_rental_links')
+          .select('provider, price_from, city, location_name, vehicle_type, rental_type')
+          .eq('is_placeholder', false);
+
+
+        if (error) {
+          console.error('Error fetching car rental pricing:', error);
+          carRentalPricingString = '';
+        } else if (carRentalPricing && carRentalPricing.length > 0) {
+          // Format pricing data: "qeeq: from $30 (Bangkok - Suvarnabhumi Airport, self-drive, SUV)"
+          carRentalPricingString = carRentalPricing
+            .map((p: any) => `${p.provider}: from ${p.price_from} (${p.city} - ${p.location_name}, ${p.rental_type}, ${p.vehicle_type})`)
+            .join(', ');
+        } else {
+        }
+      } catch (error) {
+        console.error('Exception fetching car rental pricing:', error);
+        carRentalPricingString = '';
+      }
+    }
+
     // Save user message to Supabase with country='thailand'
     await addChatMessage(telegramId, 'user', message, country);
 
     // Get AI response with chat history context for Thailand
     let aiResponse: string;
     try {
-      aiResponse = await generateAIResponse(telegramId, message, country, `${getSystemInstruction('thailand')}\n\nABSOLUTE LANGUAGE RULE — HIGHEST PRIORITY — NO EXCEPTIONS:\nDetect the language of the user's latest message.\nRespond EXCLUSIVELY in that same language. No mixing. No switching.\nBurmese/Myanmar input → Burmese reply ONLY.\nEnglish input → English reply ONLY.\nThai input → Thai reply ONLY.\nGerman input → German reply ONLY.\nSpanish input → Spanish reply ONLY.\nFrench input → French reply ONLY.\nAny other language → reply in that same language ONLY.\nNever default to English or Thai.\nEven decline messages must be in user's language.`);
+      // Always append the absolute language rule, regardless of whether systemContext is custom or default
+      const languageRule = `\n\nABSOLUTE LANGUAGE RULE — HIGHEST PRIORITY — NO EXCEPTIONS:\nDetect the language of the user's latest message.\nRespond EXCLUSIVELY in that same language. No mixing. No switching.\nBurmese/Myanmar input → Burmese reply ONLY.\nEnglish input → English reply ONLY.\nThai input → Thai reply ONLY.\nGerman input → German reply ONLY.\nSpanish input → Spanish reply ONLY.\nFrench input → French reply ONLY.\nAny other language → reply in that same language ONLY.\nNever default to English or Thai.\nEven decline messages must be in user's language.`;
+      
+      // Add car rental pricing to system context if available
+      let enhancedSystemContext = systemContext || getSystemInstruction('thailand');
+      if (carRentalPricingString) {
+        enhancedSystemContext += `\n\nCAR RENTAL PRICING (REAL DATA FROM DATABASE):\nUse ONLY these real figures when discussing car rental pricing: ${carRentalPricingString}.\nNEVER invent, guess, or estimate a car rental price number not derived from this data.\nIf no matching real price exists for what the customer is asking about, say pricing will be confirmed by the operator instead of quoting a number.`;
+      }
+      
+      const systemInstruction = enhancedSystemContext + languageRule;
+      aiResponse = await generateAIResponse(telegramId, message, country, systemInstruction, isTransferFlow);
     } catch (geminiError: any) {
       // Detect if all 3 API keys failed (Gemini API error)
       const errorMessage = geminiError?.message || String(geminiError);

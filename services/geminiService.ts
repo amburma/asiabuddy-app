@@ -1,6 +1,6 @@
 import { SupportedLanguage } from '@/types/country';
 
-const API_ENDPOINT = "https://asiabuddy.app/api/web-chat";
+const API_ENDPOINT = '/api/web-chat';
 
 function getLanguageName(code: SupportedLanguage): string {
   const map: Record<string, string> = {
@@ -19,7 +19,9 @@ export async function getConciergeResponse(
   history: { role: "user" | "model"; parts: { text: string }[] }[],
   language: SupportedLanguage,
   systemContext?: string,
-  country: string = "thailand"
+  country: string = "thailand",
+  isTransferFlow: boolean = false,
+  isCarRentalFlow: boolean = false
 ): Promise<string> {
   const langName = getLanguageName(language);
 
@@ -46,6 +48,9 @@ export async function getConciergeResponse(
         message: message,
         sessionId: sessionId,
         country: country,
+        isTransferFlow: isTransferFlow,
+        isCarRentalFlow: isCarRentalFlow,
+        systemContext: systemContext,
       }),
     });
 
