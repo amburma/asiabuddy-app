@@ -3,12 +3,12 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Volume2, Send, MessageSquare, Sparkles, User, Bot, Loader2, Play, Calendar } from 'lucide-react';
-import { ESSENTIAL_PHRASES, TRAVELER_TIPS } from '@/data/thailand/phrasesData';
-import { SUPPORTED_LANGUAGES, ThaiLanguage } from '@/types/country';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
+import { ESSENTIAL_PHRASES, TRAVELER_TIPS } from '../../data/thailand/phrasesData';
+import { SUPPORTED_LANGUAGES, ThaiLanguage } from '../../types/country';
+import { UI_TRANSLATIONS } from '../../lib/i18n';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
-import { getConciergeResponse } from '@/services/geminiService';
+import { getConciergeResponse } from '../../services/geminiService';
 import HumanOperatorChat from './HumanOperatorChat';
 
 interface Props {

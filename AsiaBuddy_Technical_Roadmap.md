@@ -1,5 +1,5 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 26 June 2026 — Session 13
+> Last Updated: 21 July 2026 — Session 32
 
 ---
 
@@ -2987,3 +2987,307 @@ Tier 4 (infra housekeeping):
 Blocked, no ETA: Agoda real data (awaiting approval), 12Go real data (traffic-gated, Kiwitaxi is interim substitute above).
 
 Do not begin implementation in this update — this is a documentation/planning commit only.
+
+---
+
+## Session 30 — 20 July 2026 — Transfer Pricing Fix + Car Rental Feature Launch
+
+**Summary:** Fixed critical transfer pricing hallucination bug (AI was inventing prices instead of using real Supabase data), completed Supabase transfer_links setup with Kiwitaxi integration, and built a complete Car Rental feature from scratch (QEEQ provider, Supabase table, pricing injection, AI integration). Also cleaned up TransportChat i18n namespace and verified language switcher functionality.
+
+### ✅ Completed
+
+**1. Supabase transfer_links setup finished**
+- Constraint fixed, Kiwitaxi marker (746660) applied
+- Both pricing rows ($15 Sedan, $120 Van) updated with real booking URLs
+- Duplicate route_name text cleaned up
+
+**2. Transfer price hallucination bug — fully resolved**
+Root causes found and fixed:
+- AI was passing promptContext as the user MESSAGE instead of systemContext, so pricing rules weren't being treated as authoritative
+- app/api/booking-chat/route.ts had a guard-logic bug where transferPricingString was never populated (checked stale empty-string value instead of relevantPricing.length)
+- services/geminiService.ts and components/thailand/HumanOperatorChat.tsx had hardcoded production URLs (https://asiabuddy.app/...) instead of relative paths, meaning local testing was silently hitting production
+- Gemini API key in .env.local was invalid/exhausted (401 ACCESS_TOKEN_TYPE_UNSUPPORTED errors)
+- Live-tested and confirmed: AI now quotes real $15/$120 prices, no hallucination, correct language responses
+
+**3. TransportChat cleanup — verified clean**
+- Removed orphaned `rental_type` (self-drive option) question from the `transport` i18n namespace across all 6 languages (EN/TH/MM/ES/FR/DE)
+- TransportChat is chauffeur-only and never used that question
+- Confirmed `carRental` namespace (used by the new CarRentalChat) correctly retains rental_type for all 6 languages
+
+**4. Final repo check — done**
+- npx tsc --noEmit clean
+- git status reviewed
+- Only known/flagged hardcoded URLs remain in BookingWebForm.tsx
+
+**5. Language switcher manual test — passed**
+- Tested TH/ES/FR/DE on /thailand/transfers — all working correctly
+
+**6. NEW FEATURE BUILT — Car Rental (not in original roadmap)**
+- Chose QEEQ as affiliate provider via Travelpayouts (marker 746660) after comparing Localrent.com, GetRentacar.com, and QEEQ — QEEQ selected for global brand coverage (Avis/Budget/Sixt/Hertz), Price Drop Protector, and self-drive + with-driver support matching existing CarRentalChat.tsx component design
+- Created car_rental_links Supabase table (city, location_name, provider, booking_url, price_from, vehicle_type, rental_type, image_url, is_placeholder) with RLS public-read policy
+- Seeded 3 real rows: Economy Sedan $30 (self-drive), SUV $65 (self-drive), Sedan with Driver $85 (with-driver) — Bangkok/Suvarnabhumi Airport
+- Fixed "Car Rental" homepage card routing: was pointing to /thailand/services ("Coming Soon" placeholder) — now correctly routes to /thailand/rental
+- Created app/[country]/rental/page.tsx and components/shared/CarRentalChatWrapper.tsx (mirroring the Transfer pattern)
+- Created lib/queries/carRentalLinks.ts (fixed a bug: referenced a non-existent created_at column, causing silent Supabase errors)
+- Fixed a client-side Supabase call bug in CarRentalChat.tsx (was calling getSupabase() directly from browser code, which fails because SUPABASE_URL is server-only — removed, now relies entirely on server-side fetching in web-chat/route.ts and booking-chat/route.ts, matching the Transfer pattern)
+- Added car_rental_links pricing fetch + injection to BOTH app/api/web-chat/route.ts (initial AI summary) AND app/api/booking-chat/route.ts (HumanOperatorChat follow-up modal) — mirrors the two-route pattern discovered during the transfer fix
+- Fixed a SEPARATE Gemini API key issue specific to the free-tier keys (GEMINI_API_KEY_1/2/3, different from GEMINI_PRO_API_KEY used by booking-chat) — free tier keys were exhausted/invalid, replaced with fresh free-tier keys
+- Fixed AI prompt content in CarRentalChat.tsx — added explicit "PRICING REQUIREMENTS" instructions telling the AI to quote real prices even when they exceed the customer's stated budget, rather than deferring entirely to the operator
+- Live-tested and confirmed: AI now correctly recommends 3 options with real QEEQ prices ($30/$65/$85), honestly flags budget mismatches
+
+**7. Git commit and push**
+- All changes committed and pushed to git main branch
+- Includes all transfer fixes, Car Rental feature, and cleanup work
+
+### ⚠️ Flagged / Known Issues (not fixed, intentionally deferred)
+
+**1. BookingWebForm.tsx hardcoded URLs**
+- Still has 2 hardcoded production URLs (https://asiabuddy.app/api/inquiry, lines 83 and 178)
+- Low priority, works fine as-is
+- Flagged for future cleanup only
+
+**2. CRITICAL — QEEQ booking_url expiration**
+- QEEQ booking_url is a session-based search-result link that EXPIRES (confirmed via screenshot: "Your search result has expired")
+- This will break for real customers
+- Need to find QEEQ's stable/reusable deep-link format (not a session search ID) via Travelpayouts, or confirm with QEEQ whether their tracked links are meant to be permanent
+
+**3. car_rental_links pricing accuracy**
+- Current pricing ($30/$65/$85) is a rough estimate
+- Real QEEQ live rates observed were $23 (Small), $29 (Medium), $35 (Large), $84 (Premium), $32 (SUV), $34 (Van)
+- Should update the 3 seeded rows to match real current rates, or better, all 6 vehicle tiers
+
+**4. Google Sheets integration broken**
+- Persistent error in server logs all session: "Critical: Absolutely unable to resolve Service Account credentials format" / "Thailand folder not found"
+- This doesn't block the Supabase-based transfer/car-rental flows
+- DOES mean general AI chat (tours, policies, non-transfer/rental pricing) may be degraded
+- Needs its own investigation — likely a malformed GOOGLE_SERVICE_ACCOUNT_KEY env var (JSON parse error suggests truncated or improperly escaped JSON)
+
+### ⏳ Still Pending
+
+**1. Chauffeur (TransportChat.tsx) manual browser test**
+- Was never completed this session (got redirected into building the Car Rental feature instead)
+- Need to locate where TransportChat actually renders (it's used inside ChatWidgetGrid.tsx, appears on /thailand homepage, NOT at a dedicated URL)
+- Manually verify self-drive fields are fully absent and the flow works
+
+**2. Vercel production environment variables**
+- User needs to update GEMINI_API_KEY_1/2/3 (and confirm GEMINI_PRO_API_KEY) on Vercel dashboard
+- Must match the working local .env.local values
+- Or production will still hit the old broken/exhausted keys
+
+**3. Verify live deploy**
+- Confirm the git push actually triggered a successful Vercel deployment
+- Confirm the live site reflects today's changes
+
+**4. UX enhancement for /thailand/rental**
+- Discussed (trust signals, self-drive/with-driver toggle design, transparent pricing, comparison cards)
+- Not yet implemented
+- Deferred for a future session
+
+### Architecture Notes (additions)
+- **Two-route pricing injection pattern discovered:** Both app/api/web-chat/route.ts (initial AI summary) AND app/api/booking-chat/route.ts (HumanOperatorChat follow-up modal) need to fetch and inject pricing data. This is because the initial summary uses free-tier Gemini keys while the follow-up modal uses pay-as-you-go keys, and they run in different contexts. The fix pattern is: fetch from Supabase → format as string → inject into system prompt → AI uses real prices.
+- **Client-side Supabase anti-pattern:** Never call getSupabase() directly from browser code ("use client" components). SUPABASE_URL is server-only (not prefixed with NEXT_PUBLIC_), so it fails in browser. Always fetch server-side and pass data as props or context, matching the Transfer pattern.
+
+---
+
+## Session 31 — 20 July 2026 — Hotels Multi-Provider Integration (Agoda / Trip.com / Booking.com)
+
+**Architecture Decision:** Option A — Redirect-card (click-out only, no price shown on
+AsiaBuddy side). agoda_links static price cards + "Coming Soon" button removed. All 3
+providers use a "Search live prices" button that opens the affiliate deep-link in a new
+tab. AccommodationChat.tsx's 14-step AI concierge survey retained, routed same pattern
+as Transfer/CarRental.
+
+### ✅ Confirmed Affiliate IDs
+
+**Agoda:**
+- `cid=1968300` — confirmed via partners.agoda.com/Tools/Sherpa → Search Box tool →
+  Site ID 1968300, Description "AsiaBuddy Thailand Hotels", Type: Sherpa
+- Widget renders correctly on /thailand/hotels (destination box, date picker, Search
+  button all functional), no console errors observed
+
+**Trip.com:**
+- `SID=325250647`, `Allianceid=9417346` — confirmed via
+  trip.com/partners/tools/deeplink/linkHistory → Previous Links tab → Site ID 325250647,
+  Site Name "Aung Myin", Product Line "Hotels"
+- Deep-link fixed: checkin/checkout dates now dynamic (checkin = today+7, checkout =
+  checkin+3, was previously today/tomorrow), `searchValue` pipe character properly
+  URL-encoded via encodeURIComponent (file: components/shared/services/
+  HotelProviderRedirectCard.tsx)
+
+**Booking.com:** Not yet applied — pending Travelpayouts application (Phase 2, after
+Trip.com verification complete)
+
+**Note:** Marker 746660 (used for Kiwitaxi/Aviasales) is intentionally different from
+Trip.com's SID=325250647 — these are separate affiliate programs, not a mismatch.
+
+### ⏳ Still Pending
+- Booking.com Travelpayouts application
+- Provider comparison tab/toggle UI/UX design (Agoda/Trip.com/Booking.com)
+- Wire redirect-card flow into AccommodationChat.tsx survey completion (Step 5)
+
+---
+
+## Session 32 — 21 July 2026 — Hotels Dynamic City Wiring + Prioritized Roadmap
+
+**Summary:** Reverse-engineered and implemented dynamic per-city deep-linking for both
+Trip.com and Agoda (previously Bangkok-only hardcoded). Fixed a Server/Client Component
+build break and an Agoda widget re-render bug along the way. Agoda still has one open
+bug (visible destination text not updating for non-English city names). Session ended
+with a full project review and an agreed, prioritized "Things To Do" list covering all
+open work across Hotels, QEEQ, other flagged issues, the new Survey Personalization
+idea, and the longer-term Transfers/Activities backlog.
+
+### ✅ Confirmed Data — Trip.com City IDs
+
+Reverse-engineered via live search capture on trip.com for all 7 cities in the fixed
+survey dropdown. Formula confirmed with no exceptions:
+
+```
+searchValue = `19|${cityId}*19*${cityId}*1`
+```
+
+| City | cityId | provinceId | countryId |
+|------|--------|------------|-----------|
+| Bangkok | 359 | 0 | 4 |
+| Chiang Mai | 623 | 10218 | 4 |
+| Phuket | 725 | 11032 | 4 |
+| Pattaya | 622 | 10087 | 4 |
+| Krabi Town | 1405 | 10129 | 4 |
+| Ayutthaya | 36030 | 11038 | 4 |
+| Koh Samui | 1229 | 10245 | 4 |
+
+Old hardcoded value `searchValue='140|4**4'` (undocumented, Bangkok-only) confirmed
+incorrect and replaced.
+
+### ✅ Confirmed Data — Agoda City IDs
+
+Reverse-engineered via live search capture on agoda.com for all 7 cities. **No formula
+relationship to Trip.com IDs** — Agoda uses arbitrary internal DB IDs, so this is a
+static lookup table only (no generation formula possible).
+
+| City | Agoda `city` ID |
+|------|-----------------|
+| Bangkok | 9395 |
+| Chiang Mai | 7401 |
+| Phuket | 16056 |
+| Pattaya | 8584 |
+| Krabi | 14865 |
+| Ayutthaya | 17704 |
+| Koh Samui | 17198 |
+
+### ✅ Completed
+
+**1. Trip.com dynamic city wiring**
+- Created `src/config/thailandCities.ts` with `THAILAND_CITIES` lookup table +
+  `buildTripComSearchValue()` helper implementing the confirmed formula
+- `HotelProviderRedirectCard.tsx` now builds `searchValue`/`cityId`/`provinceId`/
+  `countryId` dynamically from the selected city instead of the old hardcoded value
+- Added a visible "Showing results for: {city}, Thailand" indicator on the Trip.com
+  card so the selected city is verifiable in the UI (previously no visual feedback)
+- Browser-verified end to end for Chiang Mai (Burmese-language survey) — correct city
+  shown and correct cityId confirmed in the outbound Trip.com URL
+
+**2. Agoda dynamic city wiring**
+- Extended `THAILAND_CITIES` with `agodaCityId` for all 7 cities
+- `AgodaSearchWidget.tsx` changed from a hardcoded `city="9395"` prop to a `cityName`
+  prop that looks up `agodaCityId` from the shared config
+- `AccommodationChat` → `HotelsPageClient` wired to a single `selectedCity` state
+  shared by both Trip.com and Agoda widgets (one source of truth)
+- Browser-verified working for Pattaya (English-language flow)
+
+**3. Server/Client Component build fix**
+- `app/[country]/hotels/page.tsx` had been converted to `"use client"` to hold
+  `selectedCity` state, but still imported `cookies` from `next/headers`
+  (server-only) — Turbopack build failure
+- Fixed by splitting into `page.tsx` (Server Component — keeps `cookies()`,
+  `generateMetadata`) and a new `HotelsPageClient.tsx` (Client Component — holds all
+  `useState`/city-selection logic), matching standard Next.js App Router pattern
+- Build verified clean, all 15 routes generated correctly
+
+**4. Agoda widget re-render bug — partially fixed**
+- Root cause #1: `useEffect` in `AgodaSearchWidget.tsx` had an empty dependency
+  array `[]`, so the Agoda embed script only initialized once on mount and never
+  re-ran when `cityName` changed
+- Fix: added `cityName` to the dependency array + `key={selectedCity}` on the
+  wrapper in `HotelsPageClient.tsx` to force a full remount
+- Root cause #2 (found after root cause #1 didn't fully resolve it): an early-return
+  guard (`if (containerRef.current.childElementCount > 0) return`) was blocking the
+  legitimate re-initialization the above fix was supposed to trigger — removed
+- **Confirmed still broken for non-English city names** (see Known Issues below)
+
+### ⚠️ Flagged / Known Issues (not fixed, carried forward)
+
+**1. CRITICAL (carried from Session 30) — QEEQ booking_url session-link expiry**
+- Unchanged from Session 30. Still the single highest-priority open bug in the
+  codebase — will break bookings for real customers. See Session 30 notes.
+
+**2. NEW — Agoda widget does not update visible destination text for non-English
+city names**
+- Confirmed via browser test: Trip.com card correctly shows "Chiang Mai, Thailand"
+  when Chiang Mai is selected via the **Burmese-language survey** (stores
+  "ချင်းမိုင်" in `selectedCity`), but the Agoda widget's visible search box still
+  shows "Bangkok, Thailand" in the same scenario
+- A `normalizeCityName()` mapping (Burmese/Thai → English keys) was added to fix a
+  confirmed language-key mismatch in the `THAILAND_CITIES` lookup, and this fixed
+  Trip.com — but Agoda is still showing the fallback after this fix, meaning there is
+  a second, not-yet-identified issue specific to the Agoda widget (suspected: the
+  3rd-party Agoda script's visible placeholder may not actually be controlled by the
+  `DestinationName` config value at all — needs DOM/network-level verification, not
+  just config-level). **Debug prompt issued to Windsurf, result pending.**
+- Until resolved: Agoda's outbound link may still carry the correct city in its
+  tracked config even though the visible box is wrong (unconfirmed) — do not assume
+  the underlying redirect is broken just because the visible text is wrong, but do
+  not assume it's correct either. Needs explicit re-verification once the visible-text
+  bug is fixed.
+
+### 💡 New Idea Raised — Survey Personalization
+
+Discussed extending `AccommodationChat`'s 7-city survey beyond pure city-routing to
+collect lightweight personalization data (budget range, group type, trip
+priority/style) and use it to help differentiate the 3 hotel providers for the user
+— e.g. real feature-based "why this provider" badges rather than a plain 3-button
+row. Explicitly agreed this must stay **factual/data-driven** (real inventory,
+pricing, or feature differences) and avoid dark patterns (fake urgency, fabricated
+ratings, or favoring a provider by commission rather than user fit). Scoped as
+**Phase A / B / C** (static badges → live provider-API data → preference-based
+re-ranking with a transparency label). Explicitly deprioritized until Hotels core
+bugs (Trip.com + Agoda fully verified across all 7 cities) are closed.
+
+### 📋 Things To Do — Agreed Priority Order (Session 32)
+
+**Priority 1 — Hotels completion**
+1. Agoda widget bug — finish root-cause debug (in progress at Windsurf)
+2. Agoda — verify all 7 cities once bug is fixed
+3. Trip.com — verify remaining 6 cities via click-through (only Chiang Mai fully
+   click-tested so far)
+4. Provider comparison tab/toggle UI/UX design (Agoda/Trip.com/Booking.com)
+5. Booking.com — Travelpayouts application (profile details)
+
+**Priority 2 — Critical bug**
+6. QEEQ `booking_url` session-link expiry (car rental) — 🔴 CRITICAL
+
+**Priority 3 — Other flagged issues (carried from Session 30)**
+7. `car_rental_links` pricing update ($30/$65/$85 → real QEEQ rates, $23–$84)
+8. `TransportChat.tsx` manual browser test (still not done — see Session 30)
+9. Google Sheets credentials error (tour/policy data degraded)
+10. Vercel production env vars (Gemini key) update
+11. `BookingWebForm.tsx` hardcoded URLs (low priority)
+
+**Priority 4 — Survey Personalization (starts only after Priority 1 is fully closed)**
+12. Decide final scope: city-routing only vs. full personalization
+13. Phase A — static, feature-based "why this provider" badges
+14. Phase B — live property-count/price data from provider APIs (future)
+15. Phase C — preference-based provider re-ranking + transparency label (future)
+
+**Priority 5 — Longer-term (Transfers/Activities), ordered bug → missing feature →
+polish**
+16. Activities: `price_from` NULL displaying as $0 (display bug)
+17. Activities: NULL rating displaying as (0) (display bug)
+18. Activities: city selector missing (missing feature)
+19. Transfers: trip-type selector (missing feature)
+20. Transfers: Kiwitaxi data population (data completeness)
+21. Transfers: vehicle-tier badges (UI enhancement)
+22. Transfers: FAQ/cross-sell sections (UI enhancement)
+23. Navbar click behavior — verify (QA/polish)
+
+---

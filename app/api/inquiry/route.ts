@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createBooking } from '@/lib/database';
+import { createBooking } from '../../../lib/database';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const corsHeaders = {

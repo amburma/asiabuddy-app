@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { translateText } from '@/lib/translate'
+import { translateText } from '../../../lib/translate'
 
 export async function GET() {
   try {

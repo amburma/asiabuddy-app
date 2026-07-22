@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
-import { UI_TRANSLATIONS } from '@/lib/i18n'
+import { UI_TRANSLATIONS } from '../../../lib/i18n'
 
 export default async function AboutPage() {
   const cookieStore = await cookies()

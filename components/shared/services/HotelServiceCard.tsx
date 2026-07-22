@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { MapPin, Star } from 'lucide-react';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
-import { SupportedLanguage } from '@/types/country';
+import { UI_TRANSLATIONS } from '../../../lib/i18n';
+import { SupportedLanguage } from '../../../types/country';
 
 interface HotelData {
   name: string;

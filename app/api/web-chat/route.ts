@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { addChatMessage, getRecentChatHistory } from '../../../src/lib/database';
 import { generateAIResponse, getSystemInstruction } from '../../../src/services/gemini';
-import { getSupabase } from '@/lib/supabase';
+import { getSupabase } from '../../../lib/supabase';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',

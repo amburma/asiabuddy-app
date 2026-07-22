@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { TripChecklist } from './TripChecklist'
-import { SupportedLanguage } from '@/types/country'
+import { SupportedLanguage } from '../../types/country'
 
 interface TripChecklistModalProps {
   language?: SupportedLanguage

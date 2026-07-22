@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import HumanOperatorChat from '@/components/thailand/HumanOperatorChat'
-import { ThaiLanguage } from '@/types/country'
+import HumanOperatorChat from '../thailand/HumanOperatorChat'
+import { ThaiLanguage } from '../../types/country'
 
 export default function FloatingChatButton({ language }: { language: string | ThaiLanguage }) {
   const [isOpen, setIsOpen] = useState(false)

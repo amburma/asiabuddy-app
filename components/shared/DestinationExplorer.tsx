@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { DESTINATIONS } from '@/data/thailand/destinations';
-import { Destination, DestinationPillars, PillarItem } from '@/types/country';
-import { ThaiLanguage } from '@/types/country';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
-import { GENERAL_INFORMATION } from '@/data/thailand/generalInformation';
+import { DESTINATIONS } from '../../data/thailand/destinations';
+import { Destination, DestinationPillars, PillarItem } from '../../types/country';
+import { ThaiLanguage } from '../../types/country';
+import { UI_TRANSLATIONS } from '../../lib/i18n';
+import { GENERAL_INFORMATION } from '../../data/thailand/generalInformation';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { MapPin, Compass, Mountain, ShoppingBag, Utensils, Info, AlertTriangle, Wind, X, ExternalLink, Star, Sparkles, Grid } from 'lucide-react';

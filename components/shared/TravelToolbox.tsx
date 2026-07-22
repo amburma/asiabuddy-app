@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ThaiLanguage } from '@/types/country';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
+import { ThaiLanguage } from '../../types/country';
+import { UI_TRANSLATIONS } from '../../lib/i18n';
 import { Calculator, Cloud, Bus, Receipt, FileCheck, X, ChevronRight, Info, Check, AlertCircle, Home, Utensils, Stethoscope, Music, ShoppingBag, MessageSquare, ShieldCheck, Gavel } from 'lucide-react';
 import TransportChat from '../thailand/TransportChat';
-import { TRANSPORT_DETAILS } from '@/data/thailand/transportDetails';
+import { TRANSPORT_DETAILS } from '../../data/thailand/transportDetails';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 

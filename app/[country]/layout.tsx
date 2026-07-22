@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
-import FloatingChatButtonLoader from '@/components/shared/FloatingChatButtonLoader'
-import { normalizeLocale } from '@/lib/i18n'
+import FloatingChatButtonLoader from '../../components/shared/FloatingChatButtonLoader'
+import { normalizeLocale } from '../../lib/i18n'
 
 export const dynamic = 'force-dynamic'
 

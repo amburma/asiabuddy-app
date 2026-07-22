@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Navbar from '@/components/shared/Navbar'
+import Navbar from './Navbar'
 
 export default function ToursComingSoon({ country }: { country: string }) {
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)

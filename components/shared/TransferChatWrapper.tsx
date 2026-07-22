@@ -1,7 +1,7 @@
 'use client'
 
-import TransferChat from '@/components/thailand/TransferChat'
-import { ThaiLanguage } from '@/types/country'
+import TransferChat from '../thailand/TransferChat'
+import { ThaiLanguage } from '../../types/country'
 
 interface TransferChatWrapperProps {
   language: ThaiLanguage

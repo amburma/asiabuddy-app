@@ -1,7 +1,7 @@
 'use client'
 
-import TransportChat from '@/components/thailand/TransportChat'
-import { ThaiLanguage } from '@/types/country'
+import TransportChat from '../thailand/TransportChat'
+import { ThaiLanguage } from '../../types/country'
 
 interface TransportChatWrapperProps {
   language: ThaiLanguage

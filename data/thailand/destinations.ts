@@ -1,4 +1,4 @@
-import { Destination, ThaiLanguage } from '@/types/country';
+import { Destination, ThaiLanguage } from '../../types/country';
 
 export const DESTINATIONS: Partial<Record<ThaiLanguage, Destination[]>> = {
   EN: [

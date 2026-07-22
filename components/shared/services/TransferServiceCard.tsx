@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { Car, Bus, Users } from 'lucide-react';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
-import { SupportedLanguage } from '@/types/country';
+import { UI_TRANSLATIONS } from '../../../lib/i18n';
+import { SupportedLanguage } from '../../../types/country';
 
 interface TransferData {
   vehicle_type: 'sedan' | 'van' | 'shared';

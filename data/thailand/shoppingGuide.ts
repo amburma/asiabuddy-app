@@ -1,4 +1,4 @@
-import { ThaiLanguage } from '@/types/country';
+import { ThaiLanguage } from '../../types/country';
 
 export const SHOPPING_GUIDE_MARKDOWN: Record<ThaiLanguage, string> = {
   EN: `

@@ -1,4 +1,4 @@
-import { getSupabase } from '@/lib/supabase';
+import { getSupabase } from '../supabase';
 
 export interface GygLink {
   id: string;

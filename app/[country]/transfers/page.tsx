@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
-import { translateText } from '@/lib/translate'
-import TransferServiceCard from '@/components/shared/services/TransferServiceCard'
-import { getTransferLinksByCity } from '@/lib/queries/transferLinks'
-import Navbar from '@/components/shared/Navbar'
-import TransferChatWrapper from '@/components/shared/TransferChatWrapper'
-import { normalizeLocale } from '@/lib/i18n'
+import { translateText } from '../../../lib/translate'
+import TransferServiceCard from '../../../components/shared/services/TransferServiceCard'
+import { getTransferLinksByCity } from '../../../lib/queries/transferLinks'
+import Navbar from '../../../components/shared/Navbar'
+import TransferChatWrapper from '../../../components/shared/TransferChatWrapper'
+import { normalizeLocale } from '../../../lib/i18n'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

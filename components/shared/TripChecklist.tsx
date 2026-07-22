@@ -16,8 +16,8 @@ import {
   ClipboardList,
   CheckCircle
 } from 'lucide-react';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
-import { SupportedLanguage } from '@/types/country';
+import { UI_TRANSLATIONS } from '../../lib/i18n';
+import { SupportedLanguage } from '../../types/country';
 
 interface ChecklistItem {
   id: string;

@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { Plane, MapPin } from 'lucide-react';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
-import { SupportedLanguage } from '@/types/country';
+import { UI_TRANSLATIONS } from '../../../lib/i18n';
+import { SupportedLanguage } from '../../../types/country';
 
 interface FlightData {
   airline: string;

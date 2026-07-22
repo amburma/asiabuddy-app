@@ -1,4 +1,4 @@
-import { getSupabase } from '@/lib/supabase'
+import { getSupabase } from '../../../lib/supabase'
 import Link from 'next/link'
 
 export const revalidate = 3600

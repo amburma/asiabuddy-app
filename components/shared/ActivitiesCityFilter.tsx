@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import TourServiceCard from './services/TourServiceCard'
-import { GygLink } from '@/lib/queries/gygLinks'
-import { SupportedLanguage } from '@/types/country'
-import { UI_TRANSLATIONS } from '@/lib/i18n'
+import { GygLink } from '../../lib/queries/gygLinks'
+import { SupportedLanguage } from '../../types/country'
+import { UI_TRANSLATIONS } from '../../lib/i18n'
 
 interface ActivitiesCityFilterProps {
   activities: GygLink[]

@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
-import { UI_TRANSLATIONS } from '@/lib/i18n'
-import { SupportedLanguage } from '@/types/country'
-import Navbar from '@/components/shared/Navbar'
+import { UI_TRANSLATIONS } from '../../../lib/i18n'
+import { SupportedLanguage } from '../../../types/country'
+import Navbar from '../../../components/shared/Navbar'
 
 export default async function ServicesPage({
   params,

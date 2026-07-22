@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Calculator } from 'lucide-react';
-import { ThaiLanguage } from '@/types/country';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
+import { ThaiLanguage } from '../../types/country';
+import { UI_TRANSLATIONS } from '../../lib/i18n';
 
 interface Props {
   language: ThaiLanguage;

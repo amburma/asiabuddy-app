@@ -1,4 +1,4 @@
-import { SupportedLanguage } from '@/types/country';
+import { SupportedLanguage } from '../../types/country';
 
 export const VAT_REFUND_GUIDE: Record<SupportedLanguage | string, string> = {
   EN: `# VAT Refund Guide for Travelers

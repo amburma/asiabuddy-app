@@ -1,4 +1,4 @@
-import { SupportedLanguage } from '@/types/country';
+import { SupportedLanguage } from '../types/country';
 
 const SUPPORTED_LOCALES: SupportedLanguage[] = ['EN', 'TH', 'MM', 'ES', 'FR', 'DE'];
 

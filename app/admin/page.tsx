@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { createClient } from '@/lib/supabase/client';
+import { createClient } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { LogOut, Plus, Pencil, Trash2, X, ChevronDown, ChevronRight, GripVertical, Upload, ArrowUp, ArrowDown, ImagePlus } from 'lucide-react';
 

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import HumanOperatorChat from '@/components/thailand/HumanOperatorChat';
+import HumanOperatorChat from '../../../components/thailand/HumanOperatorChat';
 
 interface Props {
   id: string;

@@ -1,17 +1,17 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
-import { translateText } from '@/lib/translate'
-import FlightServiceCard from '@/components/shared/services/FlightServiceCard'
-import { getFlightLinksByCity } from '@/lib/queries/flightLinks'
-import Navbar from '@/components/shared/Navbar'
-import AviasalesSearchWidgetWrapper from '@/components/shared/AviasalesSearchWidgetWrapper'
-import VisaModalTrigger from '@/components/shared/VisaModalTrigger'
-import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
-import { SupportedLanguage } from '@/types/country'
+import { translateText } from '../../../lib/translate'
+import FlightServiceCard from '../../../components/shared/services/FlightServiceCard'
+import { getFlightLinksByCity } from '../../../lib/queries/flightLinks'
+import Navbar from '../../../components/shared/Navbar'
+import AviasalesSearchWidgetWrapper from '../../../components/shared/AviasalesSearchWidgetWrapper'
+import VisaModalTrigger from '../../../components/shared/VisaModalTrigger'
+import { UI_TRANSLATIONS, normalizeLocale } from '../../../lib/i18n'
+import { SupportedLanguage } from '../../../types/country'
 import { Plane, Calendar, MapPin, Clock } from 'lucide-react'
 import dynamicImport from 'next/dynamic'
 
-const ChatWidgetGrid = dynamicImport(() => import('@/components/shared/ChatWidgetGrid'))
+const ChatWidgetGrid = dynamicImport(() => import('../../../components/shared/ChatWidgetGrid'))
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

@@ -1,36 +1,36 @@
 'use client'
-import InstallBanner from '@/components/shared/InstallBanner';
-import IOSInstallBanner from '@/components/shared/IOSInstallBanner';
-import MarkdownRenderer from '@/components/shared/MarkdownRenderer';
-import GuideModal from '@/components/shared/GuideModal';
+import InstallBanner from '../shared/InstallBanner';
+import IOSInstallBanner from '../shared/IOSInstallBanner';
+import MarkdownRenderer from '../shared/MarkdownRenderer';
+import GuideModal from '../shared/GuideModal';
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { motion, AnimatePresence } from 'motion/react';
-import { ThaiLanguage } from '@/types/country';
-import EmergencyBanner from '@/components/shared/EmergencyBanner';
-import LanguageSelector from '@/components/shared/LanguageSelector';
-import DestinationExplorer from '@/components/shared/DestinationExplorer';
-import TravelToolbox from '@/components/shared/TravelToolbox';
-import LanguageWelcome from '@/components/shared/LanguageWelcome';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
-import { GENERAL_INFORMATION } from '@/data/thailand/generalInformation';
-import { TRANSPORT_DETAILS } from '@/data/thailand/transportDetails';
-import { ACCOMMODATION_GUIDE } from '@/data/thailand/accommodationGuide';
-import { FOOD_GUIDE_MARKDOWN } from '@/data/thailand/foodGuide';
-import { MEDICAL_GUIDE_MARKDOWN } from '@/data/thailand/medicalGuide';
-import { NIGHTLIFE_GUIDE_MARKDOWN } from '@/data/thailand/nightlifeGuide';
-import { VAT_REFUND_GUIDE } from '@/data/thailand/vatRefundGuide';
-import { VISA_GUIDE } from '@/data/thailand/visaGuide';
-import { TRAVEL_STYLE_GUIDE } from '@/data/thailand/travelStyleGuide';
-import { SHOPPING_GUIDE_MARKDOWN } from '@/data/thailand/shoppingGuide';
+import { ThaiLanguage } from '../../types/country';
+import EmergencyBanner from '../shared/EmergencyBanner';
+import LanguageSelector from '../shared/LanguageSelector';
+import DestinationExplorer from '../shared/DestinationExplorer';
+import TravelToolbox from '../shared/TravelToolbox';
+import LanguageWelcome from '../shared/LanguageWelcome';
+import { UI_TRANSLATIONS } from '../../lib/i18n';
+import { GENERAL_INFORMATION } from '../../data/thailand/generalInformation';
+import { TRANSPORT_DETAILS } from '../../data/thailand/transportDetails';
+import { ACCOMMODATION_GUIDE } from '../../data/thailand/accommodationGuide';
+import { FOOD_GUIDE_MARKDOWN } from '../../data/thailand/foodGuide';
+import { MEDICAL_GUIDE_MARKDOWN } from '../../data/thailand/medicalGuide';
+import { NIGHTLIFE_GUIDE_MARKDOWN } from '../../data/thailand/nightlifeGuide';
+import { VAT_REFUND_GUIDE } from '../../data/thailand/vatRefundGuide';
+import { VISA_GUIDE } from '../../data/thailand/visaGuide';
+import { TRAVEL_STYLE_GUIDE } from '../../data/thailand/travelStyleGuide';
+import { SHOPPING_GUIDE_MARKDOWN } from '../../data/thailand/shoppingGuide';
 import { Compass, MessageSquare, Map as MapIcon, ShieldCheck, Languages, Info, X, Bus, ChevronRight, Check, AlertCircle, Receipt, FileCheck, FileText, Menu, Grid, MessageCircle, Home, Utensils, Plane, Ticket, Stethoscope, Music, ShoppingBag, Calculator, Gavel, Briefcase, Phone, Mail, Globe, ExternalLink, Calendar } from 'lucide-react';
-import CurrencyConverter from '@/components/shared/CurrencyConverter';
-import { TripChecklist } from '@/components/shared/TripChecklist';
-import BookingWebForm from '@/components/shared/BookingWebForm';
-import CookieBanner from '@/components/shared/CookieBanner';
+import CurrencyConverter from '../shared/CurrencyConverter';
+import { TripChecklist } from '../shared/TripChecklist';
+import BookingWebForm from '../shared/BookingWebForm';
+import CookieBanner from '../shared/CookieBanner';
 
 // Dynamic imports for chat components with SSR disabled
-const ConciergeChat = dynamic(() => import('@/components/thailand/ConciergeChat'), { 
+const ConciergeChat = dynamic(() => import('./ConciergeChat'), { 
   ssr: false,
   loading: () => (
     <div className="max-w-4xl mx-auto">
@@ -42,19 +42,19 @@ const ConciergeChat = dynamic(() => import('@/components/thailand/ConciergeChat'
     </div>
   )
 })
-const TransportChat = dynamic(() => import('@/components/thailand/TransportChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
-const FoodChat = dynamic(() => import('@/components/thailand/FoodChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
-const AccommodationChat = dynamic(() => import('@/components/thailand/AccommodationChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
-const CarRentalChat = dynamic(() => import('@/components/thailand/CarRentalChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
-const TripPlannerChat = dynamic(() => import('@/components/thailand/TripPlannerChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
-const MedicalChat = dynamic(() => import('@/components/thailand/MedicalChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
-const NightlifeChat = dynamic(() => import('@/components/thailand/NightlifeChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
-const ShoppingChat = dynamic(() => import('@/components/thailand/ShoppingChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
-const BookingChat = dynamic(() => import('@/components/shared/BookingChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
-const PhrasesChat = dynamic(() => import('@/components/thailand/PhrasesChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
-const EtiquetteGuide = dynamic(() => import('@/components/shared/EtiquetteGuide'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
-const LawsGuide = dynamic(() => import('@/components/shared/LawsGuide'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
-const HumanOperatorChat = dynamic(() => import('@/components/thailand/HumanOperatorChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const TransportChat = dynamic(() => import('./TransportChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const FoodChat = dynamic(() => import('./FoodChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const AccommodationChat = dynamic(() => import('./AccommodationChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const CarRentalChat = dynamic(() => import('./CarRentalChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const TripPlannerChat = dynamic(() => import('./TripPlannerChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const MedicalChat = dynamic(() => import('./MedicalChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const NightlifeChat = dynamic(() => import('./NightlifeChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const ShoppingChat = dynamic(() => import('./ShoppingChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const BookingChat = dynamic(() => import('../shared/BookingChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const PhrasesChat = dynamic(() => import('./PhrasesChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const EtiquetteGuide = dynamic(() => import('../shared/EtiquetteGuide'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const LawsGuide = dynamic(() => import('../shared/LawsGuide'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
+const HumanOperatorChat = dynamic(() => import('./HumanOperatorChat'), { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 h-32 rounded" /> })
 
 export default function ThailandApp() {
   const [language, setLanguage] = useState<ThaiLanguage>('EN')

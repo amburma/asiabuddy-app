@@ -1,7 +1,7 @@
 'use client'
 
-import CarRentalChat from '@/components/thailand/CarRentalChat'
-import { ThaiLanguage } from '@/types/country'
+import CarRentalChat from '../thailand/CarRentalChat'
+import { ThaiLanguage } from '../../types/country'
 
 interface CarRentalChatWrapperProps {
   language: ThaiLanguage

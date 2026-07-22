@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { MapPin, UtensilsCrossed, Compass, Activity, Gem } from 'lucide-react'
-import { UI_TRANSLATIONS } from '@/lib/i18n'
+import { UI_TRANSLATIONS } from '../../lib/i18n'
 
 interface Destination {
   id: string

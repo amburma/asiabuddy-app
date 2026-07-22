@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { SupportedLanguage } from '@/types/country'
-import { UI_TRANSLATIONS } from '@/lib/i18n'
+import { SupportedLanguage } from '../../types/country'
+import { UI_TRANSLATIONS } from '../../lib/i18n'
 
 interface FooterProps {
   country: string

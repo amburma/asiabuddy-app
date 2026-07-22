@@ -1,9 +1,9 @@
-import { getSupabase } from '@/lib/supabase'
+import { getSupabase } from '../../../lib/supabase'
 import Link from 'next/link'
 import { cookies } from 'next/headers'
-import { translateText } from '@/lib/translate'
-import Navbar from '@/components/shared/Navbar'
-import ToursComingSoon from '@/components/shared/ToursComingSoon'
+import { translateText } from '../../../lib/translate'
+import Navbar from '../../../components/shared/Navbar'
+import ToursComingSoon from '../../../components/shared/ToursComingSoon'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

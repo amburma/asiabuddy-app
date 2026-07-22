@@ -1,8 +1,8 @@
 import { Bot, InputFile } from 'grammy';
-import { getBooking, updateBookingStatus, getChatHistory } from '@/lib/database';
-import { generateAndUploadInvoicePDF } from '@/lib/pdfGenerator';
-import { sendInvoiceEmail } from '@/lib/emailService';
-import { getSupabaseAdmin, getSupabase } from '@/lib/supabase';
+import { getBooking, updateBookingStatus, getChatHistory } from '../../../lib/database';
+import { generateAndUploadInvoicePDF } from '../../../lib/pdfGenerator';
+import { sendInvoiceEmail } from '../../../lib/emailService';
+import { getSupabaseAdmin, getSupabase } from '../../../lib/supabase';
 
 let operatorBot: Bot | null = null;
 let customerBot: Bot | null = null;

@@ -1,4 +1,4 @@
-import { ThaiLanguage } from '@/types/country';
+import { ThaiLanguage } from '../../types/country';
 
 export const NIGHTLIFE_GUIDE_MARKDOWN: Record<ThaiLanguage, string> = {
   MM: `# ထိုင်းနိုင်ငံ ညဥ့်ဘဝ အလုံးစုံလမ်းညွှန်- ကလပ်များ၊ ဘားများနှင့် ဘေးကင်းရေး

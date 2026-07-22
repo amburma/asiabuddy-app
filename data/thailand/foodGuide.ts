@@ -1,4 +1,4 @@
-import { ThaiLanguage } from '@/types/country';
+import { ThaiLanguage } from '../../types/country';
 
 export const FOOD_GUIDE_MARKDOWN: Record<ThaiLanguage, string> = {
   MM: `# ထိုင်းနိုင်ငံ အစားအစာ လမ်းညွှန်- မီရှီလင်ကြယ်ပွင့်ဆိုင်များမှသည် လမ်းဘေးစားသောက်ဆိုင်များအထိ

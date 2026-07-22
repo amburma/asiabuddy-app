@@ -1,8 +1,8 @@
 import { motion } from 'motion/react';
 import { Gavel, AlertTriangle, Scale, Info, ShieldAlert } from 'lucide-react';
-import { LAWS_DATA, LAWS_PRO_TIP } from '@/data/thailand/lawsData';
-import { ThaiLanguage } from '@/types/country';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
+import { LAWS_DATA, LAWS_PRO_TIP } from '../../data/thailand/lawsData';
+import { ThaiLanguage } from '../../types/country';
+import { UI_TRANSLATIONS } from '../../lib/i18n';
 
 interface Props {
   language: ThaiLanguage;

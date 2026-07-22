@@ -1,9 +1,9 @@
 import './globals.css'
-import CookieBanner from '@/components/shared/CookieBanner'
+import CookieBanner from '../components/shared/CookieBanner'
 import { Playfair_Display, Inter, DM_Mono } from 'next/font/google'
 import { cookies } from 'next/headers'
 import Script from "next/script"
-import { normalizeLocale } from '@/lib/i18n'
+import { normalizeLocale } from '../lib/i18n'
 
 const playfair = Playfair_Display({ 
   subsets: ['latin'],

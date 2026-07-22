@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { CheckCircle2, XCircle, Info, Star, ShieldCheck, Heart } from 'lucide-react';
-import { ThaiLanguage } from '@/types/country';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
+import { ThaiLanguage } from '../../types/country';
+import { UI_TRANSLATIONS } from '../../lib/i18n';
 
 interface Props {
   language: ThaiLanguage;

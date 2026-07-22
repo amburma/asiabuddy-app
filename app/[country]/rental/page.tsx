@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
-import { translateText } from '@/lib/translate'
-import { getCarRentalLinksByCity } from '@/lib/queries/carRentalLinks'
-import Navbar from '@/components/shared/Navbar'
-import CarRentalChatWrapper from '@/components/shared/CarRentalChatWrapper'
-import { normalizeLocale } from '@/lib/i18n'
+import { translateText } from '../../../lib/translate'
+import { getCarRentalLinksByCity } from '../../../lib/queries/carRentalLinks'
+import Navbar from '../../../components/shared/Navbar'
+import CarRentalChatWrapper from '../../../components/shared/CarRentalChatWrapper'
+import { normalizeLocale } from '../../../lib/i18n'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

@@ -1,4 +1,4 @@
-import { SupportedLanguage } from '@/types/country';
+import { SupportedLanguage } from '../../types/country';
 
 export const CAR_RENTAL_GUIDE: Record<SupportedLanguage, string> = {
   EN: `

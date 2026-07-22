@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ThaiLanguage } from '@/types/country';
+import { ThaiLanguage } from '../../types/country';
 import { Sparkles, Languages } from 'lucide-react';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
+import { UI_TRANSLATIONS } from '../../lib/i18n';
 
 interface Props {
   onStart: (lang: ThaiLanguage) => void;

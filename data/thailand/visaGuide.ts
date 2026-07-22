@@ -1,4 +1,4 @@
-import { ThaiLanguage } from '@/types/country';
+import { ThaiLanguage } from '../../types/country';
 
 const ENGLISH_GUIDE = `# Thailand Immigration Framework & Entry Guide (2026 Update)
 

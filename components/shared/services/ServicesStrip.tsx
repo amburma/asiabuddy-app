@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import { UI_TRANSLATIONS } from '@/lib/i18n'
-import { SupportedLanguage } from '@/types/country'
-import { GygLinksSummary } from '@/lib/queries/gygLinks'
-import { AgodaLink } from '@/lib/queries/agodaLinks'
-import { KlookLink } from '@/lib/queries/klookLinks'
-import { TransferLink } from '@/lib/queries/transferLinks'
+import { UI_TRANSLATIONS } from '../../../lib/i18n'
+import { SupportedLanguage } from '../../../types/country'
+import { GygLinksSummary } from '../../../lib/queries/gygLinks'
+import { AgodaLink } from '../../../lib/queries/agodaLinks'
+import { KlookLink } from '../../../lib/queries/klookLinks'
+import { TransferLink } from '../../../lib/queries/transferLinks'
 
 interface ServicesStripProps {
   country: string

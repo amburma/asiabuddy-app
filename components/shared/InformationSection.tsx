@@ -1,6 +1,6 @@
 "use client"
 
-import { UI_TRANSLATIONS } from '@/lib/i18n'
+import { UI_TRANSLATIONS } from '../../lib/i18n'
 
 interface Props {
   language: string

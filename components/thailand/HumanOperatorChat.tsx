@@ -3,8 +3,8 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, User, Loader2, X, Headphones, Mail, Phone, User as UserIcon, MessageCircle } from 'lucide-react';
-import { ChatMessage, ThaiLanguage } from '@/types/country';
-import { UI_TRANSLATIONS } from '@/lib/i18n';
+import { ChatMessage, ThaiLanguage } from '../../types/country';
+import { UI_TRANSLATIONS } from '../../lib/i18n';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 

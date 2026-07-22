@@ -1,14 +1,14 @@
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '../../../../lib/supabase/server'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { Clock, DollarSign, ArrowLeft, Play, CheckCircle2 } from 'lucide-react'
 import BookNowClient from './BookNowClient'
-import { ThaiLanguage } from '@/types/country'
-import { translateText } from '@/lib/translate'
+import { ThaiLanguage } from '../../../../types/country'
+import { translateText } from '../../../../lib/translate'
 import { cookies } from 'next/headers'
 
 // ─── Types ────────────────────────────────────────────────────

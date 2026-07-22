@@ -1,4 +1,4 @@
-import { ThaiLanguage } from '@/types/country';
+import { ThaiLanguage } from '../../types/country';
 
 export const MEDICAL_GUIDE_MARKDOWN: Record<ThaiLanguage, string> = {
   MM: `# ထိုင်းနိုင်ငံ ဆေးဘက်ဆိုင်ရာ အလုံးစုံလမ်းညွှန်- ကျန်းမာရေးစောင့်ရှောက်မှု၊ စစ်ဆေးမှုနှင့် ပြင်ဆင်မှုများ

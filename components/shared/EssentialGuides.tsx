@@ -1,7 +1,7 @@
 'use client'
 
-import { SupportedLanguage } from '@/types/country'
-import { UI_TRANSLATIONS } from '@/lib/i18n'
+import { SupportedLanguage } from '../../types/country'
+import { UI_TRANSLATIONS } from '../../lib/i18n'
 
 export default function EssentialGuides({ country, language }: { country: string; language: string }) {
   if (country !== 'thailand') return null
