@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Home, Loader2, MessageSquare, ChevronLeft, Check, Square, CheckSquare } from 'lucide-react';
 import { getConciergeResponse } from '@/services/geminiService';
+import { THAILAND_CITIES, normalizeCityName, buildTripComSearchValue } from '@/src/config/thailandCities';
 import { ChatMessage, ThaiLanguage } from '@/types/country';
 import { UI_TRANSLATIONS } from '@/lib/i18n';
 import ReactMarkdown from 'react-markdown';
@@ -13,6 +14,7 @@ import HumanOperatorChat from './HumanOperatorChat';
 
 interface Props {
   language: ThaiLanguage;
+  onCitySelect?: (city: string) => void;
 }
 
 // Complete dynamic sequence path. Conditions are verified dynamically.
@@ -34,7 +36,7 @@ const STEP_SEQUENCE = [
   'checkin_date'
 ];
 
-export default function AccommodationChat({ language }: Props) {
+export default function AccommodationChat({ language, onCitySelect }: Props) {
   const uiT = useMemo(() => UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN, [language]);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [currentStepId, setCurrentStepId] = useState<string>('city');
@@ -49,6 +51,7 @@ export default function AccommodationChat({ language }: Props) {
   const [mounted, setMounted] = useState<boolean>(false);
   const [showFallback, setShowFallback] = useState<boolean>(false);
   const [contextSummary, setContextSummary] = useState<string>('');
+  const [selectedCity, setSelectedCity] = useState<string>('Bangkok');
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const t = useMemo(() => uiT.accommodation || UI_TRANSLATIONS.EN.accommodation, [uiT]);
@@ -127,6 +130,17 @@ export default function AccommodationChat({ language }: Props) {
   const handleSelectOption = (option: string) => {
     const updatedAnswers = { ...answers, [currentStepId]: option };
     setAnswers(updatedAnswers);
+    
+    // Store selected city for URL building
+    if (currentStepId === 'city') {
+      setSelectedCity(option);
+    }
+    
+    // Call onCitySelect callback when city is selected
+    if (currentStepId === 'city' && onCitySelect) {
+      onCitySelect(option);
+    }
+    
     proceedToNext(updatedAnswers, option);
   };
 
@@ -135,6 +149,12 @@ export default function AccommodationChat({ language }: Props) {
     if (!val) return;
     const updatedAnswers = { ...answers, [currentStepId]: val };
     setAnswers(updatedAnswers);
+    
+    // Store selected city for URL building
+    if (currentStepId === 'city') {
+      setSelectedCity(val);
+    }
+    
     proceedToNext(updatedAnswers, val);
   };
 
@@ -171,7 +191,7 @@ export default function AccommodationChat({ language }: Props) {
     // Store context summary for HumanOperatorChat
     setContextSummary(formattedSummary);
 
-    const promptContext = `You are an elite boutique accommodation concierge expert for Thailand. 
+    const promptContext = `You are an elite boutique accommodation concierge expert for Thailand.
 A traveler has finished our dynamic configuration survey:
 
 ${formattedSummary}
@@ -181,7 +201,10 @@ RESPONSE RULES (MANDATORY):
 2. Provide direct, highly structured expert recommendations. Avoid generic introductions.
 3. Suggest 3 specific zones or elite hotel profiles fitting their exact configuration.
 4. Highlight why each option aligns with their stated details (budget, beach preference, MRT/BTS transit proximity, etc.).
-5. Ensure your response is professional and beautifully formatted. At the end, state that our live support team is ready to process immediate bookings.`;
+5. Do not act like a salesperson. Never use pushy, hard-sell, or exaggerated language. Recommend naturally and helpfully, like a knowledgeable friend giving honest advice.
+6. IMPORTANT — CTA OVERRIDE FOR HOTELS: Do NOT invite the user to click 'Book Now' or fill out a contact form for hotel bookings. Instead, direct them to search and compare live prices using the Agoda and Trip.com search options available on this page.
+7. Include one brief, natural, reassuring sentence noting that booking through the Agoda or Trip.com links on this page goes directly to the official Agoda/Trip.com website, so payment and confirmation happen securely on their platform — this helps the traveler avoid scam or fake booking sites. Keep this low-key and factual, not alarmist.
+8. End with a warm, concise closing appropriate to the user's language. Do not mention 'live support team' or 'immediate bookings' for hotels.`;
 
     try {
       const response = await getConciergeResponse(promptContext, [], language);
@@ -223,6 +246,35 @@ RESPONSE RULES (MANDATORY):
     setTextInput('');
     setSurveyCompleted(false);
     setShowBookNow(false);
+    setSelectedCity('Bangkok');
+  };
+
+  // Build Agoda search URL
+  const buildAgodaSearchUrl = (cityName: string) => {
+    const normalizedCity = normalizeCityName(cityName);
+    const cityData = THAILAND_CITIES[normalizedCity] || THAILAND_CITIES['Bangkok'];
+    const today = new Date();
+    const checkin = new Date(today);
+    checkin.setDate(today.getDate() + 7);
+    const checkout = new Date(checkin);
+    checkout.setDate(checkin.getDate() + 3);
+    const formatDate = (d: Date) => d.toISOString().split('T')[0];
+    return `https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1968300&city=${cityData.agodaCityId}&checkIn=${formatDate(checkin)}&checkOut=${formatDate(checkout)}&adults=2&rooms=1`;
+  };
+
+  // Build Trip.com search URL
+  const buildTripComSearchUrl = (cityName: string) => {
+    const normalizedCity = normalizeCityName(cityName);
+    const cityData = THAILAND_CITIES[normalizedCity] || THAILAND_CITIES['Bangkok'];
+    const { cityId, provinceId, countryId } = cityData;
+    const searchValue = buildTripComSearchValue(cityId);
+    const today = new Date();
+    const checkin = new Date(today);
+    checkin.setDate(today.getDate() + 7);
+    const checkout = new Date(checkin);
+    checkout.setDate(checkin.getDate() + 3);
+    const formatDate = (d: Date) => d.toISOString().split('T')[0];
+    return `https://www.trip.com/hotels/list?flexType=1&cityId=${cityId}&provinceId=${provinceId}&districtId=0&countryId=${countryId}&destName=${encodeURIComponent(normalizedCity)}&searchWord=${encodeURIComponent(normalizedCity)}&searchType=C&optionId=4&searchValue=${encodeURIComponent(searchValue)}&checkin=${formatDate(checkin)}&checkout=${formatDate(checkout)}&crn=1&adult=2&curr=USD&locale=en-XX&Allianceid=9417346&SID=325250647`;
   };
 
   const modalContent = showHumanChat ? (
@@ -446,12 +498,24 @@ RESPONSE RULES (MANDATORY):
       {showBookNow && (
         <div className="p-3 bg-white border-t border-gray-100 flex flex-col items-center gap-2">
           <p className="text-[10px] text-gray-500 font-semibold uppercase tracking-wider">{t.readyToBook}</p>
-          <button
-            onClick={() => setShowHumanChat(true)}
-            className="w-full bg-sacred-green text-white font-bold uppercase tracking-widest text-[11px] py-3 px-4 rounded-xl hover:bg-opacity-90 transition-colors shadow-sm flex items-center justify-center gap-2"
-          >
-            {t.bookStayButton}
-          </button>
+          <div className="w-full flex gap-2">
+            <a
+              href={buildAgodaSearchUrl(selectedCity)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 bg-sacred-green text-white font-bold uppercase tracking-widest text-[11px] py-3 px-4 rounded-xl hover:bg-opacity-90 transition-colors shadow-sm flex items-center justify-center gap-2 text-center"
+            >
+              Search Agoda
+            </a>
+            <a
+              href={buildTripComSearchUrl(selectedCity)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 bg-[#C9A84C] text-white font-bold uppercase tracking-widest text-[11px] py-3 px-4 rounded-xl hover:bg-opacity-90 transition-colors shadow-sm flex items-center justify-center gap-2 text-center"
+            >
+              Search Trip.com
+            </a>
+          </div>
         </div>
       )}
 
