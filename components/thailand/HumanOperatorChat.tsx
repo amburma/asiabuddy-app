@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useMemo } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { Send, User, Loader2, X, Headphones, Mail, Phone, User as UserIcon, MessageCircle, ExternalLink } from 'lucide-react';
 import { ChatMessage, ThaiLanguage } from '../../types/country';
@@ -27,6 +28,50 @@ interface ContactDetails {
 export default function HumanOperatorChat({ language, onClose, salesperson_id, contextSummary, isCarRentalFlow }: Props) {
   console.log('HumanOperatorChat received salesperson_id:', salesperson_id);
   const uiT = useMemo(() => UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN, [language]);
+  const pathname = usePathname();
+
+  // Determine current category from pathname
+  const currentCategory = useMemo(() => {
+    if (!pathname) return null;
+    if (pathname.includes('/flights')) return 'flights';
+    if (pathname.includes('/hotels')) return 'hotels';
+    if (pathname.includes('/tickets')) return 'tickets';
+    if (pathname.includes('/activities')) return 'activities';
+    if (pathname.includes('/rental')) return 'rental';
+    return null;
+  }, [pathname]);
+
+  // Chip config map by category
+  const chipConfig = useMemo(() => ({
+    flights: [
+      { label: 'BKK vs DMK', question: 'BKK vs DMK လေဆိပ် ဘာကွာလဲ?' },
+      { label: 'ဗီဇာလိုအပ်ချက်', question: 'ဗီဇာ လိုအပ်ပါသလား?' },
+      { label: 'ဘွတ်ကင် အချိန်', question: 'လေယာဉ်ခရီးစဉ်ကို ဘယ်အချိန်မှာ ဘွတ်ကင်လုပ်သင့်လဲ?' },
+      { label: 'လေကြောင်းလိုင်းများ', question: 'ထိုင်းနိုငံသို့ လေယာဉ်များ ပြေးဆိုင်သည့် လေကြောင်းလိုင်းများကား ဘာတွေလဲ?' },
+      { label: 'ခရီးကြာချိန်', question: 'ဘန်ကောက်သို့ တိုက်ရိုက် လေယာဉ်ခရီးစဉ်သည် ကြာမြင့်မည့်ကာလ?' }
+    ],
+    hotels: [
+      { label: 'နေရာအကောင်းဆုံး', question: 'ဘန်ကောက်တွင် နေရာလိုက်ရန် အကောင်းဆုံး နေရာက ဘာလဲ?' },
+      { label: 'ကြိုတင်ဘွတ်ကင်', question: 'လူဦးရေများသော ရာသီတွင် ကြိုတင် ဘွတ်ကင်လုပ်ရန် လိုအပ်ပါသလား?' },
+      { label: 'တိုက်ရိုက် vs ကိုယ်စားလှယ်', question: 'တိုက်ရိုက် ဘွတ်ကင်လုပ်ခြင်းနှင့် ကိုယ်စားလှယ်မှ ဘွတ်ကင်လုပ်ခြင်း ဘယ်ဟာက ပိုလုံခြုံသလဲ?' },
+      { label: 'ဘတ်ဂျက်အတိုင်းအတာ', question: 'တစ်ညလျှင် ပုံမှန် ဘတ်ဂျက် အတိုင်းအတာက ဘာလဲ?' },
+      { label: 'ပင်လယ်ကမ်းခြေဟိုတယ်', question: 'ပင်လယ်ကမ်းခြေ ဟိုတယ်များသည် ဈေးကြီးသည့်အတွက် တန်ဖိုးရှိပါသလား?' }
+    ],
+    tickets: [
+      { label: 'ကြိုတင်ဘွတ်ကင်', question: 'လက်မှတ်များကို ကြိုတင် ဘွတ်ကင်လုပ်ရန် လိုအပ်ပါသလား?' },
+      { label: 'အီလက်ထရွန်းနစ်လက်မှတ်', question: 'အီလက်ထရွန်းနစ် လက်မှတ်များကို နေရာများတွင် လက်ခံပါသလား?' },
+      { label: 'ပယ်ဖျက်မူဝါဒ', question: 'ငါ့ ဘွတ်ကင်ကို ပယ်ဖျက်လိုလျှင် ဘာလုပ်ရမလဲ?' },
+      { label: 'ပေါင်းစပ်လက်မှတ်များ', question: 'နေရာများစွာအတွက် ပေါင်းစပ် လက်မှတ်များ ရှိပါသလား?' },
+      { label: 'နေရာ vs အွန်လိုင်း', question: 'နေရာတွင် သို့မဟုတ် အွန်လိုတွင် ဘွတ်ကင်လုပ်ခြင်းသည် ပိုသက်သာပါသလား?' }
+    ],
+    activities: [
+      { label: 'လှုပ်ရှားမှုအမျိုးအစား', question: 'လှုပ်ရှားမှု အမျိုးအစားများ ရှိပါသလား?' },
+      { label: 'ဘွတ်ကင်အတည်ပြုချက်', question: 'ငါ့ ဘွတ်ကင် အတည်ပြုချက်ကို မည်သို့ ရရှိမည်နည်း?' },
+      { label: 'ပယ်ဖျက်မူဝါဒ', question: 'ပယ်ဖျက်မူဝါဒမှာ ဘာလဲ?' },
+      { label: 'ဘာသာစကားရွေးချယ်', question: 'ခရီးစဉ်များကို ဘာသာစကားများဖြင့် ရရှိနိုင်ပါသလား?' },
+      { label: 'ကြိုတင်ဘွတ်ကင်', question: 'ငါသည် လှုပ်ရှားမှုများကို ကြိုတင် ဘွတ််ကင်လုပ်သင့်ပါသလား?' }
+    ]
+  }), []);
 
   const welcomeMessages: Record<string, { greeting: string; disclaimer: string }> = {
     en: {
@@ -525,6 +570,24 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
 
         {/* Input */}
         <div className="p-5 bg-white border-t border-gray-200 flex-shrink-0 pb-[calc(1.25rem+env(safe-area-inset-bottom))] md:pb-5">
+          {/* Quick Question Chips - only show for flights/hotels/tickets/activities */}
+          {currentCategory && currentCategory !== 'rental' && chipConfig[currentCategory] && (
+            <div className="mb-3 flex flex-wrap gap-2">
+              {chipConfig[currentCategory].map((chip) => (
+                <button
+                  key={chip.label}
+                  onClick={() => {
+                    setInput(chip.question);
+                    handleSend();
+                  }}
+                  disabled={isLoading}
+                  className="px-3 py-1.5 text-xs font-medium bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37] rounded-full hover:bg-[#1A1A1A] hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {chip.label}
+                </button>
+              ))}
+            </div>
+          )}
           <div className="relative flex items-center">
             <input
               type="text"

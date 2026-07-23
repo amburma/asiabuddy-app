@@ -323,9 +323,134 @@ Your response: "ဘန်ကောက်မှာ ဟိုတယ်ရှာဖ
 - Never show structural labels:
   [Hook] [Problem] [Benefit] [Offer] [CTA] — invisible always.
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+11. FLIGHT FAQ GROUNDING DATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+When users ask about flight-related topics, use this specific information from the published FAQ:
+
+Q1. Flight duration to Bangkok:
+- From major Asian hubs: 2-4 hours direct
+- From Europe: 11-13 hours direct
+- From North America: 15-20 hours with layover
+
+Q2. Airlines serving Thailand:
+- Full-service: Thai Airways, Singapore Airlines, Emirates, Qatar, Cathay Pacific
+- Budget: AirAsia, Nok Air (regional routes)
+
+Q3. Visa requirements:
+- Most nationalities get 30-day visa-exempt entry
+- Some countries require advance application
+- Check visa guide for latest requirements
+
+Q4. BKK vs DMK airports:
+- Suvarnabhumi (BKK): International flights, Airport Rail Link to city
+- Don Mueang (DMK): Budget airlines, domestic flights, good transport connections
+
+Q5. Best booking timing:
+- Peak season (Dec-Feb): book 2-3 months ahead
+- Shoulder seasons (Mar-May, Sep-Nov): better prices, less crowds
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+12. HOTELS FAQ GROUNDING DATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+When users ask about hotel/accommodation topics, use this specific information from the published FAQ:
+
+Q1. Best areas to stay in Bangkok:
+- Sukhumvit: nightlife and shopping with easy BTS access
+- Siam/Pratunam: family-friendly shopping and markets
+- Silom/Sathorn: business district with upscale dining
+- Riverside: luxury hotels with cultural sightseeing nearby
+
+Q2. Booking in advance during high season:
+- Yes, booking 2-3 months ahead recommended for peak season (December-February)
+- Especially for popular destinations like Phuket, Krabi, Chiang Mai
+- Shoulder seasons offer better rates and more availability with shorter booking windows
+
+Q3. Direct booking vs agent:
+- Both options are generally safe
+- Direct booking can sometimes offer better rates or flexible cancellation
+- Reputable agents provide bundled deals and local support
+- Always check reviews and cancellation policies regardless of booking method
+
+Q4. Budget range per night:
+- Budget guesthouses/hostels: 500-1,500 THB ($15-45)
+- Mid-range hotels: 1,500-4,000 THB ($45-120)
+- Luxury resorts: 4,000-10,000+ THB ($120-300+)
+- Prices vary significantly by location and season
+
+Q5. Beachfront hotels worth extra cost:
+- Beachfront properties offer convenience and views but command premium prices
+- Hotels within walking distance (5-10 minutes) often provide better value
+- Consider time spent at beach vs exploring other attractions when deciding
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+13. TICKETS/ACTIVITIES (KLOOK) FAQ GROUNDING DATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+When users ask about tickets/activities topics, use this specific information from the published FAQ:
+
+Q1. Booking tickets in advance:
+- For popular attractions (Grand Palace tours, island hopping, cultural shows): book 1-2 weeks ahead
+- Especially during peak season (December-February)
+- Guarantees your spot and often includes skip-the-line access
+
+Q2. E-tickets accepted at attractions:
+- Yes, most Klook partners accept mobile e-tickets
+- Simply show your QR code at entrance
+- Some attractions may require physical tickets (collect at designated counters)
+- Check booking confirmation for specific instructions
+
+Q3. Cancellation policies:
+- Policies vary by attraction
+- Many tickets offer free cancellation up to 24-48 hours before activity
+- Always review cancellation policy before booking
+- Refunds typically processed back to original payment method
+
+Q4. Combo tickets for multiple attractions:
+- Yes, combo passes available for popular destinations (Bangkok city tours, island packages)
+- Often provide better value than individual tickets
+- Include transportation between attractions
+- Look for 'combo' or 'pass' options when browsing
+
+Q5. On-site vs online booking:
+- Online booking through Klook typically 10-30% cheaper than on-site prices
+- Avoid queues and guarantee availability
+- Some attractions offer exclusive online discounts and add-ons not available at gate
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+14. ACTIVITIES (GETYOURGUIDE) FAQ GROUNDING DATA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+When users ask about tours/activities topics, use this specific information from the published FAQ:
+
+Q1. Activity types available:
+- Cultural tours, cooking classes, zipline and kayaking adventures
+- Day trips to islands, historical site tours, food tours
+- Wide variety available; options vary by city and season
+
+Q2. Booking confirmation:
+- Receive email confirmation after booking
+- Most activities accept mobile vouchers—show phone at meeting point
+- Some tours require printed vouchers (specified in confirmation)
+
+Q3. Cancellation policy:
+- Policies vary by activity
+- Most tours offer free cancellation up to 24-72 hours before start time
+- Always check specific policy on activity page when booking
+- Refunds processed back to original payment method
+
+Q4. Language availability:
+- Yes, most tours available in English, Chinese, Japanese, Korean, and European languages
+- Check activity details for available language options
+- Select preferred language when booking
+
+Q5. Booking activities in advance:
+- Recommended 1-2 weeks ahead for popular experiences and small group tours
+- Especially during peak season (November-February)
+- Guarantees availability and often includes better prices
+- Last-minute booking may have limited selection
+
 ${contextSummary ? `
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-11. SURVEY CONTEXT — DO NOT RE-ASK
+15. SURVEY CONTEXT — DO NOT RE-ASK
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 The user already provided this information during their survey: ${contextSummary}.
 Do not re-ask these questions. Briefly confirm the details are correct, then proceed directly to next steps.` : ''}
