@@ -2,11 +2,12 @@
 
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, User, Loader2, X, Headphones, Mail, Phone, User as UserIcon, MessageCircle } from 'lucide-react';
+import { Send, User, Loader2, X, Headphones, Mail, Phone, User as UserIcon, MessageCircle, ExternalLink } from 'lucide-react';
 import { ChatMessage, ThaiLanguage } from '../../types/country';
 import { UI_TRANSLATIONS } from '../../lib/i18n';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import { THAILAND_CITIES, buildTripComSearchValue, normalizeCityName } from '../../src/config/thailandCities';
 
 interface Props {
   language: ThaiLanguage;
@@ -86,6 +87,22 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [agreedToShare, setAgreedToShare] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{ name?: string; phone?: string }>({});
+  const [flightButtons, setFlightButtons] = useState<{ origin: string; destination: string } | null>(null);
+  const [hotelButtons, setHotelButtons] = useState<string | null>(null);
+
+  // IATA to city name mapping for Trip.com URLs
+  const iataToCity: Record<string, string> = {
+    'RGN': 'Yangon',
+    'MDL': 'Mandalay',
+    'BKK': 'Bangkok',
+    'CNX': 'Chiang-Mai',
+    'HKT': 'Phuket',
+    'SIN': 'Singapore',
+    'KUL': 'Kuala-Lumpur',
+    'SGN': 'Ho-Chi-Minh-City',
+    'HAN': 'Hanoi',
+    'HKG': 'Hong-Kong'
+  };
 
   const t = uiT.chat || UI_TRANSLATIONS.EN.chat;
 
@@ -278,6 +295,32 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
         setShowContactForm(true);
       }
 
+      // Check for [SHOW_FLIGHT_BUTTONS:origin=XXX,destination=YYY] trigger
+      const flightButtonsTrigger = /\[SHOW_FLIGHT_BUTTONS:origin=([A-Z]{3}),destination=([A-Z]{3})\]/;
+      const flightButtonsMatch = botReply.match(flightButtonsTrigger);
+      if (flightButtonsMatch) {
+        displayResponse = botReply.replace(flightButtonsTrigger, '');
+        setFlightButtons({ origin: flightButtonsMatch[1], destination: flightButtonsMatch[2] });
+      } else {
+        setFlightButtons(null);
+      }
+
+      // Check for [SHOW_HOTEL_BUTTONS:city=CITYKEY] trigger
+      const hotelButtonsTrigger = /\[SHOW_HOTEL_BUTTONS:city=([A-Za-z\s]+)\]/;
+      const hotelButtonsMatch = botReply.match(hotelButtonsTrigger);
+      if (hotelButtonsMatch) {
+        displayResponse = botReply.replace(hotelButtonsTrigger, '');
+        const cityKey = hotelButtonsMatch[1];
+        // Validate city key exists in THAILAND_CITIES
+        if (THAILAND_CITIES[cityKey]) {
+          setHotelButtons(cityKey);
+        } else {
+          setHotelButtons(null);
+        }
+      } else {
+        setHotelButtons(null);
+      }
+
       setMessages(prev => [...prev, { role: 'assistant', content: displayResponse }]);
     } catch (error) {
       console.error('Error sending message:', error);
@@ -401,6 +444,73 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
                 <div className="prose prose-base max-w-none prose-p:leading-loose prose-p:text-[15px]">
                   <ReactMarkdown rehypePlugins={[rehypeRaw]}>{message.content}</ReactMarkdown>
                 </div>
+                {/* Show flight buttons for the last assistant message if triggered */}
+                {message.role === 'assistant' && i === messages.length - 1 && flightButtons && (
+                  <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
+                    <a
+                      href={`https://www.aviasales.com/search?origin_iata=${flightButtons.origin}&destination_iata=${flightButtons.destination}`}
+                      target="_blank"
+                      rel="noopener noreferrer sponsored"
+                      className="inline-flex items-center justify-center gap-2 bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37] font-semibold py-2 px-4 rounded-lg hover:bg-[#1A1A1A] hover:shadow-lg transition-all duration-200 text-sm"
+                    >
+                      <ExternalLink size={14} />
+                      Aviasales တွင် ရှာဖွေရန်
+                    </a>
+                    <a
+                      href={`https://www.trip.com/flights/${iataToCity[flightButtons.origin] || flightButtons.origin}-to-${iataToCity[flightButtons.destination] || flightButtons.destination}/tickets-${flightButtons.origin}-${flightButtons.destination}?flighttype=S&dcity=${flightButtons.origin}&acity=${flightButtons.destination}&Allianceid=9417346&SID=325250647&trip_sub1=&trip_sub3=D18866801`}
+                      target="_blank"
+                      rel="noopener noreferrer sponsored"
+                      className="inline-flex items-center justify-center gap-2 bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37] font-semibold py-2 px-4 rounded-lg hover:bg-[#1A1A1A] hover:shadow-lg transition-all duration-200 text-sm"
+                    >
+                      <ExternalLink size={14} />
+                      Trip.com တွင် နှိုင်းယှဉ်ကြည့်ရန်
+                    </a>
+                  </div>
+                )}
+
+                {/* Show hotel buttons for the last assistant message if triggered */}
+                {message.role === 'assistant' && i === messages.length - 1 && hotelButtons && (() => {
+                  const cityData = THAILAND_CITIES[hotelButtons];
+                  if (!cityData) return null;
+
+                  // Build Agoda URL
+                  const agodaCityId = cityData.agodaCityId;
+                  const agodaUrl = `https://www.agoda.com/search?city=${agodaCityId}`;
+
+                  // Build Trip.com hotel URL (same logic as HotelProviderRedirectCard)
+                  const today = new Date();
+                  const checkin = new Date(today);
+                  checkin.setDate(today.getDate() + 7);
+                  const checkout = new Date(checkin);
+                  checkout.setDate(checkin.getDate() + 3);
+                  const formatDate = (d: Date) => d.toISOString().split('T')[0];
+                  const { cityId, provinceId, countryId } = cityData;
+                  const searchValue = buildTripComSearchValue(cityId);
+                  const tripComUrl = `https://www.trip.com/hotels/list?flexType=1&cityId=${cityId}&provinceId=${provinceId}&districtId=0&countryId=${countryId}&destName=${encodeURIComponent(hotelButtons)}&searchWord=${encodeURIComponent(hotelButtons)}&searchType=C&optionId=4&searchValue=${encodeURIComponent(searchValue)}&checkin=${formatDate(checkin)}&checkout=${formatDate(checkout)}&crn=1&adult=2&curr=USD&locale=en-XX&Allianceid=9417346&SID=325250647`;
+
+                  return (
+                    <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
+                      <a
+                        href={agodaUrl}
+                        target="_blank"
+                        rel="noopener noreferrer sponsored"
+                        className="inline-flex items-center justify-center gap-2 bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37] font-semibold py-2 px-4 rounded-lg hover:bg-[#1A1A1A] hover:shadow-lg transition-all duration-200 text-sm"
+                      >
+                        <ExternalLink size={14} />
+                        Agoda တွင် ရှာဖွေရန်
+                      </a>
+                      <a
+                        href={tripComUrl}
+                        target="_blank"
+                        rel="noopener noreferrer sponsored"
+                        className="inline-flex items-center justify-center gap-2 bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37] font-semibold py-2 px-4 rounded-lg hover:bg-[#1A1A1A] hover:shadow-lg transition-all duration-200 text-sm"
+                      >
+                        <ExternalLink size={14} />
+                        Trip.com တွင် ဟိုတယ်ရှာဖွေရန်
+                      </a>
+                    </div>
+                  );
+                })()}
               </div>
             </motion.div>
           ))}
