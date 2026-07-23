@@ -9,6 +9,7 @@ import WhiteLabelFlightWidget from '../../../components/shared/WhiteLabelFlightW
 import VisaModalTrigger from '../../../components/shared/VisaModalTrigger'
 import FlightTrustBadges from '../../../components/shared/FlightTrustBadges'
 import TripComFlightButton from '../../../components/shared/services/TripComFlightButton'
+import PricingCalendarWidget from '../../../components/shared/services/PricingCalendarWidget'
 import { UI_TRANSLATIONS, normalizeLocale } from '../../../lib/i18n'
 import { SupportedLanguage } from '../../../types/country'
 import { Plane, Calendar, MapPin, Clock } from 'lucide-react'
@@ -114,6 +115,11 @@ export default async function FlightsPage({
             <div className="mt-4 flex justify-center">
               <TripComFlightButton departureCity="Yangon" departureIata="RGN" arrivalCity="Bangkok" arrivalIata="BKK" language={targetLanguage} />
             </div>
+          </div>
+
+          {/* Pricing Calendar Widget */}
+          <div className="mb-8">
+            <PricingCalendarWidget />
           </div>
 
           {/* Trust Badges */}

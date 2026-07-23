@@ -1,5 +1,16 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 23 July 2026 — Session 36
+> Last Updated: 23 July 2026 — Session 37
+
+---
+
+## ✅ Session 37 — 23 July 2026
+
+### ✅ Completed — Flights/Hotels Chat Enhancement
+- Added [SHOW_FLIGHT_BUTTONS:origin=XXX,destination=YYY] AI token to booking-chat system prompt — HumanOperatorChat now shows Aviasales + Trip.com flight buttons when the AI detects clear flight search intent
+- Added [SHOW_HOTEL_BUTTONS:city=CITYKEY] AI token — same chat now shows Agoda + Trip.com hotel buttons when hotel/accommodation intent is detected, reusing THAILAND_CITIES city lookup and existing Agoda/Trip.com URL-building logic
+- Both tokens follow the existing [SHOW_CONTACT_FORM] pattern already in the codebase — no new architecture introduced
+- Verified live in production: flight query ("ရန်ကုန်ကနေ ဘန်ကောက်ကို လေယာဉ်လက်မှတ်") and hotel query both trigger correct buttons with correct URLs
+- Build clean, no Vercel errors
 
 ---
 
