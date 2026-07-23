@@ -8,6 +8,7 @@ import AviasalesSearchWidgetWrapper from '../../../components/shared/AviasalesSe
 import WhiteLabelFlightWidget from '../../../components/shared/WhiteLabelFlightWidget'
 import VisaModalTrigger from '../../../components/shared/VisaModalTrigger'
 import FlightTrustBadges from '../../../components/shared/FlightTrustBadges'
+import TripComFlightButton from '../../../components/shared/services/TripComFlightButton'
 import { UI_TRANSLATIONS, normalizeLocale } from '../../../lib/i18n'
 import { SupportedLanguage } from '../../../types/country'
 import { Plane, Calendar, MapPin, Clock } from 'lucide-react'
@@ -55,6 +56,20 @@ export default async function FlightsPage({
   const servicesStrip = UI_TRANSLATIONS[targetLanguage].servicesStrip
   const destinationTabs = UI_TRANSLATIONS[targetLanguage].destinationTabs
 
+  // Runtime translation mapping for known placeholder values from database
+  const translatePlaceholder = (value: string | null, translationKey: string): string => {
+    if (!value) return UI_TRANSLATIONS[targetLanguage].serviceCards[translationKey as keyof typeof UI_TRANSLATIONS.EN.serviceCards]
+    
+    const placeholderMap: Record<string, string> = {
+      'Multiple Airlines': UI_TRANSLATIONS[targetLanguage].serviceCards.multipleAirlines,
+      'Anywhere': UI_TRANSLATIONS[targetLanguage].serviceCards.yourCity,
+      'Bangkok': UI_TRANSLATIONS[targetLanguage].serviceCards.bangkok,
+      'Flexible': UI_TRANSLATIONS[targetLanguage].serviceCards.flexible,
+    }
+    
+    return placeholderMap[value] || value
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar country={country} language={targetLanguage} />
@@ -96,6 +111,9 @@ export default async function FlightsPage({
             {/* TEMP: White Label widget causes layout breakage, reverted pending Travelpayouts dashboard investigation */}
             {/* <WhiteLabelFlightWidget /> */}
             <AviasalesSearchWidgetWrapper />
+            <div className="mt-4 flex justify-center">
+              <TripComFlightButton departureCity="Yangon" departureIata="RGN" arrivalCity="Bangkok" arrivalIata="BKK" language={targetLanguage} />
+            </div>
           </div>
 
           {/* Trust Badges */}
@@ -123,14 +141,14 @@ export default async function FlightsPage({
                     <div key={flight.id} className="w-full">
                       <FlightServiceCard
                         flight={{
-                          airline: flight.airline || 'Multiple Airlines',
-                          departure_city: flight.departure_city || 'Your City',
-                          arrival_city: flight.arrival_city || 'Bangkok',
-                          departure_time: flight.departure_time || 'Flexible',
-                          arrival_time: flight.arrival_time || 'Flexible',
-                          duration: flight.duration || 'Flexible',
+                          airline: translatePlaceholder(flight.airline, 'multipleAirlines'),
+                          departure_city: translatePlaceholder(flight.departure_city, 'yourCity'),
+                          arrival_city: translatePlaceholder(flight.arrival_city, 'bangkok'),
+                          departure_time: translatePlaceholder(flight.departure_time, 'flexible'),
+                          arrival_time: translatePlaceholder(flight.arrival_time, 'flexible'),
+                          duration: translatePlaceholder(flight.duration, 'flexible'),
                           stops: flight.stops ?? 0,
-                          price: flight.price === 'See live prices' || !flight.price ? null : (parseFloat(flight.price.replace(/[^0-9.]/g, '')) || null),
+                          price: flight.price === UI_TRANSLATIONS[targetLanguage].serviceCards.seeLivePrices || !flight.price ? null : (parseFloat(flight.price.replace(/[^0-9.]/g, '')) || null),
                           price_checked_at: flight.created_at,
                           affiliate_url: flight.flight_url || '#',
                         }}

@@ -690,7 +690,23 @@ const ENGLISH_UI = {
     "perDay": "/day",
     "perPerson": "/person",
     "priceChecked": "Price checked",
-    "minDriverAge": "Minimum driver age"
+    "minDriverAge": "Minimum driver age",
+    "justNow": "just now",
+    "minuteAgo": "minute ago",
+    "minutesAgo": "minutes ago",
+    "hourAgo": "hour ago",
+    "hoursAgo": "hours ago",
+    "dayAgo": "day ago",
+    "daysAgo": "days ago",
+    "direct": "Direct",
+    "stop": "stop",
+    "stops": "stops",
+    "seeLivePrices": "See live prices",
+    "comingSoon": "Coming Soon",
+    "multipleAirlines": "Multiple Airlines",
+    "yourCity": "Your City",
+    "bangkok": "Bangkok",
+    "flexible": "Flexible"
   },
   "activitiesPage": {
     "breadcrumb": "Home",
@@ -732,6 +748,7 @@ const ENGLISH_UI = {
     "searchSpecificDates": "Search Specific Dates",
     "flexibleDates": "Flexible Dates — Find Cheapest",
     "continuePlanning": "Continue Planning Your Trip",
+    "compareOnTripCom": "Compare on Trip.com",
     "faq": {
       "title": "Frequently Asked Questions",
       "q1": {
@@ -1530,7 +1547,23 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "perDay": "/วัน",
     "perPerson": "/คน",
     "priceChecked": "ตรวจสอบราคา",
-    "minDriverAge": "อายุคนขับขั้นต่ำ"
+    "minDriverAge": "อายุคนขับขั้นต่ำ",
+    "justNow": "เมื่อสักครู่",
+    "minuteAgo": "นาทีที่แล้ว",
+    "minutesAgo": "นาทีที่แล้ว",
+    "hourAgo": "ชั่วโมงที่แล้ว",
+    "hoursAgo": "ชั่วโมงที่แล้ว",
+    "dayAgo": "วันที่แล้ว",
+    "daysAgo": "วันที่แล้ว",
+    "direct": "ตรง",
+    "stop": "จุดพัก",
+    "stops": "จุดพัก",
+    "seeLivePrices": "ดูราคาจริง",
+    "comingSoon": "เร็วๆ นี้",
+    "multipleAirlines": "สายการบินหลายแห่ง",
+    "yourCity": "เมืองของคุณ",
+    "bangkok": "กรุงเทพมหานคร",
+    "flexible": "ยืดหยุ่น"
   },
   "activitiesPage": {
     "breadcrumb": "หน้าแรก",
@@ -1572,6 +1605,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "searchSpecificDates": "ค้นหาวันที่เฉพาะเจาะจง",
     "flexibleDates": "วันที่ยืดหยุ่น — ค้นหาราคาถูกที่สุด",
     "continuePlanning": "วางแผนการเดินทางต่อ",
+    "compareOnTripCom": "เปรียบเทียบที่ Trip.com",
     "faq": {
       "title": "คำถามที่พบบ่อย",
       "q1": {
@@ -2361,7 +2395,23 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "perDay": "/ရက်",
     "perPerson": "/လူ",
     "priceChecked": "စျေးနှုတ်ထားသည်",
-    "minDriverAge": "ကားမောင်း အနိမ့်ဆုံးအသက်"
+    "minDriverAge": "ကားမောင်း အနိမ့်ဆုံးအသက်",
+    "justNow": "ယခု",
+    "minuteAgo": "မိနစ်က",
+    "minutesAgo": "မိနစ်က",
+    "hourAgo": "နာရီက",
+    "hoursAgo": "နာရီက",
+    "dayAgo": "ရက်က",
+    "daysAgo": "ရက်က",
+    "direct": "တိုက်ရိုက်",
+    "stop": "ရပ်နား",
+    "stops": "ရပ်နား",
+    "seeLivePrices": "လက်ရှိစျေးကြည့်ပါ",
+    "comingSoon": "မကြာမီ",
+    "multipleAirlines": "လေကြောင်းလိုင်းများ",
+    "yourCity": "သင့၏မြို့",
+    "bangkok": "ဘန်ကောက်",
+    "flexible": "ရွေးချယ်နိုင်"
   },
   "activitiesPage": {
     "breadcrumb": "ပင်မ",
@@ -2403,6 +2453,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "searchSpecificDates": "သတ်မှတ်ထားသော ရက်စွဲများကို ရှာဖွေပါ",
     "flexibleDates": "ရက်စွဲများ ပြောင်းလဲနိုင် — အပေါ်ဆုံးစျေးကို ရှာဖွေပါ",
     "continuePlanning": "သင့်ခရီးစဉ်ကို ဆက်လက် စီစဉ်ဆောင်ပါ",
+    "compareOnTripCom": "Trip.com တွင် နှိုင်းယှဉ်ကြည့်ရန်",
     "faq": {
       "title": "မကြာခဏ မေးလေ့ရှိသော မေးခွန်းများ",
       "q1": {
@@ -3192,7 +3243,23 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "perDay": "/día",
     "perPerson": "/persona",
     "priceChecked": "Precio verificado",
-    "minDriverAge": "Edad mínima del conductor"
+    "minDriverAge": "Edad mínima del conductor",
+    "justNow": "ahora mismo",
+    "minuteAgo": "hace un minuto",
+    "minutesAgo": "hace minutos",
+    "hourAgo": "hace una hora",
+    "hoursAgo": "hace horas",
+    "dayAgo": "hace un día",
+    "daysAgo": "hace días",
+    "direct": "Directo",
+    "stop": "parada",
+    "stops": "paradas",
+    "seeLivePrices": "Ver precios en vivo",
+    "comingSoon": "Próximamente",
+    "multipleAirlines": "Múltiples aerolíneas",
+    "yourCity": "Tu ciudad",
+    "bangkok": "Bangkok",
+    "flexible": "Flexible"
   },
   "activitiesPage": {
     "breadcrumb": "Inicio",
@@ -3234,6 +3301,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "searchSpecificDates": "Buscar Fechas Específicas",
     "flexibleDates": "Fechas Flexibles — Encontrar Más Barato",
     "continuePlanning": "Continúa Planeando Tu Viaje",
+    "compareOnTripCom": "Comparar en Trip.com",
     "faq": {
       "title": "Preguntas Frecuentes",
       "q1": {
@@ -4023,7 +4091,23 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "perDay": "/jour",
     "perPerson": "/personne",
     "priceChecked": "Prix vérifié",
-    "minDriverAge": "Âge minimum du conducteur"
+    "minDriverAge": "Âge minimum du conducteur",
+    "justNow": "à l'instant",
+    "minuteAgo": "il y a une minute",
+    "minutesAgo": "il y a minutes",
+    "hourAgo": "il y a une heure",
+    "hoursAgo": "il y a heures",
+    "dayAgo": "il y a un jour",
+    "daysAgo": "il y a jours",
+    "direct": "Direct",
+    "stop": "escale",
+    "stops": "escales",
+    "seeLivePrices": "Voir prix en direct",
+    "comingSoon": "Prochainement",
+    "multipleAirlines": "Compagnies multiples",
+    "yourCity": "Votre ville",
+    "bangkok": "Bangkok",
+    "flexible": "Flexible"
   },
   "activitiesPage": {
     "breadcrumb": "Accueil",
@@ -4065,6 +4149,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "searchSpecificDates": "Rechercher des Dates Spécifiques",
     "flexibleDates": "Dates Flexibles — Trouver le Moins Cher",
     "continuePlanning": "Continuer à Planifier Votre Voyage",
+    "compareOnTripCom": "Comparer sur Trip.com",
     "faq": {
       "title": "Questions Fréquentes",
       "q1": {
@@ -4854,7 +4939,23 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "perDay": "/Tag",
     "perPerson": "/Person",
     "priceChecked": "Preis geprüft",
-    "minDriverAge": "Mindestalter des Fahrers"
+    "minDriverAge": "Mindestalter des Fahrers",
+    "justNow": "gerade eben",
+    "minuteAgo": "vor einer Minute",
+    "minutesAgo": "vor Minuten",
+    "hourAgo": "vor einer Stunde",
+    "hoursAgo": "vor Stunden",
+    "dayAgo": "vor einem Tag",
+    "daysAgo": "vor Tagen",
+    "direct": "Direkt",
+    "stop": "Stopp",
+    "stops": "Stops",
+    "seeLivePrices": "Live-Preise sehen",
+    "comingSoon": "Demnächst",
+    "multipleAirlines": "Mehrere Fluggesellschaften",
+    "yourCity": "Ihre Stadt",
+    "bangkok": "Bangkok",
+    "flexible": "Flexibel"
   },
   "activitiesPage": {
     "breadcrumb": "Startseite",
@@ -4896,6 +4997,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "searchSpecificDates": "Bestimmte Daten Suchen",
     "flexibleDates": "Flexible Daten — Günstigsten Finden",
     "continuePlanning": "Reise Weiter Planen",
+    "compareOnTripCom": "Auf Trip.com vergleichen",
     "faq": {
       "title": "Häufig Gestellte Fragen",
       "q1": {

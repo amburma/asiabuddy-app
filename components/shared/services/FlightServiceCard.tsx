@@ -24,7 +24,7 @@ interface FlightServiceCardProps {
   is_placeholder?: boolean;
 }
 
-function getRelativeTime(dateString: string): string {
+function getRelativeTime(dateString: string, t: any): string {
   const date = new Date(dateString);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -32,10 +32,10 @@ function getRelativeTime(dateString: string): string {
   const diffHours = Math.floor(diffMins / 60);
   const diffDays = Math.floor(diffHours / 24);
 
-  if (diffMins < 1) return 'just now';
-  if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
-  if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+  if (diffMins < 1) return t.justNow;
+  if (diffMins < 60) return `${diffMins} ${diffMins > 1 ? t.minutesAgo : t.minuteAgo}`;
+  if (diffHours < 24) return `${diffHours} ${diffHours > 1 ? t.hoursAgo : t.hourAgo}`;
+  if (diffDays < 7) return `${diffDays} ${diffDays > 1 ? t.daysAgo : t.dayAgo}`;
   // Use fixed format to prevent hydration mismatch (guaranteed byte-identical between server and client)
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
@@ -43,14 +43,14 @@ function getRelativeTime(dateString: string): string {
   return `${month}/${day}/${year}`;
 }
 
-const stopsLabel = (stops: number): string => {
-  if (stops === 0) return 'Direct';
-  return `${stops} stop${stops > 1 ? 's' : ''}`;
+const stopsLabel = (stops: number, t: any): string => {
+  if (stops === 0) return t.direct;
+  return `${stops} ${stops > 1 ? t.stops : t.stop}`;
 };
 
 export default function FlightServiceCard({ flight, language = 'EN', is_placeholder = false }: FlightServiceCardProps) {
   const t = UI_TRANSLATIONS[language].serviceCards;
-  const relativeTime = getRelativeTime(flight.price_checked_at);
+  const relativeTime = getRelativeTime(flight.price_checked_at, t);
   // Check both the prop AND the URL pattern for safety
   const isPlaceholder = is_placeholder === true || flight.affiliate_url.startsWith('#placeholder-');
 
@@ -90,7 +90,7 @@ export default function FlightServiceCard({ flight, language = 'EN', is_placehol
             <div className="flex-1 flex flex-col items-center">
               <div className="w-full border-b-2 border-dotted border-[#D4AF37] border-opacity-50 mb-2"></div>
               <div className="bg-[#0D0D0D] border border-[#D4AF37] text-[#D4AF37] text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap">
-                {stopsLabel(flight.stops)}
+                {stopsLabel(flight.stops, t)}
               </div>
             </div>
 
@@ -133,7 +133,7 @@ export default function FlightServiceCard({ flight, language = 'EN', is_placehol
               {flight.duration}
             </span>
             <span className="bg-[#0D0D0D] border border-[#D4AF37] text-[#D4AF37] text-xs font-medium px-2 py-1 rounded-full">
-              {stopsLabel(flight.stops)}
+              {stopsLabel(flight.stops, t)}
             </span>
           </div>
 
@@ -161,7 +161,7 @@ export default function FlightServiceCard({ flight, language = 'EN', is_placehol
       <div className="mb-4 pt-4 border-t border-[#1A1A1A]">
         <div className="mb-2">
           <span className="font-dm-mono text-3xl sm:text-4xl text-[#D4AF37] font-bold">
-            {flight.price && flight.price > 0 ? `$${flight.price}` : 'See live prices'}
+            {flight.price && flight.price > 0 ? `$${flight.price}` : t.seeLivePrices}
           </span>
         </div>
         <p className="text-xs text-[#F5F0E8] opacity-60">
@@ -177,7 +177,7 @@ export default function FlightServiceCard({ flight, language = 'EN', is_placehol
           onClick={(e) => e.preventDefault()}
           className="block w-full border border-[#D4AF37]/60 bg-[#1A1A1A] text-[#F5F0E8] text-center py-2.5 sm:py-3 rounded font-medium cursor-not-allowed opacity-90 text-sm sm:text-base"
         >
-          Coming Soon
+          {t.comingSoon}
         </button>
       ) : (
         <Link

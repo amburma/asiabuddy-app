@@ -1,5 +1,56 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 23 July 2026 — Session 33
+> Last Updated: 23 July 2026 — Session 36
+
+---
+
+## ✅ Session 36 — 23 July 2026
+
+### ✅ Completed — Flights Page Localization Polish
+- Trip.com cross-sell button: added, styled Obsidian/Gold, fully Burmese (Session 35)
+- FlightServiceCard black card: fixed English placeholder leak from DB (Multiple Airlines/Anywhere/Bangkok/Flexible) via runtime translation mapping in app/[country]/flights/page.tsx — real flight data from DB still displays as-is untranslated (by design)
+- Fixed line 137 hardcoded 'See live prices' comparison bug to use translation key
+- Added Burmese translations to lib/i18n.ts for all flight card placeholder strings across all supported languages
+
+---
+
+## ✅ Session 35 — 23 July 2026
+
+### ✅ Completed — Trip.com Flight Cross-sell (Phase 2)
+- Added "Compare on Trip.com" secondary button to the Flights page
+- File created: components/shared/services/TripComFlightButton.tsx
+- File modified: app/[country]/flights/page.tsx
+- Confirmed flight-specific deeplink parameters via Trip.com Partner Center deeplink tool (previous attempt incorrectly reused hotel-only parameters, missing trip_sub3 tracking ID — now corrected)
+- Final confirmed URL structure:
+  https://www.trip.com/flights/Yangon-to-Bangkok/tickets-RGN-BKK?flighttype=S&dcity=RGN&acity=BKK&Allianceid=9417346&SID=325250647&trip_sub1=&trip_sub3=D18866801
+- Default route: Yangon (RGN) → Bangkok (BKK), one-way search type
+- Build verified clean, no TypeScript errors
+
+### ⚠️ Known limitation to verify next session
+- Destination/origin currently hardcoded to RGN→BKK — if this button is live on non-Thailand country pages (Singapore, Vietnam, Japan), it will still route to BKK. Needs a check of which [country]/flights routes actually render this button.
+
+---
+
+## ✅ Session 34 — 23 July 2026
+
+### ✅ Completed — Trust Messaging Block
+- Added a 4-badge trust block to the Flights page, live in production: **Verified Airlines**, **Secure Payment**, **24/7 Support**, **Transparent Pricing**
+- Styled using brand colors (Obsidian / Ivory / Gold) to match existing design system
+
+### ⛔ Blocked / Paused — White Label Flight Widget
+- Attempted to embed the Travelpayouts White Label flight widget (`wl_id=20123`) in place of the existing Aviasales widget
+- Integration broke page layout on attempt — **rolled back** to the previous Aviasales widget, which is currently live again
+- **Root cause:** CSS/layout scoping issue within the White Label widget itself, not an application code error
+- **Next steps:** re-check the "Design" tab in the Travelpayouts dashboard, and/or contact Travelpayouts support directly about the layout issue
+- `WhiteLabelFlightWidget.tsx` was **not deleted** — left in the codebase so the retry can resume without rebuilding the component
+
+### 📋 Not Yet Done (Priority Order)
+1. **Trip.com Flight Cross-sell (Phase 2)** — enable Flight category in Trip.com Partner Center + add a secondary "Compare on Trip.com" button (low effort, ~3% commission)
+2. **Flexible Date Calendar Heatmap (Phase 3)** — Google Flights-style price-by-date calendar; requires Travelpayouts "Calendar of prices" API (medium–high effort)
+3. **Decision-Support Chat Widget (Phase 5, Optional)** — FAQ-quick-answer style (not a survey), covering things like BKK vs DMK, visa-free entry, baggage allowance
+
+### 🎯 Recommended Order for Next Session
+1. Trip.com Cross-sell (Phase 2) — dashboard step required, but low code risk
+2. White Label retry — message Travelpayouts support today so the response can come back in the background while other work continues
 
 ---
 
