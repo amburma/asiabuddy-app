@@ -1,5 +1,41 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 21 July 2026 — Session 32
+> Last Updated: 23 July 2026 — Session 33
+
+---
+
+## ✅ Session 33 — 23 July 2026
+
+### 🔴 Root Cause Found
+The @/ path alias was failing to resolve in webpack builds for a specific, unpredictable subset of files (not turbopack, not tsconfig include gaps, not node_modules corruption, not OneDrive, not caching — all ruled out through systematic testing). Confirmed fix: switching to relative imports resolved every case.
+
+### ✅ Fix Applied
+- Created fix-aliases.js at project root — a script that scans app/, components/, lib/, data/, types/ and automatically converts all @/ imports to correct relative imports based on computed file depth (avoids manual ../ counting errors)
+- Ran the script: converted 263 @/ imports across 91 files to relative imports
+- Installed missing eslint and eslint-config-next packages
+- Removed invalid "ignoreDeprecations": "6.0" field from tsconfig.json (incompatible with installed TypeScript 5.8.2)
+- Build now compiles successfully: all 16 routes generate, no module resolution errors
+
+### 📌 IMPORTANT — Future @/ import usage
+Going forward, new files should be checked against a working build early. If "Module not found" errors reappear for @/ imports, do NOT re-diagnose from scratch — go straight to relative imports as the known working fix, or re-run fix-aliases.js if the issue recurs broadly.
+
+### 🏢 Booking.com card removed
+- Deleted Booking.com "Coming Soon" card; hotel search now shows Agoda + Trip.com only
+- Replaced "Book Now" button with separate "Search Agoda" / "Search Trip.com" buttons
+- Verified logic works across all 7 supported cities (Bangkok, Pattaya, Krabi confirmed directly; others use same code path)
+- New files added: app/[country]/hotels/HotelsPageClient.tsx, components/shared/services/AgodaSearchWidget.tsx, components/shared/services/HotelProviderRedirectCard.tsx
+
+### 💬 Chat & messaging updates
+- Hotel chat survey prompt revised to reduce sales-y tone, added trust/anti-scam messaging
+- Fixed missing thailandCities.ts config file (was not in git)
+
+### 🚀 Deployed
+- Committed and pushed to main: "Fix @/ path alias resolution (263 imports, 91 files -> relative imports); add Agoda/Trip.com hotel search widgets; misc fixes"
+- [UPDATE THIS LINE MANUALLY: confirm Vercel deploy status — Ready/Failed — once known]
+
+### ⚠️ Known items to verify next session
+- Spot-check a sample of the 91 auto-converted files for correctness (bulk script edit, low risk but not individually reviewed)
+- package-lock.json changed significantly (~8,172 lines) due to eslint install — monitor for any dependency-related issues in subsequent builds
+- Confirm live site /thailand/hotels shows Agoda/Trip.com buttons correctly in production
 
 ---
 

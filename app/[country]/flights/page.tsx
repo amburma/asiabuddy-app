@@ -5,7 +5,9 @@ import FlightServiceCard from '../../../components/shared/services/FlightService
 import { getFlightLinksByCity } from '../../../lib/queries/flightLinks'
 import Navbar from '../../../components/shared/Navbar'
 import AviasalesSearchWidgetWrapper from '../../../components/shared/AviasalesSearchWidgetWrapper'
+import WhiteLabelFlightWidget from '../../../components/shared/WhiteLabelFlightWidget'
 import VisaModalTrigger from '../../../components/shared/VisaModalTrigger'
+import FlightTrustBadges from '../../../components/shared/FlightTrustBadges'
 import { UI_TRANSLATIONS, normalizeLocale } from '../../../lib/i18n'
 import { SupportedLanguage } from '../../../types/country'
 import { Plane, Calendar, MapPin, Clock } from 'lucide-react'
@@ -91,8 +93,13 @@ export default async function FlightsPage({
               <Calendar className="w-5 h-5 text-[#D4AF37]" />
               {t.searchSpecificDates}
             </h3>
+            {/* TEMP: White Label widget causes layout breakage, reverted pending Travelpayouts dashboard investigation */}
+            {/* <WhiteLabelFlightWidget /> */}
             <AviasalesSearchWidgetWrapper />
           </div>
+
+          {/* Trust Badges */}
+          <FlightTrustBadges language={targetLanguage} />
 
           {flightLinks.length === 0 ? (
             <div className="min-h-[400px] flex flex-col items-center justify-center text-center py-24">

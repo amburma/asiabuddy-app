@@ -756,6 +756,12 @@ const ENGLISH_UI = {
       }
     }
   },
+  "flightTrustBadges": {
+    "verifiedAirlines": "Verified Airlines & Travel Agencies",
+    "securePayment": "Secure Payment Processing",
+    "customerSupport": "24/7 Customer Support",
+    "transparentPricing": "Transparent Pricing — No Hidden Fees"
+  },
   "hotels": {
     "title": "Hotels in Thailand",
     "intro": "Find the perfect place to stay in Thailand. Budget options start around 500-1,000 THB per night for guesthouses, while mid-range hotels range from 1,500-4,000 THB. Popular areas include Sukhumvit in Bangkok for nightlife and shopping, Patong in Phuket for beach access, and the Old City in Chiang Mai for culture. Book in advance during peak season (December-February) for the best rates and availability.",
@@ -1590,6 +1596,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       }
     }
   },
+  "flightTrustBadges": {
+    "verifiedAirlines": "สายการบินและหน่วยงานท่องเที่ยวที่ได้รับการยืนยัน",
+    "securePayment": "การชำระเงินที่ปลอดภัย",
+    "customerSupport": "การสนับสนุนลูกค้า 24/7",
+    "transparentPricing": "ราคาที่โปร่งใส — ไม่มีค่าธรรมเนียมแอบแฝง"
+  },
   "hotels": {
     "title": "โรงแรมในประเทศไทย",
     "intro": "ค้นหาที่พักที่เหมาะสมที่สุดในประเทศไทย ตัวเลือกราคาประหยัดเริ่มต้นที่ประมาณ 500-1,000 บาทต่อคืนสำหรับเกสต์เฮาส์ ส่วนโรงแรมระดับกลางอยู่ที่ 1,500-4,000 บาท พื้นที่ยอดนิยมได้แก่ สุขุมวิทในกรุงเทพฯ สำหรับชีวิตกลางคืนและการช้อปปิ้ง ป่าตองในภูเก็ตสำหรับการเข้าถึงชายหาด และเมืองเก่าในเชียงใหม่สำหรับวัฒนธรรม ควรจองล่วงหน้าในฤดูกาลหนาแน่น (ธันวาคม-กุมภาพันธ์) เพื่อรับราคาที่ดีที่สุดและห้องว่าง",
@@ -2411,9 +2423,15 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       },
       "q5": {
         "question": "လေယာဉ်ခရီးစဉ်ကို ဘယ်အချိန်မှာ ဘွတ်ကင်လုပ်သင့်လဲ?",
-        "answer": "အကောင်းဆုံး စျေးနှုန်းများအတွက် လူဦးရေများပြားသော ရာသီ (ဒီဇင်ဘာ-ဖေဖော်ဝါရီ) အတွက် ခရီးစဉ်ထွက်ခွာမည့်ရက် ၂-၃ လ အလိုက် ဘွတ်ကင်လုပ်ပါ။ အလယ်အလတ် ရာသီများ (မတ်-မေ၊ စက်တင်ဘာ-နိုဝင်ဘာ) တွင် ပိုမိုကောင်းမွန်သော စျေးနှုန်းများနှင့် လူဦးရေ နည်းပါးသော အခွင့်အလမ်းများ ရရှိနိုင်သည်။"
+        "answer": "အကောင်းဆုံး စျေးနှုန်းများအတွက် လူဦးရေများပြားသော ရာသီ (ဒီဇင်ဘာ-ဖေဖော်ဝါရီ) အတွကက ခရီးစဉ်ထွက်ခွာမည့်ရက် ၂-၃ လ အလိုက် ဘွတ်ကင်လုပ်ပါ။ အလယ်အလတ် ရာသီများ (မတ်-မေ၊ စက်တင်ဘာ-နိုဝင်ဘာ) တွင် ပိုမိုကောင်းမွန်သော စျေးနှုန်းများနှင့် လူဦးရေ နည်းပါးသော အခွင့်အလမ်းများ ရရှိနိုင်သည်။"
       }
     }
+  },
+  "flightTrustBadges": {
+    "verifiedAirlines": "အတည်ပြုပြီး လေကြောင်းလိုင်းနှင့် ခရီးသွားအေဂျင်စီများ",
+    "securePayment": "လုံခြုံသော ငွေပေးချေမှု လုပ်ဆောင်ချက်",
+    "customerSupport": "၂၄/၇ ဖောက်သည် ပံ့ပိုးမှု",
+    "transparentPricing": "ပွင့်လင်းပြီး စျေးနှုန်း — ဖုန်းမရှိပါ"
   },
   "hotels": {
     "title": "ထိုင်းနိုင်ငံရှိ ဟိုတယ်များ",
@@ -3240,6 +3258,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       }
     }
   },
+  "flightTrustBadges": {
+    "verifiedAirlines": "Aerolíneas y Agencias de Viaje Verificadas",
+    "securePayment": "Procesamiento de Pagos Seguro",
+    "customerSupport": "Soporte al Cliente 24/7",
+    "transparentPricing": "Precios Transparentes — Sin Tarifas Ocultas"
+  },
   "hotels": {
     "title": "Hoteles en Tailandia",
     "intro": "Encuentra el lugar perfecto para quedarse en Tailandia. Las opciones económicas comienzan alrededor de 500-1,000 THB por noche para guesthouses, mientras que los hoteles de gama media oscilan entre 1,500-4,000 THB. Las áreas populares incluyen Sukhumvit en Bangkok para vida nocturna y compras, Patong en Phuket para acceso a la playa, y la Ciudad Vieja en Chiang Mai para cultura. Reserva con anticipación durante la temporada alta (diciembre-febrero) para las mejores tarifas y disponibilidad.",
@@ -4065,6 +4089,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       }
     }
   },
+  "flightTrustBadges": {
+    "verifiedAirlines": "Compagnies Aériennes et Agences de Voyage Vérifiées",
+    "securePayment": "Traitement de Paiement Sécurisé",
+    "customerSupport": "Support Client 24/7",
+    "transparentPricing": "Prix Transparent — Aucuns Frais Cachés"
+  },
   "hotels": {
     "title": "Hôtels en Thaïlande",
     "intro": "Trouvez l'hébergement parfait en Thaïlande. Les options économiques commencent autour de 500-1,000 THB par nuit pour les guesthouses, tandis que les hôtels de gamme moyenne vont de 1,500-4,000 THB. Les zones populaires incluent Sukhumvit à Bangkok pour la vie nocturne et les achats, Patong à Phuket pour l'accès à la plage, et la Vieille Ville à Chiang Mai pour la culture. Réservez à l'avance pendant la haute saison (décembre-février) pour les meilleurs tarifs et disponibilité.",
@@ -4889,6 +4919,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "Für die besten Tarife buchen Sie 2-3 Monate im Voraus für Hauptsaisons (Dezember-Februar). Nebensaisons (März-Mai, September-November) bieten oft bessere Preise und weniger Menschenmengen."
       }
     }
+  },
+  "flightTrustBadges": {
+    "verifiedAirlines": "Verifizierte Fluggesellschaften und Reiseagenturen",
+    "securePayment": "Sichere Zahlungsabwicklung",
+    "customerSupport": "24/7 Kundensupport",
+    "transparentPricing": "Transparente Preise — Keine Versteckten Gebühren"
   },
   "hotels": {
     "title": "Hotels in Thailand",
