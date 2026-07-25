@@ -1,5 +1,26 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 23 July 2026 — Session 38
+> Last Updated: 25 July 2026 — Session 39
+
+---
+
+## ✅ Session 39 — 25 July 2026 (Operator Paid-Invoice System)
+
+### ✅ Completed — Operator Paid-Invoice Feature (PART 8-10)
+- **Page created:** `app/admin/paid-invoice/page.tsx` — auth-protected admin page mirroring `app/admin/page.tsx` login pattern
+- **API route:** `app/api/operator/paid-invoice/route.ts` — server-side auth verification added; `issued_by` tracked from real authenticated session, not client-submitted value
+- **Supporting modules added:**
+  - `lib/email/sendPaidInvoiceEmail.ts` — Gmail SMTP email delivery to customer + admin, handles missing customer email with warning
+  - `lib/invoice/generateInvoiceNo.ts` — Race-safe invoice number generation via Supabase RPC `next_invoice_no()` (format: AB-INV-0001)
+  - `lib/pdf/generatePaidInvoicePDF.ts` — Branded PDF generation with jsPDF, conditional service details (flight/hotel/generic), amount breakdown, watermark
+  - `lib/sheets/appendPaidInvoiceRow.ts` — Google Sheets integration via service account auth, appends invoice row to tracking sheet
+  - `lib/storage/uploadInvoicePDF.ts` — Supabase Storage upload to 'paid-invoices' bucket, returns public URL
+- **Fixes applied:**
+  - Corrected import path depth bug (3 levels from `app/admin/paid-invoice/` to root `lib/`)
+  - Service Fee field made optional and fixed broken number input
+  - Added MMK to currency list
+- **Dedup mitigation:** Submit button disabled during submission (client-side); noted as best-effort, not a database-level unique constraint
+- **Status:** Build passing, manually tested end-to-end (invoice generation + customer email confirmed working)
+- **Known follow-up item:** Database-level unique constraint for dedup not yet implemented (flagged as acceptable risk for now)
 
 ---
 
