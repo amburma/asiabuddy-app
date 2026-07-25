@@ -1,5 +1,42 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 23 July 2026 — Session 37
+> Last Updated: 23 July 2026 — Session 38
+
+---
+
+## ✅ Session 38 — 23 July 2026 (Flights Polish + Site-Wide Smart FAQ Chat)
+
+### ✅ Completed — Trip.com Flight Cross-sell (Phase 2)
+- Added "Compare on Trip.com" button to Flights page, confirmed correct flight-specific deeplink parameters via Trip.com Partner Center (Allianceid=9417346, SID=325250647, trip_sub3=D18866801)
+- Fixed initial visual prominence + language mirroring issues; final style: Obsidian background, Gold text/border
+- Deleted obsolete "Customized" Trip.com deeplink (D18804886) after confirming zero codebase references
+
+### ✅ Completed — FlightServiceCard Localization
+- Fixed English placeholder strings ("Multiple Airlines", "Anywhere", "Bangkok", "Flexible") leaking from Supabase flight_links table into the UI — added runtime translation mapping for known placeholder values in app/[country]/flights/page.tsx
+- Fixed a hardcoded English string comparison bug on line 137
+
+### ✅ Completed — AI-Triggered Booking Buttons in HumanOperatorChat
+- Added [SHOW_FLIGHT_BUTTONS:origin=XXX,destination=YYY] AI token — Gemini detects flight search intent in free-text chat and triggers inline Aviasales + Trip.com buttons (same pattern as existing [SHOW_CONTACT_FORM] token)
+- Added [SHOW_HOTEL_BUTTONS:city=CITYKEY] AI token — same mechanism for hotel/accommodation intent, reusing THAILAND_CITIES config and existing Agoda/Trip.com hotel URL logic
+- Verified live in production with real user-style queries
+
+### ✅ Completed — Flexible Date Calendar Heatmap (Phase 3)
+- Embedded Travelpayouts "Pricing Calendar Widget" on Flights page (below Trip.com button), showing color-coded price-by-date grid
+- Config: origin=RGN, destination=BKK, round-trip, current month view, brand colors (Gold primary, green best-price highlight per heatmap convention)
+- SUB ID: flights_calendar_heatmap
+
+### ✅ Completed — Phase 5: Page-Aware FAQ Quick-Question Chips
+- HumanOperatorChat (site-wide floating chat) now shows different quick-question chips depending on current page, using usePathname()
+- Flights, Hotels, Tickets, and Activities pages each show 5 chips sourced verbatim from existing Burmese FAQ content in lib/i18n.ts
+- Tapping a chip sends the full FAQ question into chat via existing handleSend() — no new send logic
+- Added matching AI grounding data (sections 12-14) to app/api/booking-chat/route.ts so answers stay consistent with published FAQ content
+- Car Rental page intentionally has no chips yet — no FAQ content exists for that category
+
+### ⛔ Still Blocked
+- White Label Flight Widget (wl_id=20123) — Travelpayouts support ticket submitted, awaiting reply. WhiteLabelFlightWidget.tsx left in codebase, unused, for retry when resolved.
+
+### 📋 Not Yet Done
+- Car Rental FAQ content + matching chips (blocked on content being written first)
+- Auto-Booking AI Chat (passport OCR + real ticketing) — discussed and intentionally shelved due to compliance/legal complexity; Phase A concept (human-operator-assisted via Telegram) suggested as future starting point if revisited
 
 ---
 
@@ -3387,5 +3424,102 @@ polish**
 21. Transfers: vehicle-tier badges (UI enhancement)
 22. Transfers: FAQ/cross-sell sections (UI enhancement)
 23. Navbar click behavior — verify (QA/polish)
+
+---
+
+## ✅ Session 33 (23 July 2026) — Update
+
+### ✅ QEEQ booking_url session-link expiry bug — RESOLVED
+- Root cause: stored booking_url ဟာ QEEQ session-based search-result URL ဖြစ်နေခဲ့ (permanent affiliate deep link မဟုတ်)
+- Fix: `car_rental_links` table ရဲ့ row 3ခုစလုံးကို stable Travelpayouts QEEQ homepage deep link (marker 746660, session id parameter မပါ) တစ်ခုတည်းနဲ့ replace လုပ်ခဲ့
+- Live-tested confirmed — no expiry error
+- Priority 2 critical item ပိတ်ပြီး
+
+### ⚠️ Agoda widget destination-text bug — root cause confirmed, decision pending
+- Root cause: Agoda SherpaRender widget product limitation — ReferenceKey တစ်ခုက city တစ်ခု (Bangkok) နဲ့ server-side ချည်နှောင်ထားလို့ client URL parameter ကို လျစ်လျူရှုတယ်
+- App-side (React/Next.js) fix လေးခု ပြီးသား — container clear, unique widget id, timestamp compute, race guard — ဒါပေမဲ့ visible text/redirect ကတော့ Bangkok အတိုင်းကျန်
+- **Decision needed (KIM manual)**: Option A (Agoda dashboard ကနေ 7-city widget instance သီးခြားဖန်တီး) vs Option B (Agoda support ကို dynamic-city မေး) — ဆုံးဖြတ်ချက်မချမချင်း Windsurf ကို ဆက်ခိုင်းစရာမလို
+
+### ✅ car_rental_links pricing update — QEEQ real rates confirmed
+- QEEQ.com live search result: Small/Economy = US$21, SUV = US$32 (Medium $48, Large $35, Premium $86, Van $34 — reference only)
+- "Sedan with Driver" ($85 placeholder) — QEEQ platform ပေါ်မှာ ဒီ service မရှိကြောင်း confirm ပြီး (self-drive rental aggregator ချည်းသာ)
+
+### 📋 NEW product decision — Day Tour / Package Tour with Driver (Car Rental scope expansion)
+- Rental section ကို self-drive (QEEQ) တစ်ခုတည်း မဟုတ်တော့ဘဲ Full Day Sightseeing Tour + driver-included Package Tour ပါ ထည့်ဖို့ ဆုံးဖြတ်ခဲ့
+- QEEQ/GYG affiliate ကနေ ဒီ product မရနိုင် — local Bangkok-based operator (route × car-size wholesale rate matrix ပုံစံ, ဥပမာ Bangkok City Tour, Bangkok-Pattaya, Bangkok-Ayutthaya) ကို source/negotiate လုပ်ရန် လိုအပ်
+- လျာထားတဲ့ implementation direction: Supabase static table အသစ် (route × car-size × price) + existing HumanOperatorChat → Telegram Sales Alert → Invoice flow ကို reuse
+- Status: sourcing/operator negotiation stage — code work မစသေး, Priority 1 ပြီးမှ စရန် သဘောတူထား
+
+### 📌 Invoice system — existing infrastructure clarified (important note to avoid duplicate build)
+- Codebase ထဲမှာ invoice generation/email flow **ရှိနှင့်ပြီးသား** ကို confirm ပြီး: `lib/pdfGenerator.ts` (jsPDF-based, `invoices` table, Telegram-approve-triggered) + `lib/emailService.ts` (Nodemailer/Gmail SMTP)
+- ဒါက roadmap ထဲက "Paid Invoice System" (PART 1-10, `paid_invoices` table, `@react-pdf/renderer`, Resend API, manual-entry form) spec နဲ့ **သီးခြားစနစ်** ဖြစ်ကြောင်း note ထားရန် — Windsurf ကို PART 1-10 prompt တွေ ပို့တဲ့အခါ existing `pdfGenerator.ts`/`emailService.ts` ကို confuse မဖြစ်အောင် "duplicate client instance မဖန်တီးပါနဲ့" context ရှင်းရှင်းပေးရန်
+
+---
+
+## Paid Invoice System — New Project Spec
+
+### ⚠️ IMPORTANT — Two Separate Invoice Systems Exist
+
+**System 1 (existing, do NOT touch):**
+- `lib/pdfGenerator.ts` (jsPDF-based) + `lib/emailService.ts` (Nodemailer/Gmail SMTP)
+- `invoices` table (booking_id-based, FK to `bookings`)
+- Trigger: Telegram operator "Approve" button callback (`app/api/operator-webhook/route.ts`)
+- Use case: existing chatbot booking flow (Telegram/Web chat bookings)
+
+**System 2 (new, this project):**
+- `@react-pdf/renderer` (PDF), Resend API (email), googleapis (Sheets)
+- `paid_invoices` table (standalone, no booking FK — sequence-based invoice_no via `next_invoice_no()` Postgres function)
+- Trigger: manual staff/operator form entry (`/thailand/clogin/paid-invoice` page)
+- Use case: manual invoicing for any service type (Flight/Hotel/Tour/Transfer/Activities/Car Rental) that didn't originate from the chatbot flow — e.g. direct customer inquiries, day-tour bookings, walk-in sales
+
+**Rule for future Windsurf sessions**: PART 1-10 prompt တွေ run တဲ့အခါ System 1 ရဲ့ file (`pdfGenerator.ts`, `emailService.ts`, `invoices` table) ကို **လုံးဝ မထိပါနဲ့** — System 2 က standalone parallel system ဖြစ်ရပါမယ်.
+
+### Paid Invoice System — Build Plan (PART 0-10, sequentially gated)
+
+- PART 0 (KIM manual): Supabase SQL — `paid_invoice_seq`, `paid_invoices` table, `next_invoice_no()` function, `invoices` storage bucket, Vercel env vars (GOOGLE_SERVICE_ACCOUNT_KEY, GOOGLE_SHEET_ID, RESEND_API_KEY, ADMIN_INVOICE_EMAIL)
+- PART 1: `lib/invoice/generateInvoiceNo.ts` — invoice number generator (RPC call)
+- PART 2: `lib/pdf/PaidInvoiceTemplate.tsx` — A4 PDF template (Obsidian/Ivory/Gold scheme, service_type-conditional layout)
+- PART 3: `lib/pdf/renderInvoicePDF.ts` — PDF render utility
+- PART 4: `lib/storage/uploadInvoicePDF.ts` — Supabase Storage upload
+- PART 5: `lib/sheets/appendPaidInvoiceRow.ts` — Google Sheets append (best-effort, non-blocking)
+- PART 6: `lib/email/sendPaidInvoiceEmail.ts` — Resend email send (best-effort, non-blocking)
+- PART 7: `app/api/operator/paid-invoice/route.ts` — orchestration API route (auth check, Zod validation, invoice insert, PDF→Storage→Sheet→Email sequence)
+- PART 8: `app/thailand/clogin/paid-invoice/page.tsx` — auth-guarded frontend route
+- PART 9: `components/operator/PaidInvoiceForm.tsx` — manual entry form (service_type dropdown, passengers/guests array, currency selector, VAT optional)
+- PART 10 (KIM manual): testing checklist — service type switching, Add/Remove Row, currency Other, VAT blank vs filled, no-email handling, concurrent submit dedup, PDF/Sheet fail simulation, print preview
+
+**Status**: PART 0 (Supabase manual setup) ရှေ့ဆုံးလိုအပ်, code PART 1-9 မစသေး
+
+### ✅ Final Confirmed Invoice Data Schema (Locked)
+
+**Deployment path confirmed**: Paid Invoice System ကို `asiabuddy.app` domain အောက်မှာပဲ host လုပ်မယ် (existing `/thailand/clogin/paid-invoice` route pattern အတိုင်း, subdomain/separate deployment မလိုပါ).
+
+**Common Fields (LOCKED — do not change without KIM approval):**
+
+| Field | Type | Note |
+|---|---|---|
+| invoice_no | auto (AB-INV-0001) | Postgres sequence |
+| invoice_date | date | Default = today |
+| country | dropdown | Myanmar / Thailand / Singapore / Japan / South Korea / Vietnam / etc. — **NEW field, was missing from original PART 9 spec, must be added to Zod schema + form + paid_invoices table** |
+| customer_name | text | |
+| customer_contact | text | Phone/Telegram/Viber/WhatsApp |
+| customer_email | text (optional) | Blank ဆိုရင် customer email မပို့ |
+| service_type | dropdown | Tour / Flight / Hotel / Airport Transfer / Tickets & Activities / Car Rental |
+| currency | dropdown | MMK / USD / THB / Other → "Other" ရွေးရင် short text input ပေါ်ပြီး custom code ရိုက်ခိုင်း (e.g. SGD, JPY) |
+| base_price | number | |
+| service_fee | number | |
+| vat_amount | number (optional, default 0) | Fixed amount, manual entry, required မဟုတ် |
+| total_amount | auto-calc | base_price + service_fee + vat_amount |
+| payment_method | dropdown | Cash / KBZPay / Wave / Bank Transfer / Card |
+| issued_by | auto-fill | clogin session user |
+| remarks | textarea (optional) | |
+
+**Impact on PART 0-10 build plan**: `country` field ကို အောက်ပါနေရာတွေမှာ ထည့်ရန် လိုအပ်:
+- PART 0: `paid_invoices` table SQL ထဲ `country` column ထည့်ရန်
+- PART 7: API route Zod schema ထဲ `country` validation ထည့်ရန်
+- PART 9: Form component ထဲ country dropdown field ထည့်ရန် (service_type dropdown အနီးတွင်)
+- PART 2 (PDF template): invoice header/customer info block ထဲ country ကို ပြရန် (optional placement — KIM ကို template layout အဆင့်တွင် ပြန်စစ်ရန်)
+
+**Status**: Schema locked, PART 0 (Supabase manual setup) မစသေး — schema ဒီအတိုင်း confirm ဖြစ်ပြီးမှသာ Windsurf ကို PART 1 စ ပို့ပါမည်.
 
 ---
