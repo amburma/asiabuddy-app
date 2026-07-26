@@ -9,6 +9,7 @@ import { UI_TRANSLATIONS } from '../../lib/i18n';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { THAILAND_CITIES, buildTripComSearchValue, normalizeCityName } from '../../src/config/thailandCities';
+import { getKlookLinksByCity } from '../../lib/queries/klookLinks';
 
 interface Props {
   language: ThaiLanguage;
@@ -134,6 +135,8 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
   const [validationErrors, setValidationErrors] = useState<{ name?: string; phone?: string }>({});
   const [flightButtons, setFlightButtons] = useState<{ origin: string; destination: string } | null>(null);
   const [hotelButtons, setHotelButtons] = useState<string | null>(null);
+  const [klookButtons, setKlookButtons] = useState<string | null>(null);
+  const [klookLinks, setKlookLinks] = useState<any[]>([]);
 
   // IATA to city name mapping for Trip.com URLs
   const iataToCity: Record<string, string> = {
@@ -366,6 +369,27 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
         setHotelButtons(null);
       }
 
+      // Check for [SHOW_KLOOK_BUTTONS:city=CITYKEY] trigger
+      const klookButtonsTrigger = /\[SHOW_KLOOK_BUTTONS:city=([A-Za-z\s]+)\]/;
+      const klookButtonsMatch = botReply.match(klookButtonsTrigger);
+      if (klookButtonsMatch) {
+        displayResponse = botReply.replace(klookButtonsTrigger, '');
+        const cityKey = klookButtonsMatch[1];
+        // Normalize city key (handle spaces, capitalization)
+        const normalizedCityKey = normalizeCityName(cityKey);
+        setKlookButtons(normalizedCityKey);
+        // Fetch Klook links for this city
+        getKlookLinksByCity(normalizedCityKey).then(links => {
+          setKlookLinks(links);
+        }).catch(err => {
+          console.error('Error fetching Klook links:', err);
+          setKlookLinks([]);
+        });
+      } else {
+        setKlookButtons(null);
+        setKlookLinks([]);
+      }
+
       setMessages(prev => [...prev, { role: 'assistant', content: displayResponse }]);
     } catch (error) {
       console.error('Error sending message:', error);
@@ -493,7 +517,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
                 {message.role === 'assistant' && i === messages.length - 1 && flightButtons && (
                   <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
                     <a
-                      href={`https://www.aviasales.com/search?origin_iata=${flightButtons.origin}&destination_iata=${flightButtons.destination}`}
+                      href={`https://www.aviasales.com/search?origin_iata=${flightButtons.origin}&destination_iata=${flightButtons.destination}&marker=746660`}
                       target="_blank"
                       rel="noopener noreferrer sponsored"
                       className="inline-flex items-center justify-center gap-2 bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37] font-semibold py-2 px-4 rounded-lg hover:bg-[#1A1A1A] hover:shadow-lg transition-all duration-200 text-sm"
@@ -556,6 +580,34 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
                     </div>
                   );
                 })()}
+
+                {/* Show Klook buttons for the last assistant message if triggered */}
+                {message.role === 'assistant' && i === messages.length - 1 && klookButtons && klookLinks.length > 0 && (
+                  <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
+                    <div className="text-xs font-semibold text-gray-600 mb-1">{t.findMoreTickets}</div>
+                    {klookLinks.slice(0, 3).map((link) => (
+                      <a
+                        key={link.id}
+                        href={link.klook_url}
+                        target="_blank"
+                        rel="noopener noreferrer sponsored"
+                        className="inline-flex items-center justify-between gap-2 bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37] font-semibold py-3 px-4 rounded-lg hover:bg-[#1A1A1A] hover:shadow-lg transition-all duration-200 text-sm"
+                      >
+                        <div className="flex flex-col items-start">
+                          <span className="font-medium">{link.activity_name}</span>
+                          {(link.price_from || link.rating) && (
+                            <span className="text-xs opacity-80 mt-0.5">
+                              {link.price_from && `From ${link.price_from}`}
+                              {link.price_from && link.rating && ' · '}
+                              {link.rating && `⭐ ${link.rating}`}
+                            </span>
+                          )}
+                        </div>
+                        <ExternalLink size={14} />
+                      </a>
+                    ))}
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}
