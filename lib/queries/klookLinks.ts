@@ -17,10 +17,12 @@ export interface KlookLink {
 export async function getKlookLinksByCity(city: string): Promise<KlookLink[]> {
   const supabase = getSupabase();
   
+  const normalizedCity = city.replace(/\s+/g, '').toLowerCase();
+  
   const { data, error } = await supabase
     .from('klook_links')
     .select('*')
-    .eq('city', city)
+    .ilike('city', normalizedCity)
     .order('created_at', { ascending: false });
 
   if (error) {

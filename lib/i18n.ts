@@ -509,7 +509,8 @@ const ENGLISH_UI = {
     "bookNowCta": "Book Now",
     "surveyProgressLabel": "Survey Progress",
     "resetChatTitle": "Reset Chat",
-    "resetButtonLabel": "Reset"
+    "resetButtonLabel": "Reset",
+    "findMoreTickets": "Find more Tickets, Activities, Entrance Tickets"
   },
   "destinationTabs": {
     "mustVisit": "Must Visit",
@@ -1413,7 +1414,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "bookNowCta": "จองเลย",
     "surveyProgressLabel": "ความคืบหน้าของแบบสอบถาม",
     "resetChatTitle": "รีเซ็ตแชท",
-    "resetButtonLabel": "รีเซ็ต"
+    "resetButtonLabel": "รีเซ็ต",
+    "findMoreTickets": "ค้นหาตั๋ว กิจกรรม และค่าเข้าชมเพิ่มเติม"
   },
   "destinationTabs": {
     "mustVisit": "สถานที่ต้องไป",
@@ -2280,7 +2282,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "bookNowCta": "ဘွတ်ကင်လုပ်ပါ",
     "surveyProgressLabel": "စစ်တမ်း အခြေအနေ",
     "resetChatTitle": "စကားပြောပြန် စတင်ပါ",
-    "resetButtonLabel": "ပြန်စတင်ပါ"
+    "resetButtonLabel": "ပြန်စတင်ပါ",
+    "findMoreTickets": "လက်မှတ်၊ လှုပ်ရှားမှုများ၊ ဝင်ကြေးများ ပိုရှာဖွေရန်"
   },
   "destinationTabs": {
     "mustVisit": "သွားရောက်ရမည့်နေရာများ",
@@ -3161,7 +3164,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "bookNowCta": "Reservar Ahora",
     "surveyProgressLabel": "Progreso de la encuesta",
     "resetChatTitle": "Restablecer chat",
-    "resetButtonLabel": "Restablecer"
+    "resetButtonLabel": "Restablecer",
+    "findMoreTickets": "Buscar más entradas, actividades y tarifas de entrada"
   },
   "destinationTabs": {
     "mustVisit": "Lugares imprescindibles",
@@ -4042,7 +4046,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "bookNowCta": "Réserver Maintenant",
     "surveyProgressLabel": "Progression de l'enquête",
     "resetChatTitle": "Réinitialiser le chat",
-    "resetButtonLabel": "Réinitialiser"
+    "resetButtonLabel": "Réinitialiser",
+    "findMoreTickets": "Trouver plus de billets, activités et tarifs d'entrée"
   },
   "destinationTabs": {
     "mustVisit": "Incontournables",
@@ -4923,7 +4928,8 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "bookNowCta": "Jetzt Buchen",
     "surveyProgressLabel": "Fortschritt der Umfrage",
     "resetChatTitle": "Chat zurücksetzen",
-    "resetButtonLabel": "Zurücksetzen"
+    "resetButtonLabel": "Zurücksetzen",
+    "findMoreTickets": "Weitere Tickets, Aktivitäten und Eintrittspreise finden"
   },
   "destinationTabs": {
     "mustVisit": "Sehenswürdigkeiten",

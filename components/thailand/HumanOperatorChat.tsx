@@ -344,7 +344,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
       }
 
       // Check for [SHOW_FLIGHT_BUTTONS:origin=XXX,destination=YYY] trigger
-      const flightButtonsTrigger = /\[SHOW_FLIGHT_BUTTONS:origin=([A-Z]{3}),destination=([A-Z]{3})\]/;
+      const flightButtonsTrigger = /\[SHOW_FLIGHT_BUTTONS:\s*origin\s*=\s*([A-Z]{3})\s*,\s*destination\s*=\s*([A-Z]{3})\]/i;
       const flightButtonsMatch = botReply.match(flightButtonsTrigger);
       if (flightButtonsMatch) {
         displayResponse = botReply.replace(flightButtonsTrigger, '');
@@ -354,7 +354,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
       }
 
       // Check for [SHOW_HOTEL_BUTTONS:city=CITYKEY] trigger
-      const hotelButtonsTrigger = /\[SHOW_HOTEL_BUTTONS:city=([A-Za-z\s]+)\]/;
+      const hotelButtonsTrigger = /\[SHOW_HOTEL_BUTTONS:\s*city\s*=\s*([A-Za-z\s]+)\]/i;
       const hotelButtonsMatch = botReply.match(hotelButtonsTrigger);
       if (hotelButtonsMatch) {
         displayResponse = botReply.replace(hotelButtonsTrigger, '');
@@ -370,7 +370,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
       }
 
       // Check for [SHOW_KLOOK_BUTTONS:city=CITYKEY] trigger
-      const klookButtonsTrigger = /\[SHOW_KLOOK_BUTTONS:city=([A-Za-z\s]+)\]/;
+      const klookButtonsTrigger = /\[SHOW_KLOOK_BUTTONS:\s*city\s*=\s*([A-Za-z\s]+)\]/i;
       const klookButtonsMatch = botReply.match(klookButtonsTrigger);
       if (klookButtonsMatch) {
         displayResponse = botReply.replace(klookButtonsTrigger, '');
@@ -516,15 +516,29 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
                 {/* Show flight buttons for the last assistant message if triggered */}
                 {message.role === 'assistant' && i === messages.length - 1 && flightButtons && (
                   <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
-                    <a
-                      href={`https://www.aviasales.com/search?origin_iata=${flightButtons.origin}&destination_iata=${flightButtons.destination}&marker=746660`}
-                      target="_blank"
-                      rel="noopener noreferrer sponsored"
-                      className="inline-flex items-center justify-center gap-2 bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37] font-semibold py-2 px-4 rounded-lg hover:bg-[#1A1A1A] hover:shadow-lg transition-all duration-200 text-sm"
-                    >
-                      <ExternalLink size={14} />
-                      Aviasales တွင် ရှာဖွေရန်
-                    </a>
+                    {(() => {
+                      // Build Aviasales URL with path-based format: /search/{ORIGIN}{DDMM}{DESTINATION}1?marker=746660
+                      // Default to 30 days from today if no date captured from conversation
+                      const today = new Date();
+                      const defaultDate = new Date(today);
+                      defaultDate.setDate(today.getDate() + 30);
+                      const day = String(defaultDate.getDate()).padStart(2, '0');
+                      const month = String(defaultDate.getMonth() + 1).padStart(2, '0');
+                      const dateStr = `${day}${month}`;
+                      const aviasalesUrl = `https://www.aviasales.com/search/${flightButtons.origin}${dateStr}${flightButtons.destination}1?marker=746660`;
+
+                      return (
+                        <a
+                          href={aviasalesUrl}
+                          target="_blank"
+                          rel="noopener noreferrer sponsored"
+                          className="inline-flex items-center justify-center gap-2 bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37] font-semibold py-2 px-4 rounded-lg hover:bg-[#1A1A1A] hover:shadow-lg transition-all duration-200 text-sm"
+                        >
+                          <ExternalLink size={14} />
+                          Aviasales တွင် ရှာဖွေရန်
+                        </a>
+                      );
+                    })()}
                     <a
                       href={`https://www.trip.com/flights/${iataToCity[flightButtons.origin] || flightButtons.origin}-to-${iataToCity[flightButtons.destination] || flightButtons.destination}/tickets-${flightButtons.origin}-${flightButtons.destination}?flighttype=S&dcity=${flightButtons.origin}&acity=${flightButtons.destination}&Allianceid=9417346&SID=325250647&trip_sub1=&trip_sub3=D18866801`}
                       target="_blank"
