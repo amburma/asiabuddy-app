@@ -69,6 +69,18 @@ export default function PaidInvoicePage() {
   const [checkOut, setCheckOut] = useState('');
   const [guests, setGuests] = useState<string>('');
 
+  // Rental details
+  const [rentalCountry, setRentalCountry] = useState('');
+  const [rentalCity, setRentalCity] = useState('');
+  const [bookingType, setBookingType] = useState<'airport_pickup' | 'drop_off' | 'full_day_tour' | 'half_day_tour' | 'package_tour'>('airport_pickup');
+  const [flightNo, setFlightNo] = useState('');
+  const [pickupTime, setPickupTime] = useState('');
+  const [pickupPlace, setPickupPlace] = useState('');
+  const [noOfPersons, setNoOfPersons] = useState('');
+  const [destinationPlace, setDestinationPlace] = useState('');
+  const [destinationAddress, setDestinationAddress] = useState('');
+  const [socialApp, setSocialApp] = useState<'whatsapp' | 'line' | 'wechat' | 'viber'>('whatsapp');
+
   // Generic description
   const [description, setDescription] = useState('');
 
@@ -168,6 +180,19 @@ export default function PaidInvoicePage() {
           checkOut: checkOut || undefined,
           guests: guestList.length > 0 ? guestList : undefined,
         };
+      } else if (serviceType === 'car_rental') {
+        details.rental = {
+          country: rentalCountry || undefined,
+          city: rentalCity || undefined,
+          booking_type: bookingType || undefined,
+          flight_no: bookingType !== 'drop_off' ? (flightNo || undefined) : undefined,
+          pickup_time: pickupTime || undefined,
+          pickup_place: pickupPlace || undefined,
+          no_of_persons: noOfPersons ? parseInt(noOfPersons, 10) : undefined,
+          destination_place: destinationPlace || undefined,
+          destination_address: destinationAddress || undefined,
+          social_app: socialApp || undefined,
+        };
       } else {
         details.description = description || undefined;
       }
@@ -224,6 +249,16 @@ export default function PaidInvoicePage() {
       setCheckIn('');
       setCheckOut('');
       setGuests('');
+      setRentalCountry('');
+      setRentalCity('');
+      setBookingType('airport_pickup');
+      setFlightNo('');
+      setPickupTime('');
+      setPickupPlace('');
+      setNoOfPersons('');
+      setDestinationPlace('');
+      setDestinationAddress('');
+      setSocialApp('whatsapp');
       setDescription('');
     } catch (err: any) {
       setSubmitError('An error occurred. Please try again.');
@@ -574,7 +609,117 @@ export default function PaidInvoicePage() {
               </div>
             )}
 
-            {serviceType !== 'flight' && serviceType !== 'hotel' && (
+            {serviceType === 'car_rental' && (
+              <div className="bg-gray-50 rounded-xl p-4 space-y-4">
+                <h3 className="font-bold text-gray-700 text-sm uppercase tracking-wider">Car Rental Details</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <Field label="Country">
+                    <input
+                      type="text"
+                      value={rentalCountry}
+                      onChange={e => setRentalCountry(e.target.value)}
+                      className={inputCls}
+                    />
+                  </Field>
+
+                  <Field label="City">
+                    <input
+                      type="text"
+                      value={rentalCity}
+                      onChange={e => setRentalCity(e.target.value)}
+                      className={inputCls}
+                    />
+                  </Field>
+
+                  <Field label="Booking Type">
+                    <select
+                      value={bookingType}
+                      onChange={e => setBookingType(e.target.value as any)}
+                      className={inputCls}
+                    >
+                      <option value="airport_pickup">Airport Pick-up (Airport → Hotel)</option>
+                      <option value="drop_off">Drop-off (Hotel → Airport)</option>
+                      <option value="full_day_tour">Full Day Tour</option>
+                      <option value="half_day_tour">Half Day Tour</option>
+                      <option value="package_tour">Package Tour</option>
+                    </select>
+                  </Field>
+
+                  {bookingType !== 'drop_off' && (
+                    <Field label="Flight No.">
+                      <input
+                        type="text"
+                        value={flightNo}
+                        onChange={e => setFlightNo(e.target.value)}
+                        className={inputCls}
+                      />
+                    </Field>
+                  )}
+
+                  <Field label="Pick-up Time">
+                    <input
+                      type="time"
+                      value={pickupTime}
+                      onChange={e => setPickupTime(e.target.value)}
+                      className={inputCls}
+                    />
+                  </Field>
+
+                  <Field label="Pick-up Place">
+                    <input
+                      type="text"
+                      value={pickupPlace}
+                      onChange={e => setPickupPlace(e.target.value)}
+                      className={inputCls}
+                    />
+                  </Field>
+
+                  <Field label="No. of Persons">
+                    <input
+                      type="number"
+                      min="1"
+                      value={noOfPersons}
+                      onChange={e => setNoOfPersons(e.target.value)}
+                      className={inputCls}
+                      required
+                    />
+                  </Field>
+
+                  <Field label="Destination (Drop-off Place)">
+                    <input
+                      type="text"
+                      value={destinationPlace}
+                      onChange={e => setDestinationPlace(e.target.value)}
+                      className={inputCls}
+                    />
+                  </Field>
+
+                  <Field label="Destination (Drop-off Place) Address">
+                    <input
+                      type="text"
+                      value={destinationAddress}
+                      onChange={e => setDestinationAddress(e.target.value)}
+                      className={inputCls}
+                    />
+                  </Field>
+
+                  <Field label="Using Social App">
+                    <select
+                      value={socialApp}
+                      onChange={e => setSocialApp(e.target.value as any)}
+                      className={inputCls}
+                    >
+                      <option value="whatsapp">WhatsApp</option>
+                      <option value="line">LINE</option>
+                      <option value="wechat">WeChat</option>
+                      <option value="viber">Viber</option>
+                    </select>
+                  </Field>
+                </div>
+              </div>
+            )}
+
+            {serviceType !== 'flight' && serviceType !== 'hotel' && serviceType !== 'car_rental' && (
               <Field label="Service Description">
                 <textarea
                   value={description}

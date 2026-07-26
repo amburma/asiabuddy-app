@@ -43,6 +43,18 @@ const paidInvoiceSchema = z.object({
         name: z.string(),
       })).optional(),
     }).optional(),
+    rental: z.object({
+      country: z.string().optional(),
+      city: z.string().optional(),
+      booking_type: z.enum(['airport_pickup', 'drop_off', 'full_day_tour', 'half_day_tour', 'package_tour']),
+      flight_no: z.string().optional(),
+      pickup_time: z.string().optional(),
+      pickup_place: z.string().optional(),
+      no_of_persons: z.number().int().positive(),
+      destination_place: z.string().optional(),
+      destination_address: z.string().optional(),
+      social_app: z.enum(['whatsapp', 'line', 'wechat', 'viber']),
+    }).optional(),
     description: z.string().optional(),
   }).optional(),
 });

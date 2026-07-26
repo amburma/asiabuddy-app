@@ -1,6 +1,12 @@
 import Link from "next/link";
+import { cookies } from 'next/headers'
+import FloatingChatButtonLoader from '../components/shared/FloatingChatButtonLoader'
+import FloatingContactButtonLoader from '../components/shared/FloatingContactButtonLoader'
+import { normalizeLocale } from '../lib/i18n'
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies()
+  const language = normalizeLocale(cookieStore.get('NEXT_LOCALE')?.value)
   return (
     <main className="min-h-screen relative flex flex-col items-center justify-center px-6 overflow-hidden">
 
@@ -117,6 +123,10 @@ export default function Home() {
 
       {/* Decorative bottom line */}
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/40 to-transparent z-20" />
+
+      {/* Floating buttons */}
+      <FloatingChatButtonLoader language={language} />
+      <FloatingContactButtonLoader language={language} />
 
     </main>
   );

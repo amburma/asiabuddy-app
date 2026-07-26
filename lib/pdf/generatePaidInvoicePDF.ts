@@ -47,9 +47,23 @@ interface HotelDetails {
   guests?: Guest[];
 }
 
+interface RentalDetails {
+  country?: string;
+  city?: string;
+  booking_type?: string;
+  flight_no?: string;
+  pickup_time?: string;
+  pickup_place?: string;
+  no_of_persons?: number;
+  destination_place?: string;
+  destination_address?: string;
+  social_app?: string;
+}
+
 interface ServiceDetails {
   flight?: FlightDetails;
   hotel?: HotelDetails;
+  rental?: RentalDetails;
   description?: string;
   [key: string]: unknown;
 }
@@ -89,23 +103,23 @@ export function generatePaidInvoicePDF(data: PaidInvoiceData): Buffer {
   // ── Header: Logo + Company name ───────────────────────
   doc.addImage(logoDataUrl, 'PNG', 15, 15, 25, 25);
 
-  doc.setFont('Helvetica', 'bold');
+  doc.setFont('helvetica', 'bold');
   doc.setFontSize(22);
   doc.setTextColor(...colors.primary);
   doc.text('AsiaBuddy', 45, 22);
 
-  doc.setFont('Helvetica', 'normal');
+  doc.setFont('helvetica', 'normal');
   doc.setFontSize(8);
   doc.setTextColor(...colors.textLight);
   doc.text('Travel Services', 45, 27);
 
   // ── Header: Invoice title + meta ─────────────────────
-  doc.setFont('Helvetica', 'bold');
+  doc.setFont('helvetica', 'bold');
   doc.setFontSize(24);
   doc.setTextColor(...colors.accent);
   doc.text('Invoice', 195, 22, { align: 'right' });
 
-  doc.setFont('Helvetica', 'normal');
+  doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
   doc.setTextColor(...colors.textDark);
 
@@ -121,12 +135,12 @@ export function generatePaidInvoicePDF(data: PaidInvoiceData): Buffer {
   doc.line(15, 45, 195, 45);
 
   // ── FROM block ────────────────────────────────────────
-  doc.setFont('Helvetica', 'bold');
+  doc.setFont('helvetica', 'bold');
   doc.setFontSize(10);
   doc.setTextColor(...colors.primary);
   doc.text('FROM:', 15, 55);
 
-  doc.setFont('Helvetica', 'normal');
+  doc.setFont('helvetica', 'normal');
   doc.setTextColor(...colors.textDark);
   doc.text(
     [
@@ -142,11 +156,11 @@ export function generatePaidInvoicePDF(data: PaidInvoiceData): Buffer {
   );
 
   // ── BILL TO block ─────────────────────────────────────
-  doc.setFont('Helvetica', 'bold');
+  doc.setFont('helvetica', 'bold');
   doc.setTextColor(...colors.primary);
   doc.text('BILL TO:', 120, 55);
 
-  doc.setFont('Helvetica', 'normal');
+  doc.setFont('helvetica', 'normal');
   doc.setTextColor(...colors.textDark);
 
   const billLines = [data.customer_name, `Phone: ${data.customer_contact}`];
@@ -191,6 +205,46 @@ export function generatePaidInvoicePDF(data: PaidInvoiceData): Buffer {
         serviceTableBody.push([`  ${idx + 1}. ${g.name}`, '']);
       });
     }
+  } else if (data.service_type === 'car_rental' && data.details.rental) {
+    const rental = data.details.rental;
+    
+    // Booking type label mapping
+    const bookingTypeLabels: Record<string, string> = {
+      'airport_pickup': 'Airport Pick-up (Airport → Hotel)',
+      'drop_off': 'Drop-off (Hotel → Airport)',
+      'full_day_tour': 'Full Day Tour',
+      'half_day_tour': 'Half Day Tour',
+      'package_tour': 'Package Tour',
+    };
+    
+    // Social app label mapping
+    const socialAppLabels: Record<string, string> = {
+      'whatsapp': 'WhatsApp',
+      'line': 'LINE',
+      'wechat': 'WeChat',
+      'viber': 'Viber',
+    };
+    
+    serviceTableBody = [
+      ['Service Type', 'Car Rental (Chauffeur Service)'],
+      ['Country', rental.country || 'N/A'],
+      ['City', rental.city || 'N/A'],
+      ['Booking Type', bookingTypeLabels[rental.booking_type || ''] || rental.booking_type || 'N/A'],
+    ];
+    
+    // Only show Flight No. if present (not for drop_off)
+    if (rental.flight_no) {
+      serviceTableBody.push(['Flight No.', rental.flight_no]);
+    }
+    
+    serviceTableBody.push(
+      ['Pick-up Time', rental.pickup_time || 'N/A'],
+      ['Pick-up Place', rental.pickup_place || 'N/A'],
+      ['No. of Persons', rental.no_of_persons?.toString() || 'N/A'],
+      ['Destination (Drop-off Place)', rental.destination_place || 'N/A'],
+      ['Destination Address', rental.destination_address || 'N/A'],
+      ['Preferred Contact', socialAppLabels[rental.social_app || ''] || rental.social_app || 'N/A']
+    );
   } else {
     // Generic service description
     serviceTableBody = [
@@ -214,7 +268,7 @@ export function generatePaidInvoicePDF(data: PaidInvoiceData): Buffer {
       0: { cellWidth: 40 },
       1: { cellWidth: 140 },
     },
-    styles: { font: 'Helvetica', fontSize: 9, cellPadding: 4 },
+    styles: { font: 'helvetica', fontSize: 9, cellPadding: 4 },
     alternateRowStyles: { fillColor: colors.bgLight },
     margin: { left: 15, right: 15 },
   });
@@ -249,7 +303,7 @@ export function generatePaidInvoicePDF(data: PaidInvoiceData): Buffer {
       0: { cellWidth: 140 },
       1: { cellWidth: 40, halign: 'right', fontStyle: 'bold' },
     },
-    styles: { font: 'Helvetica', fontSize: 10, cellPadding: 4 },
+    styles: { font: 'helvetica', fontSize: 10, cellPadding: 4 },
     margin: { left: 15, right: 15 },
     showHead: false,
   });
@@ -257,12 +311,12 @@ export function generatePaidInvoicePDF(data: PaidInvoiceData): Buffer {
   // ── Remarks (if any) ───────────────────────────────────
   const amountFinalY = (doc as any).lastAutoTable?.finalY + 10 || finalY + 40;
   if (data.remarks) {
-    doc.setFont('Helvetica', 'bold');
+    doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
     doc.setTextColor(...colors.primary);
     doc.text('Remarks:', 15, amountFinalY);
 
-    doc.setFont('Helvetica', 'normal');
+    doc.setFont('helvetica', 'normal');
     doc.setTextColor(...colors.textDark);
     doc.text(data.remarks, 15, amountFinalY + 6);
   }
@@ -274,13 +328,13 @@ export function generatePaidInvoicePDF(data: PaidInvoiceData): Buffer {
   doc.setLineWidth(0.3);
   doc.line(15, pageH - 35, 195, pageH - 35);
 
-  doc.setFont('Helvetica', 'normal');
+  doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
   doc.setTextColor(...colors.textDark);
   doc.text(`Payment Method: ${data.payment_method}`, 15, pageH - 28);
   doc.text(`Issued By: ${data.issued_by}`, 15, pageH - 22);
 
-  doc.setFont('Helvetica', 'italic');
+  doc.setFont('helvetica', 'italic');
   doc.setFontSize(8);
   doc.setTextColor(...colors.textLight);
   doc.text(
@@ -288,7 +342,7 @@ export function generatePaidInvoicePDF(data: PaidInvoiceData): Buffer {
     105, pageH - 15, { align: 'center' }
   );
 
-  doc.setFont('Helvetica', 'normal');
+  doc.setFont('helvetica', 'normal');
   doc.setFontSize(7);
   doc.setTextColor(...colors.textLight);
   doc.text(

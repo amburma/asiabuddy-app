@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import FloatingChatButtonLoader from '../../components/shared/FloatingChatButtonLoader'
+import FloatingContactButtonLoader from '../../components/shared/FloatingContactButtonLoader'
 import { normalizeLocale } from '../../lib/i18n'
 
 export const dynamic = 'force-dynamic'
@@ -80,7 +81,10 @@ export default async function CountryLayout({
     <div className="min-h-screen" data-country={country}>
       {children}
       {country === 'thailand' && (
-        <FloatingChatButtonLoader language={language} />
+        <>
+          <FloatingChatButtonLoader language={language} />
+          <FloatingContactButtonLoader language={language} />
+        </>
       )}
     </div>
   )

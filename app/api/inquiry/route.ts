@@ -76,6 +76,7 @@ export async function POST(req: NextRequest) {
     chatSummary?: string;
     language?: string;
     salesperson_id?: string;
+    country?: string;
     // New format from HumanOperatorChat
     chatHistory?: { role: string; content: string }[];
     contactDetails?: {
@@ -194,6 +195,9 @@ export async function POST(req: NextRequest) {
   if (!name || !phone) {
     return NextResponse.json({ error: 'Missing required fields (name and phone)' }, { status: 422, headers: corsHeaders });
   }
+  if (!body.country || !['thailand', 'vietnam'].includes(body.country)) {
+    return NextResponse.json({ error: 'Missing or invalid country field' }, { status: 422, headers: corsHeaders });
+  }
 
   // ── 2. Save booking to Supabase ─────────────────────────────────────────────
   // Determine tour_type from services (use first service as primary)
@@ -215,6 +219,7 @@ export async function POST(req: NextRequest) {
     qa,
     chatSummary,
     language: language || 'en',
+    country: body.country,
   };
   console.log('[INQUIRY] bookingDetails.language:', language || 'en');
 
@@ -332,6 +337,7 @@ export async function POST(req: NextRequest) {
   const message =
     `🔔 *New Web Inquiry — AsiaBuddy*\n` +
     `━━━━━━━━━━━━━━━━━━\n\n` +
+    `🌍 *Country:* ${body.country}\n` +
     `👤 *Name:* ${name}\n` +
     `📞 *Phone:* ${phone}\n` +
     `📧 *Email:* ${email || '—'}\n` +

@@ -16,6 +16,7 @@
     "webhook-info": "tsx src/scripts/setWebhook.ts info"
   },
   "dependencies": {
+    "@fontsource/noto-sans-myanmar": "^5.3.0",
     "@google/genai": "^2.7.0",
     "@google/generative-ai": "^0.24.1",
     "@radix-ui/react-dialog": "^1.1.15",

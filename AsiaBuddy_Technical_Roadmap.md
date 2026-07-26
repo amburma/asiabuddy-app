@@ -3,24 +3,61 @@
 
 ---
 
-## ✅ Session 39 — 25 July 2026 (Operator Paid-Invoice System)
+## ✅ Session 39 — 25 July 2026 (Operator Paid-Invoice & Invoice Tracking System)
 
-### ✅ Completed — Operator Paid-Invoice Feature (PART 8-10)
-- **Page created:** `app/admin/paid-invoice/page.tsx` — auth-protected admin page mirroring `app/admin/page.tsx` login pattern
-- **API route:** `app/api/operator/paid-invoice/route.ts` — server-side auth verification added; `issued_by` tracked from real authenticated session, not client-submitted value
-- **Supporting modules added:**
-  - `lib/email/sendPaidInvoiceEmail.ts` — Gmail SMTP email delivery to customer + admin, handles missing customer email with warning
-  - `lib/invoice/generateInvoiceNo.ts` — Race-safe invoice number generation via Supabase RPC `next_invoice_no()` (format: AB-INV-0001)
-  - `lib/pdf/generatePaidInvoicePDF.ts` — Branded PDF generation with jsPDF, conditional service details (flight/hotel/generic), amount breakdown, watermark
-  - `lib/sheets/appendPaidInvoiceRow.ts` — Google Sheets integration via service account auth, appends invoice row to tracking sheet
-  - `lib/storage/uploadInvoicePDF.ts` — Supabase Storage upload to 'paid-invoices' bucket, returns public URL
+### ✅ Completed — PART 8: Paid-Invoice Submission Page
+- **Page created:** `app/admin/paid-invoice/page.tsx` — auth-protected using the same session-check pattern as `app/admin/page.tsx`
+- **Import path fix:** Corrected relative path depth bug — had to use 3 levels (`../../../`) from `app/admin/paid-invoice/` to root `lib/` instead of 2 levels due to the additional subfolder
+- **Form fields:**
+  - Service type: locked enum (tour, flight, hotel, airport_transfer, tickets_activities, car_rental)
+  - Currency dropdown: USD, THB, SGD, JPY, EUR, MMK (MMK added post-launch)
+  - Conditional detail sections per service type (flight/hotel/other with passenger/guest arrays)
 - **Fixes applied:**
-  - Corrected import path depth bug (3 levels from `app/admin/paid-invoice/` to root `lib/`)
-  - Service Fee field made optional and fixed broken number input
-  - Added MMK to currency list
-- **Dedup mitigation:** Submit button disabled during submission (client-side); noted as best-effort, not a database-level unique constraint
-- **Status:** Build passing, manually tested end-to-end (invoice generation + customer email confirmed working)
-- **Known follow-up item:** Database-level unique constraint for dedup not yet implemented (flagged as acceptable risk for now)
+  - Service Fee field was incorrectly required — made optional
+  - Fixed broken number input (value/onChange bug) that prevented typing numbers
+- **Dedup mitigation:** Submit button disabled during submission as best-effort protection (not database-level unique constraint — flagged as acceptable risk for now)
+
+### ✅ Completed — Server-Side Auth & issued_by Tracking
+- **API route:** `app/api/operator/paid-invoice/route.ts` — added server-side session verification (not just client-side check)
+- **issued_by field:** Captures the real authenticated operator's email server-side, ignoring any client-submitted value to prevent spoofing
+- **Tracking:** issued_by stored on each invoice record and included in generated PDF/customer email
+
+### ✅ Completed — PART 9-10: Invoices List / Admin Dashboard
+- **Page created:** `app/admin/invoices/page.tsx` — same auth protection pattern
+- **Table columns:** invoice_no, issued_by, customer_name, customer_email, service_type, currency + total_amount, service_fee, status (issued/failed badge), invoice_date, PDF link (if pdf_url present)
+- **Sync status indicators:** Visual badges for sheet_status and email_status (success/failed/pending/skipped) — failed syncs visible at a glance
+- **Filters:**
+  - Date range picker (filters on invoice_date)
+  - Dynamic issued_by dropdown (populated from distinct values in data, not hardcoded)
+- **Pagination:** 100 records default with "Load More" button
+- **TypeScript fix:** Resolved build error on `Array.from(new Set(...))` type inference (unknown[] vs string[]) by adding explicit `Set<string>` typing
+
+### ✅ Completed — Database: paid_invoices Table
+- **Discovery:** Table existed in production with no migration file (created directly via Supabase dashboard — schema drift risk, same pattern as transfer_links table)
+- **Retroactive migration:** Created `supabase/migrations/20260725_create_paid_invoices_table.sql` documenting full existing schema with CHECK constraints and indexes — NOT run against live database, documentation-only
+- **Schema documented:** id, invoice_no, invoice_date, country, customer_name, customer_contact, customer_email, service_type, currency, base_price, service_fee, vat_amount, total_amount, payment_method, issued_by, remarks, details, status, sheet_status, email_status, pdf_url, created_at
+- **RLS policy:** Currently set to "allow all" (`USING (true) WITH CHECK (true)`) — **PENDING SECURITY FIX:** Should be restricted to authenticated-only given table holds customer PII (names, emails, phone numbers) and operator emails
+
+### ✅ Completed — Supporting Modules
+- **lib/email/sendPaidInvoiceEmail.ts** — Gmail SMTP email delivery to customer + admin, handles missing customer email with warning prefix
+- **lib/invoice/generateInvoiceNo.ts** — Race-safe invoice number generation via Supabase RPC `next_invoice_no()` (format: AB-INV-0001)
+- **lib/pdf/generatePaidInvoicePDF.ts** — Branded PDF generation with jsPDF, conditional service details (flight/hotel/generic), amount breakdown, watermark
+- **lib/sheets/appendPaidInvoiceRow.ts** — Google Sheets integration via service account auth, appends invoice row to tracking sheet
+- **lib/storage/uploadInvoicePDF.ts** — Supabase Storage upload to 'paid-invoices' bucket, returns public URL
+
+### ✅ Completed — Affiliate Tracking Verification
+- **Agoda CID:** Confirmed CID 1968300 (asiabuddy.app, Active status in Agoda partner dashboard) as the correct tracking parameter for all AsiaBuddy Agoda links
+- **Requirement:** Must be present as `cid=1968300` in any shared Agoda link for commission attribution (e.g., social media promotions)
+
+### ✅ Status
+- **Build:** Passing (npm run build, no errors)
+- **Testing:** Manually tested end-to-end — invoice generation, customer email delivery confirmed working
+- **Git:** Pending commit and push
+
+### 📋 Known Follow-Ups (Not Yet Done)
+- Database-level unique constraint for dedup protection (currently only client-side disable-on-click)
+- RLS policy: Change from "allow all" to authenticated-only for paid_invoices table (contains PII)
+- Commit and push to git
 
 ---
 

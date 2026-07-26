@@ -862,7 +862,40 @@ const ENGLISH_UI = {
         "answer": "For popular experiences and small-group tours, booking 1-2 weeks ahead is recommended, especially during peak season (November-February). This ensures availability and often includes better pricing. Last-minute bookings may have limited options."
       }
     }
-  }
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Send us your inquiry and we'll get back to you shortly",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "country": "Service Country (the country where you'd like service)",
+    "countryThailand": "Thailand",
+    "countryVietnam": "Vietnam (Coming Soon)",
+    "serviceType": "Service Type",
+    "serviceTour": "🗺️ Tour Package",
+    "serviceFlight": "✈️ Flight Ticket",
+    "serviceHotel": "🏨 Hotel Booking",
+    "serviceCar": "🚗 Car Rental",
+    "serviceTaxi": "🚕 Taxi/Transfer",
+    "serviceTickets": "🎟️ Attraction Tickets",
+    "message": "Your Message",
+    "messagePlaceholder": "Tell us about your travel plans or questions...",
+    "socialApp": "Preferred Social App (Optional)",
+    "socialWhatsApp": "WhatsApp",
+    "socialLINE": "LINE",
+    "socialViber": "Viber",
+    "socialTelegram": "Telegram",
+    "submit": "Send Inquiry",
+    "submitting": "Sending...",
+    "success": "Thank you! Your inquiry has been sent successfully. We'll get back to you soon.",
+    "error": "Something went wrong. Please try again or contact us directly.",
+    "vietnamNotAvailable": "Vietnam services are coming soon. Please select Thailand for immediate assistance.",
+    "required": "Required",
+    "phoneHint": "Include country code (e.g., +66 for Thailand, +95 for Myanmar)"
+  },
+  "floatingTooltip": "📩 Send us a quick inquiry",
+  "floatingBadge": "Quick Inquiry"
 };
 
 export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
@@ -1719,7 +1752,40 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "สำหรับประสบการณ์ยอดนิยมและทัวร์กลุ่มเล็ก แนะนำให้จองล่วงหน้า 1-2 สัปดาห์ โดยเฉพาะในฤดูกาลหนาแน่น (พฤศจิกายน-กุมภาพันธ์) นี่รับประกันความพร้อมและมักรวมราคาที่ดีกว่า การจองในนาทีสุดท้ายอาจมีตัวเลือกจำกัด"
       }
     }
-  }
+  },
+  "contact": {
+    "title": "ติดต่อเรา",
+    "subtitle": "ส่งคำถามมาหาเราแล้วเราจะติดต่อกลับโดยเร็ว",
+    "name": "ชื่อเต็ม",
+    "email": "อีเมล",
+    "phone": "เบอร์โทรศัพท์",
+    "country": "ประเทศที่ต้องการบริการ (ประเทศที่คุณต้องการรับบริการ)",
+    "countryThailand": "ไทย",
+    "countryVietnam": "เวียดนาม (เร็วๆ นี้)",
+    "serviceType": "ประเภทบริการ",
+    "serviceTour": "🗺️ แพ็กเกจทัวร์",
+    "serviceFlight": "✈️ ตั๋วเครื่องบิน",
+    "serviceHotel": "🏨 การจองโรงแรม",
+    "serviceCar": "🚗 การเช่ารถ",
+    "serviceTaxi": "🚕 แท็กซี่/รถส่ง",
+    "serviceTickets": "🎟️ ตั๋วเข้าชมสถานที่",
+    "message": "ข้อความของคุณ",
+    "messagePlaceholder": "บอกเราเกี่ยวกับแผนการเดินทางหรือคำถามของคุณ...",
+    "socialApp": "แอปโซเชียลที่ต้องการ (ไม่บังคับ)",
+    "socialWhatsApp": "WhatsApp",
+    "socialLINE": "LINE",
+    "socialViber": "Viber",
+    "socialTelegram": "Telegram",
+    "submit": "ส่งคำถาม",
+    "submitting": "กำลังส่ง...",
+    "success": "ขอบคุณ! คำถามของคุณถูกส่งเรียบร้อยแล้ว เราจะติดต่อกลับโดยเร็ว",
+    "error": "เกิดข้อผิดพลาด โปรดลองอีกครั้งหรือติดต่อเราโดยตรง",
+    "vietnamNotAvailable": "บริการเวียดนามจะเริ่มให้บริการเร็วๆ นี้ โปรดเลือกไทยสำหรับการช่วยเหลือทันที",
+    "required": "จำเป็น",
+    "phoneHint": "ระบุรหัสประเทศ (เช่น +66 สำหรับไทย, +95 สำหรับพม่า)"
+  },
+  "floatingTooltip": "📩 ส่งคำถามด่วน",
+  "floatingBadge": "ส่งคำถามด่วน"
 },
   MM: {
   "brand": { "name": "ThaiGuide", "subtitle": "AsiaBuddy ဝန်ဆောင်မှုများ" },
@@ -2567,7 +2633,40 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "လူကြိုက်များသော အတွေ့အကြုံများနှင့် အုပ်စုသေး ခရီးစဉ်များအတွက် အထူးသဖြင့် လူဦးရေများသော ရာသီ (နိုဝင်ဘာ-ဖေဖော်ဝါရီ) တွင် ၁-၂ ပတ် ကြိုတင် ဘွတ်ကင်လုပ်ရန် အကြံပြုသည်။ ဤသည်သည် ရရန်နိုင်ခြင်းကို အာမခံပြီး မကြာခဏ ပိုကောင်းသော စျေးနှုန်းများကို ပါဝင်သည်။ နောက်ဆုံး မိနစ်ဘွတ်ကင်လုပ်ခြင်းသည် ရွေးချယ်စရာ ကန့်သတ်ချက်ရှိနိုင်သည်။"
       }
     }
-  }
+  },
+  "contact": {
+    "title": "ကျွန်ုပ်တို့ကို ဆက်သွယ်ပါ",
+    "subtitle": "သင့်မေးမြန်းချက်ကို ပေးပို့ပါ၊ ကျွန်ုပ်တို့သည် မကြာမီ ပြန်လည် ဆက်သွယ်ပေးပါမည်",
+    "name": "အမည်အပြည့်",
+    "email": "အီးမေးလ် လိပ်စာ",
+    "phone": "ဖုန်းနံပါတ်",
+    "country": "ဝန်ဆောင်မှု နိုင်ငံ (ဝန်ဆောင်မှုယူလိုသော နိုင်ငံ)",
+    "countryThailand": "ထိုင်း",
+    "countryVietnam": "ဗီယက်နမ် (မကြာမီ လာမည်)",
+    "serviceType": "ဝန်ဆောင်မှု အမျိုးအစား",
+    "serviceTour": "🗺️ ခရီးစဉ် ပက်ကေ့ချ်",
+    "serviceFlight": "✈️ လေယာဉ် လက်မှတ်",
+    "serviceHotel": "🏨 ဟိုတယ် ဘွတ်ကင်",
+    "serviceCar": "🚗 ကား အငှား",
+    "serviceTaxi": "🚕 တက္ကစီ/လွှဲပြောင်း",
+    "serviceTickets": "🎟️ ဆွဲဆောင်ရာ လက်မှတ်များ",
+    "message": "သင့်မက်ဆေ့ချ်",
+    "messagePlaceholder": "သင့်ခရီးစဉ် စီစဉ်မှုများ သို့မဟုတ် မေးမြန်းချက်များအကြောင်း ပြောပါ...",
+    "socialApp": "နှစ်သက်သော ဆိုရှယ်မီဒီယာ (ရွေးချယ်စရာ)",
+    "socialWhatsApp": "WhatsApp",
+    "socialLINE": "LINE",
+    "socialViber": "Viber",
+    "socialTelegram": "Telegram",
+    "submit": "မေးမြန်းချက် ပေးပို့ပါ",
+    "submitting": "ပေးပို့နေသည်...",
+    "success": "ကျေးဇူးတင်ပါသည်! သင့်မေးမြန်းချက်ကို အောင်မြင်စွာ ပေးပို့ပြီးပါပြီ။ ကျွန်ုပ်တို့သည် မကြာမီ ပြန်လည် ဆက်သွယ်ပေးပါမည်။",
+    "error": "တစ်စုံတစ်ခု မှားယွင်းသွားပါသည်။ ကျေးဇူးပြု၍ ထပ်မံ ကြိုးစားပါ သို့မဟုတ် တိုက်ရိုက် ဆက်သွယ်ပါ။",
+    "vietnamNotAvailable": "ဗီယက်နမ် ဝန်ဆောင်မှုများသည် မကြာမီ လာမည်။ ချက်ချင်း အကူအညီရရန် ထိုင်းကို ရွေးချယ်ပါ။",
+    "required": "လိုအပ်သည်",
+    "phoneHint": "နိုင်ငံကုဒ် ထည့်ပါ (ဥပမာ - ထိုင်းအတွက် +66၊ မြန်မာအတွက် +95)"
+  },
+  "floatingTooltip": "📩 မေးမြန်းချက် ပေးပို့ပါ",
+  "floatingBadge": "မေးမြန်းချက် ပေးပို့ပါ"
 },
   ES: {
   "brand": { "name": "ThaiGuide", "subtitle": "Servicios AsiaBuddy" },
@@ -3415,7 +3514,40 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "Para experiencias populares y tours de grupos pequeños, se recomienda reservar 1-2 semanas antes, especialmente durante temporada alta (noviembre-febrero). Esto garantiza disponibilidad y a menudo incluye mejores precios. Las reservas de última hora pueden tener opciones limitadas."
       }
     }
-  }
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "subtitle": "Envíanos tu consulta y te responderemos pronto",
+    "name": "Nombre Completo",
+    "email": "Correo Electrónico",
+    "phone": "Número de Teléfono",
+    "country": "País de Servicio (el país donde deseas servicio)",
+    "countryThailand": "Tailandia",
+    "countryVietnam": "Vietnam (Próximamente)",
+    "serviceType": "Tipo de Servicio",
+    "serviceTour": "🗺️ Paquete Turístico",
+    "serviceFlight": "✈️ Boleto de Vuelo",
+    "serviceHotel": "🏨 Reserva de Hotel",
+    "serviceCar": "🚗 Alquiler de Auto",
+    "serviceTaxi": "🚕 Taxi/Transfer",
+    "serviceTickets": "🎟️ Boletos de Atracciones",
+    "message": "Tu Mensaje",
+    "messagePlaceholder": "Cuéntanos sobre tus planes de viaje o preguntas...",
+    "socialApp": "App Social Preferida (Opcional)",
+    "socialWhatsApp": "WhatsApp",
+    "socialLINE": "LINE",
+    "socialViber": "Viber",
+    "socialTelegram": "Telegram",
+    "submit": "Enviar Consulta",
+    "submitting": "Enviando...",
+    "success": "¡Gracias! Tu consulta ha sido enviada exitosamente. Te responderemos pronto.",
+    "error": "Algo salió mal. Por favor intenta de nuevo o contáctanos directamente.",
+    "vietnamNotAvailable": "Los servicios de Vietnam estarán disponibles pronto. Por favor selecciona Tailandia para asistencia inmediata.",
+    "required": "Requerido",
+    "phoneHint": "Incluya el código de país (ej. +66 para Tailandia, +95 para Myanmar)"
+  },
+  "floatingTooltip": "📩 Envíanos una consulta rápida",
+  "floatingBadge": "Consulta Rápida"
 },
   FR: {
   "brand": { "name": "ThaiGuide", "subtitle": "Services AsiaBuddy" },
@@ -4263,7 +4395,40 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "Pour les expériences populaires et les circuits en petits groupes, il est recommandé de réserver 1-2 semaines à l'avance, surtout en haute saison (novembre-février). Cela garantit la disponibilité et inclut souvent de meilleurs prix. Les réservations de dernière minute peuvent avoir des options limitées."
       }
     }
-  }
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "subtitle": "Envoyez-nous votre demande et nous vous répondrons bientôt",
+    "name": "Nom Complet",
+    "email": "Adresse Email",
+    "phone": "Numéro de Téléphone",
+    "country": "Pays de Service (le pays où vous souhaitez un service)",
+    "countryThailand": "Thaïlande",
+    "countryVietnam": "Vietnam (Bientôt Disponible)",
+    "serviceType": "Type de Service",
+    "serviceTour": "🗺️ Package Touristique",
+    "serviceFlight": "✈️ Billet d'Avion",
+    "serviceHotel": "🏨 Réservation d'Hôtel",
+    "serviceCar": "🚗 Location de Voiture",
+    "serviceTaxi": "🚕 Taxi/Transfert",
+    "serviceTickets": "🎟️ Billets d'Attractions",
+    "message": "Votre Message",
+    "messagePlaceholder": "Parlez-nous de vos plans de voyage ou questions...",
+    "socialApp": "App Sociale Préférée (Optionnel)",
+    "socialWhatsApp": "WhatsApp",
+    "socialLINE": "LINE",
+    "socialViber": "Viber",
+    "socialTelegram": "Telegram",
+    "submit": "Envoyer la Demande",
+    "submitting": "Envoi en cours...",
+    "success": "Merci! Votre demande a été envoyée avec succès. Nous vous répondrons bientôt.",
+    "error": "Une erreur s'est produite. Veuillez réessayer ou nous contacter directement.",
+    "vietnamNotAvailable": "Les services Vietnam seront bientôt disponibles. Veuillez sélectionner la Thaïlande pour une assistance immédiate.",
+    "required": "Obligatoire",
+    "phoneHint": "Incluez le code pays (ex. +66 pour la Thaïlande, +95 pour le Myanmar)"
+  },
+  "floatingTooltip": "📩 Envoyez-nous une demande rapide",
+  "floatingBadge": "Demande Rapide"
 },
   DE: {
   "brand": { "name": "ThaiGuide", "subtitle": "AsiaBuddy Services" },
@@ -5111,6 +5276,39 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
         "answer": "Für beliebte Erlebnisse und Kleingruppen-Touren wird empfohlen, 1-2 Wochen im Voraus zu buchen, besonders in der Hauptsaison (November-Februar). Dies garantiert Verfügbarkeit und beinhaltet oft bessere Preise. Last-Minute-Buchungen können begrenzte Optionen haben."
       }
     }
-  }
+  },
+  "contact": {
+    "title": "Kontaktieren Sie Uns",
+    "subtitle": "Senden Sie uns Ihre Anfrage und wir werden Ihnen bald antworten",
+    "name": "Vollständiger Name",
+    "email": "E-Mail-Adresse",
+    "phone": "Telefonnummer",
+    "country": "Service-Land (das Land, in dem Sie Service benötigen)",
+    "countryThailand": "Thailand",
+    "countryVietnam": "Vietnam (Bald Verfügbar)",
+    "serviceType": "Service-Typ",
+    "serviceTour": "🗺️ Reiserundepaket",
+    "serviceFlight": "✈️ Flugticket",
+    "serviceHotel": "🏨 Hotelbuchung",
+    "serviceCar": "🚗 Autovermietung",
+    "serviceTaxi": "🚕 Taxi/Transfer",
+    "serviceTickets": "🎟️ Attraktionstickets",
+    "message": "Ihre Nachricht",
+    "messagePlaceholder": "Erzählen Sie uns von Ihren Reiseplänen oder Fragen...",
+    "socialApp": "Bevorzugte Social-App (Optional)",
+    "socialWhatsApp": "WhatsApp",
+    "socialLINE": "LINE",
+    "socialViber": "Viber",
+    "socialTelegram": "Telegram",
+    "submit": "Anfrage Senden",
+    "submitting": "Wird gesendet...",
+    "success": "Danke! Ihre Anfrage wurde erfolgreich gesendet. Wir werden Ihnen bald antworten.",
+    "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder kontaktieren Sie uns direkt.",
+    "vietnamNotAvailable": "Vietnam-Services werden bald verfügbar sein. Bitte wählen Sie Thailand für sofortige Hilfe.",
+    "required": "Erforderlich",
+    "phoneHint": "Landescode angeben (z.B. +66 für Thailand, +95 für Myanmar)"
+  },
+  "floatingTooltip": "📩 Senden Sie uns eine schnelle Anfrage",
+  "floatingBadge": "Schnelle Anfrage"
 },
 };
