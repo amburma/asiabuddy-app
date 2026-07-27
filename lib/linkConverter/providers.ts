@@ -48,12 +48,8 @@ export const AFFILIATE_PROVIDERS: AffiliateProvider[] = [
     name: 'GetYourGuide',
     category: 'activities',
     domainPattern: /getyourguide\.com/i,
-    mode: 'manual',
-    portalUrl: 'https://partner.getyourguide.com/',
-    instructions: {
-      en: 'GetYourGuide requires generating links through their partner portal. Click below to open the portal, find your activity, and use their Link Builder tool.',
-      mm: 'GetYourGuide သည် သူတို့၏ partner portal မှတစ်ဆင့် link များ ဖန်တီးရန် လိုအပ်ပါသည်။ အောက်တွင် နှိပ်ပြီး portal ကို ဖွင့်ပါ၊ သင့်လုပ်ငန်းစဉ်ကို ရှာဖွေပါ၊ နောက်တွင် သူတို့၏ Link Builder ကိရိယာကို အသုံးပြုပါ။',
-    },
+    mode: 'auto',
+    convert: (url: string) => appendQueryParam(url, 'partner_id=CSMXKHM&utm_medium=online_publisher'),
   },
 
   // === TRANSFERS ===
