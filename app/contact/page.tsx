@@ -40,6 +40,13 @@ const WhatsAppIcon = () => (
   </svg>
 );
 
+const LineIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+    <path d="M8 12h8"></path>
+  </svg>
+);
+
 const SERVICE_VALUES = ['tour', 'flight', 'hotel', 'car', 'taxi', 'tickets'] as const;
 const SOCIAL_VALUES = ['whatsapp', 'line', 'viber', 'telegram'] as const;
 const COUNTRY_VALUES = ['thailand', 'vietnam'] as const;
@@ -252,18 +259,38 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Thailand Card - Empty State */}
+            {/* Thailand Card */}
             <div className="bg-[#0D0D0D] border border-[#C9A84C]/30 rounded-2xl p-6">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl">🇹🇭</span>
                 <h3 className="text-lg font-serif font-bold text-[#F5F0E8]">Thailand</h3>
               </div>
-              <div className="flex items-center justify-center py-8">
-                <p className="text-[#F5F0E8]/60 text-sm text-center">
-                  Contact details coming soon
-                </p>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Agent Name</p>
+                  <p className="text-[#F5F0E8] font-medium text-sm">Ma Ma Khin Khin</p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Address</p>
+                  <p className="text-[#F5F0E8]/80 text-sm">Thailand</p>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Mobile</p>
+                  <a href="tel:+66651139934" className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm hover:text-[#C9A84C] transition-colors">
+                    <PhoneIcon />
+                    <span>+66651139934</span>
+                  </a>
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <a href="viber://chat?number=+66651139934" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Viber">
+                    <ViberIcon />
+                  </a>
+                  <div className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm" title="LINE">
+                    <LineIcon />
+                    <span>0651139934 (Ma Ma Khin Khin)</span>
+                  </div>
+                </div>
               </div>
-              {/* TODO: Insert Thailand agent data here when available */}
             </div>
 
             {/* Germany Card */}
@@ -275,7 +302,7 @@ export default function ContactPage() {
               <div className="space-y-3">
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Agent Name</p>
-                  <p className="text-[#F5F0E8] font-medium text-sm">Aung Myin (Viktor)</p>
+                  <p className="text-[#F5F0E8] font-medium text-sm">Ko Viktor</p>
                 </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Address</p>
