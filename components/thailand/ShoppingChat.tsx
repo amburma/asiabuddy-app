@@ -217,6 +217,7 @@ RESPONSE RULES — MANDATORY:
           <HumanOperatorChat
             language={language}
             onClose={() => setShowHumanChat(false)}
+            country="thailand"
           />
         )}
       </AnimatePresence>

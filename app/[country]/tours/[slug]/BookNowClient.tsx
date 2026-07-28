@@ -63,6 +63,7 @@ export default function BookNowClient({
           onClose={() => setIsChatOpen(false)}
           language={userLanguage}
           salesperson_id={salesperson_id}
+          country={country}
         />
       </div>
     </div>

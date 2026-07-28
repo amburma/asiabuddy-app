@@ -257,6 +257,7 @@ If the customer's stated budget is below the real price, acknowledge the gap hon
           onClose={() => setShowHumanChat(false)}
           contextSummary={contextSummary}
           isCarRentalFlow={true}
+          country="thailand"
         />
       </div>
     </div>

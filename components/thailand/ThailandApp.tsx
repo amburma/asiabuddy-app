@@ -594,6 +594,7 @@ useEffect(() => {
           <HumanOperatorChat
             language={language}
             onClose={() => setShowHumanOperatorChat(false)}
+            country="thailand"
           />
         )}
       </AnimatePresence>

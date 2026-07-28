@@ -203,6 +203,7 @@ export default function BookingChat({ language }: Props) {
           <HumanOperatorChat
             language={language}
             onClose={() => setShowHumanChat(false)}
+            country="thailand"
           />
         )}
       </AnimatePresence>

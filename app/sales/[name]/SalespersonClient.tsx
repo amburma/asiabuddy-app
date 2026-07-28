@@ -39,7 +39,7 @@ export default function SalespersonClient({ id, display_name, avatar_url }: Prop
 
       {/* HumanOperatorChat Modal */}
       {showChat && (
-        <HumanOperatorChat salesperson_id={id} language="EN" onClose={() => setShowChat(false)} />
+        <HumanOperatorChat salesperson_id={id} language="EN" country="thailand" onClose={() => setShowChat(false)} />
       )}
     </>
   );

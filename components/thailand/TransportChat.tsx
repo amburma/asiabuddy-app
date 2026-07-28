@@ -215,6 +215,7 @@ RESPONSE RULES (MANDATORY):
           language={language}
           onClose={() => setShowHumanChat(false)}
           contextSummary={contextSummary}
+          country="thailand"
         />
       </div>
     </div>

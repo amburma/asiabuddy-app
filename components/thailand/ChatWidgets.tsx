@@ -236,6 +236,7 @@ export default function ChatWidgets() {
           <HumanOperatorChat
             language={language}
             onClose={() => setShowHumanOperatorChat(false)}
+            country="thailand"
           />
         )}
       </AnimatePresence>
