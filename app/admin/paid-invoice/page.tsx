@@ -34,6 +34,11 @@ export default function PaidInvoicePage() {
   const [loginPassword, setLoginPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetMessage, setResetMessage] = useState('');
+  const [resetError, setResetError] = useState('');
 
   // Form state
   const [submitting, setSubmitting] = useState(false);
@@ -127,6 +132,34 @@ export default function PaidInvoicePage() {
     await supabase.auth.signOut();
     setUser(null);
     setIsLoggedIn(false);
+  };
+
+  const handleResetPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetLoading(true);
+    setResetError('');
+    setResetMessage('');
+
+    try {
+      // Get the current origin for redirect
+      const origin = typeof window !== 'undefined' ? window.location.origin : '';
+      
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${origin}/admin/reset-password`,
+      });
+
+      if (error) {
+        setResetError('An error occurred. Please try again.');
+      } else {
+        // Always show success message regardless of whether email exists
+        setResetMessage('If an account exists with this email, a reset link has been sent.');
+        setResetEmail('');
+      }
+    } catch (err: any) {
+      setResetError('An error occurred. Please try again.');
+    } finally {
+      setResetLoading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -279,44 +312,107 @@ export default function PaidInvoicePage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">AsiaBuddy Admin</h1>
-          <p className="text-sm text-gray-500 mb-6">Sign in to access paid invoice creation</p>
+          {!showForgotPassword ? (
+            <>
+              <h1 className="text-2xl font-bold text-gray-800 mb-2">AsiaBuddy Admin</h1>
+              <p className="text-sm text-gray-500 mb-6">Sign in to access paid invoice creation</p>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <Field label="Email">
-              <input
-                type="email"
-                value={loginEmail}
-                onChange={e => setLoginEmail(e.target.value)}
-                placeholder="admin@example.com"
-                className={inputCls}
-                required
-              />
-            </Field>
+              <form onSubmit={handleLogin} className="space-y-4">
+                <Field label="Email">
+                  <input
+                    type="email"
+                    value={loginEmail}
+                    onChange={e => setLoginEmail(e.target.value)}
+                    placeholder="admin@example.com"
+                    className={inputCls}
+                    required
+                  />
+                </Field>
 
-            <Field label="Password">
-              <input
-                type="password"
-                value={loginPassword}
-                onChange={e => setLoginPassword(e.target.value)}
-                placeholder="••••••••"
-                className={inputCls}
-                required
-              />
-            </Field>
+                <Field label="Password">
+                  <input
+                    type="password"
+                    value={loginPassword}
+                    onChange={e => setLoginPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className={inputCls}
+                    required
+                  />
+                </Field>
 
-            {loginError && (
-              <p className="text-red-500 text-sm">{loginError}</p>
-            )}
+                {loginError && (
+                  <p className="text-red-500 text-sm">{loginError}</p>
+                )}
 
-            <button
-              type="submit"
-              disabled={loginLoading}
-              className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl text-sm disabled:opacity-50"
-            >
-              {loginLoading ? 'Signing in...' : 'Login'}
-            </button>
-          </form>
+                <button
+                  type="submit"
+                  disabled={loginLoading}
+                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl text-sm disabled:opacity-50"
+                >
+                  {loginLoading ? 'Signing in...' : 'Login'}
+                </button>
+              </form>
+
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(true)}
+                  className="text-sm text-emerald-600 hover:text-emerald-700 font-medium"
+                >
+                  Forgot Password?
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h1 className="text-2xl font-bold text-gray-800 mb-2">Reset Password</h1>
+              <p className="text-sm text-gray-500 mb-6">Enter your email to receive a reset link</p>
+
+              <form onSubmit={handleResetPassword} className="space-y-4">
+                <Field label="Email">
+                  <input
+                    type="email"
+                    value={resetEmail}
+                    onChange={e => setResetEmail(e.target.value)}
+                    placeholder="admin@example.com"
+                    className={inputCls}
+                    required
+                  />
+                </Field>
+
+                {resetError && (
+                  <p className="text-red-500 text-sm">{resetError}</p>
+                )}
+
+                {resetMessage && (
+                  <p className="text-emerald-600 text-sm">{resetMessage}</p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={resetLoading}
+                  className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 rounded-xl text-sm disabled:opacity-50"
+                >
+                  {resetLoading ? 'Sending...' : 'Send Reset Link'}
+                </button>
+              </form>
+
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowForgotPassword(false);
+                    setResetEmail('');
+                    setResetMessage('');
+                    setResetError('');
+                  }}
+                  className="text-sm text-gray-600 hover:text-gray-700 font-medium"
+                >
+                  ← Back to Login
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     );
