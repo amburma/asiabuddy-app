@@ -17,6 +17,7 @@ interface Props {
   salesperson_id?: string;
   contextSummary?: string;
   isCarRentalFlow?: boolean;
+  country?: string;
 }
 
 interface ContactDetails {
@@ -26,8 +27,11 @@ interface ContactDetails {
   socialHandles: string;
 }
 
-export default function HumanOperatorChat({ language, onClose, salesperson_id, contextSummary, isCarRentalFlow }: Props) {
+export default function HumanOperatorChat({ language, onClose, salesperson_id, contextSummary, isCarRentalFlow, country }: Props) {
   console.log('HumanOperatorChat received salesperson_id:', salesperson_id);
+  if (!country) {
+    console.error('[HumanOperatorChat] CRITICAL: country prop is missing. This will cause inquiry submission to fail.');
+  }
   const uiT = useMemo(() => UI_TRANSLATIONS[language] || UI_TRANSLATIONS.EN, [language]);
   const pathname = usePathname();
 
@@ -437,6 +441,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
         agreedToShare: true,
         source: 'HumanOperatorChat',
         language: language,
+        country: country,
         salesperson_id
       };
       console.log("[DEBUG] Sending inquiry request", payload);
