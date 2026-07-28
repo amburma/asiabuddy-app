@@ -60,6 +60,26 @@ const nextConfig = {
         has: [{ type: 'host', value: 'thailand.asiabuddy.app' }],
         destination: 'https://asiabuddy.app/thailand',
         permanent: true,
+      },
+      {
+        source: '/thailand/about',
+        destination: '/about',
+        permanent: true,
+      },
+      {
+        source: '/singapore/about',
+        destination: '/about',
+        permanent: true,
+      },
+      {
+        source: '/vietnam/about',
+        destination: '/about',
+        permanent: true,
+      },
+      {
+        source: '/japan/about',
+        destination: '/about',
+        permanent: true,
       }
     ]
   },

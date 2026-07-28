@@ -1,5 +1,113 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 25 July 2026 — Session 39
+> Last Updated: 27 July 2026 — Session 42
+
+---
+
+## 📋 Session 42 — 27 July 2026 (PLANNED — Payment Trust Page)
+
+### Problem Statement
+Customers who want to purchase services seen on the Facebook Page need to send payment via bank transfer, since no payment gateway exists yet. As a newly-established company, trust is a concern when asking customers to transfer money. Initial idea considered: a single public page under asiabuddy.app listing full bank account details for all countries/sales agents, styled elegantly for trust.
+
+### Decision: REJECTED — Public Static Bank Details Page
+Rejected due to four identified risks:
+1. Clone/Phishing risk — a public, indexable page with static account numbers can be screenshotted/cloned by scammers onto fake pages, and customers have no way to distinguish real vs fake.
+2. Reconciliation risk — a single shared static account number across all customers makes it impossible to match incoming transfers to specific orders without a reference number, creating payment disputes with no proof on either side.
+3. Sales agent privacy/doxxing risk — publishing individual agents' personal address/contact details publicly exposes staff to impersonation and safety risks.
+4. Elegant UI alone does not establish trust — scam pages can also be well-designed. Real trust requires verifiable, personalized, non-public payment information tied to a specific transaction.
+
+### Decision: APPROVED — Two-Part Alternative Architecture
+
+**Part A — Public Generic Trust Page** (e.g. /how-to-pay or /about/payment, public + SEO-indexable):
+- Company registration/business license display (if available)
+- Physical office address + Google Maps embed
+- Single official company contact channel (NOT individual agent personal numbers)
+- Payment method icons only (Bank Transfer / KBZPay / Wave / Card) — NO full account numbers displayed publicly
+- "How It Works" step process: Inquiry -> Invoice Generated -> Payment Detail Sent Privately -> Confirmation
+- Customer testimonials / Facebook reviews embed
+- Explicit security notice: "We will never ask you to pay to an account not listed on your official invoice"
+
+**Part B — Secure Per-Customer Payment Detail** (extends existing Paid Invoice System, PART 0-10, paid_invoices table):
+- New admin-only (not public) bank_accounts table, one row per country/currency, referenced via bank_account_id FK from paid_invoices
+- Invoice generation auto-selects correct bank account by country/currency at generation time
+- Full account details + unique invoice_no + exact amount delivered ONLY via the generated PDF invoice + Email/Telegram to that specific customer — never posted publicly
+- OPTIONAL future addition: an auth-light /verify/[invoiceNo] lookup page so a customer can confirm "this invoice/amount is genuine" without exposing all invoices publicly
+
+### Status
+📋 PLANNED — decision and architecture documented only. No implementation started. Next actionable steps (Part A page copy/design, Part B bank_accounts table schema + PART 0-10 integration) to be scoped in a future session. Marked here as a placeholder so this doesn't get lost — an unrelated urgent task is being prioritized first.
+
+### Dependency Note
+Part B depends on and extends the existing Paid Invoice System (paid_invoices table, PART 0-10 build plan, System 2 — see "Paid Invoice System - New Project Spec" section). Do NOT confuse with System 1 (pdfGenerator.ts/emailService.ts, invoices table). When this is picked up later, bank_account_id FK should be added to the paid_invoices schema alongside the existing "country" field addition already noted in that section.
+
+---
+
+## 📋 Session 41 — 27 July 2026 (PLANNED — Affiliate Link Converter Tool)
+
+### Scope
+An internal staff tool at app/convert/page.tsx that lets operators paste any raw brand URL (Agoda, Trip.com, Klook, GetYourGuide, Kiwitaxi) and auto-generate the correct affiliate-tracking version, grouped by category (Hotels / Activities & Tickets / Transfers), so staff can easily create correct affiliate links for social media posts without needing to manually navigate each affiliate dashboard.
+
+### Key Decisions Made
+- **Klook dual-account issue discovered:** direct Klook Affiliate Program (aid=126322, used in existing klook_links database) vs Travelpayouts network access to Klook (pid=746660, found via a Travelpayouts-generated link during testing). DECISION: aid=126322 will be the default/primary for consistency with existing data; pid=746660 available as an alternate toggle.
+- **Access control:** reuse existing Supabase Auth admin pattern (same as app/admin/page.tsx) — not a public-facing page.
+- **Architecture:** config-driven provider list (lib/linkConverter/providers.ts) with per-provider transform functions, designed to be extensible for future programs (e.g. Booking.com once its pending CJ Affiliate application is approved).
+- **Optional conversion history log table planned** (link_conversions) for audit trail — tracks which operator generated which link and when.
+- **Excluded from this tool:** Aviasales and Trip.com flight links, since these require structured origin/destination/date inputs rather than a simple "paste any URL" conversion (existing chat-based flight button features already handle this separately).
+
+### Status
+📋 PLANNED — investigation phase not yet started. Next session should begin with Phase 1 investigation (confirming GetYourGuide and Kiwitaxi exact affiliate URL formats from existing database entries) before any implementation.
+
+---
+
+## ✅ Session 40 — 26 July 2026 (Rental Invoice, Contact Form, Klook Chat Button, Critical Bug Fixes)
+
+### ✅ Completed — RENTAL INVOICE FEATURE (With-Driver Chauffeur Service)
+- Extended the existing operator paid-invoice system (app/admin/paid-invoice/page.tsx) with a new "car_rental" structured detail schema
+- New RentalDetails fields: country, city, booking_type (Airport Pick-up, Drop-off, Full Day Tour, Half Day Tour, Package Tour), flight_no (conditional — shown for all booking types except drop_off), pickup_time, pickup_place, no_of_persons, destination_place, destination_address, social_app
+- Stored in the existing "details" JSONB column as details.rental (no migration needed, follows the same pattern as details.flight/details.hotel)
+- Updated app/api/operator/paid-invoice/route.ts validation (zod schema) to validate the new rental fields
+- Updated lib/pdf/generatePaidInvoicePDF.ts and lib/email/sendPaidInvoiceEmail.ts (both HTML and plain-text bodies) to render rental details with human-readable label mapping for booking_type and social_app
+
+### ✅ Completed — MYANMAR (BURMESE) PDF FONT — ATTEMPTED AND REVERTED
+- Attempted to fix Myanmar text rendering in jsPDF-generated invoices by embedding Noto Sans Myanmar font (base64-embedded TTF)
+- Discovered jsPDF has no complex script shaping engine (no GSUB/GPOS support), so Myanmar text still rendered incorrectly even with the correct font embedded — this is a jsPDF architectural limitation, not a font selection problem
+- Investigated Puppeteer + HTML-to-PDF as an alternative (Chromium has full Myanmar shaping support), but this requires puppeteer-core + @sparticuz/chromium for Vercel compatibility, and the project is on Vercel's Free/Hobby plan (10-second function timeout) — cold start risk was judged too high
+- DECISION: Reverted to jsPDF + Helvetica (English-only invoices going forward). No Myanmar text support in PDF invoices. This decision should be revisited if the project upgrades to Vercel Pro or moves to a different PDF generation approach in the future
+- Email templates (Phase A improvements — service-specific detail blocks for all 6 service types: tour, flight, hotel, airport_transfer, tickets_activities, car_rental) were kept — unrelated to the font issue, this fix stayed in place for both HTML and plain-text email bodies
+
+### ✅ Completed — GLOBAL CUSTOMER INQUIRY / CONTACT FORM
+- New standalone page at app/contact/page.tsx (NOT nested under [country] — deliberately global/country-agnostic since the link is meant to be shared directly on social media comment replies, where no country context exists in the URL)
+- Reuses the existing app/api/inquiry/route.ts endpoint (already had Telegram alert integration via OPERATOR_BOT_TOKEN/OPERATOR_GROUP_CHAT_ID) — extended it to accept a new "country" field (stored in the bookings.details JSONB, no migration needed) and added Country to the Telegram alert message template
+- Form fields: Name (required), Email (optional), Phone (required, with a country-code hint since the number is used to find customers on WhatsApp/Viber/etc.), Country (Thailand active, Vietnam "Coming Soon" with submit disabled if selected), Service Type (single-select: tour/flight/hotel/car/taxi/tickets), Message (required, maps to otherService field), Preferred Social Apps (multi-select checkboxes: WhatsApp/LINE/Viber/Telegram — changed from single-select dropdown since customers may use the same number on multiple apps; WeChat replaced with Telegram per updated requirements)
+- Full i18n support added to lib/i18n.ts for all 6 languages (EN/TH/MM/ES/FR/DE) under a new "contact" section
+- Added '/contact' to EXCLUDED_PATHS in proxy.ts (per the docs/ADDING_NEW_PAGES.md SOP) — public/indexable, no noindex
+- New FloatingContactButton component (components/shared/FloatingContactButton.tsx) added bottom-left (mirroring the existing bottom-right FloatingChatButton/HumanOperatorChat widget), linking to /contact, styled to match the site's gold/luxury design system — added to both app/page.tsx (root homepage) and app/[country]/layout.tsx so it's visible sitewide
+- Added a Home icon (lucide-react) next to the Contact page's language selector, linking back to /thailand
+
+### ✅ Completed — KLOOK TICKETS/ACTIVITIES CHAT BUTTON (AI-Triggered)
+- Added a new AI-driven trigger, [SHOW_KLOOK_BUTTONS:city=CITYKEY], to the system prompt in app/api/booking-chat/route.ts, mirroring the existing SHOW_FLIGHT_BUTTONS/SHOW_HOTEL_BUTTONS pattern
+- Includes careful disambiguation logic for the Burmese word "လက်မှတ်" (can mean flight ticket OR attraction ticket) — route pattern detected → flight trigger; attraction/entrance keywords without a route → Klook trigger; ambiguous → AI asks a clarifying question instead of guessing
+- Frontend parsing added to components/thailand/HumanOperatorChat.tsx, rendering up to 3 Klook activity buttons (activity name, price, rating) fetched via getKlookLinksByCity(), using the new "findMoreTickets" i18n key across all 6 languages
+- Covers the 12 cities with real Klook affiliate links (AID 126322): Bangkok, Pattaya, Phuket, Krabi, Hua Hin, Hat Yai, Kanchanaburi, Pak Chong, Ko Chang, Satun, Chiang Rai, Ko Samui
+
+### ✅ Completed — CRITICAL BUG FIXES
+- **Aviasales affiliate marker missing:** The flight button URL in HumanOperatorChat.tsx (line 520) was generating `?origin_iata=X&destination_iata=Y` with no marker=746660 at all. This likely cost commission on every flight-button click since this feature was added. Fixed by adding the marker parameter
+- **Aviasales URL format structurally wrong:** Aviasales does not support origin_iata/destination_iata query params for direct search deep links. The correct format is path-based: /search/{ORIGIN}{DDMM}{DESTINATION}1?marker=746660 (origin IATA + departure date DDMM + destination IATA + passenger count). Since the chat flow doesn't currently collect a travel date, implemented a 30-day-from-today default fallback
+- **Klook button not rendering (env var bug):** lib/supabase.ts was using non-"NEXT_PUBLIC_"-prefixed env vars (SUPABASE_URL/SUPABASE_ANON_KEY), which are stripped from the browser bundle by Next.js and resolve to undefined in client components. Since HumanOperatorChat.tsx is a 'use client' component, every browser-side Supabase call via this shared client was silently broken. Fixed by switching lib/supabase.ts to use NEXT_PUBLIC_SUPABASE_URL/NEXT_PUBLIC_SUPABASE_ANON_KEY instead, which works in both server and browser contexts
+  - ⚠️ NOTE FOR FUTURE: getAgodaLinksByCity() and getTransferLinksByCity() share the same getSupabase() client and would hit this SAME bug if ever called from a client component — currently they're only used in Server Components so they're unaffected today, but this is a landmine for any future feature that calls them from client-side code
+- **City-name query mismatch in klookLinks:** The klook_links table stores city names as lowercase with NO spaces (e.g. "huahin", "chiangrai") while the AI prompt outputs spaced/capitalized names (e.g. "Hua Hin", "Chiang Rai"). Fixed getKlookLinksByCity() to strip whitespace and lowercase the input before querying, and changed the query from .eq() to .ilike() as a case-insensitive safety net
+- **Regex hardening for chat triggers:** Hardened all 3 chat trigger regexes (flight/hotel/klook) to be case-insensitive and tolerant of extra whitespace around colons/equals signs, since the AI's exact token formatting was found to be inconsistent
+
+### ✅ Completed — AFFILIATE LINK VERIFICATION
+- Re-confirmed Agoda CID 1968300, Trip.com SID 325250647/Allianceid 9417346, Klook AID 126322, and Aviasales marker 746660 are all correctly present in generated links across multiple features tested this session (paid invoices, Contact form, HumanOperatorChat flight/Klook buttons)
+
+### ✅ Status
+- **Build:** Passing (npm run build, no errors)
+- **Testing:** Manually tested end-to-end — rental invoice generation, Contact form submission + Telegram alert, Klook button rendering, Aviasales link format, affiliate parameter presence — all confirmed working
+- **Git:** Committed and pushed
+
+### 📋 Known Follow-Ups (Not Yet Done)
+- Database-level unique constraint for paid-invoice dedup protection (still only client-side disable-on-click)
+- getAgodaLinksByCity/getTransferLinksByCity client-side env var landmine (see critical bug fixes above) — fix proactively if these are ever called from a 'use client' component
+- Myanmar PDF support remains unresolved (English-only invoices for now)
 
 ---
 

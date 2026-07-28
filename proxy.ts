@@ -9,6 +9,7 @@ const EXCLUDED_PATHS = [
   '/sales',
   '/privacy-policy',
   '/contact',
+  '/about',
 ]
 
 export function proxy(request: NextRequest) {
