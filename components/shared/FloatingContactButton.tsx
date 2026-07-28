@@ -15,7 +15,6 @@ export default function FloatingContactButton({ language }: { language: string |
   if (!mounted) return null
 
   const t = UI_TRANSLATIONS[language as SupportedLanguage] || UI_TRANSLATIONS.EN
-  const tooltipText = t.floatingTooltip || '📩 Send us a quick inquiry'
   const badgeText = t.floatingBadge || 'Quick Inquiry'
 
   return (
@@ -31,21 +30,6 @@ export default function FloatingContactButton({ language }: { language: string |
         gap: '8px',
       }}
     >
-      {/* Tooltip */}
-      <div style={{
-        background: 'white',
-        color: '#1a2e1a',
-        fontSize: '12px',
-        fontWeight: '600',
-        padding: '6px 14px',
-        borderRadius: '999px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
-        border: '1px solid #fde68a',
-        whiteSpace: 'nowrap',
-      }}>
-        {tooltipText}
-      </div>
-
       {/* Main Button */}
       <Link href="/contact">
         <button
