@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom'
 import HumanOperatorChat from '../thailand/HumanOperatorChat'
 import { ThaiLanguage } from '../../types/country'
 
-export default function FloatingChatButton({ language }: { language: string | ThaiLanguage }) {
+export default function FloatingChatButton({ language, country }: { language: string | ThaiLanguage; country?: string }) {
   const [isOpen, setIsOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [pulse, setPulse] = useState(true)
@@ -115,6 +115,7 @@ export default function FloatingChatButton({ language }: { language: string | Th
           <HumanOperatorChat
             language={language as ThaiLanguage}
             onClose={() => setIsOpen(false)}
+            country={country}
           />
         </div>,
         document.body
