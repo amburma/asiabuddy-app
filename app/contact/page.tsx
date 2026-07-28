@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { UI_TRANSLATIONS } from '../../lib/i18n';
 import { SupportedLanguage } from '../../types/country';
+import { countries } from '../../data/countries';
 import Link from 'next/link';
 import { Home } from 'lucide-react';
 
@@ -49,7 +50,7 @@ const LineIcon = () => (
 
 const SERVICE_VALUES = ['tour', 'flight', 'hotel', 'car', 'taxi', 'tickets'] as const;
 const SOCIAL_VALUES = ['whatsapp', 'line', 'viber', 'telegram'] as const;
-const COUNTRY_VALUES = ['thailand', 'vietnam'] as const;
+const COUNTRY_VALUES = countries.filter(c => c.active).map(c => c.id) as readonly string[];
 
 export default function ContactPage() {
   const [language, setLanguage] = useState<SupportedLanguage>('EN');
@@ -88,11 +89,6 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validate Vietnam selection
-    if (formData.country === 'vietnam') {
-      return;
-    }
 
     setIsSubmitting(true);
     setSubmitStatus('idle');
@@ -153,8 +149,6 @@ export default function ContactPage() {
   if (!mounted) {
     return null;
   }
-
-  const isVietnamSelected = formData.country === 'vietnam';
 
   return (
     <div className="min-h-screen bg-[#F5F0E8]">
@@ -427,14 +421,12 @@ export default function ContactPage() {
                 onChange={(e) => setFormData({ ...formData, country: e.target.value as any })}
                 className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-[#C9A84C] focus:ring-1 focus:ring-[#C9A84C] transition-colors text-[#0D0D0D]"
               >
-                <option value="thailand">{contact?.countryThailand || 'Thailand'}</option>
-                <option value="vietnam">{contact?.countryVietnam || 'Vietnam (Coming Soon)'}</option>
+                {countries.filter(c => c.active).map((country) => (
+                  <option key={country.id} value={country.id}>
+                    {country.flag} {country.name}
+                  </option>
+                ))}
               </select>
-              {isVietnamSelected && (
-                <p className="mt-2 text-sm text-amber-600 font-medium">
-                  {contact?.vietnamNotAvailable || 'Vietnam services are coming soon. Please select Thailand for immediate assistance.'}
-                </p>
-              )}
             </div>
 
             {/* Service Type */}
@@ -511,7 +503,7 @@ export default function ContactPage() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isSubmitting || isVietnamSelected}
+              disabled={isSubmitting}
               className="w-full bg-gradient-to-r from-[#C9A84C] to-[#B8943E] text-white px-10 py-4 rounded-full shadow-lg font-bold transition-all duration-300 hover:shadow-xl hover:from-[#B8943E] hover:to-[#A78330] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-[#C9A84C] disabled:hover:to-[#B8943E]"
             >
               {isSubmitting ? (contact?.submitting || 'Sending...') : (contact?.submit || 'Send Inquiry')}

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createBooking } from '../../../lib/database';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import { countries } from '../../../data/countries';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -195,7 +196,8 @@ export async function POST(req: NextRequest) {
   if (!name || !phone) {
     return NextResponse.json({ error: 'Missing required fields (name and phone)' }, { status: 422, headers: corsHeaders });
   }
-  if (!body.country || !['thailand', 'vietnam'].includes(body.country)) {
+  const activeCountryIds = countries.filter(c => c.active).map(c => c.id);
+  if (!body.country || !activeCountryIds.includes(body.country)) {
     return NextResponse.json({ error: 'Missing or invalid country field' }, { status: 422, headers: corsHeaders });
   }
 

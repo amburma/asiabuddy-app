@@ -1,8 +1,10 @@
 import type { MetadataRoute } from 'next'
 import { getSupabase } from '../lib/supabase'
+import { countries } from '../data/countries'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://asiabuddy.app'
+  const activeCountryIds = countries.filter(c => c.active).map(c => c.id)
 
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -41,7 +43,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .eq('status', 'active')
 
     if (tours) {
-      const tourRoutes = tours.map((tour) => ({
+      const tourRoutes = tours
+        .filter(tour => activeCountryIds.includes(tour.country))
+        .map((tour) => ({
         url: `${baseUrl}/${tour.country}/tours/${tour.slug}`,
         changeFrequency: 'weekly' as const,
         priority: 0.8,
@@ -56,7 +60,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .select('country, updated_at')
 
     if (destinations) {
-      const destinationRoutes = destinations.map((dest) => ({
+      const destinationRoutes = destinations
+        .filter(dest => activeCountryIds.includes(dest.country))
+        .map((dest) => ({
         url: `${baseUrl}/${dest.country}/destination`,
         changeFrequency: 'weekly' as const,
         priority: 0.7,

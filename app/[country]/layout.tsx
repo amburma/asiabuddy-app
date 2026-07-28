@@ -3,6 +3,8 @@ import { cookies } from 'next/headers'
 import FloatingChatButtonLoader from '../../components/shared/FloatingChatButtonLoader'
 import FloatingContactButtonLoader from '../../components/shared/FloatingContactButtonLoader'
 import { normalizeLocale } from '../../lib/i18n'
+import { countries } from '../../data/countries'
+import { notFound } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,20 +14,60 @@ const COUNTRY_META: Record<string, { name: string; description: string }> = {
     description:
       'Explore Thailand with AsiaBuddy — tours, travel tips, chat assistance, and booking services for your perfect Thai adventure.',
   },
+  myanmar: {
+    name: 'Myanmar',
+    description:
+      'Discover Myanmar with AsiaBuddy — curated tours, local insights, and seamless booking for an unforgettable experience.',
+  },
+  vietnam: {
+    name: 'Vietnam',
+    description:
+      'Experience Vietnam with AsiaBuddy — travel guides, tours, and personalized booking support.',
+  },
+  cambodia: {
+    name: 'Cambodia',
+    description:
+      'Explore Cambodia with AsiaBuddy — tours, travel tips, and booking services for your perfect adventure.',
+  },
+  laos: {
+    name: 'Laos',
+    description:
+      'Discover Laos with AsiaBuddy — curated tours, local insights, and seamless booking for an unforgettable experience.',
+  },
   singapore: {
     name: 'Singapore',
     description:
       'Discover Singapore with AsiaBuddy — curated tours, local insights, and seamless booking for an unforgettable experience.',
+  },
+  malaysia: {
+    name: 'Malaysia',
+    description:
+      'Explore Malaysia with AsiaBuddy — tours, travel tips, and booking services for your perfect adventure.',
+  },
+  indonesia: {
+    name: 'Indonesia',
+    description:
+      'Discover Indonesia with AsiaBuddy — curated tours, local insights, and seamless booking for an unforgettable experience.',
+  },
+  philippines: {
+    name: 'Philippines',
+    description:
+      'Explore Philippines with AsiaBuddy — tours, travel tips, and booking services for your perfect adventure.',
   },
   japan: {
     name: 'Japan',
     description:
       'Plan your Japan trip with AsiaBuddy — expert travel guides, tours, and booking assistance.',
   },
-  vietnam: {
-    name: 'Vietnam',
+  germany: {
+    name: 'Germany',
     description:
-      'Experience Vietnam with AsiaBuddy — travel guides, tours, and personalized booking support.',
+      'Discover Germany with AsiaBuddy — curated tours, local insights, and seamless booking for an unforgettable experience.',
+  },
+  uk: {
+    name: 'United Kingdom',
+    description:
+      'Explore the UK with AsiaBuddy — tours, travel tips, and booking services for your perfect adventure.',
   },
 }
 
@@ -35,6 +77,13 @@ export async function generateMetadata({
   params: Promise<{ country: string }>
 }): Promise<Metadata> {
   const { country } = await params
+  const activeCountryIds = countries.filter(c => c.active).map(c => c.id)
+  if (!activeCountryIds.includes(country.toLowerCase())) {
+    return {
+      title: 'Page Not Found',
+      description: 'The requested page does not exist.',
+    }
+  }
   const meta = COUNTRY_META[country.toLowerCase()]
   const countryName = meta?.name ?? country.charAt(0).toUpperCase() + country.slice(1)
   const description =
@@ -74,15 +123,19 @@ export default async function CountryLayout({
   params: Promise<{ country: string }>
 }) {
   const { country } = await params
+  const activeCountryIds = countries.filter(c => c.active).map(c => c.id)
+  if (!activeCountryIds.includes(country.toLowerCase())) {
+    notFound()
+  }
   const cookieStore = await cookies()
   const language = normalizeLocale(cookieStore.get('NEXT_LOCALE')?.value)
 
   return (
     <div className="min-h-screen" data-country={country}>
       {children}
-      {country === 'thailand' && (
+      {activeCountryIds.includes(country.toLowerCase()) && (
         <>
-          <FloatingChatButtonLoader language={language} />
+          <FloatingChatButtonLoader language={language} country={country} />
           <FloatingContactButtonLoader language={language} />
         </>
       )}
