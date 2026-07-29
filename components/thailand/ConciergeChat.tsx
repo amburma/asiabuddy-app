@@ -53,7 +53,7 @@ RESPONSE RULES — MANDATORY:
 2. No filler. No repetition. No restating the question.
 3. Maximum 3 follow-up suggestions only if relevant.
 4. Never list your own capabilities unless asked.
-5. Out-of-scope question → one sentence decline in user's language only. Nothing else.`;
+5. If the question is about another AsiaBuddy travel service (flight, hotel, transfer, car rental, activities/tickets) but outside this widget's specific scope, respond in the user's language telling them to tap 'Book Now' below for live options and pricing — one sentence only. If the question is completely unrelated to travel (e.g. general knowledge, unrelated topics), give a one-sentence decline in the user's language only. Nothing else in either case.`;
 
     try {
       const response = await getConciergeResponse(contextPrompt, history, language);
