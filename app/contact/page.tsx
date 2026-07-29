@@ -219,10 +219,6 @@ export default function ContactPage() {
               </div>
               <div className="space-y-3">
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Agent Name</p>
-                  <p className="text-[#F5F0E8] font-medium text-sm">U Aung Soe</p>
-                </div>
-                <div>
                   <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Address</p>
                   <p className="text-[#F5F0E8]/80 text-sm">North Dagon Township, Yangon, Myanmar</p>
                 </div>
@@ -261,10 +257,6 @@ export default function ContactPage() {
               </div>
               <div className="space-y-3">
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Agent Name</p>
-                  <p className="text-[#F5F0E8] font-medium text-sm">Ma Ma Khin Khin</p>
-                </div>
-                <div>
                   <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Address</p>
                   <p className="text-[#F5F0E8]/80 text-sm">Thailand</p>
                 </div>
@@ -294,10 +286,6 @@ export default function ContactPage() {
                 <h3 className="text-lg font-serif font-bold text-[#F5F0E8]">Germany</h3>
               </div>
               <div className="space-y-3">
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Agent Name</p>
-                  <p className="text-[#F5F0E8] font-medium text-sm">Ko Viktor</p>
-                </div>
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Address</p>
                   <p className="text-[#F5F0E8]/80 text-sm">Altenberge, Germany</p>
