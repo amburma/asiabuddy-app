@@ -1,9 +1,9 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 27 July 2026 — Session 42
+> Last Updated: 31 July 2026 — Session 42 (Part A country-payment CTA implemented, 1 build error pending fix)
 
 ---
 
-## 📋 Session 42 — 27 July 2026 (PLANNED — Payment Trust Page)
+## 🔄 Session 42 — 27 July 2026 (IN PROGRESS — Payment Trust Page, Part A implemented)
 
 ### Problem Statement
 Customers who want to purchase services seen on the Facebook Page need to send payment via bank transfer, since no payment gateway exists yet. As a newly-established company, trust is a concern when asking customers to transfer money. Initial idea considered: a single public page under asiabuddy.app listing full bank account details for all countries/sales agents, styled elegantly for trust.
@@ -33,7 +33,39 @@ Rejected due to four identified risks:
 - OPTIONAL future addition: an auth-light /verify/[invoiceNo] lookup page so a customer can confirm "this invoice/amount is genuine" without exposing all invoices publicly
 
 ### Status
-📋 PLANNED — decision and architecture documented only. No implementation started. Next actionable steps (Part A page copy/design, Part B bank_accounts table schema + PART 0-10 integration) to be scoped in a future session. Marked here as a placeholder so this doesn't get lost — an unrelated urgent task is being prioritized first.
+🔄 IN PROGRESS — Part A functionally complete, pending final content + new country-payment-info sub-feature. Part B not started.
+
+### Part A — Payment Trust Page (`/how-to-pay`) — COMPLETED WORK LOG
+- Built `app/how-to-pay/page.tsx` (Server Component) + `components/how-to-pay/HowToPayInteractive.tsx` (Client Component), global/country-agnostic route (not nested under `[country]`), added to `EXCLUDED_PATHS` in `proxy.ts` as public/indexable.
+- Design system used: Obsidian `#0D0D0D` / Ivory `#F5F0E8` / Gold `#C9A84C` via raw Tailwind arbitrary hex values (NOT the unverified `sacred-bg`/`gold-deep` token names — note this as a confirmed working pattern for future pages, since those custom token names remain unverified in `tailwind.config`).
+- i18n: added `howToPay` namespace across all 6 languages (EN/TH/MM/ES/FR/DE) to `lib/i18n.ts`.
+- Sections built: Hero, 5-step "How It Works" (Inquiry → Invoice Generated → Payment Detail Sent Privately → Upload Payment Proof → Confirmation — note the 5th step was added specifically to reflect the existing `/payment-proof/[booking_id]` + `/api/upload-payment-proof` Telegram-notify flow, which already existed independently of this session), Security Notice callout, Company Details block (Altenberge, Germany address + Google Maps embed, single tri-channel official contact +49 179 3956759 as WhatsApp/Telegram/Phone), Payment Methods icon row (Bank Transfer/KBZPay/Wave/Card, no account numbers), Social Proof block (950K Facebook followers headline + screenshot placeholder + Facebook Page link placeholder — Facebook Page URL and screenshot file still pending from KIM).
+- Home button added to top-right of the shared Navbar via a new optional `showRootHomeButton?: boolean` prop on `components/shared/Navbar.tsx`, enabled only from `HowToPayInteractive.tsx` — no other page affected.
+- Bugs found and fixed during this session (record for future reference, since these are reusable lessons):
+  1. Cannot export `generateMetadata` from a file with `"use client"` — resolved by keeping `page.tsx` a Server Component and moving interactivity into a separate Client Component.
+  2. `lucide-react` does not export a `Facebook` icon (no brand icons in that package) — replaced with `ExternalLink`.
+  3. Passing a function (render-prop / function-as-children pattern) from a Server Component into a Client Component's children throws "Functions are not valid as a child of Client Components" — root cause was traced to a stray, untracked `app/how-to-pay/page_backup.tsx` file containing this pattern; deleting it and refactoring `page.tsx` to pass plain props (not a render function) fixed it. Lesson: always check for stray backup/leftover `.tsx` files in the route folder when debugging Server/Client boundary errors, since Next.js type-checks every `.tsx` file in the project regardless of whether Next.js treats it as an actual route.
+- Discovered and removed an abandoned duplicate: `app/payment-info/page.tsx` (untracked, zero references anywhere, excluded from SEO, never committed — an earlier uncommitted attempt at the same trust-page concept). Deleted, and removed from `EXCLUDED_PATHS` in `proxy.ts`. Confirmed `app/payment-proof/[booking_id]/page.tsx` and `app/api/upload-payment-proof/route.ts` are unrelated, active, correctly-functioning infrastructure (uses `bookings` table, not `invoices`/`paid_invoices`) and were left untouched.
+
+### Part A — Remaining before considered fully done
+- [x] KIM supplied real Facebook Page URL: `https://www.facebook.com/asiabuddyapp` (previous placeholder link on the Social Proof block was pointing to a broken local `localhost:3000/[TODO...]` href — needs swapping in `HowToPayInteractive.tsx`)
+- [ ] Screenshot image file for `/public/images/facebook-950k-followers.png` — still pending from KIM
+- [x] New sub-feature (see below): country-aware payment info — implemented, build fix pending (see below)
+
+### New sub-feature: Country-Aware Payment Info CTA — IMPLEMENTED (build error pending fix)
+- User requested the ability to select a country under "Accepted Payment Methods" so customers can conveniently find country-specific payment info as more countries launch (currently only Thailand is live; Vietnam, Singapore, etc. planned per `data/countries.ts`).
+- IMPORTANT SECURITY DECISION (explicitly discussed and agreed): full bank account numbers must NOT be shown publicly per country, even behind a country selector — this would reintroduce the exact public-bank-details risk (phishing/impersonation, account profiling, no leak traceability) that Session 42's original architecture decision (Part A vs Part B split) was designed to avoid. Explicitly rejected: showing real account numbers on the public trust page.
+- Agreed design: country selector shows only which payment methods (icons) are available for that country → a "Get [Country] Payment Info" button opens WhatsApp/Telegram with a pre-filled inquiry message → staff verifies the customer and sends real payment details privately per invoice, consistent with the existing Part B design (admin-only `bank_accounts` table, per-invoice private delivery).
+- Country list sourced dynamically from `data/countries.ts`, so future country launches don't require code changes to this section.
+- **Implementation completed this session:**
+  - `data/countries.ts`: `active: boolean` → `status: 'live' | 'coming-soon'` (Thailand only `'live'` for now)
+  - `app/api/inquiry/route.ts` and `app/sitemap.ts`: updated to filter on `status === 'live'`
+  - `components/how-to-pay/HowToPayInteractive.tsx`: country selector (live countries only) + "Get [Country] Payment Info" CTA → opens WhatsApp with pre-filled, `encodeURIComponent`-escaped message, new tab, proper `rel` security attributes
+  - i18n: added `paymentMethods.getInfoButton` (`{country}` placeholder) across all 6 languages (EN/TH/MM/ES/FR/DE)
+  - Verified no real or fake bank account numbers are rendered anywhere in the payment methods section — CTA is message-flow only, not a data-reveal flow
+- **Build error found post-implementation (fix identified, not yet applied):** the `active` → `status` rename was not propagated to `app/[country]/layout.tsx` line 80 (`countries.filter(c => c.active)` — `active` no longer exists on `Country`). Same class of bug as prior sessions' "stray reference after a rename" lessons. Fix: change to `countries.filter(c => c.status === 'live')`. `route.ts` and `sitemap.ts` were already updated correctly — this is the one remaining reference.
+- Separately, the same build run surfaced an unrelated ESLint config error (`react/display-name` rule failing to load on `app/about/page.tsx`, `contextOrFilename.getFilename is not a function`) — does not block the Next.js compile itself, worth a look in a later session (likely `eslint-config-next`/ESLint version mismatch) but not urgent.
+- Not yet verified: `npm run build` clean pass after the `layout.tsx` fix, and manual `npm run dev` test of the country selector + CTA flow.
 
 ### Dependency Note
 Part B depends on and extends the existing Paid Invoice System (paid_invoices table, PART 0-10 build plan, System 2 — see "Paid Invoice System - New Project Spec" section). Do NOT confuse with System 1 (pdfGenerator.ts/emailService.ts, invoices table). When this is picked up later, bank_account_id FK should be added to the paid_invoices schema alongside the existing "country" field addition already noted in that section.

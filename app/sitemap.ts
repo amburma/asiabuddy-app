@@ -4,7 +4,7 @@ import { countries } from '../data/countries'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://asiabuddy.app'
-  const activeCountryIds = countries.filter(c => c.active).map(c => c.id)
+  const activeCountryIds = countries.filter(c => c.status === 'live').map(c => c.id)
 
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [

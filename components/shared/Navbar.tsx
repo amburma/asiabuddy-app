@@ -27,6 +27,7 @@ interface NavbarProps {
   country?: string
   language?: string
   isFirstVisit?: boolean
+  showRootHomeButton?: boolean
 }
 
 const languages = [
@@ -37,7 +38,7 @@ const languages = [
   { code: 'FR', label: 'Français' },
 ]
 
-export default function Navbar({ country, language, isFirstVisit }: NavbarProps) {
+export default function Navbar({ country, language, isFirstVisit, showRootHomeButton }: NavbarProps) {
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
   const [showLanguageWelcome, setShowLanguageWelcome] = useState(isFirstVisit || false)
@@ -227,6 +228,16 @@ export default function Navbar({ country, language, isFirstVisit }: NavbarProps)
             <div className="w-[1px] h-6 bg-gray-200 mx-1" />
             
             {/* Home Button */}
+            {showRootHomeButton && (
+              <Link
+                href="/"
+                className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 text-gray-600 hover:border-[#C9A84C] hover:text-[#C9A84C] hover:bg-[#C9A84C]/5 transition-all"
+                title="Go to homepage"
+              >
+                <Home size={18} />
+              </Link>
+            )}
+            
             {country && (
               <Link
                 href={`/${country}`}

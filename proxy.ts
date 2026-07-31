@@ -6,11 +6,11 @@ const VALID_COUNTRIES = ['thailand', 'singapore', 'vietnam', 'japan']
 const EXCLUDED_PATHS = [
   '/partner-invite-2026',
   '/payment-proof',
-  '/payment-info',
   '/sales',
   '/privacy-policy',
   '/contact',
   '/about',
+  '/how-to-pay',
 ]
 
 export function proxy(request: NextRequest) {

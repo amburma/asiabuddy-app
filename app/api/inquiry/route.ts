@@ -196,7 +196,7 @@ export async function POST(req: NextRequest) {
   if (!name || !phone) {
     return NextResponse.json({ error: 'Missing required fields (name and phone)' }, { status: 422, headers: corsHeaders });
   }
-  const activeCountryIds = countries.filter(c => c.active).map(c => c.id);
+  const activeCountryIds = countries.filter(c => c.status === 'live').map(c => c.id);
   if (!body.country || !activeCountryIds.includes(body.country)) {
     return NextResponse.json({ error: 'Missing or invalid country field' }, { status: 422, headers: corsHeaders });
   }

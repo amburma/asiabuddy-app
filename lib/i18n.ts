@@ -895,6 +895,53 @@ const ENGLISH_UI = {
     "required": "Required",
     "phoneHint": "Include country code (e.g., +66 for Thailand, +95 for Myanmar)"
   },
+  "howToPay": {
+    "hero": {
+      "title": "How to Pay Safely",
+      "subtitle": "Your payment security is our top priority. Learn how our secure payment process works."
+    },
+    "steps": {
+      "step1": {
+        "title": "Inquiry",
+        "description": "Submit your travel inquiry through our contact form or messaging channels."
+      },
+      "step2": {
+        "title": "Invoice Generated",
+        "description": "We create a detailed invoice with your service breakdown and pricing."
+      },
+      "step3": {
+        "title": "Payment Details Sent Privately",
+        "description": "Secure payment information is sent directly to you via your preferred channel."
+      },
+      "step4": {
+        "title": "Upload Payment Proof",
+        "description": "After paying, upload a screenshot of your payment via the personal link included in your invoice to instantly notify our team."
+      },
+      "step5": {
+        "title": "Confirmation",
+        "description": "Once payment is verified, we confirm your booking and provide service details."
+      }
+    },
+    "securityNotice": "We will never ask you to pay to an account not listed on your official invoice.",
+    "companyDetails": {
+      "registrationLabel": "Company Registration",
+      "addressLabel": "Office Address",
+      "contactLabel": "Official Contact"
+    },
+    "paymentMethods": {
+      "bankTransfer": "Bank Transfer",
+      "kbzPay": "KBZPay",
+      "wave": "Wave",
+      "card": "Card",
+      "getInfoButton": "Get {country} Payment Info"
+    },
+    "testimonials": {
+      "title": "What Our Customers Say"
+    },
+    "socialProof": {
+      "headline": "Trusted by 950K+ followers on Facebook"
+    }
+  },
   "floatingTooltip": "📩 Send us a quick inquiry",
   "floatingBadge": "Quick Inquiry"
 };
@@ -1786,6 +1833,53 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "required": "จำเป็น",
     "phoneHint": "ระบุรหัสประเทศ (เช่น +66 สำหรับไทย, +95 สำหรับพม่า)"
   },
+  "howToPay": {
+    "hero": {
+      "title": "วิธีการชำระเงินอย่างปลอดภัย",
+      "subtitle": "ความปลอดภัยในการชำระเงินของคุณเป็นสิ่งสำคัญที่สุดของเรา เรียนรู้ว่ากระบวนการชำระเงินที่ปลอดภัยของเราทำงานอย่างไร"
+    },
+    "steps": {
+      "step1": {
+        "title": "สอบถาม",
+        "description": "ส่งคำถามการเดินทางของคุณผ่านแบบฟอร์มติดต่อหรือช่องทางการส่งข้อความ"
+      },
+      "step2": {
+        "title": "สร้างใบแจ้งหนี้",
+        "description": "เราสร้างใบแจ้งหนี้โดยละเอียดพร้อมรายละเอียดบริการและราคาของคุณ"
+      },
+      "step3": {
+        "title": "ส่งรายละเอียดการชำระเงินแบบส่วนตัว",
+        "description": "ข้อมูลการชำระเงินที่ปลอดภัยจะถูกส่งโดยตรงไปยังคุณผ่านช่องทางที่คุณเลือก"
+      },
+      "step4": {
+        "title": "อัปโหลดหลักฐานการชำระเงิน",
+        "description": "หลังจากชำระเงินแล้ว อัปโหลดภาพหน้าจอของการชำระเงินผ่านลิงก์ส่วนตัวที่รวมอยู่ในใบแจ้งหนี้ของคุณเพื่อแจ้งทีมงานของเราทันที"
+      },
+      "step5": {
+        "title": "ยืนยัน",
+        "description": "เมื่อการชำระเงินได้รับการยืนยันแล้ว เราจะยืนยันการจองของคุณและให้รายละเอียดบริการ"
+      }
+    },
+    "securityNotice": "เราจะไม่ขอให้คุณชำระเงินไปยังบัญชีที่ไม่ได้ระบุในใบแจ้งหนี้อย่างเป็นทางการของคุณ",
+    "companyDetails": {
+      "registrationLabel": "การจดทะเบียนบริษัท",
+      "addressLabel": "ที่อยู่สำนักงาน",
+      "contactLabel": "ติดต่ออย่างเป็นทางการ"
+    },
+    "paymentMethods": {
+      "bankTransfer": "โอนเงินผ่านธนาคาร",
+      "kbzPay": "KBZPay",
+      "wave": "Wave",
+      "card": "บัตร",
+      "getInfoButton": "รับข้อมูลการชำระเงิน {country}"
+    },
+    "testimonials": {
+      "title": "ลูกค้าของเราพูดอย่างไร"
+    },
+    "socialProof": {
+      "headline": "เชื่อถือโดยผู้ติดตามมากกว่า 950K+ คนบน Facebook"
+    }
+  },
   "floatingTooltip": "📩 ส่งคำถามด่วน",
   "floatingBadge": "ส่งคำถามด่วน"
 },
@@ -2667,6 +2761,53 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "vietnamNotAvailable": "ဗီယက်နမ် ဝန်ဆောင်မှုများသည် မကြာမီ လာမည်။ ချက်ချင်း အကူအညီရရန် ထိုင်းကို ရွေးချယ်ပါ။",
     "required": "လိုအပ်သည်",
     "phoneHint": "နိုင်ငံကုဒ် ထည့်ပါ (ဥပမာ - ထိုင်းအတွက် +66၊ မြန်မာအတွက် +95)"
+  },
+  "howToPay": {
+    "hero": {
+      "title": "ဘယ်လို ငွေပေးချေရမလဲ",
+      "subtitle": "သင့်ငွေပေးချေမှု လုံခြုံရေးသည် ကျွန်ုပ်တို့၏ အရေးကြီးဆုံး ဦးတည်ချက်ဖြစ်သည်။ ကျွန်ုပ်တို့၏ လုံခြုံသော ငွေပေးချေမှု လုပ်ငန်းစဉ်က ဘယ်လို အလုပ်လုပ်သည်ကို လေ့လာပါ။"
+    },
+    "steps": {
+      "step1": {
+        "title": "စုံစမ်းမေးမြန်းချက်",
+        "description": "သင့်ခရီးစဉ် စုံစမ်းမေးမြန်းချက်ကို ကျွန်ုပ်တို့၏ ဆက်သွယ်ရန် ပုံစံ သို့မဟုတ် မက်ဆေ့ချ် ချန်နယ်များမှ တစ်ဆင့် ပေးပို့ပါ။"
+      },
+      "step2": {
+        "title": "ငွေပေးချေမှု မှာစာ ထုတ်ပေးခြင်း",
+        "description": "ကျွန်ုပ်တို့သည် သင့် ဝန်ဆောင်မှု အသေးစိတ်နှင့် စျေးနှုန်းများပါဝင်သော အသေးစိတ် ငွေပေးချေမှု မှာစာကို ဖန်တီးပေးသည်။"
+      },
+      "step3": {
+        "title": "ငွေပေးချေမှု အသေးစိတ်များကို ကိုယ်ပိုင်အဖြစ် ပေးပို့ခြင်း",
+        "description": "လုံခြုံသော ငွေပေးချေမှု အချက်အလက်များသည် သင် ရွေးချယ်ထားသော ချန်နယ်မှ တိုက်ရိုက် သင့်ဆီသို့ ပေးပို့သည်။"
+      },
+      "step4": {
+        "title": "ငွေပေးချေမှု အထောက်အထား တင်ပါ",
+        "description": "ပေးချေပြီးနောက် သင့်ငွေပေးချေမှု မှာစာတွင် ပါဝင်သော ကိုယ်ပိုင်လင့်မှ တစ်ဆင့် ငွေပေးချေမှု မျက်နှာပြင်ပုံရိပ်ကို တင်ပြီး ကျွန်ုပ်တို့အား ချက်ချင်း အသိပေးပါ"
+      },
+      "step5": {
+        "title": "အတည်ပြုချက်",
+        "description": "ငွေပေးချေမှုကို အတည်ပြုပြီးနောက်၊ ကျွန်ုပ်တို့သည် သင့် ဘွတ်ကင်ကို အတည်ပြုပြီး ဝန်ဆောင်မှု အသေးစိတ်များကို ပေးသည်။"
+      }
+    },
+    "securityNotice": "ကျွန်ုပ်တို့သည် သင့် တရားဝင် ငွေပေးချေမှု မှာစာတွင် မပါဝင်သော � account သို့ ငွေပေးချေရန် ဘယ်တော့မှ မေးပါမည်။",
+    "companyDetails": {
+      "registrationLabel": "ကုမ္ပဏီ မှတ်ပုံတင်",
+      "addressLabel": "ရုံးခန်း လိပ်စာ",
+      "contactLabel": "တရားဝင် ဆက်သွယ်ရန်"
+    },
+    "paymentMethods": {
+      "bankTransfer": "ဘဏ် လွှဲပြောင်း",
+      "kbzPay": "KBZPay",
+      "wave": "Wave",
+      "card": "ကတ်",
+      "getInfoButton": "{country} ငွေပေးချေမှု အချက်အလက်များ ရယူရန်"
+    },
+    "testimonials": {
+      "title": "ကျွန်ုပ်တို့၏ ဖောက်သည်များက ဘာသာပြန်ပြောကြားသည်"
+    },
+    "socialProof": {
+      "headline": "Facebook တွင် လူကြည့်ပရိသတ် 950K+ ဦးက ယုံကြည်အားထားသည်"
+    }
   },
   "floatingTooltip": "📩 မေးမြန်းချက် ပေးပို့ပါ",
   "floatingBadge": "မေးမြန်းချက် ပေးပို့ပါ"
@@ -3550,6 +3691,53 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "required": "Requerido",
     "phoneHint": "Incluya el código de país (ej. +66 para Tailandia, +95 para Myanmar)"
   },
+  "howToPay": {
+    "hero": {
+      "title": "Cómo Pagar de Forma Segura",
+      "subtitle": "La seguridad de tu pago es nuestra máxima prioridad. Aprende cómo funciona nuestro proceso de pago seguro."
+    },
+    "steps": {
+      "step1": {
+        "title": "Consulta",
+        "description": "Envía tu consulta de viaje a través de nuestro formulario de contacto o canales de mensajería."
+      },
+      "step2": {
+        "title": "Factura Generada",
+        "description": "Creamos una factura detallada con el desglose de servicios y precios."
+      },
+      "step3": {
+        "title": "Detalles de Pago Enviados Privadamente",
+        "description": "La información de pago segura se envía directamente a través de tu canal preferido."
+      },
+      "step4": {
+        "title": "Subir Comprobante de Pago",
+        "description": "Después de pagar, sube una captura de pantalla de tu pago a través del enlace personal incluido en tu factura para notificar a nuestro equipo al instante."
+      },
+      "step5": {
+        "title": "Confirmación",
+        "description": "Una vez verificado el pago, confirmamos tu reserva y proporcionamos los detalles del servicio."
+      }
+    },
+    "securityNotice": "Nunca te pediremos que pagues a una cuenta que no esté listada en tu factura oficial.",
+    "companyDetails": {
+      "registrationLabel": "Registro de la Empresa",
+      "addressLabel": "Dirección de la Oficina",
+      "contactLabel": "Contacto Oficial"
+    },
+    "paymentMethods": {
+      "bankTransfer": "Transferencia Bancaria",
+      "kbzPay": "KBZPay",
+      "wave": "Wave",
+      "card": "Tarjeta",
+      "getInfoButton": "Obtener Información de Pago de {country}"
+    },
+    "testimonials": {
+      "title": "Lo Que Dicen Nuestros Clientes"
+    },
+    "socialProof": {
+      "headline": "Confiable por más de 950K+ seguidores en Facebook"
+    }
+  },
   "floatingTooltip": "📩 Envíanos una consulta rápida",
   "floatingBadge": "Consulta Rápida"
 },
@@ -4432,6 +4620,53 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "required": "Obligatoire",
     "phoneHint": "Incluez le code pays (ex. +66 pour la Thaïlande, +95 pour le Myanmar)"
   },
+  "howToPay": {
+    "hero": {
+      "title": "Comment Payer en Toute Sécurité",
+      "subtitle": "La sécurité de votre paiement est notre priorité absolue. Découvrez comment fonctionne notre processus de paiement sécurisé."
+    },
+    "steps": {
+      "step1": {
+        "title": "Demande",
+        "description": "Soumettez votre demande de voyage via notre formulaire de contact ou nos canaux de messagerie."
+      },
+      "step2": {
+        "title": "Facture Générée",
+        "description": "Nous créons une facture détaillée avec la répartition des services et des tarifs."
+      },
+      "step3": {
+        "title": "Détails de Paiement Envoyés Privément",
+        "description": "Les informations de paiement sécurisées sont envoyées directement via votre canal préféré."
+      },
+      "step4": {
+        "title": "Télécharger la Preuve de Paiement",
+        "description": "Après avoir payé, téléchargez une capture d'écran de votre paiement via le lien personnel inclus dans votre facture pour notifier notre équipe instantanément."
+      },
+      "step5": {
+        "title": "Confirmation",
+        "description": "Une fois le paiement vérifié, nous confirmons votre réservation et fournissons les détails du service."
+      }
+    },
+    "securityNotice": "Nous ne vous demanderons jamais de payer sur un compte non répertorié sur votre facture officielle.",
+    "companyDetails": {
+      "registrationLabel": "Enregistrement de l'Entreprise",
+      "addressLabel": "Adresse du Bureau",
+      "contactLabel": "Contact Officiel"
+    },
+    "paymentMethods": {
+      "bankTransfer": "Virement Bancaire",
+      "kbzPay": "KBZPay",
+      "wave": "Wave",
+      "card": "Carte",
+      "getInfoButton": "Obtenir les Informations de Paiement {country}"
+    },
+    "testimonials": {
+      "title": "Ce Que Disent Nos Clients"
+    },
+    "socialProof": {
+      "headline": "Approuvé par plus de 950K+ d'abonnés sur Facebook"
+    }
+  },
   "floatingTooltip": "📩 Envoyez-nous une demande rapide",
   "floatingBadge": "Demande Rapide"
 },
@@ -5313,6 +5548,53 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "vietnamNotAvailable": "Vietnam-Services werden bald verfügbar sein. Bitte wählen Sie Thailand für sofortige Hilfe.",
     "required": "Erforderlich",
     "phoneHint": "Landescode angeben (z.B. +66 für Thailand, +95 für Myanmar)"
+  },
+  "howToPay": {
+    "hero": {
+      "title": "Sicher Bezahlen",
+      "subtitle": "Ihre Zahlungssicherheit ist unsere oberste Priorität. Erfahren Sie, wie unser sicherer Zahlungsprozess funktioniert."
+    },
+    "steps": {
+      "step1": {
+        "title": "Anfrage",
+        "description": "Reichen Sie Ihre Reiseanfrage über unser Kontaktformular oder Messaging-Kanäle ein."
+      },
+      "step2": {
+        "title": "Rechnung Erstellt",
+        "description": "Wir erstellen eine detaillierte Rechnung mit Serviceaufschlüsselung und Preisen."
+      },
+      "step3": {
+        "title": "Zahlungsdetails Privat Gesendet",
+        "description": "Sichere Zahlungsinformationen werden direkt über Ihren bevorzugten Kanal gesendet."
+      },
+      "step4": {
+        "title": "Zahlungsbeispiel Hochladen",
+        "description": "Nach der Zahlung laden Sie einen Screenshot Ihrer Zahlung über den persönlichen Link in Ihrer Rechnung hoch, um unser Team sofort zu benachrichtigen."
+      },
+      "step5": {
+        "title": "Bestätigung",
+        "description": "Sobald die Zahlung verifiziert ist, bestätigen wir Ihre Buchung und stellen Servicedetails bereit."
+      }
+    },
+    "securityNotice": "Wir werden Sie niemals bitten, an ein Konto zu zahlen, das nicht auf Ihrer offiziellen Rechnung aufgeführt ist.",
+    "companyDetails": {
+      "registrationLabel": "Firmenregistrierung",
+      "addressLabel": "Büroadresse",
+      "contactLabel": "Offizieller Kontakt"
+    },
+    "paymentMethods": {
+      "bankTransfer": "Banküberweisung",
+      "kbzPay": "KBZPay",
+      "wave": "Wave",
+      "card": "Karte",
+      "getInfoButton": "Zahlungsinformationen für {country} erhalten"
+    },
+    "testimonials": {
+      "title": "Was Unsere Kunden Sagen"
+    },
+    "socialProof": {
+      "headline": "Vertraut von über 950K+ Followern auf Facebook"
+    }
   },
   "floatingTooltip": "📩 Senden Sie uns eine schnelle Anfrage",
   "floatingBadge": "Schnelle Anfrage"

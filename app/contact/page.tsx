@@ -50,7 +50,7 @@ const LineIcon = () => (
 
 const SERVICE_VALUES = ['tour', 'flight', 'hotel', 'car', 'taxi', 'tickets'] as const;
 const SOCIAL_VALUES = ['whatsapp', 'line', 'viber', 'telegram'] as const;
-const COUNTRY_VALUES = countries.filter(c => c.active).map(c => c.id) as readonly string[];
+const COUNTRY_VALUES = countries.filter(c => c.status === 'live').map(c => c.id) as readonly string[];
 
 export default function ContactPage() {
   const [language, setLanguage] = useState<SupportedLanguage>('EN');
@@ -379,7 +379,7 @@ export default function ContactPage() {
                 onChange={(e) => setFormData({ ...formData, country: e.target.value as any })}
                 className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-[#C9A84C] focus:ring-1 focus:ring-[#C9A84C] transition-colors text-[#0D0D0D]"
               >
-                {countries.filter(c => c.active).map((country) => (
+                {countries.filter(c => c.status === 'live').map((country) => (
                   <option key={country.id} value={country.id}>
                     {country.flag} {country.name}
                   </option>

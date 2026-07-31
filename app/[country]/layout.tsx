@@ -77,7 +77,7 @@ export async function generateMetadata({
   params: Promise<{ country: string }>
 }): Promise<Metadata> {
   const { country } = await params
-  const activeCountryIds = countries.filter(c => c.active).map(c => c.id)
+  const activeCountryIds = countries.filter(c => c.status === 'live').map(c => c.id)
   if (!activeCountryIds.includes(country.toLowerCase())) {
     return {
       title: 'Page Not Found',
@@ -123,7 +123,7 @@ export default async function CountryLayout({
   params: Promise<{ country: string }>
 }) {
   const { country } = await params
-  const activeCountryIds = countries.filter(c => c.active).map(c => c.id)
+  const activeCountryIds = countries.filter(c => c.status === 'live').map(c => c.id)
   if (!activeCountryIds.includes(country.toLowerCase())) {
     notFound()
   }
