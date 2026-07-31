@@ -249,36 +249,6 @@ export default function ContactPage() {
               </div>
             </div>
 
-            {/* Thailand Card */}
-            <div className="bg-[#0D0D0D] border border-[#C9A84C]/30 rounded-2xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <span className="text-2xl">🇹🇭</span>
-                <h3 className="text-lg font-serif font-bold text-[#F5F0E8]">Thailand</h3>
-              </div>
-              <div className="space-y-3">
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Address</p>
-                  <p className="text-[#F5F0E8]/80 text-sm">Thailand</p>
-                </div>
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Mobile</p>
-                  <a href="tel:+66651139934" className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm hover:text-[#C9A84C] transition-colors">
-                    <PhoneIcon />
-                    <span>+66651139934</span>
-                  </a>
-                </div>
-                <div className="flex gap-3 pt-2">
-                  <a href="viber://chat?number=+66651139934" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Viber">
-                    <ViberIcon />
-                  </a>
-                  <div className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm" title="LINE">
-                    <LineIcon />
-                    <span>0651139934 (Ma Ma Khin Khin)</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             {/* Germany Card */}
             <div className="bg-[#0D0D0D] border border-[#C9A84C]/30 rounded-2xl p-6">
               <div className="flex items-center gap-3 mb-4">
