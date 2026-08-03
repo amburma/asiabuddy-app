@@ -249,6 +249,44 @@ export default function ContactPage() {
               </div>
             </div>
 
+            {/* Thailand Card */}
+            <div className="bg-[#0D0D0D] border border-[#C9A84C]/30 rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl">🇹🇭</span>
+                <h3 className="text-lg font-serif font-bold text-[#F5F0E8]">Thailand</h3>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Viber</p>
+                  <a href="tel:+9592054674" className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm hover:text-[#C9A84C] transition-colors">
+                    <PhoneIcon />
+                    <span>+95 9 2054674</span>
+                  </a>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Mobile, Line, WhatsApp</p>
+                  <a href="tel:+66953385997" className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm hover:text-[#C9A84C] transition-colors">
+                    <PhoneIcon />
+                    <span>+66 9 53385997</span>
+                  </a>
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <a href="viber://chat?number=+9592054674" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Viber">
+                    <ViberIcon />
+                  </a>
+                  <a href="https://line.me/ti/p/~66953385997" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Line">
+                    <LineIcon />
+                  </a>
+                  <a href="https://wa.me/66953385997" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="WhatsApp">
+                    <WhatsAppIcon />
+                  </a>
+                  <a href="mailto:thinzar313@gmail.com" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Email">
+                    <EmailIcon />
+                  </a>
+                </div>
+              </div>
+            </div>
+
             {/* Germany Card */}
             <div className="bg-[#0D0D0D] border border-[#C9A84C]/30 rounded-2xl p-6">
               <div className="flex items-center gap-3 mb-4">
