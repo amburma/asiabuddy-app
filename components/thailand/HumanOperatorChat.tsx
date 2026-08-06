@@ -10,6 +10,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { THAILAND_CITIES, buildTripComSearchValue, normalizeCityName } from '../../src/config/thailandCities';
 import { getKlookLinksByCity } from '../../lib/queries/klookLinks';
+import { generate12GoLink } from '../../lib/twelveGo';
 
 interface Props {
   language: ThaiLanguage;
@@ -141,6 +142,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
   const [hotelButtons, setHotelButtons] = useState<string | null>(null);
   const [klookButtons, setKlookButtons] = useState<string | null>(null);
   const [klookLinks, setKlookLinks] = useState<any[]>([]);
+  const [twelveGoButtons, setTwelveGoButtons] = useState<{ origin: string; destination: string } | null>(null);
 
   // IATA to city name mapping for Trip.com URLs
   const iataToCity: Record<string, string> = {
@@ -394,6 +396,18 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
         setKlookLinks([]);
       }
 
+      // Check for [SHOW_12GO_BUTTONS:origin=XXX,destination=YYY] trigger
+      const twelveGoButtonsTrigger = /\[SHOW_12GO_BUTTONS:\s*origin\s*=\s*([a-z-]+)\s*,\s*destination\s*=\s*([a-z-]+)\]/i;
+      const twelveGoButtonsMatch = botReply.match(twelveGoButtonsTrigger);
+      if (twelveGoButtonsMatch) {
+        displayResponse = botReply.replace(twelveGoButtonsTrigger, '');
+        setTwelveGoButtons({ origin: twelveGoButtonsMatch[1], destination: twelveGoButtonsMatch[2] });
+      } else if (flightButtonsMatch || hotelButtonsMatch || klookButtonsMatch) {
+        // A different topic trigger fired in this reply — clear the 12Go buttons
+        setTwelveGoButtons(null);
+      }
+      // else: no new trigger of any kind — leave twelveGoButtons as-is so it persists across follow-up questions
+
       setMessages(prev => [...prev, { role: 'assistant', content: displayResponse }]);
     } catch (error) {
       console.error('Error sending message:', error);
@@ -625,6 +639,31 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
                         <ExternalLink size={14} />
                       </a>
                     ))}
+                  </div>
+                )}
+
+                {/* Show 12Go buttons for the last assistant message if triggered */}
+                {message.role === 'assistant' && i === messages.length - 1 && twelveGoButtons && (
+                  <div className="mt-4 pt-4 border-t border-gray-100 flex flex-col gap-2">
+                    {(() => {
+                      const twelveGoUrl = generate12GoLink({
+                        origin: twelveGoButtons.origin,
+                        destination: twelveGoButtons.destination,
+                        lang: language === 'MM' ? 'en' : language // 12Go supports limited languages, default to English for Myanmar
+                      });
+
+                      return (
+                        <a
+                          href={twelveGoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer sponsored"
+                          className="inline-flex items-center justify-center gap-2 bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37] font-semibold py-2 px-4 rounded-lg hover:bg-[#1A1A1A] hover:shadow-lg transition-all duration-200 text-sm"
+                        >
+                          <ExternalLink size={14} />
+                          12Go တွင် ဘတ်စ်/ရထား ရှာဖွေရန်
+                        </a>
+                      );
+                    })()}
                   </div>
                 )}
               </div>

@@ -836,8 +836,36 @@ const ENGLISH_UI = {
       }
     }
   },
+  "transportTickets": {
+    "title": "Bus, Train & Ferry Tickets in Thailand",
+    "intro": "Book bus, train, and ferry tickets across Thailand with 12Go Asia. Travel comfortably between major cities like Bangkok, Chiang Mai, Phuket, and Koh Samui. Choose from VIP buses, express trains, and high-speed ferries with instant confirmation and e-tickets.",
+    "continuePlanning": "Continue Planning Your Trip",
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "What types of transport are available?",
+        "answer": "12Go Asia offers buses (standard, VIP, and luxury), trains (express and rapid), and ferries between islands. Options vary by route—popular routes like Bangkok to Chiang Mai have multiple daily departures with different comfort levels."
+      },
+      "q2": {
+        "question": "How do I receive my ticket?",
+        "answer": "After booking, you'll receive an e-ticket via email. Most operators accept mobile e-tickets—simply show your QR code at the terminal. Some routes require physical tickets which can be collected at the counter. Check your booking confirmation for pickup instructions."
+      },
+      "q3": {
+        "question": "What is the cancellation policy?",
+        "answer": "Cancellation policies vary by operator and ticket type. Many tickets offer free cancellation up to 24-72 hours before departure. Always review the specific policy before booking. Refunds are typically processed back to your original payment method minus any operator fees."
+      },
+      "q4": {
+        "question": "Are there different seat classes?",
+        "answer": "Yes, buses offer standard, VIP, and luxury options with reclining seats, air conditioning, and sometimes onboard meals. Trains have various classes from fan-cooled seats to sleeper berths. Ferries offer standard deck seating and VIP cabin options."
+      },
+      "q5": {
+        "question": "Should I book transport tickets in advance?",
+        "answer": "For popular routes like Bangkok to Chiang Mai or Bangkok to Phuket, especially during peak seasons (December-February, Songkran in April), booking 1-2 weeks ahead is recommended. This guarantees your seat and often includes better pricing. Last-minute bookings may have limited options."
+      }
+    }
+  },
   "activities": {
-    "title": "Tours & Activities in Thailand",
+    "title": "ทัวร์และกิจกรรมในประเทศไทย",
     "intro": "Discover curated tours and experiences across Thailand with GetYourGuide. From cooking classes in Chiang Mai to snorkeling adventures in Krabi, explore authentic local activities led by expert guides. Whether you're seeking cultural immersion, outdoor adventures, or hidden gems, find the perfect experience for your journey.",
     "continuePlanning": "Continue Planning Your Trip",
     "faq": {
@@ -1774,6 +1802,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       }
     }
   },
+  "transportTickets": {
+    "title": "ตั๋วรถบัส รถไฟ และเรือเฟอร์รี่ในประเทศไทย",
+    "intro": "จองตั๋วรถบัส รถไฟ และเรือเฟอร์รี่ทั่วประเทศไทยกับ 12Go Asia เดินทางอย่างสะดวกสบายระหว่างเมืองหลักเช่น กรุงเทพฯ เชียงใหม่ ภูเก็ต และเกาะสมุย เลือกจากรถบัส VIP รถไฟด่วน และเรือเฟอร์รี่ความเร็วสูงพร้อมการยืนยันทันทีและอี-ตั๋ว",
+    "continuePlanning": "วางแผนการเดินทางต่อ",
+    "faq": {
+      "title": "คำถามที่พบบ่อย",
+      "q1": {
+        "question": "มีประเภทการเดินทางใดบ้าง?",
+        "answer": "12Go Asia นำเสนอรถบัส (มาตรฐาน VIP และหรูหรา) รถไฟ (ด่วนและเร็ว) และเรือเฟอร์รี่ระหว่างเกาะ ตัวเลือกแตกต่างกันไปตามเส้นทาง เส้นทางยอดนิยมเช่น กรุงเทพฯ ถึง เชียงใหม่ มีการเดินทางหลายครั้งต่อวันพร้อมระดับความสะดวกสบายที่แตกต่างกัน"
+      },
+      "q2": {
+        "question": "ฉันจะได้รับตั๋วอย่างไร?",
+        "answer": "หลังจากจอง คุณจะได้รับอี-ตั๋วทางอีเมล ผู้ปฏิบัติการส่วนใหญ่ยอมรับอี-ตั๋วมือถือ เพียงแสดง QR code ของคุณที่เทอร์มินัล เส้นทางบางสายต้องการตั๋วจริงซึ่งสามารถรับได้ที่เคาน์เตอร์ ตรวจสอบการยืนยันการจองของคุณสำหรับคำแนะนำการรับตั๋ว"
+      },
+      "q3": {
+        "question": "นโยบายการยกเลิกคืออะไร?",
+        "answer": "นโยบายการยกเลิกแตกต่างกันไปตามผู้ปฏิบัติการและประเภทตั๋ว ตั๋วหลายใบเสนอการยกเลิกฟรีถึง 24-72 ชั่วโมงก่อนการเดินทาง ตรวจสอบนโยบายเฉพาะเสมอก่อนจอง การคืนเงินมักดำเนินการกลับไปยังวิธีการชำระเงินเดิมของคุณหักค่าธรรมเนียมผู้ปฏิบัติการ"
+      },
+      "q4": {
+        "question": "มีคลาสที่นั่งต่างๆ หรือไม่?",
+        "answer": "ใช่ รถบัสมีตัวเลือกมาตรฐาน VIP และหรูหราพร้อมเบาะนั่งเอน เครื่องปรับอากาศ และบางครั้งมีอาหารบนรถ รถไฟมีคลาสต่างๆ จากที่นั่งระบายความร้อนไปจนถึงที่นองห้องนอน เรือเฟอร์รี่มีตัวเลือกที่นั่งดาดฟ้ามาตรฐานและห้อง VIP"
+      },
+      "q5": {
+        "question": "ฉันควรจองตั๋วการเดินทางล่วงหน้าหรือไม่?",
+        "answer": "สำหรับเส้นทางยอดนิยมเช่น กรุงเทพฯ ถึง เชียงใหม่ หรือ กรุงเทพฯ ถึง ภูเก็ต โดยเฉพาะในฤดูกาลหนาแน่น (ธันวาคม-กุมภาพันธ์ สงกรานต์ในเมษายน) แนะนำให้จองล่วงหน้า 1-2 สัปดาห์ นี่รับประกันที่นั่งของคุณและมักรวมราคาที่ดีกว่า การจองทันทีอาจมีตัวเลือกจำกัด"
+      }
+    }
+  },
   "activities": {
     "title": "ทัวร์และกิจกรรมในประเทศไทย",
     "intro": "ค้นพบทัวร์และประสบการณ์ที่คัดสรรทั่วประเทศไทยกับ GetYourGuide จากคลาสทำอาหารในเชียงใหม่ไปจนถึงการผจญภัยดำน้ำตื้นในกระบี่ สำรวจกิจกรรมท้องถิ่นแท้จริงที่นำโดยไกด์ผู้เชี่ยวชาญ ไม่ว่าคุณกำลังมองหาการดื่มด่ำทางวัฒนธรรม การผจญภัยกลางแจ้ง หรือสถานที่ลับ ค้นหาประสบการณ์ที่เหมาะสมสำหรับการเดินทางของคุณ",
@@ -2700,6 +2756,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "q5": {
         "question": "နေရာတွင် သို့မဟုတ် အွန်လိုတွင် ဘွတ်ကင်လုပ်ခြင်းသည် ပိုသက်သာပါသလား?",
         "answer": "Klook မှတစ်ဆင့် အွန်လိုင်း ဘွတ်ကင်လုပ်ခြင်းသည် နေရာတွင် စျေးနှုန်းထက် ပျမ်းမျှအားဖြင့် ၁၀-၃၀% ပိုသက်သာသည်။ သင်သည် စားပွဲချင်းမရှောင်ပဲ နေရာရရန် အာမခံနိုင်သည်။ နေရာအချို့သည် တံခါးတွင် မရရှိနိုင်သော သီးသန့် အွန်လိုင်း လျှော့စျေးများနှင့် ထပ်ပေါင်းများကို ပေးသည်။"
+      }
+    }
+  },
+  "transportTickets": {
+    "title": "ထိုင်းနိုင်ငံရှိ ဘတ်စ်ကား၊ ရထားနှင့် ကူးတို့သင်္ဘော (Ferry) လက်မှတ်များ",
+    "intro": "12Go Asia မှတစ်ဆင့် ထိုင်းနိုင်ငံတစ်ဝှမ်းရှိ ဘတ်စ်ကား၊ ရထားနှင့် ကူးတို့သင်္ဘော လက်မှတ်များကို လွယ်ကူချောမွေ့စွာ ကြိုတင်ဘွတ်ကင်ပြုလုပ်နိုင်ပါသည်။ ဘန်ကောက်၊ ချင်းမိုင်၊ ဖူးကက်နှင့် ကိုဆမူီ ကဲ့သို့သော အဓိကမြို့ကြီးများနှင့် ခရီးစဉ်များသို့ အဆင်ပြေချောမွေ့စွာ ခရီးသွားလာနိုင်ပါသည်။ VIP ဘတ်စ်ကားများ၊ အမြန်ရထားများနှင့် အမြန်ကူးတို့သင်္ဘောများထဲမှ စိတ်ကြိုက်ရွေးချယ်နိုင်ပြီး၊ ချက်ချင်းအတည်ပြုချက်နှင့် E-ticket များ ရရှိကာ စိတ်အေးချမ်းသာစွာ ခရီးနှင်နိုင်မည်ဖြစ်ပါသည်။",
+    "continuePlanning": "သင့်ခရီးစဉ်ကို ဆက်လက် စီစဉ်ဆောင်ပါ",
+    "faq": {
+      "title": "မကြာခဏ မေးလေ့ရှိသော မေးခွန်းများ",
+      "q1": {
+        "question": "မည်သည့် သယ်ယူပို့ဆောင်ရေးအမျိုးအစားများကို ရရှိနိုင်ပါသနည်း။",
+        "answer": "12Go Asia တွင် ဘတ်စ်ကားများ (Standard, VIP နှင့် Luxury)၊ ရထားများ (Express နှင့် Rapid) နှင့် ကျွန်းများအကြား ပြေးဆွဲသော ကူးတို့သင်္ဘောများကို ဘွတ်ကင်ပြုလုပ်နိုင်ပါသည်။ ရွေးချယ်နိုင်သော ဝန်ဆောင်မှုများသည် ခရီးစဉ်လမ်းကြောင်းအပေါ် မူတည်၍ ကွဲပြားမှုရှိနိုင်ပါသည်။ ဘန်ကောက်မှ ချင်းမိုင်သို့ သွားရောက်သည့် လူကြိုက်များသော လမ်းကြောင်းများတွင် ခရီးစဉ်အကြိမ်ရေ အများအပြားရှိပြီး အဆင်ပြေချောမွေ့မှု အဆင့်အတန်းအမျိုးမျိုးကို စိတ်ကြိုက်ရွေးချယ်နိုင်ပါသည်။"
+      },
+      "q2": {
+        "question": "လက်မှတ်ကို မည်သို့ ရရှိမည်နည်း။",
+        "answer": "ဘွတ်ကင်ပြုလုပ်ပြီးပါက သင့်အီးမေးလ်သို့ E-ticket ကို ပေးပို့ပေးမည်ဖြစ်ပါသည်။ ဝန်ဆောင်မှုပေးသူ အများစုသည် မိုဘိုင်း E-ticket များကို လက်ခံသဖြင့် စကေးရှင်း/ဂိတ်များတွင် QR Code ကို ပြသရုံဖြင့် ခရီးသွားနိုင်ပါသည်။ အချို့သော လမ်းကြောင်းများတွင်မူ ကောင်တာ၌ ပုံနှိပ်လက်မှတ် (Physical Ticket) ထုတ်ယူရန် လိုအပ်နိုင်ပါသည်။ လက်မှတ်ထုတ်ယူရန် အသေးစိတ် ညွှန်ကြားချက်များအတွက် သင့် ဘွတ်ကင်အတည်ပြုချက် (Booking Confirmation) ကို စစ်ဆေးပါ။"
+      },
+      "q3": {
+        "question": "ခရီးစဉ် ဖျက်သိမ်းခြင်းဆိုင်ရာ မူဝါဒ (Cancellation Policy) မည်သို့ရှိပါသနည်း။",
+        "answer": "ခရီးစဉ်ဖျက်သိမ်းခြင်းဆိုင်ရာ မူဝါဒများသည် ဝန်ဆောင်မှုပေးသည့် ကုမ္ပဏီနှင့် လက်မှတ်အမျိုးအစားအပေါ် မူတည်၍ ကွဲပြားပါသည်။ လက်မှတ်အများစုသည် ထွက်ခွာမည့်အချိန်မတိုင်မီ ၂၄ နာရီမှ ၇၂ နာရီအတွင်း အခမဲ့ ဖျက်သိမ်းခွင့်ရှိပါသည်။ ဘွတ်ကင်မပြုလုပ်မီ သက်ဆိုင်ရာ မူဝါဒကို အမြဲမပြတ် စစ်ဆေးပေးပါ။ ငွေပြန်လည်ပေးအပ်ခြင်းများကို များသောအားဖြင့် သင် အသုံးပြုခဲ့သော မူရင်း ငွေပေးချေမှုနည်းလမ်းအတိုင်း ပြန်လည် ထည့်သွင်းပေးမည်ဖြစ်ပါသည်။ အချို့သော လက်မှတ်များသည် ဝယ်ယူပြီးပါက Cancel (ဖျက်သိမ်းခြင်း) နှင့် ခရီးစဉ်ရက်စွဲ ပြောင်းလဲခြင်းများ ပြုလုပ်ခွင့်မရှိပါသဖြင့် လက်မှတ်မဝယ်ယူမီ အထူးသတိပြုစစ်ဆေးပေးပါရန် အသိပေးအပ်ပါသည်။"
+      },
+      "q4": {
+        "question": "ခုံနေရာနှင့် အတန်းအစား ရွေးချယ်စရာများ ရှိပါသလား။",
+        "answer": "ဟုတ်ကဲ့၊ ရှိပါသည်။ ဘတ်စ်ကားများတွင် လဲလျောင်းနိုင်သော ခုံနေရာများ၊ လေအေးပေးစနစ် နှင့် အစားအသောက် ဝန်ဆောင်မှုများ ပါဝင်သည့် Standard, VIP နှင့် Luxury ဟူ၍ ရွေးချယ်နိုင်ပါသည်။ ရထားများတွင် လေအေးပေးစနစ်ပါဝင်သော ရာသီထိန်းခုံများမှသည် အိပ်စဉ်အခန်းများ (Sleeper) အထိ အမျိုးအစားမျိုးစုံ ရှိပါသည်။ ကူးတို့သင်္ဘောများတွင်လည်း ရိုးရိုးခုံနေရာများနှင့် VIP အခန်း ရွေးချယ်စရာများ ပါဝင်ပါသည်။"
+      },
+      "q5": {
+        "question": "သယ်ယူပို့ဆောင်ရေး လက်မှတ်များကို ကြိုတင်ဘွတ်ကင် လုပ်ထားသင့်ပါသလား။",
+        "answer": "ဘန်ကောက်-ချင်းမိုင် သို့မဟုတ် ဘန်ကောက်-ဖူးကက် ကဲ့သို့သော လူကြိုက်များသော လမ်းကြောင်းများအတွက်၊ အထူးသဖြင့် ခရီးသွားရာသီများ (ဒီဇင်ဘာ မှ ဖေဖော်ဝါရီ နှင့် ဧပြီလ သင်္ကြန်ကာလများ) တွင် ၁ ပတ်မှ ၂ ပတ်ခန့် ကြိုတင် ဘွတ်ကင်ပြုလုပ်ထားရန် အကြံပြုလိုပါသည်။ ကြိုတင်ဘွတ်ကင်လုပ်ခြင်းဖြင့် လိုချင်သော ခုံနေရာကို သေချာပေါက် ရရှိနိုင်မည့်အပြင် သက်သာသော ဈေးနှုန်းများကိုပါ ရရှိနိုင်မည်ဖြစ်ပါသည်။ နောက်ဆုံးမှ ဘွတ်ကင်ပြုလုပ်ပါက ခုံနေရာ ရွေးချယ်ခွင့် ကန့်သတ်ချက်များ ရှိနိုင်ပါသည်။"
       }
     }
   },
@@ -3632,6 +3716,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       }
     }
   },
+  "transportTickets": {
+    "title": "Billetes de autobús, tren y ferry en Tailandia",
+    "intro": "Reserva billetes de autobús, tren y ferry por toda Tailandia con 12Go Asia. Viaja cómodamente entre grandes ciudades como Bangkok, Chiang Mai, Phuket y Koh Samui. Elige entre autobuses VIP, trenes expresos y ferris de alta velocidad con confirmación instantánea y billetes electrónicos.",
+    "continuePlanning": "Continuar planificando tu viaje",
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "q1": {
+        "question": "¿Qué tipos de transporte están disponibles?",
+        "answer": "12Go Asia ofrece autobuses (estándar, VIP y de lujo), trenes (exprés y rápidos) y ferris entre islas. Las opciones varían según la ruta; rutas populares como Bangkok a Chiang Mai tienen múltiples salidas diarias con diferentes niveles de comodidad."
+      },
+      "q2": {
+        "question": "¿Cómo recibo mi billete?",
+        "answer": "Después de reservar, recibirás un billete electrónico por correo electrónico. La mayoría de los operadores aceptan billetes electrónicos móviles; solo tienes que mostrar tu código QR en la terminal. Algunas rutas requieren billetes físicos que se pueden recoger en el mostrador. Consulta tu confirmación de reserva para conocer las instrucciones de recogida."
+      },
+      "q3": {
+        "question": "¿Cuál es la política de cancelación?",
+        "answer": "Las políticas de cancelación varían según el operador y el tipo de billete. Muchos billetes ofrecen cancelación gratuita hasta 24-72 horas antes de la salida. Revisa siempre la política específica antes de reservar. Los reembolsos generalmente se procesan al método de pago original, menos las tarifas del operador."
+      },
+      "q4": {
+        "question": "¿Hay diferentes clases de asientos?",
+        "answer": "Sí, los autobuses ofrecen opciones estándar, VIP y de lujo con asientos reclinables, aire acondicionado y, a veces, comidas a bordo. Los trenes tienen varias clases, desde asientos con ventilador hasta literas. Los ferris ofrecen asientos estándar en cubierta y opciones de cabina VIP."
+      },
+      "q5": {
+        "question": "¿Debo reservar los billetes de transporte con antelación?",
+        "answer": "Para rutas populares como Bangkok a Chiang Mai o Bangkok a Phuket, especialmente durante temporadas altas (diciembre-febrero, Songkran en abril), se recomienda reservar con 1-2 semanas de antelación. Esto garantiza tu asiento y a menudo incluye mejores precios. Las reservas de última hora pueden tener opciones limitadas."
+      }
+    }
+  },
   "activities": {
     "title": "Tours y Actividades en Tailandia",
     "intro": "Descubre tours y experiencias curadas en toda Tailandia con GetYourGuide. Desde clases de cocina en Chiang Mai hasta aventuras de snorkel en Krabi, explora actividades locales auténticas guiadas por expertos. Ya sea que busques inmersión cultural, aventuras al aire libre o joyas ocultas, encuentra la experiencia perfecta para tu viaje.",
@@ -4561,6 +4673,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       }
     }
   },
+  "transportTickets": {
+    "title": "Billets de bus, de train et de ferry en Thaïlande",
+    "intro": "Réservez des billets de bus, de train et de ferry dans toute la Thaïlande avec 12Go Asia. Voyagez confortablement entre les grandes villes comme Bangkok, Chiang Mai, Phuket et Koh Samui. Choisissez parmi des bus VIP, des trains express et des ferries rapides avec confirmation instantanée et billets électroniques.",
+    "continuePlanning": "Continuer la planification de votre voyage",
+    "faq": {
+      "title": "Questions fréquentes",
+      "q1": {
+        "question": "Quels types de transport sont disponibles ?",
+        "answer": "12Go Asia propose des bus (standard, VIP et luxe), des trains (express et rapides) et des ferries entre les îles. Les options varient selon l'itinéraire — les trajets populaires comme Bangkok à Chiang Mai ont plusieurs départs quotidiens avec différents niveaux de confort."
+      },
+      "q2": {
+        "question": "Comment vais-je recevoir mon billet ?",
+        "answer": "Après la réservation, vous recevrez un billet électronique par e-mail. La plupart des opérateurs acceptent les billets électroniques mobiles — il suffit de présenter votre code QR au terminal. Certains itinéraires nécessitent des billets physiques à récupérer au comptoir. Consultez votre confirmation de réservation pour les instructions de retrait."
+      },
+      "q3": {
+        "question": "Quelle est la politique d'annulation ?",
+        "answer": "Les politiques d'annulation varient selon l'opérateur et le type de billet. De nombreux billets offrent une annulation gratuite jusqu'à 24-72 heures avant le départ. Vérifiez toujours la politique spécifique avant de réserver. Les remboursements sont généralement effectués sur votre méthode de paiement d'origine, moins les frais éventuels de l'opérateur."
+      },
+      "q4": {
+        "question": "Y a-t-il différentes classes de sièges ?",
+        "answer": "Oui, les bus proposent des options standard, VIP et luxe avec sièges inclinables, climatisation et parfois des repas à bord. Les trains offrent diverses classes, des sièges ventilés aux couchettes. Les ferries proposent des sièges de pont standard et des options de cabine VIP."
+      },
+      "q5": {
+        "question": "Dois-je réserver mes billets de transport à l'avance ?",
+        "answer": "Pour les itinéraires populaires comme Bangkok-Chiang Mai ou Bangkok-Phuket, surtout pendant les hautes saisons (décembre-février, Songkran en avril), il est recommandé de réserver 1 à 2 semaines à l'avance. Cela garantit votre place et permet souvent d'obtenir de meilleurs prix. Les réservations de dernière minute peuvent avoir des options limitées."
+      }
+    }
+  },
   "activities": {
     "title": "Tours et Activités en Thaïlande",
     "intro": "Découvrez des circuits et expériences curés à travers la Thaïlande avec GetYourGuide. Des cours de cuisine à Chiang Mai aux aventures de snorkeling à Krabi, explorez des activités locales authentiques guidées par des experts. Que vous cherchiez une immersion culturelle, des aventures en plein air ou des trésors cachés, trouvez l'expérience parfaite pour votre voyage.",
@@ -5487,6 +5627,34 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "q5": {
         "question": "Ist es günstiger, vor Ort oder online zu buchen?",
         "answer": "Online-Buchen über Klook ist typischerweise 10-30% günstiger als Vor-Ort-Preise. Sie vermeiden auch Warteschlangen und garantieren Verfügbarkeit. Einige Attraktionen bieten exklusive Online-Rabatte und Extras, die nicht am Eingang erhältlich sind."
+      }
+    }
+  },
+  "transportTickets": {
+    "title": "Bus-, Zug- und Fährtickets in Thailand",
+    "intro": "Buchen Sie Bus-, Zug- und Fährtickets in ganz Thailand mit 12Go Asia. Reisen Sie bequem zwischen wichtigen Städten wie Bangkok, Chiang Mai, Phuket und Koh Samui. Wählen Sie aus VIP-Bussen, Expresszügen und Schnellfähren mit sofortiger Bestätigung und E-Tickets.",
+    "continuePlanning": "Reiseplanung fortsetzen",
+    "faq": {
+      "title": "Häufig gestellte Fragen",
+      "q1": {
+        "question": "Welche Transportarten sind verfügbar?",
+        "answer": "12Go Asia bietet Busse (Standard, VIP und Luxus), Züge (Express und Rapid) und Fähren zwischen den Inseln an. Die Optionen variieren je nach Strecke – beliebte Routen wie Bangkok nach Chiang Mai haben mehrere tägliche Abfahrten mit unterschiedlichem Komfortniveau."
+      },
+      "q2": {
+        "question": "Wie erhalte ich mein Ticket?",
+        "answer": "Nach der Buchung erhalten Sie ein E-Ticket per E-Mail. Die meisten Anbieter akzeptieren mobile E-Tickets – zeigen Sie einfach Ihren QR-Code am Terminal vor. Bei manchen Strecken sind physische Tickets erforderlich, die am Schalter abgeholt werden können. Prüfen Sie Ihre Buchungsbestätigung für Abholhinweise."
+      },
+      "q3": {
+        "question": "Wie lautet die Stornierungsrichtlinie?",
+        "answer": "Stornierungsrichtlinien variieren je nach Anbieter und Tickettyp. Viele Tickets bieten eine kostenlose Stornierung bis zu 24–72 Stunden vor Abfahrt. Prüfen Sie vor der Buchung immer die spezifische Richtlinie. Rückerstattungen erfolgen in der Regel auf die ursprüngliche Zahlungsmethode, abzüglich etwaiger Gebühren des Anbieters."
+      },
+      "q4": {
+        "question": "Gibt es verschiedene Sitzklassen?",
+        "answer": "Ja, Busse bieten Standard-, VIP- und Luxusoptionen mit verstellbaren Sitzen, Klimaanlage und teilweise Mahlzeiten an Bord. Züge verfügen über verschiedene Klassen, von Sitzen mit Ventilator bis hin zu Schlafkabinen. Fähren bieten Standard-Deckplätze und VIP-Kabinen zur Auswahl."
+      },
+      "q5": {
+        "question": "Sollte ich Transporttickets im Voraus buchen?",
+        "answer": "Für beliebte Strecken wie Bangkok–Chiang Mai oder Bangkok–Phuket wird besonders während der Hauptsaison (Dezember–Februar, Songkran im April) empfohlen, 1–2 Wochen im Voraus zu buchen. Dies garantiert Ihnen einen Sitzplatz und bietet oft bessere Preise. Bei kurzfristigen Buchungen kann die Auswahl eingeschränkt sein."
       }
     }
   },
