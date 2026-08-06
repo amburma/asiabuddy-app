@@ -11,6 +11,7 @@ import rehypeRaw from 'rehype-raw';
 import { THAILAND_CITIES, buildTripComSearchValue, normalizeCityName } from '../../src/config/thailandCities';
 import { getKlookLinksByCity } from '../../lib/queries/klookLinks';
 import { generate12GoLink } from '../../lib/twelveGo';
+import { generateAiraloLink } from '../../lib/airalo';
 
 interface Props {
   language: ThaiLanguage;
@@ -143,6 +144,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
   const [klookButtons, setKlookButtons] = useState<string | null>(null);
   const [klookLinks, setKlookLinks] = useState<any[]>([]);
   const [twelveGoButtons, setTwelveGoButtons] = useState<{ origin: string; destination: string } | null>(null);
+  const [showEsimCTA, setShowEsimCTA] = useState(false);
 
   // IATA to city name mapping for Trip.com URLs
   const iataToCity: Record<string, string> = {
@@ -309,6 +311,9 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
     setInput('');
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
+    
+    // Reset CTAs on new message
+    setShowEsimCTA(false);
 
     // Convert ChatMessage format to Gemini format
     const chatHistory = messages.map(msg => ({
@@ -407,6 +412,47 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
         setTwelveGoButtons(null);
       }
       // else: no new trigger of any kind — leave twelveGoButtons as-is so it persists across follow-up questions
+
+      // Check for [SHOW_ESIM_CTA] trigger
+      const esimTrigger = '[SHOW_ESIM_CTA]';
+      const hasEsimTag = botReply.includes(esimTrigger);
+      if (hasEsimTag) {
+        displayResponse = botReply.replace(esimTrigger, '');
+      }
+
+      // Check for eSIM-related keywords
+      const esimKeywords = [
+        // English
+        'esim', 'e-sim', 'internet', 'wifi', 'wi-fi', 'connection', 'sim card', 'data plan',
+        // Myanmar
+        'အီဆင်', 'အင်တာနက်', 'ဝိုင်ဖိုင်', 'ဆင်းကတ်', 'ဒေတာ',
+        // Thai
+        'อีซิม', 'อินเทอร์เน็ต', 'ไวไฟ', 'ซิมการ์ด', 'แพ็กเกจ',
+        // Chinese
+        'esim', 'e-sim', '互联网', 'wifi', 'wi-fi', 'sim卡', '流量',
+        // Japanese
+        'esim', 'e-sim', 'インターネット', 'wifi', 'wi-fi', 'simカード', 'データプラン',
+        // Korean
+        'esim', 'e-sim', '인터넷', 'wifi', 'wi-fi', '심카드', '데이터',
+        // German
+        'esim', 'e-sim', 'internet', 'wifi', 'wi-fi', 'sim-karte', 'datenplan',
+        // French
+        'esim', 'e-sim', 'internet', 'wifi', 'wi-fi', 'carte sim', 'forfait données',
+        // Spanish
+        'esim', 'e-sim', 'internet', 'wifi', 'wi-fi', 'tarjeta sim', 'plan de datos'
+      ];
+
+      const responseLower = displayResponse.toLowerCase();
+      const userMessageLower = userMessage.toLowerCase();
+      const hasEsimKeyword = esimKeywords.some(keyword => 
+        responseLower.includes(keyword) || userMessageLower.includes(keyword)
+      );
+
+      // Reset eSIM CTA on new messages, then set if triggered
+      setShowEsimCTA(false);
+      if (hasEsimKeyword || hasEsimTag) {
+        setShowEsimCTA(true);
+      }
 
       setMessages(prev => [...prev, { role: 'assistant', content: displayResponse }]);
     } catch (error) {
@@ -661,6 +707,25 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
                         >
                           <ExternalLink size={14} />
                           12Go တွင် ဘတ်စ်/ရထား ရှာဖွေရန်
+                        </a>
+                      );
+                    })()}
+                  </div>
+                )}
+
+                {/* Show eSIM CTA button for the last assistant message if triggered */}
+                {message.role === 'assistant' && i === messages.length - 1 && showEsimCTA && (
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    {(() => {
+                      const airaloUrl = generateAiraloLink({ countryId: 'thailand', subId: 'chatbot-thailand' });
+                      return (
+                        <a
+                          href={airaloUrl}
+                          target="_blank"
+                          rel="noopener noreferrer sponsored"
+                          className="inline-flex items-center justify-center gap-2 bg-[#f59e0b] text-white font-semibold py-2 px-4 rounded-lg hover:bg-[#d97706] hover:shadow-lg transition-all duration-200 text-sm"
+                        >
+                          Get eSIM 📶
                         </a>
                       );
                     })()}

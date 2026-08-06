@@ -35,7 +35,7 @@ export default function ServicesStrip({
         </h2>
         <div className="w-12 h-0.5 bg-amber-500 mt-2 mb-6 mx-auto" />
 
-        <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-7 gap-3">
+        <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-8 gap-3">
           <Link
             href={`/${country}/hotels`}
             className="flex flex-col items-center justify-center bg-white border border-gray-100 rounded-2xl py-4 px-2 shadow-sm hover:shadow-md hover:border-amber-300 hover:bg-amber-50 transition-all duration-200 cursor-pointer"
@@ -128,6 +128,16 @@ export default function ServicesStrip({
             <span className="text-3xl mb-2 hover:scale-110 transition-transform">🚌</span>
             <span className="text-xs font-semibold text-gray-700 text-center whitespace-nowrap">
               Transport
+            </span>
+          </Link>
+
+          <Link
+            href={`/${country}/esim`}
+            className="flex flex-col items-center justify-center bg-white border border-gray-100 rounded-2xl py-4 px-2 shadow-sm hover:shadow-md hover:border-amber-300 hover:bg-amber-50 transition-all duration-200 cursor-pointer"
+          >
+            <span className="text-3xl mb-2 hover:scale-110 transition-transform">📶</span>
+            <span className="text-xs font-semibold text-gray-700 text-center whitespace-nowrap">
+              eSIM
             </span>
           </Link>
         </div>

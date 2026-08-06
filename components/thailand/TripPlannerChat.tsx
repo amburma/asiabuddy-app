@@ -10,6 +10,7 @@ import { UI_TRANSLATIONS } from '../../lib/i18n';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import HumanOperatorChat from './HumanOperatorChat';
+import { generateAiraloLink } from '../../lib/airalo';
 
 interface Props {
   language: ThaiLanguage;
@@ -43,6 +44,7 @@ export default function TripPlannerChat({ language }: Props) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showBookNow, setShowBookNow] = useState(false);
+  const [showEsimCTA, setShowEsimCTA] = useState(false);
   const [showHumanChat, setShowHumanChat] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
@@ -124,10 +126,42 @@ RESPONSE RULES — MANDATORY:
         // Spanish
         'hotel', 'tour', 'vuelo', 'entrada', 'alquiler de coche', 'traslado aeropuerto'
       ];
+
+      // Check for eSIM-related keywords
+      const esimKeywords = [
+        // English
+        'esim', 'e-sim', 'internet', 'wifi', 'wi-fi', 'connection', 'sim card', 'data plan',
+        // Myanmar
+        'အီဆင်', 'အင်တာနက်', 'ဝိုင်ဖိုင်', 'ဆင်းကတ်', 'ဒေတာ',
+        // Thai
+        'อีซิม', 'อินเทอร์เน็ต', 'ไวไฟ', 'ซิมการ์ด', 'แพ็กเกจ',
+        // Chinese
+        'esim', 'e-sim', '互联网', 'wifi', 'wi-fi', 'sim卡', '流量',
+        // Japanese
+        'esim', 'e-sim', 'インターネット', 'wifi', 'wi-fi', 'simカード', 'データプラン',
+        // Korean
+        'esim', 'e-sim', '인터넷', 'wifi', 'wi-fi', '심카드', '데이터',
+        // German
+        'esim', 'e-sim', 'internet', 'wifi', 'wi-fi', 'sim-karte', 'datenplan',
+        // French
+        'esim', 'e-sim', 'internet', 'wifi', 'wi-fi', 'carte sim', 'forfait données',
+        // Spanish
+        'esim', 'e-sim', 'internet', 'wifi', 'wi-fi', 'tarjeta sim', 'plan de datos'
+      ];
+
       const responseLower = response.toLowerCase();
       const hasKeyword = keywords.some(keyword => responseLower.includes(keyword));
+      const hasEsimKeyword = esimKeywords.some(keyword =>
+        responseLower.includes(keyword)
+      );
+      const hasEsimTag = response.includes('[SHOW_ESIM_CTA]');
+
       if (hasKeyword) {
         setShowBookNow(true);
+      }
+
+      if (hasEsimKeyword || hasEsimTag) {
+        setShowEsimCTA(true);
       }
     } catch (error: any) {
       if (error.fallback === true) {
@@ -377,9 +411,10 @@ RESPONSE RULES — MANDATORY:
                     </button>
                   </div>
                 )}
-                <button 
+                <button
                   onClick={() => {
                     setShowBookNow(false);
+                    setShowEsimCTA(false);
                     setStep('destination');
                     setMessages([]);
                   }}
@@ -394,6 +429,17 @@ RESPONSE RULES — MANDATORY:
                   >
                     {t.bookNowCta}
                   </button>
+                )}
+                {showEsimCTA && (
+                  <a
+                    href={generateAiraloLink({ countryId: 'thailand', subId: 'chatbot-thailand' })}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 w-full bg-[#f59e0b] text-white font-semibold py-3 px-4 rounded-xl hover:bg-[#d97706] transition-colors flex items-center justify-center gap-2"
+                  >
+                    <span>Get eSIM</span>
+                    <span>📶</span>
+                  </a>
                 )}
 
               </div>

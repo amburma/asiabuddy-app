@@ -864,6 +864,37 @@ const ENGLISH_UI = {
       }
     }
   },
+  "esim": {
+    "title": "Stay Connected with an eSIM",
+    "intro": "Skip the airport SIM card counter. Get a digital eSIM from Airalo before you land and connect to local data the moment your flight touches down — no physical SIM swap, no roaming bills.",
+    "ctaTitle": "Get Your eSIM Before You Travel",
+    "ctaDescription": "Browse data plans for your destination on Airalo and activate instantly on your phone. Setup takes minutes and works on most modern smartphones.",
+    "ctaButton": "Get {country} eSIM",
+    "continuePlanning": "Continue Planning Your Trip",
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "What is an eSIM and how is it different from a physical SIM card?",
+        "answer": "An eSIM is a digital SIM built into your phone. Instead of inserting a physical card, you scan a QR code or tap a link to install a data plan directly onto your device. It works alongside or instead of your regular SIM, and most phones from the last few years support it."
+      },
+      "q2": {
+        "question": "Is my phone compatible with eSIM?",
+        "answer": "Most iPhones (XS and newer) and many recent Android phones (Google Pixel, Samsung Galaxy S20 and newer, and others) support eSIM. Check your phone's settings under Cellular or Mobile Network for an 'Add eSIM' or 'Add Data Plan' option, or check with Airalo's compatibility list before purchasing."
+      },
+      "q3": {
+        "question": "When should I install and activate my eSIM?",
+        "answer": "You can install the eSIM profile any time before your trip, even while still on your home Wi-Fi. Most Airalo plans let you choose when the data validity period starts — either on installation or on first connection to a local network — so you won't waste days of validity waiting to depart."
+      },
+      "q4": {
+        "question": "Do I need Wi-Fi to install the eSIM?",
+        "answer": "Yes, you'll need an internet connection (Wi-Fi or existing mobile data) to download and install the eSIM profile. Once installed, no further internet is needed until you want to use the data plan itself, so it's best to install before you leave home or at the airport."
+      },
+      "q5": {
+        "question": "What happens if I run out of data?",
+        "answer": "Most Airalo eSIM plans can be topped up directly from the Airalo app once your current plan runs low or expires, without needing to buy a brand new eSIM. Check the specific plan's top-up options before purchase if this matters for a longer trip."
+      }
+    }
+  },
   "activities": {
     "title": "ทัวร์และกิจกรรมในประเทศไทย",
     "intro": "Discover curated tours and experiences across Thailand with GetYourGuide. From cooking classes in Chiang Mai to snorkeling adventures in Krabi, explore authentic local activities led by expert guides. Whether you're seeking cultural immersion, outdoor adventures, or hidden gems, find the perfect experience for your journey.",
@@ -1830,6 +1861,37 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       }
     }
   },
+  "esim": {
+    "title": "เชื่อมต่อได้ตลอดเวลาด้วย eSIM",
+    "intro": "ไม่ต้องเสียเวลาเข้าแถวที่เคาน์เตอร์ซิมการ์ด ณ สนามบิน เพียงรับ eSIM ดิจิทัลจาก Airalo ก่อนเดินทางถึง และเชื่อมต่อกับข้อมูลอินเทอร์เน็ตท้องถิ่นทันทีที่เครื่องลงจอด โดยไม่ต้องเปลี่ยนซิมการ์ด และไม่มีค่าบริการโรมมิ่งเพิ่มเติม",
+    "ctaTitle": "รับ eSIM ของคุณก่อนออกเดินทาง",
+    "ctaDescription": "ค้นหาแพ็กเกจอินเทอร์เน็ตสำหรับจุดหมายปลายทางของคุณบน Airalo และเปิดใช้งานบนโทรศัพท์ได้ทันที การตั้งค่าใช้เวลาเพียงไม่กี่นาที และรองรับสมาร์ตโฟนรุ่นใหม่ส่วนใหญ่",
+    "ctaButton": "รับ eSIM สำหรับ{country}",
+    "continuePlanning": "วางแผนการเดินทางของคุณต่อ",
+    "faq": {
+      "title": "คำถามที่พบบ่อย (FAQs)",
+      "q1": {
+        "question": "eSIM คืออะไร และแตกต่างจากซิมการ์ดทั่วไปอย่างไร?",
+        "answer": "eSIM คือซิมดิจิทัลที่ติดตั้งอยู่ในตัวเครื่องโทรศัพท์ของคุณ โดยไม่ต้องใส่ซิมการ์ดจริง เพียงสแกน QR code หรือแตะลิงก์เพื่อติดตั้งแพ็กเกจอินเทอร์เน็ตลงในอุปกรณ์ได้โดยตรง สามารถทำงานควบคู่ไปกับซิมปกติหรือใช้แทนซิมเดิมได้ ซึ่งโทรศัพท์ส่วนใหญ่ที่เปิดตัวในไม่กี่ปีที่ผ่านมารองรับระบบนี้"
+      },
+      "q2": {
+        "question": "โทรศัพท์ของฉันรองรับการใช้งาน eSIM หรือไม่?",
+        "answer": "iPhone ส่วนใหญ่ (รุ่น XS ขึ้นไป) และโทรศัพท์ Android รุ่นใหม่หลายรุ่น (เช่น Google Pixel, Samsung Galaxy S20 ขึ้นไป และรุ่นอื่น ๆ) รองรับการใช้งาน eSIM คุณสามารถตรวจสอบได้ที่การตั้งค่าโทรศัพท์ในหัวข้อ Cellular หรือ Mobile Network ว่ามีตัวเลือก 'Add eSIM' หรือ 'Add Data Plan' หรือไม่ หรือตรวจสอบรายชื่ออุปกรณ์ที่รองรับจาก Airalo ก่อนทำการสั่งซื้อ"
+      },
+      "q3": {
+        "question": "ฉันควรติดตั้งและเปิดใช้งาน eSIM เมื่อใด?",
+        "answer": "คุณสามารถติดตั้งโปรไฟล์ eSIM เมื่อใดก็ได้ก่อนการเดินทาง แม้ขณะยังเชื่อมต่อ Wi-Fi ที่บ้าน แพ็กเกจส่วนใหญ่ของ Airalo ให้คุณเลือกระยะเวลาเริ่มนับอายุใช้งานได้ ทั้งเมื่อเริ่มติดตั้งหรือเมื่อเชื่อมต่อกับเครือข่ายท้องถิ่นเป็นครั้งแรก คุณจึงไม่เสียจำนวนวันใช้งานไปโดยเปล่าประโยชน์ขณะรอออกเดินทาง"
+      },
+      "q4": {
+        "question": "จำเป็นต้องใช้ Wi-Fi ในการติดตั้ง eSIM หรือไม่?",
+        "answer": "จำเป็น ต้องมีการเชื่อมต่ออินเทอร์เน็ต (Wi-Fi หรืออินเทอร์เน็ตมือถือเดิม) เพื่อดาวน์โหลดและติดตั้งโปรไฟล์ eSIM เมื่อติดตั้งเรียบร้อยแล้ว ไม่จำเป็นต้องใช้อินเทอร์เน็ตเพิ่มเติมจนกว่าคุณจะเริ่มใช้งานแพ็กเกจนั้น ดังนั้นจึงขอแนะนำให้ติดตั้งก่อนออกจากบ้านหรือขณะอยู่ที่สนามบิน"
+      },
+      "q5": {
+        "question": "จะเกิดอะไรขึ้นหากอินเทอร์เน็ตหมด?",
+        "answer": "แพ็กเกจ eSIM ส่วนใหญ่ของ Airalo สามารถเติมเงิน (Top-up) ได้โดยตรงผ่านแอปพลิเคชัน Airalo เมื่อแพ็กเกจปัจจุบันใกล้หมดหรือหมดอายุ โดยไม่จำเป็นต้องซื้อ eSIM ใหม่ หากเป็นการเดินทางระยะยาว ควรตรวจสอบตัวเลือกการเติมเงินของแพ็กเกจนั้น ๆ ก่อนทำการสั่งซื้อ"
+      }
+    }
+  },
   "activities": {
     "title": "ทัวร์และกิจกรรมในประเทศไทย",
     "intro": "ค้นพบทัวร์และประสบการณ์ที่คัดสรรทั่วประเทศไทยกับ GetYourGuide จากคลาสทำอาหารในเชียงใหม่ไปจนถึงการผจญภัยดำน้ำตื้นในกระบี่ สำรวจกิจกรรมท้องถิ่นแท้จริงที่นำโดยไกด์ผู้เชี่ยวชาญ ไม่ว่าคุณกำลังมองหาการดื่มด่ำทางวัฒนธรรม การผจญภัยกลางแจ้ง หรือสถานที่ลับ ค้นหาประสบการณ์ที่เหมาะสมสำหรับการเดินทางของคุณ",
@@ -2784,6 +2846,37 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "q5": {
         "question": "သယ်ယူပို့ဆောင်ရေး လက်မှတ်များကို ကြိုတင်ဘွတ်ကင် လုပ်ထားသင့်ပါသလား။",
         "answer": "ဘန်ကောက်-ချင်းမိုင် သို့မဟုတ် ဘန်ကောက်-ဖူးကက် ကဲ့သို့သော လူကြိုက်များသော လမ်းကြောင်းများအတွက်၊ အထူးသဖြင့် ခရီးသွားရာသီများ (ဒီဇင်ဘာ မှ ဖေဖော်ဝါရီ နှင့် ဧပြီလ သင်္ကြန်ကာလများ) တွင် ၁ ပတ်မှ ၂ ပတ်ခန့် ကြိုတင် ဘွတ်ကင်ပြုလုပ်ထားရန် အကြံပြုလိုပါသည်။ ကြိုတင်ဘွတ်ကင်လုပ်ခြင်းဖြင့် လိုချင်သော ခုံနေရာကို သေချာပေါက် ရရှိနိုင်မည့်အပြင် သက်သာသော ဈေးနှုန်းများကိုပါ ရရှိနိုင်မည်ဖြစ်ပါသည်။ နောက်ဆုံးမှ ဘွတ်ကင်ပြုလုပ်ပါက ခုံနေရာ ရွေးချယ်ခွင့် ကန့်သတ်ချက်များ ရှိနိုင်ပါသည်။"
+      }
+    }
+  },
+  "esim": {
+    "title": "eSIM ဖြင့် အမြဲတမ်း အဆက်အသွယ်မပြတ် ရှိနေပါစေ",
+    "intro": "လေဆိပ်ရှိ SIM ကဒ် ရောင်းချသည့် ကောင်တာများတွင် တန်းစီစောင့်ဆိုင်းရသည့် ဒုက္ခမှ ကင်းဝေးစေရန် သင်၏ ခရီးစဉ် မစတင်မီ Airalo မှ Digital eSIM တစ်ခုကို ရယူလိုက်ပါ။ ရုပ်ပိုင်းဆိုင်ရာ SIM ကဒ်များ လဲလှယ်ရန် မလိုဘဲ၊ နယ်စပ်ဖြတ်ကျော် Roaming စရိတ်များ ပေးဆောင်ရခြင်း မရှိဘဲ လေယာဉ် ဆင်းသက်သည်နှင့် သက်ဆိုင်ရာ ဒေသတွင်း အင်တာနက် ဒေတာကို ချက်ချင်း ချိတ်ဆက် အသုံးပြုနိုင်မည် ဖြစ်ပါသည်။",
+    "ctaTitle": "ခရီးမထွက်မီ eSIM ကို ကြိုတင် ရယူပါ",
+    "ctaDescription": "Airalo တွင် သင်သွားရောက်မည့် ခရီးစဉ်ဒေသအတွက် သင့်တော်မည့် ဒေတာ အစီအစဉ်များကို ရှာဖွေ၍ သင့်ဖုန်းတွင် ချက်ချင်း စတင်အသုံးပြုနိုင်ပါသည်။ စနစ်တပ်ဆင်ခြင်းမှာ မိနစ်ပိုင်းမျှသာ ကြာမြင့်ပြီး ခေတ်မီ စမတ်ဖုန်း အများစုတွင် လွယ်ကူစွာ အသုံးပြုနိုင်ပါသည်။",
+    "ctaButton": "{country} eSIM ရယူရန်",
+    "continuePlanning": "သင်၏ ခရီးစဉ်ကို ဆက်လက် စီစဉ်ပါ",
+    "faq": {
+      "title": "မကြာခဏ မေးလေ့ရှိသော မေးခွန်းများ (FAQs)",
+      "q1": {
+        "question": "eSIM ဆိုသည်မှာ အဘယ်နည်း။ ရုပ်ပိုင်းဆိုင်ရာ SIM ကဒ်နှင့် မည်သို့ ကွာခြားပါသနည်း။",
+        "answer": "eSIM ဆိုသည်မှာ သင့်ဖုန်းအတွင်း၌ သီးခြား ထည့်သွင်းထားပြီးသား Digital SIM တစ်မျိုး ဖြစ်ပါသည်။ ရုပ်ပိုင်းဆိုင်ရာ ကဒ်တစ်ခုခု ထည့်သွင်းရန် မလိုဘဲ QR Code စကင်ဖတ်ခြင်း သို့မဟုတ် Link တစ်ခုကို နှိပ်လိုက်ရုံဖြင့် သင့်စက်ပစ္စည်းအတွင်းသို့ ဒေတာ အစီအစဉ်ကို တိုက်ရိုက် တပ်ဆင်နိုင်ပါသည်။ ၎င်းသည် သင် လက်ရှိသုံးနေသော မူလ SIM ကဒ်နှင့်တွဲ၍သော်လည်းကောင်း၊ သီးသန့်ဖြစ်စေ အသုံးပြုနိုင်ပြီး လွန်ခဲ့သော နည်းနည်းအတွင်း ထွက်ရှိထားသည့် စမတ်ဖုန်း အများစုတွင် အသုံးပြုနိုင်ပါသည်။"
+      },
+      "q2": {
+        "question": "ကျွန်ုပ်၏ ဖုန်းသည် eSIM နှင့် ချိတ်ဆက် အသုံးပြုနိုင်ပါသလား။",
+        "answer": "iPhone (XS နှင့် နောက်ပိုင်းထွက် အမျိုးအစားများ) နှင့် နောက်ပိုင်းထွက် Android ဖုန်းအများစု (Google Pixel, Samsung Galaxy S20 နှင့် နောက်ပိုင်းထွက်များ) တွင် eSIM ကို အသုံးပြုနိုင်ပါသည်။ သင့်ဖုန်း၏ Settings အောက်ရှိ Cellular သို့မဟုတ် Mobile Network တွင် 'Add eSIM' သို့မဟုတ် 'Add Data Plan' ရွေးချယ်ခွင့် ပါ၊ မပါ စစ်ဆေးပါ သို့မဟုတ် မဝယ်ယူမီ Airalo ၏ ကိုင်တွယ်အသုံးပြုနိုင်သည့် စက်ပစ္စည်းစာရင်းတွင် တိုက်ဆိုင်စစ်ဆေးပါ။"
+      },
+      "q3": {
+        "question": "eSIM ကို မည်သည့်အချိန်တွင် ထည့်သွင်း၍ စတင် အသုံးပြုသင့်ပါသနည်း။",
+        "answer": "eSIM Profile ကို ခရီးမထွက်မီ မည်သည့်အချိန်၌မဆို မိမိအိမ်ရှိ Wi-Fi ဖြင့် ချိတ်ဆက်၍ ကြိုတင် တပ်ဆင်ထားနိုင်ပါသည်။ Airalo အစီအစဉ် အများစုသည် ဒေတာ သက်တမ်း စတင်မည့်အချိန်ကို—တပ်ဆင်သည့်အချိန်မှစ၍ သို့မဟုတ် ဒေသတွင်း ကွန်ရက်သို့ စတင်ချိတ်ဆက်သည့်အချိန်မှစ၍—ကြိုက်နှစ်သက်ရာ ရွေးချယ်ခွင့်ပေးထားသဖြင့် ခရီးမထွက်မီ သက်တမ်းကုန်ဆုံးသွားမည်ကို ပူပန်ရန် မလိုပါ။"
+      },
+      "q4": {
+        "question": "eSIM တပ်ဆင်ရန် Wi-Fi လိုအပ်ပါသလား။",
+        "answer": "ဟုတ်ကဲ့၊ eSIM Profile ကို ဒေါင်းလုဒ်ဆွဲ၍ တပ်ဆင်ရန် အင်တာနက်ချိတ်ဆက်မှု (Wi-Fi သို့မဟုတ် လက်ရှိ မိုဘိုင်းဒေတာ) လိုအပ်ပါသည်။ တပ်ဆင်ပြီးပါက ဒေတာ အစီအစဉ်ကို စတင် မသုံးစွဲမီအထိ အင်တာနက် ထပ်မံ လိုအပ်မည် မဟုတ်ပါ၊ ထို့ကြောင့် အိမ်မှ မထွက်ခွာမီ သို့မဟုတ် လေဆိပ်သို့ မရောက်မီ ကြိုတင် တပ်ဆင်ထားခြင်းက အကောင်းဆုံး ဖြစ်ပါသည်။"
+      },
+      "q5": {
+        "question": "ဒေတာ ကုန်သွားပါက မည်သို့ ဖြစ်မည်နည်း။",
+        "answer": "Airalo eSIM အစီအစဉ် အများစုသည် သင်၏ လက်ရှိ အစီအစဉ် ဒေတာနည်းသွားပါက သို့မဟုတ် သက်တမ်းကုန်သွားပါက eSIM အသစ် ထပ်မံ ဝယ်ယူရန် မလိုဘဲ Airalo App မှတစ်ဆင့် တိုက်ရိုက် ငွေဖြည့်သွင်း (Top-up) သုံးစွဲနိုင်ပါသည်။ ရေရှည်ခရီးစဉ်များအတွက် အရေးကြီးပါက မဝယ်ယူမီ သက်ဆိုင်ရာ အစီအစဉ်၏ ငွေဖြည့်သွင်းမှု ရွေးချယ်ခွင့်များကို စစ်ဆေးပါ။"
       }
     }
   },
@@ -3744,6 +3837,37 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       }
     }
   },
+  "esim": {
+    "title": "Mantente conectado con una eSIM",
+    "intro": "Evita las filas en el mostrador de tarjetas SIM del aeropuerto. Obtén una eSIM digital de Airalo antes de aterrizar y conéctate a los datos locales desde el momento en que tu avión toque tierra: sin cambiar físicamente de SIM y sin facturas de roaming.",
+    "ctaTitle": "Obtén tu eSIM antes de viajar",
+    "ctaDescription": "Explora los planes de datos para tu destino en Airalo y actívalos al instante en tu teléfono. La configuración solo toma unos minutos y funciona en la mayoría de los teléfonos inteligentes modernos.",
+    "ctaButton": "Obtener eSIM para {country}",
+    "continuePlanning": "Continúa planeando tu viaje",
+    "faq": {
+      "title": "Preguntas frecuentes (FAQ)",
+      "q1": {
+        "question": "¿Qué es una eSIM y en qué se diferencia de una tarjeta SIM física?",
+        "answer": "Una eSIM es una tarjeta SIM digital integrada directamente en tu teléfono. En lugar de insertar una tarjeta física, simplemente escaneas un código QR o ejecutas un enlace para instalar un plan de datos directamente en tu dispositivo. Funciona de manera conjunta o independiente a tu SIM habitual, y la mayoría de los teléfonos de los últimos años son compatibles con esta tecnología."
+      },
+      "q2": {
+        "question": "¿Es mi teléfono compatible con eSIM?",
+        "answer": "La mayoría de los iPhone (XS y modelos posteriores) y muchos teléfonos Android recientes (como Google Pixel, Samsung Galaxy S20 y posteriores) admiten eSIM. Consulta los ajustes de tu teléfono en la sección \"Datos móviles\" o \"Red móvil\" para ver si aparece la opción \"Añadir eSIM\" o \"Añadir plan de datos\", o revisa la lista de compatibilidad de Airalo antes de comprar."
+      },
+      "q3": {
+        "question": "¿Cuándo debo instalar y activar mi eSIM?",
+        "answer": "Puedes instalar el perfil de la eSIM en cualquier momento antes de tu viaje, incluso conectado a la red Wi-Fi de tu casa. La mayoría de los planes de Airalo te permiten elegir cuándo comienza el periodo de validez de los datos (ya sea al momento de la instalación o al conectarte por primera vez a una red local), por lo que no perderás días de validez mientras esperas la fecha de salida."
+      },
+      "q4": {
+        "question": "¿Necesito Wi-Fi para instalar la eSIM?",
+        "answer": "Sí, necesitarás una conexión a Internet (Wi-Fi o datos móviles existentes) para descargar e instalar el perfil de la eSIM. Una vez instalada, no se requiere conexión adicional a Internet hasta que desees utilizar el plan de datos, por lo que es recomendable instalarla antes de salir de casa o en el aeropuerto."
+      },
+      "q5": {
+        "question": "¿Qué pasa si me quedo sin datos?",
+        "answer": "La mayoría de los planes eSIM de Airalo se pueden recargar directamente desde la aplicación de Airalo cuando tu plan actual esté por agotarse o vencer, sin necesidad de comprar una eSIM completamente nueva. Si realizas un viaje largo, consulta las opciones de recarga específicas del plan antes de realizar la compra."
+      }
+    }
+  },
   "activities": {
     "title": "Tours y Actividades en Tailandia",
     "intro": "Descubre tours y experiencias curadas en toda Tailandia con GetYourGuide. Desde clases de cocina en Chiang Mai hasta aventuras de snorkel en Krabi, explora actividades locales auténticas guiadas por expertos. Ya sea que busques inmersión cultural, aventuras al aire libre o joyas ocultas, encuentra la experiencia perfecta para tu viaje.",
@@ -4701,6 +4825,37 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       }
     }
   },
+  "esim": {
+    "title": "Restez connecté grâce à une eSIM",
+    "intro": "Évitez la file d'attente au guichet de cartes SIM à l'aéroport. Obtenez une eSIM numérique auprès d'Airalo avant votre atterrissage et connectez-vous au réseau de données local dès la sortie de l'avion — aucun changement physique de carte SIM, aucun frais d'itinérance.",
+    "ctaTitle": "Obtenez votre eSIM avant de voyager",
+    "ctaDescription": "Parcourez les forfaits de données pour votre destination sur Airalo et activez-les instantanément sur votre téléphone. La configuration ne prend que quelques minutes et fonctionne sur la plupart des smartphones récents.",
+    "ctaButton": "Obtenir une eSIM pour {country}",
+    "continuePlanning": "Continuez à planifier votre voyage",
+    "faq": {
+      "title": "Foire aux questions (FAQ)",
+      "q1": {
+        "question": "Qu'est-ce qu'une eSIM et en quoi diffère-t-elle d'une carte SIM physique ?",
+        "answer": "Une eSIM est une carte SIM numérique intégrée à votre téléphone. Au lieu d'insérer une carte physique, il vous suffit de scanner un code QR ou d'appuyer sur un lien pour installer un forfait de données directement sur votre appareil. Elle fonctionne en parallèle ou en remplacement de votre carte SIM habituelle, et la plupart des téléphones récents la prennent en charge."
+      },
+      "q2": {
+        "question": "Mon téléphone est-il compatible avec l'eSIM ?",
+        "answer": "La plupart des iPhone (XS et modèles ultérieurs) ainsi que de nombreux téléphones Android récents (Google Pixel, Samsung Galaxy S20 et modèles ultérieurs, entre autres) prennent en charge l'eSIM. Vérifiez les paramètres de votre téléphone dans la section « Données cellulaires » ou « Réseau mobile » pour voir si l'option « Ajouter une eSIM » ou « Ajouter un forfait de données » apparaît, ou consultez la liste de compatibilité d'Airalo avant d'acheter."
+      },
+      "q3": {
+        "question": "Quand dois-je installer et activer mon eSIM ?",
+        "answer": "Vous pouvez installer le profil eSIM à tout moment avant votre voyage, même depuis votre réseau Wi-Fi domestique. La plupart des forfaits Airalo vous permettent de choisir le moment où la période de validité des données commence — soit dès l'installation, soit lors de la première connexion à un réseau local — afin de ne pas perdre de jours de validité en attendant votre départ."
+      },
+      "q4": {
+        "question": "Ai-je besoin du Wi-Fi pour installer l'eSIM ?",
+        "answer": "Oui, une connexion Internet (Wi-Fi ou données mobiles existantes) est nécessaire pour télécharger et installer le profil eSIM. Une fois l'installation terminée, aucune autre connexion Internet n'est requise jusqu'à ce que vous souhaitiez utiliser le forfait de données lui-même. Il est donc préférable de l'installer avant de quitter votre domicile ou à l'aéroport."
+      },
+      "q5": {
+        "question": "Que se passe-t-il si je n'ai plus de données ?",
+        "answer": "La plupart des forfaits eSIM Airalo peuvent être rechargés directement depuis l'application Airalo lorsque votre forfait actuel est presque épuisé ou arrive à expiration, sans avoir à acheter une toute nouvelle eSIM. Si cela est important pour un voyage de longue durée, vérifiez les options de recharge spécifiques au forfait avant votre achat."
+      }
+    }
+  },
   "activities": {
     "title": "Tours et Activités en Thaïlande",
     "intro": "Découvrez des circuits et expériences curés à travers la Thaïlande avec GetYourGuide. Des cours de cuisine à Chiang Mai aux aventures de snorkeling à Krabi, explorez des activités locales authentiques guidées par des experts. Que vous cherchiez une immersion culturelle, des aventures en plein air ou des trésors cachés, trouvez l'expérience parfaite pour votre voyage.",
@@ -5655,6 +5810,37 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
       "q5": {
         "question": "Sollte ich Transporttickets im Voraus buchen?",
         "answer": "Für beliebte Strecken wie Bangkok–Chiang Mai oder Bangkok–Phuket wird besonders während der Hauptsaison (Dezember–Februar, Songkran im April) empfohlen, 1–2 Wochen im Voraus zu buchen. Dies garantiert Ihnen einen Sitzplatz und bietet oft bessere Preise. Bei kurzfristigen Buchungen kann die Auswahl eingeschränkt sein."
+      }
+    }
+  },
+  "esim": {
+    "title": "Bleiben Sie jederzeit vernetzt mit einer eSIM",
+    "intro": "Sparen Sie sich das Anstehen am SIM-Karten-Schalter am Flughafen. Holen Sie sich noch vor der Landung eine digitale eSIM von Airalo und nutzen Sie sofort nach dem Aufsetzen des Flugzeugs lokale Datendienste – ganz ohne physischen SIM-Karten-Wechsel und ohne teure Roaming-Gebühren.",
+    "ctaTitle": "Holen Sie sich Ihre eSIM bereits vor der Reise",
+    "ctaDescription": "Durchsuchen Sie die Datentarife für Ihr Reiseziel auf Airalo und aktivieren Sie diese direkt auf Ihrem Smartphone. Die Einrichtung dauert nur wenige Minuten und funktioniert auf den meisten modernen Geräten.",
+    "ctaButton": "eSIM für {country} sichern",
+    "continuePlanning": "Planen Sie Ihre Reise weiter",
+    "faq": {
+      "title": "Häufig gestellte Fragen (FAQ)",
+      "q1": {
+        "question": "Was ist eine eSIM und wie unterscheidet sie sich von einer physischen SIM-Karte?",
+        "answer": "Eine eSIM ist eine digitale SIM-Karte, die direkt in Ihrem Smartphone integriert ist. Anstatt eine physische Karte einzulegen, scannen Sie einfach einen QR-Code oder tippen auf einen Link, um einen Datentarif direkt auf Ihrem Gerät zu installieren. Sie funktioniert parallel zu Ihrer regulären SIM-Karte oder ersetzt diese vollständig. Die meisten Smartphones der letzten Jahre unterstützen diese Technologie."
+      },
+      "q2": {
+        "question": "Ist mein Smartphone mit eSIM kompatibel?",
+        "answer": "Die meisten iPhones (XS und neuer) sowie viele aktuelle Android-Geräte (z. B. Google Pixel, Samsung Galaxy S20 und neuer) unterstützen eSIM. Überprüfen Sie in den Einstellungen Ihres Smartphones unter „Mobilfunk\" oder „Mobilfunknetz\", ob die Option „eSIM hinzufügen\" oder „Datentarif hinzufügen\" vorhanden ist, oder nutzen Sie die Kompatibilitätsliste von Airalo vor dem Kauf."
+      },
+      "q3": {
+        "question": "Wann sollte ich meine eSIM installieren und aktivieren?",
+        "answer": "Sie können das eSIM-Profil jederzeit vor Ihrer Reise installieren – selbst bequem über Ihr Heim-WLAN. Bei den meisten Airalo-Tarifen können Sie wählen, wann der Gültigkeitszeitraum beginnt (entweder direkt bei der Installation oder erst bei der ersten Verbindung mit einem lokalen Netzwerk). So verlieren Sie keine Gültigkeitstage während der Vorbereitungszeit."
+      },
+      "q4": {
+        "question": "Benötige ich WLAN, um die eSIM zu installieren?",
+        "answer": "Ja, Sie benötigen eine aktive Internetverbindung (WLAN oder bestehende mobile Daten), um das eSIM-Profil herunterzuladen und zu installieren. Nach der Installation ist kein weiteres Internet erforderlich, bis Sie den Datentarif selbst nutzen möchten. Es wird daher empfohlen, die Installation noch zu Hause oder am Flughafen durchzuführen."
+      },
+      "q5": {
+        "question": "Was passiert, wenn mein Datenvolumen aufgebraucht ist?",
+        "answer": "Die meisten eSIM-Tarife von Airalo können direkt über die Airalo-App aufgeladen werden, sobald Ihr aktuelles Datenvolumen zur Neige geht oder abläuft. Der Kauf einer völlig neuen eSIM ist dafür nicht erforderlich. Prüfen Sie bei längeren Reisen vorab die spezifischen Aufladeoptionen des jeweiligen Tarifs."
       }
     }
   },
