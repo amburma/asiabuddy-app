@@ -128,3 +128,63 @@ The project uses:
 - Operator Bot: `https://your-project.vercel.app/api/operator-webhook`
 
 Both webhooks are automatically registered when you run the registration script.
+
+## Supabase Free-Tier Protection
+
+This project includes protective measures for the Supabase free tier to prevent auto-pause and ensure data backup.
+
+### Keep-Alive Endpoint
+
+**Location**: `app/api/keep-alive/route.ts`
+
+**Purpose**: Prevents Supabase free-tier project from auto-pausing after 7 days of inactivity by performing a lightweight read query.
+
+**Setup**: Configure an external cron service to ping this endpoint every 2-3 days:
+
+1. **Recommended Services**:
+   - [cron-job.org](https://cron-job.org) (free, no account required)
+   - [UptimeRobot](https://uptimerobot.com) (free, requires account)
+
+2. **URL to ping**: `https://your-domain.com/api/keep-alive`
+
+3. **Schedule**: Every 2 days (to stay well under the 7-day limit)
+
+4. **Expected response**: JSON with status "ok" and timestamp
+
+### Automated Backups
+
+**Status**: ✅ **Implemented (Cloudflare R2)**
+
+The project includes automated weekly backups of the Supabase database to Cloudflare R2.
+
+**Current State**:
+- ✅ Backup script: `scripts/backup-supabase.ts`
+- ✅ GitHub Actions workflow: `.github/workflows/weekly-backup.yml`
+- ✅ Cloudflare R2 integration
+- ✅ Retention policy: Keeps last 4 backups automatically
+- ✅ Manual and scheduled execution
+
+**Setup Required**:
+See [BACKUP_SETUP.md](./BACKUP_SETUP.md) for complete setup instructions:
+
+1. Create Cloudflare R2 bucket
+2. Configure GitHub Secrets (database URL, R2 credentials)
+3. Install dependencies: `npm install @aws-sdk/client-s3`
+4. Test locally: `npm run backup`
+5. Push to GitHub to enable weekly schedule
+
+**Quick Start**:
+```bash
+# Install dependency
+npm install @aws-sdk/client-s3
+
+# Test backup locally (with env vars set)
+npm run backup
+```
+
+**Environment Variables Needed**:
+- `SUPABASE_DATABASE_URL` - Full PostgreSQL connection string
+- `R2_ACCOUNT_ID` - Cloudflare account ID
+- `R2_ACCESS_KEY_ID` - R2 access key ID
+- `R2_SECRET_ACCESS_KEY` - R2 secret access key
+- `R2_BUCKET_NAME` - R2 bucket name

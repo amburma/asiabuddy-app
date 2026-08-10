@@ -717,7 +717,7 @@ export default function HumanOperatorChat({ language, onClose, salesperson_id, c
                 {message.role === 'assistant' && i === messages.length - 1 && showEsimCTA && (
                   <div className="mt-4 pt-4 border-t border-gray-100">
                     {(() => {
-                      const airaloUrl = generateAiraloLink({ countryId: 'thailand', subId: 'chatbot-thailand' });
+                      const airaloUrl = generateAiraloLink({ subId: 'chatbot-thailand' });
                       return (
                         <a
                           href={airaloUrl}

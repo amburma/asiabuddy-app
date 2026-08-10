@@ -13,7 +13,8 @@
     "lint": "next lint",
     "register-webhook": "tsx src/scripts/setWebhook.ts",
     "delete-webhook": "tsx src/scripts/setWebhook.ts delete",
-    "webhook-info": "tsx src/scripts/setWebhook.ts info"
+    "webhook-info": "tsx src/scripts/setWebhook.ts info",
+    "backup": "tsx scripts/backup-supabase.ts"
   },
   "dependencies": {
     "@fontsource/noto-sans-myanmar": "^5.3.0",
@@ -26,6 +27,7 @@
     "@radix-ui/react-tabs": "^1.1.13",
     "@supabase/ssr": "^0.10.3",
     "@supabase/supabase-js": "^2.106.2",
+    "@aws-sdk/client-s3": "^3.600.0",
     "@tailwindcss/postcss": "^4.3.0",
     "canvas-confetti": "^1.9.4",
     "class-variance-authority": "^0.7.1",

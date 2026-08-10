@@ -360,7 +360,7 @@ export default function PhrasesChat({ language }: Props) {
               )}
               {showEsimCTA && (
                 <a
-                  href={generateAiraloLink({ countryId: 'thailand', subId: 'chatbot-thailand' })}
+                  href={generateAiraloLink({ subId: 'chatbot-thailand' })}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-3 w-full bg-[#f59e0b] text-white font-semibold py-3 px-4 rounded-xl hover:bg-[#d97706] transition-colors flex items-center justify-center gap-2"
