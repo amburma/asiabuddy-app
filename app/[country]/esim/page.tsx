@@ -68,7 +68,6 @@ export default async function EsimPage({
   }
 
   const airaloLink = generateAiraloLink({
-    countryId: country,
     subId: `esim-page-${country}`,
   })
 
