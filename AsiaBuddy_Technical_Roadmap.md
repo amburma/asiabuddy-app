@@ -1,5 +1,5 @@
 # AsiaBuddy — Technical Roadmap & Architecture Guide
-> Last Updated: 6 August 2026 — Session 43 planned — eSIM Affiliate Integration (Airalo), documentation only, implementation not started
+> Last Updated: 7 August 2026 — Session 46 completed — Domain Infrastructure: Email Forwarding, SSL Fix, DMARC & Canonical Domain
 
 ---
 
@@ -8,7 +8,7 @@
 ### Problem Statement
 AsiaBuddy customers arranging trips (tours, transport tickets via 12Go, hotels) often
 also need mobile data connectivity in the destination country. No eSIM offering exists
-in the app currently. Airalo affiliate program (10% base commission via Impact network,
+in the app currently. Airalo affiliate program (10% base commission via Travelpayouts network [Corrected in Session 45 — see below],
 sub_id/click tracking supported) was evaluated and approved for integration, following
 the same affiliate-link pattern already proven with 12Go Transport Tickets in Session 42.
 
@@ -29,9 +29,9 @@ matching the 12Go integration's ground-transport-ticket model.
 
 **Affiliate link handling**
 - `lib/airalo.ts` — new file, mirrors `lib/twelveGo.ts` structure
-  - `generateAiraloLink(countrySlug: string, subId?: string): string` 
-  - Base affiliate link: `https://airalo.tpo.lu/CMO35G2k` + query params for country/sub_id
-    where Airalo's link structure supports it (to confirm against Impact dashboard docs
+  - `generateAiraloLink({ subId }: { subId?: string }): string` [Corrected in Session 45 — see below] 
+  - Base affiliate link: `https://airalo.tpo.lu/CMO35G2k` + query params for sub_id
+    where Airalo's link structure supports it (to confirm against Travelpayouts dashboard docs [Corrected in Session 45 — see below]
     before hardcoding param names)
   - `SUPPORTED_AIRALO_COUNTRIES` — validation list (Airalo covers 200+ destinations,
     far wider than AsiaBuddy's current live countries, so no fallback-language issue like
@@ -62,10 +62,10 @@ matching the 12Go integration's ground-transport-ticket model.
 
 **Tracking**
 - Confirm whether Airalo supports `sub_id`-equivalent parameters (like 12Go) before
-  building any per-click/per-country tracking logic — check Impact dashboard link
+  building any per-click/per-country tracking logic — check Travelpayouts dashboard link [Corrected in Session 45 — see below]
   builder, do not assume URL structure.
 - Flag open question: Airalo native-app deep-link attribution (same unresolved caveat
-  as 12Go's native-app checkout — confirm with Airalo/Impact support whether
+  as 12Go's native-app checkout — confirm with Airalo/Travelpayouts support whether [Corrected in Session 45 — see below]
   affiliate ID survives a web-to-app handoff before relying on it for revenue reporting).
 
 ### Implementation Steps (PART breakdown, for sequencing in future sessions)
@@ -81,12 +81,132 @@ matching the 12Go integration's ground-transport-ticket model.
 ### Open Questions Before Implementation Starts
 - [ ] Does Airalo provide an embeddable widget, or affiliate-link-only? (affects PART 5 design)
 - [ ] Does Airalo support sub_id/click-level tracking params like 12Go? (affects PART 1 + tracking)
-- [ ] Native app deep-link affiliate attribution — confirmed or not? (email Airalo/Impact support)
-- [ ] Any commission-rate confirmation needed once actually registered on Impact dashboard
+- [ ] Native app deep-link affiliate attribution — confirmed or not? (email Airalo/Travelpayouts support [Corrected in Session 45 — see below])
+- [ ] Any commission-rate confirmation needed once actually registered on Travelpayouts dashboard [Corrected in Session 45 — see below]
       (public sources cite 10% standard, "dynamic" per some aggregators — verify in-account)
 
 ### Status
 🆕 PLANNED — documentation only, PART 1 not yet started. No code written this session.
+
+---
+
+## ✅ Session 44 — eSIM Chatbot Promotion Fix — COMPLETED
+
+### Background / Problem
+The in-app chatbot (all chat widgets, including the "Live Chat" widget) was telling users eSIM is "outside AsiaBuddy's service scope" and never showing any CTA, even though the Airalo eSIM landing page and affiliate link infrastructure already existed from Session 43. Two separate root causes were found:
+1. The shared system prompt (getSystemInstruction in src/services/gemini.ts) didn't list eSIM as a sold service.
+2. The "Live Chat" widget (HumanOperatorChat.tsx) doesn't use the shared prompt at all — it calls its own separate API route (app/api/booking-chat/route.ts) with its own independent hardcoded system prompt, which also lacked eSIM language. This was found only after the first fix pass (which covered 11 other chat components) didn't fix the Live Chat widget.
+
+### What Was Done
+1. Updated system prompt in src/services/gemini.ts (getSystemInstruction) to list eSIM/Mobile Internet as a sold service and instruct the AI to recommend Airalo eSIM with a [SHOW_ESIM_CTA] tag instead of declining.
+2. Updated the separate hardcoded system prompt in app/api/booking-chat/route.ts (added as new numbered section, "eSIM PROMOTION TRIGGER RULE") with the same eSIM-positive language and [SHOW_ESIM_CTA] tag, since this route doesn't share code with gemini.ts.
+3. Added multi-language eSIM keyword detection (esim, e-sim, internet, wifi, wi-fi, connection, sim card, data plan — in English, Myanmar, Thai, Chinese, Japanese, Korean, German, French, Spanish) plus [SHOW_ESIM_CTA] tag detection to all 12 chat components.
+4. Added a new `showEsimCTA` state (kept separate from the existing `showBookNow` state, since the destination and button style differ) to each component, reset on new messages.
+5. Added an orange "Get eSIM 📶" CTA button (bg-[#f59e0b]) to each component, rendered when showEsimCTA is true, linking directly to the Airalo affiliate URL via generateAiraloLink({ subId: 'chatbot-thailand' }) from lib/airalo.ts (reused from Session 43, no new file created). Opens in a new tab (target="_blank", rel="noopener noreferrer") since it's an external affiliate link.
+
+### Files Changed
+| File | Change |
+|---|---|
+| src/services/gemini.ts | Added eSIM to service list + [SHOW_ESIM_CTA] instruction in getSystemInstruction() |
+| app/api/booking-chat/route.ts | Added separate eSIM promotion section to its own independent system prompt |
+| components/thailand/ConciergeChat.tsx | Added eSIM keyword detection + showEsimCTA + Get eSIM button |
+| components/thailand/FoodChat.tsx | Same as above |
+| components/thailand/TripPlannerChat.tsx | Same as above |
+| components/thailand/ShoppingChat.tsx | Same as above |
+| components/thailand/NightlifeChat.tsx | Same as above |
+| components/thailand/MedicalChat.tsx | Same as above |
+| components/thailand/TransportChat.tsx | Same as above |
+| components/thailand/TransferChat.tsx | Same as above |
+| components/thailand/PhrasesChat.tsx | Same as above |
+| components/thailand/CarRentalChat.tsx | Same as above |
+| components/thailand/AccommodationChat.tsx | Same as above |
+| components/thailand/HumanOperatorChat.tsx | Same as above (this is the "Live Chat" widget) |
+
+### Verified
+- `npm run build` passes locally, no errors.
+- Confirmed working live: Live Chat widget now correctly responds to eSIM questions and shows the Get eSIM button linking to Airalo.
+- Checked for other chat surfaces beyond these 12 components: components/shared/BookingChat.tsx is a wrapper that delegates to HumanOperatorChat, so no separate logic was needed there. Legacy/archive folder (_archive_thailand_vite_legacy) is unused and was not touched.
+
+### Open Items Carried Forward
+- Currently the CTA links use `subId: 'chatbot-thailand'` for tracking — not yet confirmed in the Travelpayouts dashboard whether sub_id tracking is actually reported for this program. (Note: Travelpayouts uses sub_id parameter, not Impact.com's subid1 convention.)
+- Non-Thailand country pages/chat components (if any exist outside the components/thailand/ directory) were not in scope for this session — confirm whether other country chat widgets need the same fix.
+
+---
+
+## ✅ Session 45 — Affiliate Network Correction (Travelpayouts, not Impact.com) — COMPLETED
+
+### Background / Problem
+The original Session 43 entry incorrectly assumed the Airalo affiliate link (https://airalo.tpo.lu/CMO35G2k) ran on the Impact.com network, and lib/airalo.ts was built using Impact.com's parameter conventions (`subid1` for tracking, `u` for deep-link override). This was discovered to be wrong: the link is actually a Travelpayouts link (tpo.lu is Travelpayouts' redirect domain). This was verified two ways: (1) confirmed in the user's own Travelpayouts dashboard at app.travelpayouts.com — the link appears in Tools > Links > Recent with Sub ID "eSIM" and destination page https://airalo.com, and (2) confirmed in the Travelpayouts dashboard's "Top performing programs" report, which showed real click counts against "Airalo" increasing as the fixed links were tested — confirming both that this is genuinely a Travelpayouts-tracked program and that the corrected tracking format works.
+
+### What Was Corrected
+1. lib/airalo.ts: removed the `countryId` parameter and `u` deep-link override entirely — the verified base link always points to the generic https://airalo.com homepage, there is no per-country deep link for this program, and none was created (to avoid risking attribution breakage on a link already confirmed working).
+2. lib/airalo.ts: changed the tracking parameter from `subid1` to `sub_id` — Travelpayouts' actual documented SubID override parameter, which overrides the SubID baked into the link at creation time ("eSIM" by default).
+3. Updated all 13 call sites (the /esim landing page + all 12 chat components) to drop the countryId argument and keep only a descriptive subId (e.g. 'chatbot-thailand', 'esim-page-thailand').
+4. Verified end-to-end: click counts in the Travelpayouts dashboard increased after testing the corrected links, confirming the sub_id parameter format is being read correctly by Travelpayouts.
+
+### Still Open
+- Bookings/earnings still show $0 in the dashboard — expected, since only click-testing has been done so far, not a real purchase. A real test purchase would be needed to confirm commission attribution end-to-end.
+- Per-SubID breakdown (e.g. confirming 'chatbot-thailand' clicks are distinguishable from 'esim-page-thailand' clicks in Travelpayouts reports) has not been separately verified yet — only the aggregate Airalo click count was checked.
+- No per-country deep link exists for this program; if the user later wants to send eSIM traffic straight to a country-specific Airalo page rather than the generic homepage, a new short link would need to be generated per country in the Travelpayouts dashboard first.
+
+### Files Changed
+| File | Change |
+|---|---|
+| lib/airalo.ts | Removed countryId + u param, changed subid1 → sub_id, removed deep-linking |
+| app/[country]/esim/page.tsx | Updated generateAiraloLink call site |
+| components/thailand/*.tsx (12 files) | Updated generateAiraloLink call sites |
+
+---
+
+## ✅ Session 46 — Domain Infrastructure: Email Forwarding, SSL Fix, DMARC & Canonical Domain — COMPLETED
+
+### Background / Problem
+While setting up free email forwarding (info@asiabuddy.app) via Porkbun's email forwarding wizard, the root domain's DNS record for asiabuddy.app was unexpectedly reset from pointing to Vercel to pointing at Porkbun's own pixie.porkbun.com (Porkbun's URL forwarding target). This broke the live site entirely, producing ERR_SSL_VERSION_OR_CIPHER_MISMATCH on https://asiabuddy.app — Vercel's dashboard showed the domain as "Invalid Configuration". This was diagnosed by comparing Vercel's expected DNS records against the actual Porkbun DNS records.
+
+### What Was Done
+
+#### 1. Fixed the broken root domain record (SSL outage)
+Changed the root domain record for asiabuddy.app from an ALIAS pointing to pixie.porkbun.com to an A record pointing to Vercel's IP (216.198.79.1), matching what Vercel's dashboard specified. This restored the live site.
+
+#### 2. Added www.asiabuddy.app as a proper Vercel domain
+Previously www.asiabuddy.app was unintentionally caught by a wildcard CNAME (*.asiabuddy.app → pixie.porkbun.com) meant for other purposes, which also caused an SSL error on the www subdomain. Fixed by:
+- Adding www.asiabuddy.app as a separate domain entry in Vercel (Connect to an environment → Production)
+- Adding a specific CNAME record in Porkbun DNS for host "www" pointing to the unique target Vercel provided (a specific-per-domain *.vercel-dns-017.com value) — this specific record takes priority over the existing wildcard CNAME, so it does not conflict
+
+#### 3. Set canonical domain (SEO)
+Decided asiabuddy.app (no www) as the canonical domain, since it's already used in all marketing material and the info@asiabuddy.app email address. Configured www.asiabuddy.app in Vercel as a 301 Moved Permanently redirect to asiabuddy.app, so both versions work but SEO authority consolidates on the canonical version.
+
+#### 4. Verified free email forwarding (Porkbun)
+Set up info@asiabuddy.app to forward to an existing Gmail account using Porkbun's free email forwarding (up to 20 free forward addresses per domain, receive-only — replies show as sent from the Gmail address, not info@asiabuddy.app; a paid hosted inbox would be needed for that). This added MX records (fwd1.porkbun.com prio 10, fwd2.porkbun.com prio 20) and an SPF TXT record (v=spf1 include:_spf.porkbun.com ~all). Verified end-to-end with a real test email — received successfully in Gmail, not flagged as spam.
+
+#### 5. Added DMARC record (security)
+Added a DMARC TXT record at _dmarc.asiabuddy.app with value "v=DMARC1; p=none; rua=mailto:info@asiabuddy.app; pct=100" to reduce the risk of email spoofing using the asiabuddy.app domain. Deliberately used p=none (monitor-only) rather than p=quarantine/reject, since DKIM is not set up (forwarding-only, not a full hosted mailbox) — a stricter policy risked blocking legitimate mail. Verified via MXToolbox: record published correctly, valid syntax, no errors (the "Policy Not Enabled" note is expected and intentional given p=none).
+
+### Final DNS State (Porkbun, asiabuddy.app) — 7 records
+| Type | Host | Value |
+|---|---|---|
+| A | asiabuddy.app | 216.198.79.1 |
+| CNAME | *.asiabuddy.app | pixie.porkbun.com |
+| CNAME | www.asiabuddy.app | [unique vercel-dns-017.com target] |
+| MX (prio 10) | asiabuddy.app | fwd1.porkbun.com |
+| MX (prio 20) | asiabuddy.app | fwd2.porkbun.com |
+| TXT | asiabuddy.app | v=spf1 include:_spf.porkbun.com ~all |
+| TXT | _dmarc.asiabuddy.app | v=DMARC1; p=none; rua=mailto:info@asiabuddy.app; pct=100 |
+
+### Verified
+- https://asiabuddy.app loads correctly, no SSL errors
+- https://www.asiabuddy.app redirects (301) to https://asiabuddy.app correctly
+- Vercel Domains dashboard shows "Valid Configuration" for both asiabuddy.app and www.asiabuddy.app
+- DMARC record confirmed valid via MXToolbox
+- Test email to info@asiabuddy.app successfully forwarded to Gmail, landed in inbox (not spam)
+
+### Open Items Carried Forward
+- Email forwarding is receive-only — replies from Gmail won't show as sent from info@asiabuddy.app. If sending as info@asiabuddy.app is ever needed, a paid hosted email inbox would be required (~$2/month per address on Porkbun), which would also enable proper DKIM signing.
+- DMARC is currently in monitor-only mode (p=none). After a few weeks of reviewing aggregate reports sent to info@asiabuddy.app with no unexpected failures, consider tightening to p=quarantine.
+- admin@ and sales@ forwarding addresses were discussed but not yet created — only info@ is currently set up. Add if/when needed (up to 20 free forwards allowed per domain).
+
+### Files Changed
+This session was infrastructure/DNS configuration only — no application code files were changed. Changes were made directly in Porkbun's DNS dashboard and Vercel's Domains settings.
 
 ---
 
@@ -409,10 +529,8 @@ Paid customers (tour packages, flights, hotels, airport transfers, etc.) current
 ---
 
 🔴 ကျန်နေသေးတဲ့ Action Items
-
-1. 12Go affiliate support ကို mail ပို့ရန် — native-app checkout ကို affiliate ID attribution ရှိ/မရှိ confirm-request (web-to-app deferred deep linking သို့မဟုတ် server-side matching support လုပ်/မလုပ်)
-2. Sub-ID tracking test — generate12GoLink() ထဲ sub_id parameter ထည့်ပြီး test click လုပ်ကြည့်ရန် (affiliate dashboard ထဲ click/booking log ခွဲသိနိုင်ရန်)
-3. Live production monitoring — Supabase migration apply ပြီးနောက် transport-tickets page ရဲ့ route cards, chat bot 12Go trigger, widget အားလုံး production ပေါ်တွင် functional check
+1. Sub-ID tracking test — generate12GoLink() ထဲ sub_id parameter ထည့်ပြီး test click လုပ်ကြည့်ရန် (affiliate dashboard ထဲ click/booking log ခွဲသိနိုင်ရန်)
+2. Live production monitoring — Supabase migration apply ပြီးနောကျ transport-tickets page ရဲ့ route cards, chat bot 12Go trigger, widget အားလုံး production ပေါ်တွင် functional check
 
 ---
 
@@ -421,5 +539,24 @@ Paid customers (tour packages, flights, hotels, airport transfers, etc.) current
 - Route architecture: /thailand/transport-tickets standalone route ဆက်လက်တည်မြဲ
 - Widget currency: THB (Thai Baht) အဖြစ် သတ်မှတ်ပြီးပြီး
 - Color system: #D4AF37 primary gold source of truth ဆက်သုံး
+
+---
+
+## Session — 10 August 2026 — Tours Page Redesign (Finalized Plan) + Gemini Gems Refinement Status
+
+### Tours Page (`/thailand/tours` + `/thailand/tours/[slug]`) — Finalized Strategy
+- Existing built infrastructure is being KEPT, not rebuilt: SSR pages with `generateMetadata` SEO, the Google Translate API pipeline translating `tours.title`/`description`/`highlights`/`inclusion`/`exclusions` at render time across all 6 languages (EN/MM/TH/DE/FR/ES), `app/sitemap.ts` auto-generation from Supabase `tours`, and the SSR Day accordion structure on the itinerary page.
+- DECISION — Remove `price_from` from the sticky booking widget entirely. Pricing will never be shown publicly on the site; it is considered too volatile/risky to display. Price is only given to a customer when they specifically request it, and only by staff responding manually (using the internal Gemini Gems).
+- DECISION — Upgrade the existing Day accordion visually by adding a real curated photo to each day, sourced from a new reusable "Landmark Photo Library" (real stock photos, e.g. Unsplash/Pexels with commercial-use licenses, or AsiaBuddy's own photos — NOT AI-generated composites), keyed by landmark/location name so the same photo can be reused across multiple tours that visit the same place (e.g. Grand Palace, Floating Market). The existing translated text stays as real HTML from Supabase — only a photo layer is added alongside it. This preserves full SEO indexability and all 6 languages.
+- REJECTED APPROACH (do not build this) — A single flattened AI-generated poster image per day with the day title/description text baked into the image pixels. Rejected because baked-in text cannot be language-mirrored (breaks the 6-language requirement) and is not crawlable by search engines. Photo and text must always remain separate layers.
+- DECISION — The "More Details/Book Now" CTA on the tour detail page will route to the Contact Us page (not to the existing `HumanOperatorChat` widget), with the specific tour's page URL automatically attached to the inquiry submission. This is important so operators can see which tour page a customer was viewing when they follow up and respond to the inquiry.
+- Confirmed Supabase (not a static file) remains the right backing store given ~15-20 tours for Thailand, reusing the existing `tours`/`itineraries` tables and Admin CRUD rather than building a parallel static content system.
+- Note: two Supabase free-tier protective measures are already in place (implemented via Windsurf/Claude Code in a prior session) — a keep-alive endpoint at `app/api/keep-alive/route.ts` (needs an external cron ping every 2-3 days to prevent project auto-pause) and a weekly automated Postgres backup to Cloudflare R2 via GitHub Actions (`scripts/backup-supabase.ts`, `.github/workflows/weekly-backup.yml`, 4-backup retention). Note the R2 backup covers Postgres tables only (via `pg_dump`) — it does NOT back up Supabase Storage image files, which will matter once the Landmark Photo Library is built.
+- Next step (not yet started): design the exact Supabase schema for the Landmark Photo Library and the day-to-landmark linking mechanism, then build the actual UI changes as separate staged Windsurf prompts, one file per part, per this project's usual workflow convention.
+
+### Gemini Gems Refinement — Status (documentation only; these Gems are edited manually in the Gemini Gems UI, not via Windsurf/codebase changes)
+- Revised and drafted (pending KIM's final review/manual paste into Gemini Gems): Hotel Inquire, Flight Ticket Inquire, Ticket and Activities Inquire, Car Rental Inquire — all four now follow a shared auto-detected-stage pattern (Discovery/Verification/Booking Confirmation, or KB-lookup + fuzzy-match for Car Rental) while preserving each Gem's own pre-existing unique business rules (e.g. the Flight/Activities highest-cross-platform-price quoting rule; Car Rental's fixed Knowledge Base price list).
+- In progress: Follow up Inquire Gem — the first-touch responder that parses a raw web inquiry (arriving via the Contact Us form, including the tour page link when a customer inquires from a tour detail page) and sends a tailored greeting plus follow-up questions per service category. Being expanded from the original flat 4-question-per-category template to fuller, more carefully reasoned question sets per category, matching the depth of the already-expanded Hotel survey.
+- Also in progress: Tour Itinerary Generator Gem — converts a tour poster/program into a full Burmese-language day-by-day itinerary (Brief Itinerary, Itinerary Details, Travel Tips, Do's and Don'ts sections), to be used by staff to generate a tailored itinerary in response to a customer inquiry.
 
 ---
