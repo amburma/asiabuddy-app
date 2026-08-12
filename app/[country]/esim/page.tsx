@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
-import Navbar from '../../../components/shared/Navbar'
 import { generateAiraloLink } from '../../../lib/airalo'
 import { UI_TRANSLATIONS, normalizeLocale } from '../../../lib/i18n'
 import { MapPin, Plane, Bus, Wifi } from 'lucide-react'
@@ -47,22 +46,19 @@ export default async function EsimPage({
   const countryData = countries.find(c => c.id === country)
   if (countryData?.status !== 'live') {
     return (
-      <div className="min-h-screen bg-white">
-        <Navbar country={country} language={targetLanguage} />
-        <div className="max-w-7xl mx-auto px-6 py-16 text-center">
-          <h1 className="font-serif text-3xl md:text-4xl font-bold text-sacred-green mb-4">
-            Coming Soon
-          </h1>
-          <p className="text-gray-600 mb-8">
-            eSIM is not yet available for {countryName}.
-          </p>
-          <Link
-            href={`/${country}`}
-            className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-2xl transition"
-          >
-            ← Back to {countryName}
-          </Link>
-        </div>
+      <div className="max-w-7xl mx-auto px-6 py-16 text-center">
+        <h1 className="font-serif text-3xl md:text-4xl font-bold text-sacred-green mb-4">
+          Coming Soon
+        </h1>
+        <p className="text-gray-600 mb-8">
+          eSIM is not yet available for {countryName}.
+        </p>
+        <Link
+          href={`/${country}`}
+          className="inline-flex items-center gap-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-2xl transition"
+        >
+          ← Back to {countryName}
+        </Link>
       </div>
     )
   }
@@ -72,8 +68,7 @@ export default async function EsimPage({
   })
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar country={country} language={targetLanguage} />
+    <>
       <div className="border-b border-gold-soft/20 bg-sacred-bg/70">
         <div className="max-w-7xl mx-auto px-6 py-8 md:py-10">
           <div className="mt-6">
@@ -190,6 +185,6 @@ export default async function EsimPage({
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }

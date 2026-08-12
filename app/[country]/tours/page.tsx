@@ -2,7 +2,6 @@ import { getSupabase } from '../../../lib/supabase'
 import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { translateText } from '../../../lib/translate'
-import Navbar from '../../../components/shared/Navbar'
 import ToursComingSoon from '../../../components/shared/ToursComingSoon'
 
 export const dynamic = 'force-dynamic'
@@ -196,8 +195,7 @@ export default async function ToursPage({
   })
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar country={country} language={targetLanguage} />
+    <>
       <div className="border-b border-gold-soft/20 bg-sacred-bg/70">
         <div className="max-w-7xl mx-auto px-6 py-8 md:py-10">
           <div className="mt-6">
@@ -355,6 +353,6 @@ export default async function ToursPage({
           </Link>
         </div>
       </section>
-    </div>
+    </>
   )
 }

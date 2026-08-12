@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { UI_TRANSLATIONS } from '../../../lib/i18n'
 import { SupportedLanguage } from '../../../types/country'
-import Navbar from '../../../components/shared/Navbar'
 
 export default async function ServicesPage({
   params,
@@ -18,8 +17,7 @@ export default async function ServicesPage({
   const uiTranslations = UI_TRANSLATIONS[targetLanguage as SupportedLanguage]
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar country={country} language={targetLanguage} />
+    <>
       <div className="border-b border-gold-soft/20 bg-sacred-bg/70">
         <div className="max-w-7xl mx-auto px-6 py-8 md:py-10">
           <div className="mt-6">
@@ -58,6 +56,6 @@ export default async function ServicesPage({
           {uiTranslations.servicesPage.chatNote}
         </p>
       </div>
-    </div>
+    </>
   )
 }

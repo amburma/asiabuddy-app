@@ -3,7 +3,6 @@ import { cookies } from 'next/headers'
 import { translateText } from '../../../lib/translate'
 import TransferServiceCard from '../../../components/shared/services/TransferServiceCard'
 import { getTransferLinksByCity } from '../../../lib/queries/transferLinks'
-import Navbar from '../../../components/shared/Navbar'
 import TransferChatWrapper from '../../../components/shared/TransferChatWrapper'
 import { normalizeLocale } from '../../../lib/i18n'
 
@@ -89,8 +88,7 @@ export default async function TransfersPage({
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar country={country} language={targetLanguage} />
+    <>
       <div className="border-b border-gold-soft/20 bg-sacred-bg/70">
         <div className="max-w-7xl mx-auto px-6 py-8 md:py-10">
           <div className="mt-6">
@@ -160,6 +158,6 @@ export default async function TransfersPage({
           )}
         </div>
       </div>
-    </div>
+    </>
   )
 }

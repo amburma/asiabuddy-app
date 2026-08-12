@@ -1,5 +1,4 @@
 import { cookies } from 'next/headers'
-import Navbar from '../../../components/shared/Navbar'
 import HotelsPageClient from './HotelsPageClient'
 import { UI_TRANSLATIONS, normalizeLocale } from '../../../lib/i18n'
 import { SupportedLanguage } from '../../../types/country'
@@ -37,9 +36,6 @@ export default async function HotelsPage({
   const targetLanguage = normalizeLocale(cookieStore.get('NEXT_LOCALE')?.value) as SupportedLanguage
 
   return (
-    <>
-      <Navbar country={country} language={targetLanguage} />
-      <HotelsPageClient country={country} targetLanguage={targetLanguage} />
-    </>
+    <HotelsPageClient country={country} targetLanguage={targetLanguage} />
   )
 }

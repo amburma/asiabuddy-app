@@ -3,7 +3,6 @@ import { cookies } from 'next/headers'
 import { translateText } from '../../../lib/translate'
 import TourServiceCard from '../../../components/shared/services/TourServiceCard'
 import { getGygLinksByCity } from '../../../lib/queries/gygLinks'
-import Navbar from '../../../components/shared/Navbar'
 import { UI_TRANSLATIONS, normalizeLocale } from '../../../lib/i18n'
 import { MapPin, Calendar, Plane } from 'lucide-react'
 
@@ -111,8 +110,7 @@ export default async function ActivitiesPage({
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar country={country} language={targetLanguage} />
+    <>
       <div className="border-b border-gold-soft/20 bg-sacred-bg/70">
         <div className="max-w-7xl mx-auto px-6 py-8 md:py-10">
           <div className="mt-6">
@@ -259,6 +257,6 @@ export default async function ActivitiesPage({
           )}
         </div>
       </div>
-    </div>
+    </>
   )
 }

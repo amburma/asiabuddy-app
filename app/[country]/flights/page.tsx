@@ -3,7 +3,6 @@ import { cookies } from 'next/headers'
 import { translateText } from '../../../lib/translate'
 import FlightServiceCard from '../../../components/shared/services/FlightServiceCard'
 import { getFlightLinksByCity } from '../../../lib/queries/flightLinks'
-import Navbar from '../../../components/shared/Navbar'
 import AviasalesSearchWidgetWrapper from '../../../components/shared/AviasalesSearchWidgetWrapper'
 import WhiteLabelFlightWidget from '../../../components/shared/WhiteLabelFlightWidget'
 import VisaModalTrigger from '../../../components/shared/VisaModalTrigger'
@@ -72,8 +71,7 @@ export default async function FlightsPage({
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <Navbar country={country} language={targetLanguage} />
+    <>
       <div className="border-b border-gold-soft/20 bg-sacred-bg/70">
         <div className="max-w-7xl mx-auto px-6 py-8 md:py-10">
           <div className="mt-6">
@@ -244,6 +242,6 @@ export default async function FlightsPage({
       {country === 'thailand' && (
         <ChatWidgetGrid language={targetLanguage} hideGrid={true} />
       )}
-    </div>
+    </>
   )
 }

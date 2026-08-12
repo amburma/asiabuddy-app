@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
+import Navbar from '../../components/shared/Navbar'
 import FloatingChatButtonLoader from '../../components/shared/FloatingChatButtonLoader'
 import FloatingContactButtonLoader from '../../components/shared/FloatingContactButtonLoader'
 import { normalizeLocale } from '../../lib/i18n'
@@ -129,9 +130,11 @@ export default async function CountryLayout({
   }
   const cookieStore = await cookies()
   const language = normalizeLocale(cookieStore.get('NEXT_LOCALE')?.value)
+  const isFirstVisit = !cookieStore.has('NEXT_LOCALE')
 
   return (
     <div className="min-h-screen" data-country={country}>
+      <Navbar country={country} language={language.toUpperCase()} isFirstVisit={isFirstVisit} />
       {children}
       {activeCountryIds.includes(country.toLowerCase()) && (
         <>

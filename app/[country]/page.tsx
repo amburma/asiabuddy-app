@@ -8,7 +8,6 @@ import { TripChecklistModal } from '../../components/shared/TripChecklistModal'
 import EssentialGuides from '../../components/shared/EssentialGuides'
 import { translateText } from '../../lib/translate'
 import { cookies } from 'next/headers'
-import Navbar from '../../components/shared/Navbar'
 import { SupportedLanguage } from '../../types/country'
 import { getGygLinksSummary } from '../../lib/queries/gygLinks'
 import { getAgodaLinksByCity } from '../../lib/queries/agodaLinks'
@@ -94,8 +93,6 @@ export default async function CountryPage({
 
   return (
     <>
-      <Navbar country={lowerCountry} language={targetLanguage.toUpperCase()} isFirstVisit={isFirstVisit} />
-
       {/* SECTION 1 — HERO */}
       <section id="home" className="relative min-h-[40vh] flex items-center justify-center overflow-hidden bg-sacred-green/5">
         {/* Background Image */}
