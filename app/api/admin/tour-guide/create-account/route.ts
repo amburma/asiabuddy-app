@@ -9,7 +9,8 @@ const packageSchema = z.object({
   source: z.literal('package'),
   username: z.string().min(1, 'Username is required'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
-  booking_id: z.string().uuid('Invalid booking ID'),
+  tour_days: z.number().int().positive('Tour days must be a positive integer'),
+  booking_id: z.string().uuid('Invalid booking ID').optional(),
 });
 
 const purchasedSchema = z.object({
@@ -76,10 +77,9 @@ export async function POST(req: NextRequest) {
 
     // Add source-specific fields
     if (data.source === 'package') {
-      accountData.booking_id = data.booking_id;
+      accountData.booking_id = data.booking_id || null;
       accountData.phone_or_whatsapp = null;
-      // total_hours_allocated will be computed at booking confirmation time
-      accountData.total_hours_allocated = 0;
+      accountData.total_hours_allocated = data.tour_days * 2;
     } else if (data.source === 'purchased') {
       accountData.booking_id = null;
       accountData.phone_or_whatsapp = data.phone_or_whatsapp;

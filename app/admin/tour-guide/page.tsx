@@ -35,6 +35,7 @@ export default function TourGuideAccountPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [bookingId, setBookingId] = useState('');
+  const [tourDays, setTourDays] = useState('');
   const [phoneOrWhatsapp, setPhoneOrWhatsapp] = useState('');
   const [totalHoursAllocated, setTotalHoursAllocated] = useState('');
   const [submitError, setSubmitError] = useState('');
@@ -99,12 +100,15 @@ export default function TourGuideAccountPage() {
       };
 
       if (source === 'package') {
-        if (!bookingId) {
-          setSubmitError('Booking ID is required for package accounts');
+        if (!tourDays) {
+          setSubmitError('Tour days is required for package accounts');
           setSubmitting(false);
           return;
         }
-        payload.booking_id = bookingId;
+        payload.tour_days = parseInt(tourDays, 10);
+        if (bookingId) {
+          payload.booking_id = bookingId;
+        }
       } else {
         if (!phoneOrWhatsapp) {
           setSubmitError('Phone/WhatsApp is required for purchased and trial accounts');
@@ -141,6 +145,7 @@ export default function TourGuideAccountPage() {
         setUsername('');
         setPassword('');
         setBookingId('');
+        setTourDays('');
         setPhoneOrWhatsapp('');
         setTotalHoursAllocated('');
       }
@@ -278,16 +283,29 @@ export default function TourGuideAccountPage() {
             </Field>
 
             {source === 'package' && (
-              <Field label="Booking ID">
-                <input
-                  type="text"
-                  value={bookingId}
-                  onChange={e => setBookingId(e.target.value)}
-                  placeholder="Enter booking ID"
-                  className={inputCls}
-                  required
-                />
-              </Field>
+              <>
+                <Field label="Tour Days">
+                  <input
+                    type="number"
+                    min="1"
+                    step="1"
+                    value={tourDays}
+                    onChange={e => setTourDays(e.target.value)}
+                    placeholder="Enter number of tour days"
+                    className={inputCls}
+                    required
+                  />
+                </Field>
+                <Field label="Booking ID (optional)">
+                  <input
+                    type="text"
+                    value={bookingId}
+                    onChange={e => setBookingId(e.target.value)}
+                    placeholder="Enter booking ID for record-keeping"
+                    className={inputCls}
+                  />
+                </Field>
+              </>
             )}
 
             {source !== 'package' && (
