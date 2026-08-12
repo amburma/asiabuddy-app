@@ -47,6 +47,12 @@ interface Itinerary {
   meals_included: string[]
   accommodation: string | null
   image_url: string | null
+  landmark_id: string | null
+  landmarks: {
+    image_url: string | null
+    alt_text: string | null
+    name: string | null
+  } | null
   created_at: string
 }
 
@@ -155,10 +161,10 @@ export default async function TourDetailPage({
     notFound()
   }
 
-  // Fetch itineraries ordered by day_number
+  // Fetch itineraries with landmark photos ordered by day_number
   const { data: itineraries } = await supabase
     .from('itineraries')
-    .select('*')
+    .select('*, landmarks(image_url, alt_text, name)')
     .eq('tour_id', tour.id)
     .order('day_number', { ascending: true })
 
@@ -167,7 +173,6 @@ export default async function TourDetailPage({
   const highlights = Array.isArray(t.highlights) ? t.highlights : []
   const inclusions = Array.isArray(t.inclusions) ? t.inclusions : []
   const exclusions = Array.isArray(t.exclusions) ? t.exclusions : []
-  const priceFrom = t.price_from || 0
 
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
 
@@ -288,16 +293,6 @@ export default async function TourDetailPage({
             <div className="bg-[#1a2332] text-white rounded-2xl shadow-lg p-6">
               <div className="text-xs font-semibold text-orange-400 tracking-widest uppercase mb-4">RESERVE YOUR SPOT</div>
               
-              {/* Price */}
-              <div className="mb-4">
-                <span className="text-sm text-gray-400">From</span>
-                <span className="text-5xl font-bold text-white mx-2">
-                  {priceFrom}
-                </span>
-                <span className="text-lg text-gray-300">USD</span>
-                <p className="text-xs text-gray-500 mt-1">per person</p>
-              </div>
-
               <hr className="border-gray-700 my-4" />
 
               {/* Stats Grid */}
@@ -326,8 +321,6 @@ export default async function TourDetailPage({
               <BookNowClient
                 tourSlug={translatedTour.slug}
                 country={translatedTour.country}
-                price={priceFrom}
-                currency={translatedTour.currency}
                 salesperson_id={translatedTour.salesperson_id}
                 language={country.toUpperCase() as ThaiLanguage}
               />
@@ -415,18 +408,35 @@ export default async function TourDetailPage({
                     </div>
                     {i < translatedItineraries.length - 1 && <div className="w-[1px] flex-grow bg-gray-200 mt-2" />}
                   </div>
-                  <div className="pb-6">
+                  <div className="pb-6 flex-1">
                     <h4 className="font-bold text-sacred-green text-sm mb-1">
                       Day {day.day_number}{day.title ? ` — ${day.title}` : ''}
                     </h4>
-                    {day.image_url && (
+                    {/* Landmark photo from joined landmarks table */}
+                    {day.landmarks?.image_url && (
+                      <div className="mb-3">
+                        <Image
+                          src={day.landmarks.image_url}
+                          alt={day.landmarks.alt_text || day.landmarks.name || day.title || `Day ${day.day_number}`}
+                          width={800}
+                          height={280}
+                          className="rounded-lg"
+                          style={{ objectFit: 'cover', width: '100%', height: 'auto', maxHeight: '280px' }}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      </div>
+                    )}
+                    {/* Fallback to legacy image_url if no landmark photo */}
+                    {!day.landmarks?.image_url && day.image_url && (
                       <div className="mb-3">
                         <Image
                           src={day.image_url}
                           alt={day.title || `Day ${day.day_number}`}
                           width={800}
                           height={280}
-                          style={{ objectFit: 'cover', borderRadius: '8px', width: '100%', height: 'auto', maxHeight: '280px' }}
+                          className="rounded-lg"
+                          style={{ objectFit: 'cover', width: '100%', height: 'auto', maxHeight: '280px' }}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                       </div>
                     )}
@@ -448,8 +458,6 @@ export default async function TourDetailPage({
           <BookNowClient
             tourSlug={translatedTour.slug}
             country={translatedTour.country}
-            price={priceFrom}
-            currency={translatedTour.currency}
             salesperson_id={translatedTour.salesperson_id}
             language={country.toUpperCase() as ThaiLanguage}
           />
