@@ -1002,7 +1002,19 @@ const ENGLISH_UI = {
     }
   },
   "floatingTooltip": "📩 Send us a quick inquiry",
-  "floatingBadge": "Quick Inquiry"
+  "floatingBadge": "Quick Inquiry",
+  "tourGuide": "Tour Guide",
+  "tourGuideLogin": "Tour Guide Login",
+  "tourGuideAuth": {
+    "title": "Tour Guide",
+    "loginTitle": "Tour Guide Login",
+    "username": "Username",
+    "password": "Password",
+    "loginButton": "Login",
+    "loggingIn": "Logging in...",
+    "invalidCredentials": "Invalid username or password",
+    "loginError": "Login failed. Please try again."
+  }
 };
 
 export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
@@ -1999,7 +2011,19 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     }
   },
   "floatingTooltip": "📩 ส่งคำถามด่วน",
-  "floatingBadge": "ส่งคำถามด่วน"
+  "floatingBadge": "ส่งคำถามด่วน",
+  "tourGuide": "ทัวร์ไกด์",
+  "tourGuideLogin": "เข้าสู่ระบบทัวร์ไกด์",
+  "tourGuideAuth": {
+    "title": "ทัวร์ไกด์",
+    "loginTitle": "เข้าสู่ระบบทัวร์ไกด์",
+    "username": "ชื่อผู้ใช้",
+    "password": "รหัสผ่าน",
+    "loginButton": "เข้าสู่ระบบ",
+    "loggingIn": "กำลังเข้าสู่ระบบ...",
+    "invalidCredentials": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+    "loginError": "เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่"
+  }
 },
   MM: {
   "brand": { "name": "ThaiGuide", "subtitle": "AsiaBuddy ဝန်ဆောင်မှုများ" },
@@ -2987,7 +3011,19 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     }
   },
   "floatingTooltip": "📩 မေးမြန်းချက် ပေးပို့ပါ",
-  "floatingBadge": "မေးမြန်းချက် ပေးပို့ပါ"
+  "floatingBadge": "မေးမြန်းချက် ပေးပို့ပါ",
+  "tourGuide": "ခရီးသွားလမ်းညွှန်",
+  "tourGuideLogin": "ခရီးသွားလမ်းညွှန် ဝင်ရောက်ပါ",
+  "tourGuideAuth": {
+    "title": "ခရီးသွားလမ်းညွှန်",
+    "loginTitle": "ခရီးသွားလမ်းညွှန် ဝင်ရောက်ပါ",
+    "username": "အသုံးပြုသူအမည်",
+    "password": "စကားဝှက်",
+    "loginButton": "ဝင်ရောက်ပါ",
+    "loggingIn": "ဝင်ရောက်နေသည်...",
+    "invalidCredentials": "အသုံးပြုသူအမည် သို့မဟုတ် စကားဝှက် မှားနေပါသည်",
+    "loginError": "ဝင်ရောက်မှု မအောင်မြင်ပါ ထပ်မံကြိုးစားပါ"
+  }
 },
   ES: {
   "brand": { "name": "ThaiGuide", "subtitle": "Servicios AsiaBuddy" },
@@ -3975,7 +4011,19 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     }
   },
   "floatingTooltip": "📩 Envíanos una consulta rápida",
-  "floatingBadge": "Consulta Rápida"
+  "floatingBadge": "Consulta Rápida",
+  "tourGuide": "Guía Turístico",
+  "tourGuideLogin": "Iniciar Sesión Guía",
+  "tourGuideAuth": {
+    "title": "Guía Turístico",
+    "loginTitle": "Iniciar Sesión Guía Turístico",
+    "username": "Usuario",
+    "password": "Contraseña",
+    "loginButton": "Iniciar Sesión",
+    "loggingIn": "Iniciando sesión...",
+    "invalidCredentials": "Usuario o contraseña inválidos",
+    "loginError": "Error al iniciar sesión. Intente nuevamente."
+  }
 },
   FR: {
   "brand": { "name": "ThaiGuide", "subtitle": "Services AsiaBuddy" },
@@ -4963,7 +5011,19 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     }
   },
   "floatingTooltip": "📩 Envoyez-nous une demande rapide",
-  "floatingBadge": "Demande Rapide"
+  "floatingBadge": "Demande Rapide",
+  "tourGuide": "Guide Touristique",
+  "tourGuideLogin": "Connexion Guide",
+  "tourGuideAuth": {
+    "title": "Guide Touristique",
+    "loginTitle": "Connexion Guide Touristique",
+    "username": "Nom d'utilisateur",
+    "password": "Mot de passe",
+    "loginButton": "Connexion",
+    "loggingIn": "Connexion...",
+    "invalidCredentials": "Nom d'utilisateur ou mot de passe invalide",
+    "loginError": "Échec de la connexion. Veuillez réessayer."
+  }
 },
   DE: {
   "brand": { "name": "ThaiGuide", "subtitle": "AsiaBuddy Services" },
@@ -5951,6 +6011,18 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     }
   },
   "floatingTooltip": "📩 Senden Sie uns eine schnelle Anfrage",
-  "floatingBadge": "Schnelle Anfrage"
+  "floatingBadge": "Schnelle Anfrage",
+  "tourGuide": "Reiseführer",
+  "tourGuideLogin": "Reiseführer Login",
+  "tourGuideAuth": {
+    "title": "Reiseführer",
+    "loginTitle": "Reiseführer Login",
+    "username": "Benutzername",
+    "password": "Passwort",
+    "loginButton": "Anmelden",
+    "loggingIn": "Anmelden...",
+    "invalidCredentials": "Ungültiger Benutzername oder Passwort",
+    "loginError": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut."
+  }
 },
 };

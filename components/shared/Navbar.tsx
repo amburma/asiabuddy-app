@@ -300,6 +300,13 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
                     {/* booking.link exists for longer booking text; keep concise label */}
                     {t.booking?.chatTitle || 'Tour Operator'}
                   </Link>
+                  <Link 
+                    href="/tourguide"
+                    onClick={() => setShowMenu(false)}
+                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
+                  >
+                    {t.tourGuide || 'Tour Guide'}
+                  </Link>
                 </div>
               )}
 
@@ -464,6 +471,22 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
                   </div>
                 </>
               )}
+
+              {/* Section: TOUR GUIDE (available to all visitors) */}
+              <>
+                <h4 className="text-xs uppercase tracking-widest text-[#C9A84C] mt-4 mb-1 px-4">
+                  {t.tourGuide || 'TOUR GUIDE'}
+                </h4>
+                <div className="space-y-1">
+                  <Link 
+                    href="/tourguide"
+                    onClick={() => setShowMenu(false)}
+                    className="block px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
+                  >
+                    {t.tourGuideLogin || 'Tour Guide Login'}
+                  </Link>
+                </div>
+              </>
             </div>
           </div>
         </div>
