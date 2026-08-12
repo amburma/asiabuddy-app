@@ -1,55 +1,88 @@
-## Phase 0 — UI + Build Verification (13 August 2026, continued)
+# AsiaBuddy "Tour Guide" — Build Progress Log
+> Started: 12 August 2026 (session continuing from AsiaBuddy_TourGuide_Project_Plan.md)
+> Last verified against live codebase: 13 August 2026 — see "Auth + Gate services" entry under Phase 0
+> This file is the running source of truth for what's actually been built and verified,
+> as opposed to what the original plan documents *proposed*. Where this log and the
+> plan documents disagree, this log wins — it reflects verified reality.
 
-### Navbar entry
-Applied via Windsurf diff (not terminal — terminal paste of a diff caused a
-PowerShell parsing error, corrected mid-session, no file impact from that
-mistake). `/tourguide` nav link added to Navbar.tsx, confirmed present in
-build output.
+---
 
-### Color convention investigation
-Hypothesized a "structural vs CTA" color-family split between #C9A84C and
-#D4AF37 — disproven. Actual finding: #D4AF37 is a named Tailwind token
-(`gold-deep`) under a "Sacred Aesthetic Palette" section (paired with
-`sacred-bg`, `sacred-green`), while #C9A84C has no named token and is used
-as the de facto default gold via raw hex throughout the codebase (154
-occurrences, no token). `TourGuideLoginForm.tsx` had no import tying it to
-the sacred theme, so its 4 raw #D4AF37 occurrences were changed to #C9A84C
-to match Navbar.tsx (the codebase's actual default), not fixed to a "correct"
-token.
+## Phase 0 — Foundation: ✅ COMPLETE (core cost-enforcement logic)
 
-**Follow-up identified, not yet actioned:** #C9A84C is used as a raw hex
-everywhere with no Tailwind token — formalizing it as a named token (e.g.
-`gold-primary`) is a low-priority refactor, not required for Phase 0.
+### Schema conflicts found vs. original plan (§3 of AsiaBuddy_TourGuide_Project_Plan.md)
 
-### Async cookies() build failure (found + fixed)
-`npm run build` failed on `app/tourguide/page.tsx` — `cookieStore.get()` 
-called without `await` on `cookies()`. Root cause: Next.js 15 made `cookies()` 
-async; this tour-guide code predates that migration or was never updated.
-Fixed to `const cookieStore = await cookies()`. Scope was limited to
-tour-guide files only — investigation confirmed the sync pattern did not
-appear used elsewhere in a way that needed touching for this task.
+| Plan assumption | Reality (verified) | Resolution |
+|---|---|---|
+| `admin_users` table exists, `created_by_admin_id references admin_users(id)` | No `admin_users` table. Admin auth is Supabase Auth + `auth.role()='authenticated'` checks. | Changed FK to `references auth.users(id)` |
+| `bookings` has a duration/tour-days column, or a `tour_id` FK to `tours` | Neither exists. `bookings.tour_type` is a category label (`'tour'`, `'flight'`, `'car'`, `'taxi'`), not a duration or FK. No link from `bookings` to `tours` at all. | Added nullable `bookings.tour_days integer` column (migration `20260813`). **Superseded 13 Aug 2026** — see "Plan Deviation" section below: this column is no longer part of the active flow; `tour_days` is instead entered directly on the Tour Guide admin account-creation form. The `bookings.tour_days` column itself is harmless and left in place, just unused by the current flow. |
+| User-scoped RLS (`auth.uid()`) pattern | Existing project convention uses `auth.role()='authenticated'` for admin access; no `auth.uid()`-scoped policies exist anywhere in the codebase. | Followed existing convention. Also identified that `tour_guide_accounts` customers authenticate via custom username/password stored in that table — they are **not** Supabase Auth users, so `auth.uid()` would be null for them regardless. All customer-facing access must go through API routes using the service role key; RLS only grants admin (`auth.role()='authenticated'`) access, no anon/public policy on any of the 4 tables. |
+| `increment_tour_guide_usage()` (§3.2) is a plain increment, no cap check | §2.3 explicitly requires check-and-deduct to be atomic to prevent concurrent-tab budget overshoot; a plain increment doesn't satisfy that. | Rebuilt with `SELECT ... FOR UPDATE` row lock + cap check inside the same transaction. Verified via 20-way concurrent test (see below). |
+| Plan doesn't specify where `p_cap_usd` comes from for the increment function | — | Decided to compute the cap **inside** the SQL function (not in app code) by reading `tour_guide_accounts.source` + `total_hours_allocated` and applying the §1.2 tier rates. Keeps the one source of truth in the DB. Trade-off: rates are hardcoded in the function body — a pricing change requires a new migration (`CREATE OR REPLACE FUNCTION`), not a config-table edit. Acceptable for v1; revisit if pricing changes become frequent (Phase 6). |
+| `tour_guide_trial_usage` has no described atomic function | — | Added `increment_tour_guide_trial_usage()`, same lock pattern, fixed 120s (2 min) cap, and raises an error if called against a non-`trial` account (verified). |
 
-### Hover shade (TourGuideLoginForm.tsx button)
-Investigated whether #C9A84C has an existing paired darkened hover shade
-anywhere in the codebase — none found. Navbar.tsx and other #C9A84C usages
-pair it with opacity-based hover (`hover:bg-[#C9A84C]/10`, `/5`), which is
-correct for text/icon links but not applicable to a solid filled button.
-Decision: left `hover:bg-[#b8942f]` unchanged (no invented hex value) —
-logged as a low-priority cosmetic backlog item, not a Phase 0 blocker.
+### Migrations applied (in order) — all verified against live DB
 
-### Final build result
-`npm run build` — clean, 0 errors. All tour-guide routes present in output:
-`/tourguide`, `/api/tour-guide/login`, `/api/tour-guide/logout`. Pre-existing
-`react/display-name` ESLint rule-loading error on `app/about/page.tsx` 
-confirmed unrelated to tour-guide work, does not block build, left as
-separate backlog item.
+1. **`20260811_create_tour_guide_foundation.sql`**
+   Creates `tour_guide_accounts`, `tour_guide_usage`, `tour_guide_trial_usage`, `feature_cost_config`. RLS enabled on all 4, single "admin full access" policy per table (`auth.role()='authenticated'`), no anon/public policy.
+   ✅ Verified: 4 tables exist, RLS `true` on all 4, 4 policies exist.
 
-## Phase 0 — ✅ FULLY COMPLETE (schema, functions, auth/gate services, UI, build)
+2. **`20260812_create_increment_tour_guide_usage_function.sql`**
+   First version of `increment_tour_guide_usage(p_account_id, p_feature, p_amount, p_cap_usd)` — atomic, caller-supplied cap.
+   ✅ Applied and sanity-tested, later **superseded** by migration 4 below (signature changed).
 
-## Backlog (non-blocking, carried forward)
-- [ ] Formalize #C9A84C as a named Tailwind token (currently raw hex only)
-- [ ] Normalize TourGuideLoginForm.tsx button hover shade to a true #C9A84C-derived darken (currently an inherited #D4AF37-derived shade)
-- [ ] Pre-existing `react/display-name` ESLint config error (app/about/page.tsx) — unrelated to tour-guide, project-wide issue
+3. **`20260813_add_tour_days_to_bookings.sql`**
+   Adds `bookings.tour_days integer` (nullable, `check (tour_days is null or tour_days > 0)`).
+   ✅ Verified: column exists, type `integer`, nullable.
+
+4. **`20260814_redefine_tour_guide_functions.sql`**
+   - Drops the 4-arg `increment_tour_guide_usage()` from migration 2, replaces with 3-arg version `(p_account_id, p_feature, p_amount)` that computes the cap internally (package: `hours × $0.15`, purchased: `hours × $1.50`, trial: raises an error).
+   - Adds `increment_tour_guide_trial_usage(p_account_id, p_seconds)` — same atomic pattern, fixed 120s cap, rejects non-trial accounts.
+   ✅ Verified: both functions exist with correct signatures.
+
+### Test results (all against live Supabase DB, via SQL Editor + one Windsurf-run Node script)
+
+| Test | Result |
+|---|---|
+| Package tier: $1.00 call then $0.60 call against $1.50 cap (10hr × $0.15) | `true/1.00/0.50` then `false/1.00/0.50` (unchanged) — ✅ |
+| Purchased tier: $1.50 call against $1.50 cap (1hr × $1.50) | `true/1.50/0.00` — ✅ |
+| Trial: 100s call then 30s call against 120s cap | `true/100/20` then `false/100/20` (unchanged) — ✅ |
+| Guard: trial account calling `increment_tour_guide_usage()` (the cost function) | Raises `increment_tour_guide_usage() is not valid for source=trial; ...` as designed — ✅ |
+| Concurrency: 20 parallel calls, $0.10 each, $1.05 cap, via Node script (`@supabase/supabase-js`, service role key) | Exactly 10 successes, 10 rejections, 0 errors, final `total_cost_usd = 1.00` (never exceeded cap) — ✅ |
+
+**Note on test methodology:** several early test runs gave inconsistent results (e.g. Test B `purchased` tier) — root cause was leftover rows from earlier failed/duplicate test runs, not a function bug. Lesson for future testing in this project: always run a full cleanup of fixed test UUIDs *before* a fresh test attempt, not only after.
+
+### Auth + Gate services (found already built, now verified + committed)
+
+The following were discovered already implemented in a prior session but not yet
+reflected in this log:
+
+- `lib/tour-guide/auth.ts` — bcryptjs password hashing, jose-based JWT session
+  tokens (30-day expiry), httpOnly `tg_session` cookie, `verifyCredentials()` 
+  against `tour_guide_accounts` 
+- `lib/tour-guide/costGateService.ts` — `assertBudgetAvailable()`,
+  `getAccountStatus()`, `recordUsage()`, `recordTrialUsage()` — this IS the
+  CostGateService listed as an open item below; it already exists
+- `lib/tour-guide/featureGateService.ts` — `checkFeatureAccess()`, trial tier
+  restricted to `TRIAL_ALLOWED_FEATURES = ['live']` — this IS the
+  FeatureGateService listed as an open item below; it already exists
+- `lib/tour-guide/gate.ts` — `gateFeatureRequest()`, unified cost+feature gate
+  combining the two services above
+- `lib/tour-guide/supabaseAdmin.ts` — service-role client for this subsystem
+- `app/api/tour-guide/login/route.ts` — POST endpoint, validates credentials
+  via `verifyCredentials()`, issues `tg_session` cookie
+- `app/api/tour-guide/logout/route.ts` — POST endpoint, clears the session
+  cookie
+
+No git history existed for these files as of verification — they were
+untracked. Committed as `7fdf66ef` (git log confirms this; run
+`git show --stat 7fdf66ef` for the exact file list). Not yet pushed to origin
+as of this log entry.
+
+Confirmed NOT to exist yet (verified by searching `components/` and `app/`):
+"Tour Guide" nav entry, login form UI, any dashboard page. This remains the
+actual Phase 0 blocker.
+
+---
 
 ## Plan Deviation — `package` account creation is now manual (13 Aug 2026)
 
@@ -73,3 +106,89 @@ can exist without it. Roadmap reordered accordingly.
 
 Cancelled: adding a `tour_days` field to the paid-invoice Zod
 schema/UI (previously planned Task 1.1) — no longer needed.
+
+---
+
+## Task 0.8 — Dashboard Shell: ✅ COMPLETE (14 Aug 2026)
+
+- `app/tourguide/dashboard/page.tsx` — server component, checks `tg_session` 
+  cookie via `verifySessionToken`, redirects to `/tourguide` if invalid.
+  Fetches account data via `supabaseAdmin`. For package/purchased, computes
+  `hours_remaining = total_hours_allocated - (total_cost_usd / rate)` 
+  (rate: package=0.15, purchased=1.5) — code comment added flagging that
+  these rate constants must stay in sync with `increment_tour_guide_usage()` 
+  in migration `20260814` if pricing ever changes. For trial, shows
+  `seconds_used / 120`. 2x2 feature grid, Obsidian/Ivory/Gold palette
+  matching the login form, trial accounts see only Live Translator enabled.
+  Logout route (`app/api/tour-guide/logout/route.ts`) confirmed to already
+  exist from a prior session — was not recreated.
+
+- **Process note:** this commit (`5b9b7c36`) also swept in 4 unrelated files
+  from prior sessions via a wildcard `git add` — all turned out to be
+  pre-existing and harmless on inspection, but going forward, prompts to
+  Windsurf must specify exact filenames for `git add`, never a wildcard.
+
+### Bug found + fixed: package accounts got `total_hours_allocated = 0` 
+
+Discovered while auditing the commit above. `app/api/admin/tour-guide/create-account/route.ts` 
+hardcoded `total_hours_allocated = 0` for `source='package'`, with a stale
+comment referencing the abandoned "auto-issuance at booking confirmation"
+flow (see the Plan Deviation entry above — that flow was abandoned on 13 Aug
+2026 in favor of manual admin entry, but the code was never updated to
+match). Net effect: every package account was created with a $0 cap,
+meaning `increment_tour_guide_usage()` would reject every single call
+immediately (`0 + amount > 0` cap) — the feature would have been completely
+unusable for package customers.
+
+**Fix (commit `b1611923`):**
+- `app/admin/tour-guide/page.tsx`: package account form now requires a
+  `tour_days` number input; `booking_id` is now optional (record-keeping
+  only, matches the documented decision that it's not a functional
+  dependency)
+- `app/api/admin/tour-guide/create-account/route.ts`: Zod schema now
+  validates `tour_days` as a positive integer for package accounts;
+  `total_hours_allocated = tour_days * 2` computed server-side; stale
+  comment removed
+
+**Lesson for future audits:** always check hardcoded/placeholder values
+(`= 0`, `= null`, `// TODO`) left behind when a planned flow gets abandoned
+mid-build — the surrounding code doesn't always get updated to match the new
+plan, and this class of bug won't throw an error, it just silently produces
+wrong data.
+
+### Progress log now tracked in git (commit `e75b5792`)
+
+This file was untracked until 14 Aug 2026 — meaning a fresh Windsurf session
+starting from a different local checkout would not have had any of this
+history available, including the plan-deviation decision that caused the
+bug above. Now committed and pushed.
+
+---
+
+## Open items carried forward (not yet built)
+
+- [ ] **Phase 0:** genuinely complete as of 14 Aug 2026 — schema, atomic
+      functions, auth, gate services, admin creation form (all 3 sources,
+      package bug fixed), customer dashboard. Nothing known outstanding.
+- [ ] Whether `feature_cost_config` (currently unused by the increment functions, which hardcode their own rates) should later drive the tier rates instead of the hardcoded `0.15` / `1.50` constants — deferred, not blocking
+- [ ] All other Phase 1–6 items exactly as listed in `AsiaBuddy_TourGuide_Project_Plan.md` §8, unchanged (Phase 1's `tour_days`-on-invoice task is cancelled per the Plan Deviation entry above — do not resurrect it)
+
+---
+
+## Cross-session working note
+
+**This file must stay tracked in git and be read at the start of every new
+session** (Windsurf or otherwise) before making any Tour Guide changes — it
+is the only place decisions like the Plan Deviation (13 Aug) are recorded.
+The Project Plan document (`AsiaBuddy_TourGuide_Project_Plan.md`) is now
+stale in several places (§3.1 auto-issuance, §7.1 form scope) and should not
+be treated as current truth where this log contradicts it.
+
+---
+
+## Working conventions established this session (for future Windsurf prompts)
+
+- Migration filenames: `YYYYMMDD_description.sql`, one purpose per file
+- Every migration gets applied via Supabase SQL Editor (not CLI — not installed on this machine) and verified with a follow-up `information_schema`/`pg_proc`/`pg_policies` query before moving on
+- Windsurf is used for: file creation/editing in the repo, git commit/push, and read-only investigation of the codebase — **never** for direct DB access (no CLI, no stored credentials given to it for this purpose)
+- Test data uses fixed placeholder UUIDs (`...a1`, `...b1`, `...c1` pattern) — must be cleaned up **before**, not just after, each test run
