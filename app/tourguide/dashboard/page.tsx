@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { verifySessionToken } from '@/lib/tour-guide/auth'
 import { supabaseAdmin } from '@/lib/tour-guide/supabaseAdmin'
 import { LogOut, FileText, Camera, Mic, Headphones } from 'lucide-react'
@@ -104,9 +105,8 @@ export default async function TourGuideDashboard() {
             const isEnabled = !isTrial || feature.id === 'live'
             const Icon = feature.icon
 
-            return (
+            const cardContent = (
               <div
-                key={feature.id}
                 className={`border rounded-lg p-6 ${
                   isEnabled
                     ? 'border-[#C9A84C] bg-[#1a1a1a] hover:bg-[#252525] cursor-pointer transition-colors'
@@ -136,6 +136,16 @@ export default async function TourGuideDashboard() {
                 </div>
               </div>
             )
+
+            if (feature.id === 'text' && isEnabled) {
+              return (
+                <Link key={feature.id} href="/tourguide/text">
+                  {cardContent}
+                </Link>
+              )
+            }
+
+            return <div key={feature.id}>{cardContent}</div>
           })}
         </div>
       </main>

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import {
   assertBudgetAvailable,
   CostGateError,
@@ -6,9 +6,11 @@ import {
   type TourGuideFeature,
 } from './costGateService';
 import { checkFeatureAccess } from './featureGateService';
+import { resolveAccountFromRequest } from './auth';
 
 export interface GateSuccess {
   ok: true;
+  accountId: string;
   status: AccountStatus;
 }
 export interface GateFailure {
@@ -24,45 +26,10 @@ export type GateResult = GateSuccess | GateFailure;
  *       |
  *   [Feature Gate] --(trial + non-live)--> blocked, upsell
  *
- * Response shapes follow the existing route conventions used elsewhere in
- * the codebase ({ error }, { status }) — see app/api/inquiry/route.ts etc.
- *
- * Usage in a feature route:
- *
- *   export async function POST(req: NextRequest) {
- *     try {
- *       const accountId = await resolveAccountId(req); // Phase 1 concern, see note below
- *       const gate = await gateFeatureRequest(accountId, 'text');
- *       if (!gate.ok) return gate.response;
- *
- *       // ... call Translate API, compute amountUsd from the response ...
- *       const usage = await recordUsage(accountId, 'text', amountUsd);
- *       if (!usage.success) {
- *         // lost the race against another tab between assertBudgetAvailable()
- *         // and recordUsage() — surface the same "limit reached" response
- *         return NextResponse.json({ error: 'Hours have been used up' }, { status: 429 });
- *       }
- *
- *       return NextResponse.json({
- *         success: true,
- *         data: { translation: '...' },
- *         remainingHours: gate.status.source === 'trial' ? undefined : usage.remainingUsd,
- *         warning: usage.warning,
- *       });
- *     } catch (err) {
- *       console.error(err);
- *       return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
- *     }
- *   }
- *
- * NOTE on resolveAccountId(): session/credential validation for
- * tour_guide_accounts (booking-credential or admin-issued username/password)
- * is genuinely new territory in this codebase — there is currently no
- * customer login mechanism at all (see investigation notes: admin-only
- * Supabase Auth, no cookies/JWT for customers). That's Phase 1 scope per
- * the roadmap, not part of this Phase 0 gate. gateFeatureRequest() takes a
- * resolved accountId so it stays decoupled from however that ends up being
- * built (signed cookie, JWT, etc.).
+ * Most routes should use gateFeatureRequestFromReq() below, not this one
+ * directly — it takes an already-resolved accountId, which is useful for
+ * the Live Translator streaming tick loop (resolves session once at
+ * connection time, not on every tick).
  */
 export async function gateFeatureRequest(
   accountId: string,
@@ -93,5 +60,27 @@ export async function gateFeatureRequest(
     };
   }
 
-  return { ok: true, status };
+  return { ok: true, accountId, status };
+}
+
+/**
+ * Convenience wrapper for the common case: resolve the session cookie
+ * (lib/tour-guide/auth.ts) AND run the Cost Gate + Feature Gate, in one
+ * call. Most /api/tour-guide/* routes should use this.
+ */
+export async function gateFeatureRequestFromReq(
+  req: NextRequest,
+  feature: TourGuideFeature
+): Promise<GateResult> {
+  const session = await resolveAccountFromRequest(req);
+  if (!session) {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { error: 'Unauthorized - Invalid or missing session' },
+        { status: 401 }
+      ),
+    };
+  }
+  return gateFeatureRequest(session.accountId, feature);
 }
