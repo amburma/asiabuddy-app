@@ -165,11 +165,47 @@ bug above. Now committed and pushed.
 
 ---
 
+## Phase 3 — Voice Q&A: ✅ COMPLETE (13 Aug 2026)
+
+### What was built
+
+- `app/api/tour-guide/voice-qa/route.ts` — new API endpoint following the established translate/ocr pattern (gate → parse → generateContent → recordUsage). Text-only output, package/purchased sources only (trial excluded via feature gate). Accepts audio input (base64-encoded) and returns text responses.
+
+### Audio pricing bug found + fixed
+
+Discovered that `lib/tour-guide/geminiConfig.ts`'s `PRICING_PER_M_TOKENS` only had text input rates. According to Google's official pricing page (ai.google.dev/gemini-api/docs/pricing, verified 13 Aug 2026), audio input on `gemini-3.1-flash-lite` costs $0.50/M tokens vs $0.25/M for text (2x). 
+
+**Fix:** Updated `PRICING_PER_M_TOKENS` structure to `{ input: { text: number; audio: number }, output: number }` and modified `computeCostUsd()` to accept an optional `inputType` parameter (defaults to `'text'` for backward compatibility with existing translate/ocr routes). The voice-qa route now calls `computeCostUsd(usage, model, { inputType: 'audio' })` to bill at the correct audio rate.
+
+### TourGuideFeature type extended
+
+- File: `lib/tour-guide/costGateService.ts`
+- Change: Added `'voice-qa'` to the `TourGuideFeature` union type: `export type TourGuideFeature = 'text' | 'ocr' | 'voice' | 'voice-qa' | 'live';`
+
+**Step 2C investigation results:** No exhaustive switch/lookup updates were needed. The type is used in:
+- `gate.ts` — only as parameter types, no exhaustive switches
+- `featureGateService.ts` — `TRIAL_ALLOWED_FEATURES` array (checked via `.includes()`) and `checkFeatureAccess()` function (no exhaustive pattern matching)
+
+The new `'voice-qa'` member integrates automatically with existing gate logic; trial accounts are correctly blocked (not in `TRIAL_ALLOWED_FEATURES`) and package/purchased accounts can access it without code changes.
+
+### Commit
+
+- **Hash:** `b82e4feb`
+- **Message:** "Phase 3 (Voice Q&A): Add voice-qa feature with audio pricing fix"
+- **Files:** `lib/tour-guide/geminiConfig.ts`, `lib/tour-guide/costGateService.ts`, `app/api/tour-guide/voice-qa/route.ts`
+
+### Open items carried forward
+
+- [ ] **Frontend UI for voice-qa** — recording button, audio upload flow, displaying the text response. Only the API route exists now (backend-first approach, matching how OCR/translate were implemented).
+
+---
+
 ## Open items carried forward (not yet built)
 
 - [ ] **Phase 0:** genuinely complete as of 14 Aug 2026 — schema, atomic
       functions, auth, gate services, admin creation form (all 3 sources,
       package bug fixed), customer dashboard. Nothing known outstanding.
+- [ ] **Phase 3:** Frontend UI for voice-qa (recording button, upload flow, response display) — backend route complete.
 - [ ] Whether `feature_cost_config` (currently unused by the increment functions, which hardcode their own rates) should later drive the tier rates instead of the hardcoded `0.15` / `1.50` constants — deferred, not blocking
 - [ ] All other Phase 1–6 items exactly as listed in `AsiaBuddy_TourGuide_Project_Plan.md` §8, unchanged (Phase 1's `tour_days`-on-invoice task is cancelled per the Plan Deviation entry above — do not resurrect it)
 
