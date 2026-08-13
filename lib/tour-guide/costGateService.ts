@@ -34,7 +34,7 @@ export const TRIAL_WARNING_AT_SECONDS = 90;
 export const BUDGET_WARNING_THRESHOLD = 0.8; // 80%, per plan §4.1 step 8 / §4.2 step 5
 
 export type TourGuideSource = 'package' | 'purchased' | 'trial';
-export type TourGuideFeature = 'text' | 'ocr' | 'voice' | 'live';
+export type TourGuideFeature = 'text' | 'ocr' | 'voice' | 'voice-qa' | 'live';
 
 export interface AccountStatus {
   accountId: string;

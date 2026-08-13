@@ -21,8 +21,10 @@ export const TOUR_GUIDE_MODELS = {
 // RE-VERIFY before Phase 4 (Live): pricing changes, and Live's per-minute
 // audio billing doesn't map onto this token table anyway — Phase 4's route
 // must compute Live cost separately, not via computeCostUsd() below.
-const PRICING_PER_M_TOKENS: Record<string, { input: number; output: number }> = {
-  'gemini-3.1-flash-lite': { input: 0.25, output: 1.5 },
+// Audio input costs 2x text input on gemini-3.1-flash-lite (confirmed against
+// Google's official pricing page, ai.google.dev/gemini-api/docs/pricing, 13 Aug 2026).
+const PRICING_PER_M_TOKENS: Record<string, { input: { text: number; audio: number }; output: number }> = {
+  'gemini-3.1-flash-lite': { input: { text: 0.25, audio: 0.50 }, output: 1.5 },
 };
 
 /**
@@ -56,17 +58,23 @@ export interface GeminiUsage {
   candidatesTokenCount?: number;
 }
 
+export interface ComputeCostOptions {
+  inputType?: 'text' | 'audio';
+}
+
 /**
  * Converts a Gemini response's token usage into a real USD amount, for
  * `recordUsage()` in costGateService.ts. Text/OCR/Voice Q&A (Phases 1-3)
  * all route through this — Live (Phase 4) is exempt, see note above.
  */
-export function computeCostUsd(usage: GeminiUsage, model: string): number {
+export function computeCostUsd(usage: GeminiUsage, model: string, options?: ComputeCostOptions): number {
   const rates = PRICING_PER_M_TOKENS[model];
   if (!rates) {
     throw new Error(`No pricing entry for model "${model}" in PRICING_PER_M_TOKENS`);
   }
-  const inputCost = ((usage.promptTokenCount ?? 0) / 1_000_000) * rates.input;
+  const inputType = options?.inputType ?? 'text';
+  const inputRate = rates.input[inputType];
+  const inputCost = ((usage.promptTokenCount ?? 0) / 1_000_000) * inputRate;
   const outputCost = ((usage.candidatesTokenCount ?? 0) / 1_000_000) * rates.output;
   return inputCost + outputCost;
 }
