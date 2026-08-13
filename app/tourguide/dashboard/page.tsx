@@ -145,6 +145,14 @@ export default async function TourGuideDashboard() {
               )
             }
 
+            if (feature.id === 'photo' && isEnabled) {
+              return (
+                <Link key={feature.id} href="/tourguide/photo">
+                  {cardContent}
+                </Link>
+              )
+            }
+
             return <div key={feature.id}>{cardContent}</div>
           })}
         </div>
