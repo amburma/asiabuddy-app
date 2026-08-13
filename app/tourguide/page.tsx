@@ -4,7 +4,7 @@ import { verifySessionToken } from '../../lib/tour-guide/auth'
 import TourGuideLoginForm from '../../components/tour-guide/TourGuideLoginForm'
 
 export default async function TourGuidePage() {
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   const sessionCookie = cookieStore.get('tg_session')
   
   if (sessionCookie?.value) {
