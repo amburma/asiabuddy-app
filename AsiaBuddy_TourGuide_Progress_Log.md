@@ -169,13 +169,13 @@ bug above. Now committed and pushed.
 
 ### What was built
 
-- `app/api/tour-guide/voice-qa/route.ts` — new API endpoint following the established translate/ocr pattern (gate → parse → generateContent → recordUsage). Text-only output, package/purchased sources only (trial excluded via feature gate). Accepts audio input (base64-encoded) and returns text responses.
+- `app/api/tour-guide/voice-qa/route.ts` — new API endpoint following the established translate/ocr pattern (gate → parse → generateContent → recordUsage). Text-only output, package/purchased sources only (trial excluded via feature gate). Accepts audio input (base64-encoded) and returns text responses. (Later renamed to `voice-translate` in a subsequent session — see Phase 3 Route Rename entry below)
 
 ### Audio pricing bug found + fixed
 
 Discovered that `lib/tour-guide/geminiConfig.ts`'s `PRICING_PER_M_TOKENS` only had text input rates. According to Google's official pricing page (ai.google.dev/gemini-api/docs/pricing, verified 13 Aug 2026), audio input on `gemini-3.1-flash-lite` costs $0.50/M tokens vs $0.25/M for text (2x). 
 
-**Fix:** Updated `PRICING_PER_M_TOKENS` structure to `{ input: { text: number; audio: number }, output: number }` and modified `computeCostUsd()` to accept an optional `inputType` parameter (defaults to `'text'` for backward compatibility with existing translate/ocr routes). The voice-qa route now calls `computeCostUsd(usage, model, { inputType: 'audio' })` to bill at the correct audio rate.
+**Fix:** Updated `PRICING_PER_M_TOKENS` structure to `{ input: { text: number; audio: number }, output: number }` and modified `computeCostUsd()` to accept an optional `inputType` parameter (defaults to `'text'` for backward compatibility with existing translate/ocr routes). The voice-qa route (later renamed to voice-translate) now calls `computeCostUsd(usage, model, { inputType: 'audio' })` to bill at the correct audio rate.
 
 ### TourGuideFeature type extended
 
@@ -192,20 +192,20 @@ The new `'voice-qa'` member integrates automatically with existing gate logic; t
 
 - **Hash:** `b82e4feb`
 - **Message:** "Phase 3 (Voice Q&A): Add voice-qa feature with audio pricing fix"
-- **Files:** `lib/tour-guide/geminiConfig.ts`, `lib/tour-guide/costGateService.ts`, `app/api/tour-guide/voice-qa/route.ts`
+- **Files:** `lib/tour-guide/geminiConfig.ts`, `lib/tour-guide/costGateService.ts`, `app/api/tour-guide/voice-qa/route.ts` (later renamed to `voice-translate`)
 
 ### Open items carried forward
 
-- [ ] **Frontend UI for voice-qa** — recording button, audio upload flow, displaying the text response. Only the API route exists now (backend-first approach, matching how OCR/translate were implemented).
+- [x] **Frontend UI for voice-qa** — recording button, audio upload flow, displaying the text response. ✅ Complete.
 
 ---
 
 ## Open items carried forward (not yet built)
 
-- [ ] **Phase 0:** genuinely complete as of 14 Aug 2026 — schema, atomic
+- [x] **Phase 0:** genuinely complete as of 14 Aug 2026 — schema, atomic
       functions, auth, gate services, admin creation form (all 3 sources,
       package bug fixed), customer dashboard. Nothing known outstanding.
-- [ ] **Phase 3:** Frontend UI for voice-qa (recording button, upload flow, response display) — backend route complete.
+- [x] **Phase 3:** Frontend UI for voice-qa (recording button, upload flow, response display) — backend route complete. ✅ Complete including route rename to voice-translate.
 - [ ] Whether `feature_cost_config` (currently unused by the increment functions, which hardcode their own rates) should later drive the tier rates instead of the hardcoded `0.15` / `1.50` constants — deferred, not blocking
 - [ ] All other Phase 1–6 items exactly as listed in `AsiaBuddy_TourGuide_Project_Plan.md` §8, unchanged (Phase 1's `tour_days`-on-invoice task is cancelled per the Plan Deviation entry above — do not resurrect it)
 
@@ -423,11 +423,20 @@ re-verification note under Bug 5 above.)*
   clearly to translate."**
 - Voice page header title: "Voice Q&A" → **"Voice Translator"**
 
-This is purely a UI-label change. The underlying route
-(`/api/tour-guide/voice-qa`), feature key (`'voice-qa'` in
-`TourGuideFeature` type and `TRIAL_ALLOWED_FEATURES`), component file
-name (`TourGuideVoiceQAForm.tsx`), and any DB usage-history rows under
-the old key are all **still pending** — see Open Items below.
+This is purely a UI-label change. The underlying route was later renamed from `/api/tour-guide/voice-qa` to `/api/tour-guide/voice-translate` (see below). The feature key (`'voice-qa'` in `TourGuideFeature` type and `TRIAL_ALLOWED_FEATURES`), component file name (`TourGuideVoiceQAForm.tsx`), and any DB usage-history rows under the old key remain unchanged.
+
+---
+
+## Phase 3 — Voice Translator: Route rename (14 Aug 2026)
+
+### Complete rename from voice-qa to voice-translate
+
+- **API route folder:** `app/api/tour-guide/voice-qa/` → `app/api/tour-guide/voice-translate/` (git mv, preserving history)
+- **Fetch call:** `components/tour-guide/TourGuideVoiceTranslateForm.tsx` — `/api/tour-guide/voice-qa` → `/api/tour-guide/voice-translate`
+- **Test script:** `test-silent-audio.js` — updated API path and comment to reference voice-translate endpoint
+- **Progress log:** updated this entry to reflect the completed rename
+
+**Note:** The feature key `'voice-qa'` in `TourGuideFeature` type and usage-history records remains unchanged — only the route path and client-side references were updated.
 
 ---
 

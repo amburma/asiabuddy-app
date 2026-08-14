@@ -2,7 +2,7 @@ import type { TourGuideFeature, TourGuideSource } from './costGateService';
 
 /**
  * Confirmed decision (plan §1.1): Free Trial only ever unlocks Live
- * Translator — Text/OCR/Voice Q&A are freely available via mainstream AI
+ * Translator — Text/OCR/Voice Translate are freely available via mainstream AI
  * tools already, so a trial there proves nothing; Live Translator is the
  * actual differentiator and the intended conversion funnel.
  */

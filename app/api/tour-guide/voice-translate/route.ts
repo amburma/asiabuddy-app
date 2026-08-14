@@ -22,8 +22,8 @@ const voiceQASchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     // Cost Gate + Feature Gate. Trial accounts never get past this for
-    // feature='voice-qa' (featureGateService.ts restricts trial to 'live' only).
-    const gate = await gateFeatureRequestFromReq(req, 'voice-qa');
+    // feature='voice-translate' (featureGateService.ts restricts trial to 'live' only).
+    const gate = await gateFeatureRequestFromReq(req, 'voice-translate');
     if (!gate.ok) return gate.response;
     const { accountId } = gate;
 
@@ -77,16 +77,16 @@ If the audio is completely silent or unintelligible, respond with exactly: UNCLE
 
       result = await Promise.race([geminiPromise, timeoutPromise]);
     } catch (apiErr) {
-      console.error('Gemini API error (voice-qa):', apiErr);
+      console.error('Gemini API error (voice-translate):', apiErr);
       if (apiErr instanceof Error && apiErr.message === 'Gemini API timeout') {
-        return NextResponse.json({ error: 'Voice Q&A service timed out — please try again' }, { status: 504 });
+        return NextResponse.json({ error: 'Voice Translator service timed out — please try again' }, { status: 504 });
       }
-      return NextResponse.json({ error: 'Voice Q&A service is temporarily unavailable' }, { status: 502 });
+      return NextResponse.json({ error: 'Voice Translator service is temporarily unavailable' }, { status: 502 });
     }
 
     const responseText = result.text?.trim();
     if (!responseText) {
-      return NextResponse.json({ error: 'Voice Q&A failed — empty response' }, { status: 502 });
+      return NextResponse.json({ error: 'Voice Translator failed — empty response' }, { status: 502 });
     }
 
     // Compute cost and record usage before response handling
@@ -100,7 +100,7 @@ If the audio is completely silent or unintelligible, respond with exactly: UNCLE
       { inputType: 'audio' }
     );
 
-    const usage = await recordUsage(accountId, 'voice-qa', amountUsd);
+    const usage = await recordUsage(accountId, 'voice-translate', amountUsd);
 
     if (!usage.success) {
       // Same race-condition handling as translate/route.ts — see that

@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { verifySessionToken } from '@/lib/tour-guide/auth'
 import { supabaseAdmin } from '@/lib/tour-guide/supabaseAdmin'
 import { normalizeLocale } from '@/lib/i18n'
-import TourGuideVoiceQAForm from '@/components/tour-guide/TourGuideVoiceQAForm'
+import TourGuideVoiceTranslateForm from '@/components/tour-guide/TourGuideVoiceTranslateForm'
 import FloatingContactButtonLoader from '@/components/shared/FloatingContactButtonLoader'
 import FloatingChatButtonLoader from '@/components/shared/FloatingChatButtonLoader'
 
@@ -42,7 +42,7 @@ export default async function TourGuideVoicePage() {
   return (
     <div className="min-h-screen bg-[#0D0D0D] px-6 pt-8 pb-40 md:pb-8">
       <div className="max-w-2xl mx-auto">
-        <TourGuideVoiceQAForm />
+        <TourGuideVoiceTranslateForm />
       </div>
       <FloatingContactButtonLoader language={language} />
       <FloatingChatButtonLoader language={language} country="thailand" />

@@ -11,7 +11,7 @@ interface TranslationEntry {
   timestamp: number
 }
 
-export default function TourGuideVoiceQAForm() {
+export default function TourGuideVoiceTranslateForm() {
   const router = useRouter()
   const [targetLanguage, setTargetLanguage] = useState('Burmese')
   const [isRecording, setIsRecording] = useState(false)
@@ -110,7 +110,7 @@ export default function TourGuideVoiceQAForm() {
     setCopied(false)
 
     try {
-      const response = await fetch('/api/tour-guide/voice-qa', {
+      const response = await fetch('/api/tour-guide/voice-translate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ audio, mimeType, targetLanguage }),
@@ -133,7 +133,7 @@ export default function TourGuideVoiceQAForm() {
       }
 
       if (!response.ok || !data.success) {
-        setError(data.error ?? 'Voice Q&A failed. Please try again.')
+        setError(data.error ?? 'Voice Translator failed. Please try again.')
         return
       }
 
@@ -145,7 +145,7 @@ export default function TourGuideVoiceQAForm() {
       setRemainingHours(typeof data.remainingHours === 'number' ? data.remainingHours : null)
       setWarning(Boolean(data.warning))
     } catch {
-      setError('Voice Q&A failed. Please check your connection and try again.')
+      setError('Voice Translator failed. Please check your connection and try again.')
     } finally {
       setIsLoading(false)
     }

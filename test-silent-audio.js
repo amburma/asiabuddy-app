@@ -1,4 +1,4 @@
-// Test script to send silent/unclear audio to voice-qa endpoint
+// Test script to send silent/unclear audio to voice-translate endpoint
 // This will help reproduce the hallucination issue
 
 const fs = require('fs');
@@ -19,7 +19,7 @@ const postData = JSON.stringify(testData);
 const options = {
   hostname: 'localhost',
   port: 3000,
-  path: '/api/tour-guide/voice-qa',
+  path: '/api/tour-guide/voice-translate',
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',

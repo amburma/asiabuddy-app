@@ -49,7 +49,7 @@ export type TourGuideSource = 'package' | 'purchased' | 'trial';
 // NOTE: 'live' does not use TOUR_GUIDE_RATES — its dollar cost is 
 // computed per-tick via computeLiveTranslatorCostUsd() and passed 
 // directly to recordUsage(). See that function's docstring.
-export type TourGuideFeature = 'text' | 'ocr' | 'voice' | 'voice-qa' | 'live';
+export type TourGuideFeature = 'text' | 'ocr' | 'voice' | 'voice-translate' | 'live';
 
 export interface AccountStatus {
   accountId: string;

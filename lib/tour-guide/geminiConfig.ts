@@ -64,7 +64,7 @@ export interface ComputeCostOptions {
 
 /**
  * Converts a Gemini response's token usage into a real USD amount, for
- * `recordUsage()` in costGateService.ts. Text/OCR/Voice Q&A (Phases 1-3)
+ * `recordUsage()` in costGateService.ts. Text/OCR/Voice Translate (Phases 1-3)
  * all route through this — Live (Phase 4) is exempt, see note above.
  */
 export function computeCostUsd(usage: GeminiUsage, model: string, options?: ComputeCostOptions): number {
