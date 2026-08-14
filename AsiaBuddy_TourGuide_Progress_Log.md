@@ -228,3 +228,303 @@ be treated as current truth where this log contradicts it.
 - Every migration gets applied via Supabase SQL Editor (not CLI — not installed on this machine) and verified with a follow-up `information_schema`/`pg_proc`/`pg_policies` query before moving on
 - Windsurf is used for: file creation/editing in the repo, git commit/push, and read-only investigation of the codebase — **never** for direct DB access (no CLI, no stored credentials given to it for this purpose)
 - Test data uses fixed placeholder UUIDs (`...a1`, `...b1`, `...c1` pattern) — must be cleaned up **before**, not just after, each test run
+
+---
+
+## Phase 3 — Voice Translator (formerly "Voice Q&A"): ✅ COMPLETE
+
+### Context correction vs. original Progress Log
+
+The original Progress Log (Phase 0) predates significant work that had
+already landed by the start of this session:
+
+- `lib/tour-guide/auth.ts` — JWT session auth (jose library, httpOnly
+  `tg_session` cookie, 30-day expiry) for `tour_guide_accounts` 
+  customers. Confirmed via investigation; this was not reflected in
+  the original log.
+- Phase 3 backend for the voice feature (then called "Voice Q&A") had
+  already been pushed to origin (commit `b82e4feb`) along with an
+  earlier Progress Log entry (commit `e23b3643`), with frontend UI
+  built but held back locally due to an active audio bug — resolved
+  this session (see below).
+
+### Bug 1 — Audio capture (TWO separate bugs, found and fixed sequentially)
+
+**Documentation correction:** an earlier draft of this log described
+Bug 1 as a single "stale closure" issue. On review, this was actually
+**two distinct bugs**, found one after the other:
+
+**Bug 1a — Silent/near-empty audio reaching Gemini (RMS issue)**
+
+- **Symptom:** Speaking "what is 2 plus 2" returned a completely
+  unrelated answer (e.g. about the nearest metro station to the
+  Eiffel Tower), despite Gemini's `usageMetadata` showing a non-zero
+  `AUDIO` token count — meaning some audio data *did* reach the model,
+  but the model appears to have hallucinated a plausible-sounding
+  "tour guide" answer rather than admitting it couldn't understand the
+  input, because the prompt at the time forbade any "notes" or
+  "explanations."
+- **Root cause:** `blob.size` was being used as a proxy for "did the
+  user actually say something," but WebM/Opus encodes silence at a
+  roughly constant bitrate — so a silent clip and a spoken clip of the
+  same duration can be nearly the same file size. A near-silent
+  recording was passing the size check and reaching Gemini as valid
+  audio.
+- **Fix:** Replaced the byte-size heuristic with real silence
+  detection: decode the recorded audio via the Web Audio API and
+  compute RMS (root-mean-square) loudness across the whole clip. If
+  RMS falls under an empirically-set threshold, the recording is
+  rejected client-side before ever calling Gemini (saves cost and
+  removes the hallucination risk at the root).
+
+**Bug 1b — Stale closure dropping/truncating chunks (found in a later test)**
+
+- **Symptom:** After the RMS fix, a different test scenario (found
+  separately, not the same "what is 2 plus 2" case above) still
+  produced empty/truncated blobs — audio base64 payloads suspiciously
+  short (1,312–7,724 chars) for the spoken content.
+- **Root cause:** `ondataavailable` pushed chunks via `setAudioChunks()` 
+  (React state), while `onstop` read `audioChunks` from a stale
+  closure scope instead of the updated state.
+- **Fix:** Replaced state-based chunk collection with `useRef` 
+  (`audioChunksRef`) in `TourGuideVoiceQAForm.tsx`. Verified: base64
+  lengths after the fix ranged 32,684–151,196 chars, with
+  transcriptions correctly matching spoken audio.
+
+**Both fixes are required and complementary** — 1a prevents cost/
+hallucination from near-silent input reaching Gemini at all; 1b
+ensures that when there *is* real speech, the full recording (not a
+truncated fragment) is what gets sent.
+
+### Bug 2 — Single/short-word mistranslation
+
+**Symptom:** Isolated short words (e.g. "အိမ်သာ" = toilet) mistranslated
+to unrelated English words ("Still", "Subway").
+
+**Root cause:** No minimum recording duration was enforced — a quick
+press-release could produce a sub-second, effectively empty clip.
+
+**Fix:** Added a 700ms minimum-duration guard in `handleRecordStop` 
+(delays `mediaRecorder.stop()` via `setTimeout` if recording is under
+700ms, rather than rejecting the attempt). Also added a short-phrase
+hint in the transcription prompt ("a short utterance is often a
+complete travel-related question... not separate unrelated words").
+
+**Known limitation (not a bug, not fully solved):** very short,
+isolated single-word utterances remain somewhat more error-prone than
+full phrases/sentences even after the 700ms duration guard — inherent
+to the underlying audio model's need for context. Full travel
+questions/sentences (the feature's primary intended use case) tested
+reliably accurate, including a verified 6-sentence, multi-clause
+Burmese question (hunger → restaurant hours → bus schedule) translated
+with full fidelity to English.
+
+### Bug 3 — `targetLanguage` missing from request (400 "Missing required fields")
+
+**Root cause:** `handleVoiceSubmit(audio, mimeType)` never accepted
+`targetLanguage` as a parameter and relied on non-working closure
+access, sending `targetLanguage: undefined`.
+
+**Fix:** Added `targetLanguage` as an explicit third parameter, passed
+from the `onstop` call site.
+
+### Bug 4 — `mimeType` schema mismatch (400 "Missing required fields")
+
+**Root cause:** Zod schema required `mimeType: z.literal('audio/webm')` 
+(exact match) but the client always sends `'audio/webm;codecs=opus'` 
+(required for valid WebM/Opus encoding).
+
+**Fix:** Relaxed the schema to
+`z.string().refine(v => v.startsWith('audio/webm'))`.
+
+### Bug 5 — Output format: Q&A vs. Translation-only
+
+**Documentation correction:** an earlier draft of this log stated the
+backend was changed to return `{ question: original, answer:
+translation }`, rendered as "Q:" / "A:" bubbles in the UI. **This is
+NOT the final design and should not be treated as current behavior.**
+
+The confirmed, final, intentional design (per explicit product
+decision) is: **translation-only output**. The feature takes spoken
+audio in one language and returns *only* a faithful translation of
+what was said into `targetLanguage` — it does **not** answer questions
+using Gemini's own knowledge, and does **not** echo back the original-
+language transcript to the user. This mirrors the existing Text
+Translate feature's behavior exactly, with voice as the input method
+instead of typing.
+
+- Frontend: `QAEntry { question, answer }` → `TranslationEntry
+  { translation, timestamp }`; history UI shows a single translation
+  bubble per recording ("Recording N: <translation>"), not "Q:"/"A:"
+  pairs.
+- Backend: Gemini prompt instructs transcribe-then-translate, output
+  the translation only; response shape is `{ translation }`, not
+  `{ question, answer }`.
+- **CONFIRMED: resolved in commits `8147023e` (backend) and
+  `7649aec8` (frontend)** — verified by reading the raw, current file
+  content of both `route.ts` and `TourGuideVoiceQAForm.tsx` directly
+  (not trusting a diff summary alone), confirming the response shape,
+  prompt, and rendered UI all match the translation-only design. Also
+  confirmed usage is recorded via `recordUsage()` *before* the
+  `UNCLEAR_AUDIO` early-return, so real Gemini API cost is tracked
+  even when the audio is unclear.
+
+### Production prompt (translation-only design, confirmed live)
+
+```
+Listen to the audio and transcribe exactly what was said internally.
+Pay close attention to short phrases and compound words — a short
+utterance is often a complete travel-related question or request
+(e.g. asking for a location, price, or direction), not separate
+unrelated words.
+
+Translate what was said into ${targetLanguage}.
+
+Output ONLY the translation — do not answer any question implied by
+the speech, do not add advice or extra information, do not include
+the original-language transcript, no notes, no quotation marks.
+
+If the audio is completely silent or unintelligible, respond with
+exactly: UNCLEAR_AUDIO
+```
+
+*(Verify this matches what's actually deployed — see the
+re-verification note under Bug 5 above.)*
+
+### UI additions (Voice, Text, Photo pages — all 3)
+
+- **Home button** — relative link to `/thailand` (not a hardcoded
+  localhost/absolute URL, so it works correctly in production) — top
+  header row, all 3 pages.
+- **Log out button** — `POST /api/tour-guide/logout` (existing route,
+  clears `tg_session` cookie) then redirect to `/tourguide` — top
+  header row, all 3 pages, matching the dashboard's existing logout
+  pattern.
+- **Clear button** — right-aligned on the "Translate to" /
+  "Response language" row (NOT in the top header — corrected after an
+  initial placement mistake):
+  - Voice: "Clear History" — `setHistory([])` 
+  - Text: "Clear" — resets `sourceText`, `translation`, `error` 
+  - Photo: "Clear" — calls existing `clearImage()` (already resets
+    `previewUrl`/`pendingImage`) plus `setExtractedText('')` and
+    `setTranslation('')` 
+- **Floating widgets** — `FloatingContactButtonLoader` (bottom-left)
+  and `FloatingChatButtonLoader` (bottom-right), the same Quick
+  Inquiry / HumanOperatorChat widgets used on `/thailand`, added to
+  all 3 tour-guide pages at the `page.tsx` level using the same
+  `normalizeLocale(cookieStore.get('NEXT_LOCALE')?.value)` language
+  pattern as `app/[country]/layout.tsx`, with `country="thailand"` 
+  hardcoded (tour-guide is Thailand-only for now).
+
+### Naming/label update (display only — NOT the route/feature-key rename)
+
+- Dashboard card: "Voice Q&A" → **"Voice Translator"**; description
+  "Ask questions and get voice answers" → **"Record your voice
+  clearly to translate."**
+- Voice page header title: "Voice Q&A" → **"Voice Translator"**
+
+This is purely a UI-label change. The underlying route
+(`/api/tour-guide/voice-qa`), feature key (`'voice-qa'` in
+`TourGuideFeature` type and `TRIAL_ALLOWED_FEATURES`), component file
+name (`TourGuideVoiceQAForm.tsx`), and any DB usage-history rows under
+the old key are all **still pending** — see Open Items below.
+
+---
+
+## Phase 4 — Live Translator: architecture & pricing decisions (planning, not yet built)
+
+### Budget architecture decision
+
+**Decision: keep the existing hours-based system as-is (Option B).**
+Rather than introducing a parallel budget model for Live Translator,
+its actual Gemini cost is computed and deducted from the same
+dollar-denominated budget via the existing `recordUsage(accountId,
+feature, amountUsd)` call — no new conversion-factor logic needed in
+code, since the function already takes a raw USD amount. This avoids
+having two different budget systems to keep in sync and doesn't
+disturb existing package/purchased-hour accounts.
+
+### Security/enforcement — ephemeral token strategy
+
+Because Live Translator requires a persistent client-side WebSocket
+connection directly to Gemini (see the earlier architecture note on
+why this can't run through a standard Vercel serverless function),
+budget enforcement can't rely solely on a single request-time check.
+Decision:
+
+- Client requests a short-lived **ephemeral token** from the backend
+  (Vercel) before connecting directly to Gemini — never exposes the
+  real API key to the client.
+- Token `expireTime` is set short (e.g. 1–5 minutes) based on
+  remaining budget, and the client must periodically request a new
+  token to continue the session — this keeps the actual hard-cap
+  enforcement server-side even though the audio stream itself bypasses
+  the backend.
+- Client-reported usage ticks are used only for billing/logging
+  granularity, not as the security boundary — the token expiry is the
+  real enforcement mechanism.
+
+### Model decision
+
+**`gemini-3.5-live-translate-preview`** (native speech-to-speech, not
+separate STT→translate→TTS calls) — single WebSocket session,
+simultaneous output audio + two-column transcript. Chosen for lower
+cost and better session resilience than a chained pipeline.
+
+**Preview-model pricing risk:** since this is a Google preview model,
+pricing is subject to change without notice. Before writing
+production code and before launch, re-verify current pricing directly
+against Google's official pricing page. A circuit-breaker/alert
+mechanism on the backend is planned so the system can pause Live
+Translator automatically if actual cost per session spikes
+unexpectedly.
+
+### Pricing — clarified (two figures, not a conflict)
+
+**Documentation correction:** an earlier draft of this log stated two
+different "real cost" figures ($1.50/hr and $2.22/hr) without
+distinguishing them, which reads as a contradiction. Clarified:
+
+- **$1.50/hr** — the **original budgeting assumption**, set early in
+  the project based on Flash-Lite-tier models used for Text/OCR/
+  Voice Translator (the package tier's existing hardcoded cap in
+  `geminiConfig.ts`/the increment-function's cost formula).
+- **$2.22/hr** — the **actual, measured cost basis** for Live
+  Translator specifically, computed from Google's official
+  `gemini-3.5-live-translate-preview` pricing (~$0.0053/min input
+  audio + ~$0.0315/min output audio ≈ $0.037/min × 60 = ~$2.22/hr).
+  This is the correct figure to use for Live Translator's actual cost
+  — it is **not comparable** to the $1.50/hr package-tier cap, which
+  was set for a different (cheaper, non-live) model tier and was never
+  meant to bound Live Translator's real cost.
+
+**Business pricing (customer-facing):**
+- Actual Gemini cost: ~$2.22/hr (see above)
+- Customer price: **$2.00/hr** was an earlier proposal, but is **below
+  actual cost** and was superseded — a repricing decision is pending
+  pilot data (see below). Do not treat $2.00/hr as final.
+- A repricing range of **$2.80–$3.00/hr** (Option 1) was discussed as
+  a candidate if pilot data confirms the ~$2.22/hr cost basis, but the
+  final decision is **deliberately deferred** until real pilot usage
+  data is collected (see next section) — do not lock in a customer
+  price yet.
+
+### Pilot testing plan (decided, not yet executed)
+
+- Dollar-native deduction: no new conversion-factor logic in code —
+  compute Live Translator's actual Gemini cost (audio duration ×
+  real per-minute rate) and pass it directly to the existing
+  `recordUsage(accountId, feature, amountUsd)`.
+- Add dedicated backend logging during the pilot/dev period to
+  capture real-world $/hour from actual sessions (not just the
+  theoretical per-minute rate) — accounts for connection overhead,
+  idle time, retries, etc. that the theoretical rate doesn't capture.
+- Repricing decision (whether to move to the $2.80–$3.00/hr range) is
+  **explicitly deferred** until this real pilot data is reviewed —
+  this is a deliberate "measure before deciding" approach, not an
+  oversight.
+
+**Status: planning/decisions only — no Live Translator code has been
+written yet.** This section documents the agreed architecture and
+pricing approach so the next session can start implementation directly
+without re-litigating these decisions.
