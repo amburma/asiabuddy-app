@@ -40,7 +40,7 @@ export default async function TourGuideVoicePage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0D0D0D] px-6 py-8">
+    <div className="min-h-screen bg-[#0D0D0D] px-6 pt-8 pb-40 md:pb-8">
       <div className="max-w-2xl mx-auto">
         <TourGuideVoiceQAForm />
       </div>
