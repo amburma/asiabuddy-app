@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { createClient } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { LogOut, Plus, Pencil, Trash2, X, ChevronDown, ChevronRight, GripVertical, Upload, ArrowUp, ArrowDown, ImagePlus } from 'lucide-react';
+import LandmarkPhotoPicker from '../../components/admin/LandmarkPhotoPicker';
 
 export const dynamic = 'force-dynamic';
 
@@ -48,6 +49,15 @@ function extractStoragePath(url: string, bucketName: string): string | null {
   return url.substring(index + marker.length);
 }
 
+// Detect if an ID is a real database UUID vs a temporary client-generated ID
+// Real UUIDs are standard format (e.g., "550e8400-e29b-41d4-a716-446655440000")
+// Temp IDs are timestamp-based (e.g., "1786429776931-0")
+function isRealDatabaseId(id: string): boolean {
+  // Check if it matches standard UUID format (8-4-4-4-12 hex digits)
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  return uuidRegex.test(id);
+}
+
 export default function GlobalAdminPage() {
   const router = useRouter();
   const supabase = useMemo(() => {
@@ -78,6 +88,7 @@ export default function GlobalAdminPage() {
   const [toursSlug, setToursSlug] = useState('');
   const [toursCountry, setToursCountry] = useState('thailand');
   const [toursShortDesc, setToursShortDesc] = useState('');
+  const [toursDesc, setToursDesc] = useState('');
   const [toursPriceFrom, setToursPriceFrom] = useState('');
   const [toursCurrency, setToursCurrency] = useState('USD');
   const [toursDurationDays, setToursDurationDays] = useState('');
@@ -87,14 +98,34 @@ export default function GlobalAdminPage() {
   const [toursDestinationId, setToursDestinationId] = useState('');
   const [toursHighlights, setToursHighlights] = useState<string[]>([]);
   const [toursHighlightsInput, setToursHighlightsInput] = useState('');
-  const [toursInclusions, setToursInclusions] = useState<string[]>([]);
+  const [toursInclusions, setToursInclusions] = useState<string[]>([
+    'Hotel accommodation in above mentioned hotels with daily breakfast',
+    'Air conditioning car with driver for sightseeing',
+    'All airport – hotels / hotel – airport transfers in-out',
+    'Entrance fees and zone fees',
+    'Toll fee and fuel charges for car',
+    'Government tax and service charges',
+    'Lots of loves and smiles'
+  ]);
   const [toursInclusionsInput, setToursInclusionsInput] = useState('');
-  const [toursExclusions, setToursExclusions] = useState<string[]>([]);
+  const [toursExclusions, setToursExclusions] = useState<string[]>([
+    'International Flight Tickets',
+    'Tourist visa',
+    'International airfare and airport taxes',
+    'Travel insurance',
+    'Visits not mentioned in the program',
+    'Drinks and personal expenses',
+    'Early check-in and late check-out at all hotels',
+    'Single supplement',
+    'Tips and porters at the hotels',
+    'Tips drivers and guides'
+  ]);
   const [toursExclusionsInput, setToursExclusionsInput] = useState('');
   const [toursStatus, setToursStatus] = useState('draft');
   const [tourImageUrls, setTourImageUrls] = useState<string[]>([]);
   const [tourImageInput, setTourImageInput] = useState('');
   const [tourUploadStatus, setTourUploadStatus] = useState<'idle' | 'uploading' | 'done'>('idle');
+  const [tourImageDeleteError, setTourImageDeleteError] = useState<string | null>(null);
   const [itineraryDays, setItineraryDays] = useState<any[]>([]);
   const [tourSectionOpen, setTourSectionOpen] = useState<Record<string, boolean>>({
     basics: true,
@@ -176,6 +207,33 @@ export default function GlobalAdminPage() {
     fetchItineraries();
   }, [selectedCountry]);
 
+  // Initialize form with default values on first load (only if not editing)
+  useEffect(() => {
+    if (!editing) {
+      setToursInclusions([
+        'Hotel accommodation in above mentioned hotels with daily breakfast',
+        'Air conditioning car with driver for sightseeing',
+        'All airport – hotels / hotel – airport transfers in-out',
+        'Entrance fees and zone fees',
+        'Toll fee and fuel charges for car',
+        'Government tax and service charges',
+        'Lots of loves and smiles'
+      ]);
+      setToursExclusions([
+        'International Flight Tickets',
+        'Tourist visa',
+        'International airfare and airport taxes',
+        'Travel insurance',
+        'Visits not mentioned in the program',
+        'Drinks and personal expenses',
+        'Early check-in and late check-out at all hotels',
+        'Single supplement',
+        'Tips and porters at the hotels',
+        'Tips drivers and guides'
+      ]);
+    }
+  }, [editing]);
+
   const fetchTours = async () => {
     const { data } = await supabase
       .from('tours')
@@ -238,11 +296,43 @@ export default function GlobalAdminPage() {
     }
   };
 
+  const handleDeleteTourImage = async (imageUrl: string) => {
+    setTourImageDeleteError(null);
+    
+    try {
+      const response = await fetch('/api/admin/tour-images', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ imageUrl }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to delete image');
+      }
+
+      const data = await response.json();
+      
+      if (data.success) {
+        // Only remove from local state if delete succeeded
+        setTourImageUrls(prev => prev.filter(item => item !== imageUrl));
+      } else {
+        throw new Error('Delete operation failed');
+      }
+    } catch (err: any) {
+      console.error('Delete tour image error:', err);
+      setTourImageDeleteError(err.message || 'Failed to delete image from storage');
+    }
+  };
+
   const resetToursForm = () => {
     setToursTitle('');
     setToursSlug('');
     setToursCountry(selectedCountry);
     setToursShortDesc('');
+    setToursDesc('');
     setToursPriceFrom('');
     setToursCurrency('USD');
     setToursDurationDays('');
@@ -252,14 +342,36 @@ export default function GlobalAdminPage() {
     setToursDestinationId('');
     setToursHighlights([]);
     setToursHighlightsInput('');
-    setToursInclusions([]);
+    // Set default inclusions for new tours
+    setToursInclusions([
+      'Hotel accommodation in above mentioned hotels with daily breakfast',
+      'Air conditioning car with driver for sightseeing',
+      'All airport – hotels / hotel – airport transfers in-out',
+      'Entrance fees and zone fees',
+      'Toll fee and fuel charges for car',
+      'Government tax and service charges',
+      'Lots of loves and smiles'
+    ]);
     setToursInclusionsInput('');
-    setToursExclusions([]);
+    // Set default exclusions for new tours
+    setToursExclusions([
+      'International Flight Tickets',
+      'Tourist visa',
+      'International airfare and airport taxes',
+      'Travel insurance',
+      'Visits not mentioned in the program',
+      'Drinks and personal expenses',
+      'Early check-in and late check-out at all hotels',
+      'Single supplement',
+      'Tips and porters at the hotels',
+      'Tips drivers and guides'
+    ]);
     setToursExclusionsInput('');
     setToursStatus('draft');
     setTourImageUrls([]);
     setTourImageInput('');
     setTourUploadStatus('idle');
+    setTourImageDeleteError(null);
     setItineraryDays([]);
     setTourSectionOpen({ basics: true, pricing: true, highlights: true, images: true, itinerary: true });
     setShowToursForm(true);
@@ -298,7 +410,6 @@ export default function GlobalAdminPage() {
     const errors: Record<string, string> = {};
     if (!toursTitle.trim()) errors.title = 'Tour title is required';
     if (!toursSlug.trim()) errors.slug = 'Slug is required';
-    if (!toursPriceFrom || parseFloat(toursPriceFrom) <= 0) errors.price_from = 'Price is required';
     const country = toursCountry.trim() || 'thailand';
     const durationDays = parseInt(toursDurationDays);
     if (!durationDays || durationDays < 1) errors.duration_days = 'Duration must be at least 1 day';
@@ -315,8 +426,8 @@ export default function GlobalAdminPage() {
         title: toursTitle.trim(),
         slug: toursSlug.trim(),
         short_description: toursShortDesc.trim() || null,
-        description: null,
-        price_from: parseFloat(toursPriceFrom),
+        description: toursDesc.trim() || null,
+        price_from: toursPriceFrom ? parseFloat(toursPriceFrom) : null,
         currency: toursCurrency || 'USD',
         duration_days: durationDays,
         duration_nights: parseInt(toursDurationNights) || 0,
@@ -377,6 +488,7 @@ export default function GlobalAdminPage() {
           .join(','),
         accommodation: day.accommodation || '',
         image_url: day.image_url || null,
+        landmark_id: day.landmark_id || null,
         sort_order: index,
       }));
 
@@ -395,6 +507,40 @@ export default function GlobalAdminPage() {
       setSaveSuccess(true);
       setSuccess('✅ Tour saved successfully!');
       fetchTours();
+      
+      // Refetch itinerary days with fresh UUIDs from database
+      const { data: freshItineraryData } = await supabase
+        .from('itineraries')
+        .select('*, landmarks(id, name, image_url)')
+        .eq('tour_id', tourId)
+        .order('sort_order', { ascending: true });
+      
+      if (freshItineraryData && freshItineraryData.length > 0) {
+        const parsedDays = freshItineraryData.map((day: any) => ({
+          id: day.id,
+          day_number: day.day_number,
+          title: day.title || '',
+          content: day.content || '',
+          highlights: Array.isArray(day.highlights) ? day.highlights : [],
+          highlightsInput: '',
+          meals: {
+            breakfast: day.meals_included?.toLowerCase().includes('breakfast') || false,
+            lunch: day.meals_included?.toLowerCase().includes('lunch') || false,
+            dinner: day.meals_included?.toLowerCase().includes('dinner') || false,
+          },
+          accommodation: day.accommodation || '',
+          image_url: day.image_url || '',
+          landmark_id: day.landmark_id || null,
+          landmark_photo: day.landmarks ? {
+            photo_id: day.landmarks.id,
+            display_name: day.landmarks.name,
+            image_url: day.landmarks.image_url
+          } : null,
+        }));
+        setItineraryDays(parsedDays);
+      } else {
+        setItineraryDays([]);
+      }
       
       if (!editing) {
         resetToursForm();
@@ -652,6 +798,10 @@ export default function GlobalAdminPage() {
                         <textarea value={toursShortDesc} onChange={e => setToursShortDesc(e.target.value)} rows={2} placeholder="A short summary for the tour card" className={`${inputCls} resize-none`} />
                       </Field>
 
+                      <Field label="About This Tour">
+                        <textarea value={toursDesc} onChange={e => setToursDesc(e.target.value)} rows={6} placeholder="Full tour description with details about the experience, itinerary highlights, and what travelers can expect..." className={`${inputCls} resize-none`} />
+                      </Field>
+
                       <div className="grid gap-4 md:grid-cols-2">
                         <Field label="Country">
                           <input value={toursCountry} onChange={e => setToursCountry(e.target.value)} placeholder="thailand" className={inputCls} />
@@ -659,7 +809,7 @@ export default function GlobalAdminPage() {
                         <Field label="Status">
                           <select value={toursStatus} onChange={e => setToursStatus(e.target.value)} className={inputCls}>
                             <option value="draft">Draft</option>
-                            <option value="published">Published</option>
+                            <option value="active">Published</option>
                           </select>
                         </Field>
                       </div>
@@ -686,9 +836,8 @@ export default function GlobalAdminPage() {
                   {tourSectionOpen.pricing && (
                     <div className="space-y-4 bg-white p-5">
                       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                        <Field label="Price From">
-                          <input type="number" value={toursPriceFrom} onChange={e => { setToursPriceFrom(e.target.value); if (tourValidationErrors.price_from) { setTourValidationErrors(prev => ({ ...prev, price_from: '' })); } }} placeholder="299" className={`${inputCls} ${tourValidationErrors.price_from ? 'border-red-300 focus:ring-red-400' : ''}`} />
-                          {tourValidationErrors.price_from && <p className="mt-1 text-sm text-red-500">{tourValidationErrors.price_from}</p>}
+                        <Field label="Price From (Optional)">
+                          <input type="number" value={toursPriceFrom} onChange={e => { setToursPriceFrom(e.target.value); }} placeholder="299" className={inputCls} />
                         </Field>
                         <Field label="Currency">
                           <select value={toursCurrency} onChange={e => setToursCurrency(e.target.value)} className={inputCls}>
@@ -836,12 +985,15 @@ export default function GlobalAdminPage() {
                           {tourImageUrls.map((image, index) => (
                             <div key={`${image}-${index}`} className="relative shrink-0">
                               <img src={image} alt={`Tour preview ${index + 1}`} className="h-24 w-32 rounded-lg border border-gray-200 object-cover" />
-                              <button type="button" onClick={() => setTourImageUrls(prev => prev.filter(item => item !== image))} className="absolute right-1 top-1 rounded-full bg-black/70 p-1 text-white">
+                              <button type="button" onClick={() => handleDeleteTourImage(image)} className="absolute right-1 top-1 rounded-full bg-black/70 p-1 text-white hover:bg-black/80">
                                 <X size={12} />
                               </button>
                             </div>
                           ))}
                         </div>
+                      )}
+                      {tourImageDeleteError && (
+                        <p className="text-xs text-red-600 mt-2">{tourImageDeleteError}</p>
                       )}
                     </div>
                   )}
@@ -861,7 +1013,16 @@ export default function GlobalAdminPage() {
                       <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
                         Build your itinerary below. Reorder days with the arrow buttons.
                       </div>
-                      {itineraryDays.map((day, index) => (
+                      {itineraryDays.map((day, index) => {
+                        console.log('DEBUG rendering day row:', JSON.stringify({ day_id: day.id, day_number: day.day_number }));
+                        console.log('DEBUG day photo field:', JSON.stringify({
+                          day_id: day.id,
+                          day_id_type: typeof day.id,
+                          isReal: isRealDatabaseId(day.id),
+                          day_number: day.day_number
+                        }));
+                        console.log('DEBUG Field/LandmarkPhotoPicker render block ENTRY for day', day.day_number);
+                        return (
                         <div key={day.id} className="rounded-lg border border-l-4 border-l-amber-400 bg-white p-4 shadow-sm">
                           <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                             <div className="flex items-center gap-3">
@@ -929,10 +1090,42 @@ export default function GlobalAdminPage() {
                               </button>
                             </div>
                           </Field>
-                        </div>
-                      ))}
 
-                      <button type="button" onClick={() => setItineraryDays(prev => [...prev, { id: `${Date.now()}-${prev.length}`, day_number: prev.length + 1, title: '', content: '', highlights: [], highlightsInput: '', meals: { breakfast: false, lunch: false, dinner: false }, accommodation: '', image_url: '' }])} className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-amber-400 px-4 py-3 text-sm font-semibold text-amber-600 transition hover:bg-amber-50">
+                          <Field label="Day Photo">
+                            {isRealDatabaseId(day.id) ? (
+                              <LandmarkPhotoPicker
+                                itineraryId={day.id}
+                                currentPhoto={day.landmark_photo}
+                                onChange={(photo) => setItineraryDays(prev => prev.map(item => item.id === day.id ? { 
+                                  ...item, 
+                                  landmark_photo: photo,
+                                  landmark_id: photo?.photo_id || null,
+                                  image_url: photo?.image_url || item.image_url 
+                                } : item))}
+                              />
+                            ) : (
+                              <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
+                                Save the tour first to add a photo for this day.
+                              </div>
+                            )}
+                          </Field>
+                        </div>
+                        );
+                      })}
+
+                      <button type="button" onClick={() => setItineraryDays(prev => [...prev, { 
+                        id: `${Date.now()}-${prev.length}`, 
+                        day_number: prev.length + 1, 
+                        title: '', 
+                        content: '', 
+                        highlights: [], 
+                        highlightsInput: '', 
+                        meals: { breakfast: false, lunch: false, dinner: false }, 
+                        accommodation: '', 
+                        image_url: '', 
+                        landmark_id: null, 
+                        landmark_photo: null 
+                      }])} className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-amber-400 px-4 py-3 text-sm font-semibold text-amber-600 transition hover:bg-amber-50">
                         <Plus size={16} /> Add Next Day
                       </button>
                     </div>
@@ -960,8 +1153,8 @@ export default function GlobalAdminPage() {
                   </div>
                   <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
                     <div className="mb-3 flex items-center justify-between gap-3">
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${toursStatus === 'published' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-700'}`}>
-                        {toursStatus === 'published' ? 'Published' : 'Draft'}
+                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${toursStatus === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-700'}`}>
+                        {toursStatus === 'active' ? 'Published' : 'Draft'}
                       </span>
                       {toursFeatured && <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">Featured</span>}
                     </div>
@@ -1021,7 +1214,7 @@ export default function GlobalAdminPage() {
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <h4 className="text-sm font-bold text-gray-800">{item.title}</h4>
-                        <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${item.status === 'published' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-200 text-gray-700'}`}>{item.status || 'draft'}</span>
+                        <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${item.status === 'active' ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-200 text-gray-700'}`}>{item.status === 'active' ? 'Published' : (item.status || 'Draft')}</span>
                       </div>
                       <p className="mt-1 text-xs text-gray-500">
                         {item.currency} {item.price_from} · {item.duration_days} days · {item.duration_nights || 0} nights
@@ -1035,6 +1228,7 @@ export default function GlobalAdminPage() {
                           setToursSlug(item.slug || '');
                           setToursCountry(item.country || selectedCountry);
                           setToursShortDesc(item.short_description || '');
+                          setToursDesc(item.description || '');
                           setToursPriceFrom(String(item.price_from || ''));
                           setToursCurrency(item.currency || 'USD');
                           setToursDurationDays(String(item.duration_days || ''));
@@ -1053,7 +1247,7 @@ export default function GlobalAdminPage() {
                           // Fetch existing itinerary days
                           const { data: itineraryData } = await supabase
                             .from('itineraries')
-                            .select('*')
+                            .select('*, landmarks(id, name, image_url)')
                             .eq('tour_id', item.id)
                             .order('sort_order', { ascending: true });
                           
@@ -1072,6 +1266,12 @@ export default function GlobalAdminPage() {
                               },
                               accommodation: day.accommodation || '',
                               image_url: day.image_url || '',
+                              landmark_id: day.landmark_id || null,
+                              landmark_photo: day.landmarks ? {
+                                photo_id: day.landmarks.id,
+                                display_name: day.landmarks.name,
+                                image_url: day.landmarks.image_url
+                              } : null,
                             }));
                             setItineraryDays(parsedDays);
                           } else {

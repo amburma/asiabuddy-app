@@ -13,7 +13,9 @@ import { getGeminiClient, computeCostUsd, TOUR_GUIDE_MODELS } from '@/lib/tour-g
 // Vercel failures.
 const voiceQASchema = z.object({
   audio: z.string().min(1),
-  mimeType: z.literal('audio/webm'),
+  mimeType: z.string().refine((v) => v.startsWith('audio/webm'), {
+    message: 'mimeType must be audio/webm or audio/webm;codecs=...',
+  }),
   targetLanguage: z.string().min(1),
 });
 
@@ -48,11 +50,23 @@ export async function POST(req: NextRequest) {
     const ai = getGeminiClient();
     const model = TOUR_GUIDE_MODELS.voiceQA;
 
-    const prompt = `You are a helpful tour guide. Listen to the audio question and answer it in ${targetLanguage}. Return ONLY your answer as plain text — no audio output, no notes, no explanations, no quotation marks.`;
+    const prompt = `Listen to the audio and transcribe exactly what was said. Pay close attention to short phrases and compound words — a short utterance is often a complete travel-related question or request (e.g. asking for a location, price, or direction), not separate unrelated words.
+
+Then translate that transcription into ${targetLanguage}.
+
+Respond in EXACTLY this format with no extra text:
+ORIGINAL: <the original transcript>
+TRANSLATION: <the translation>
+
+If the audio is completely silent or unintelligible, respond with exactly: UNCLEAR AUDIO`;
 
     let result;
     try {
-      result = await ai.models.generateContent({
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Gemini API timeout')), 25000); // 25-second timeout
+      });
+
+      const geminiPromise = ai.models.generateContent({
         model,
         contents: [
           {
@@ -62,16 +76,24 @@ export async function POST(req: NextRequest) {
         ],
         config: { temperature: 0.3 },
       });
+
+      result = await Promise.race([geminiPromise, timeoutPromise]);
     } catch (apiErr) {
       console.error('Gemini API error (voice-qa):', apiErr);
+      if (apiErr instanceof Error && apiErr.message === 'Gemini API timeout') {
+        return NextResponse.json({ error: 'Voice Q&A service timed out — please try again' }, { status: 504 });
+      }
       return NextResponse.json({ error: 'Voice Q&A service is temporarily unavailable' }, { status: 502 });
     }
 
-    const answer = result.text?.trim();
-    if (!answer) {
+    const responseText = result.text?.trim();
+    console.log('[voice-qa] Raw Gemini response text:', responseText);
+    if (!responseText) {
       return NextResponse.json({ error: 'Voice Q&A failed — empty response' }, { status: 502 });
     }
 
+    // Compute cost and record usage before response handling
+    // (API call costs money even if audio is unclear)
     const amountUsd = computeCostUsd(
       {
         promptTokenCount: result.usageMetadata?.promptTokenCount,
@@ -91,9 +113,29 @@ export async function POST(req: NextRequest) {
 
     const updatedStatus = await getAccountStatus(accountId);
 
+    // Handle UNCLEAR AUDIO sentinel
+    if (responseText === 'UNCLEAR AUDIO') {
+      return NextResponse.json(
+        { error: 'Could not understand the audio. Please try again.' },
+        { status: 400 }
+      );
+    }
+
+    // Parse ORIGINAL:/TRANSLATION: format
+    const originalMatch = responseText.match(/ORIGINAL:\s*(.*)/);
+    const translationMatch = responseText.match(/TRANSLATION:\s*(.*)/);
+
+    if (!originalMatch || !translationMatch) {
+      return NextResponse.json({ error: 'Voice Q&A failed — invalid response format' }, { status: 502 });
+    }
+
+    const original = originalMatch[1].trim();
+    const translation = translationMatch[1].trim();
+    console.log('[voice-qa] Parsed question:', original, '| Parsed answer:', translation);
+
     return NextResponse.json({
       success: true,
-      data: { answer },
+      data: { question: original, answer: translation },
       remainingHours: updatedStatus.source === 'trial' ? undefined : updatedStatus.remainingHours,
       warning: usage.warning,
     });

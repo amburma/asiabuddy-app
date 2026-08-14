@@ -2,23 +2,9 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowLeft, Languages, Loader2, AlertTriangle, Copy, Check } from 'lucide-react'
-
-// Kept short and Asia-travel-relevant rather than an exhaustive list —
-// Gemini will happily translate to any language named here regardless.
-const LANGUAGES = [
-  'Burmese',
-  'English',
-  'Thai',
-  'Vietnamese',
-  'Chinese (Simplified)',
-  'Japanese',
-  'Korean',
-  'Khmer',
-  'Lao',
-  'Malay',
-  'Indonesian',
-]
+import Link from 'next/link'
+import { ArrowLeft, Languages, Loader2, AlertTriangle, Copy, Check, Home, LogOut, Trash2 } from 'lucide-react'
+import { LANGUAGES } from '@/lib/tour-guide/languages'
 
 export default function TourGuideTextTranslateForm() {
   const router = useRouter()
@@ -89,15 +75,51 @@ export default function TourGuideTextTranslateForm() {
     setTimeout(() => setCopied(false), 1500)
   }
 
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/tour-guide/logout', { method: 'POST' })
+      router.push('/tourguide')
+    } catch {
+      // If logout fails, still redirect to login
+      router.push('/tourguide')
+    }
+  }
+
+  const handleClear = () => {
+    setSourceText('')
+    setTranslation('')
+    setError('')
+  }
+
   return (
     <div>
-      <button
-        onClick={() => router.push('/tourguide/dashboard')}
-        className="flex items-center gap-2 text-sm text-[#F5F0E8] opacity-70 hover:opacity-100 transition-opacity mb-6"
-      >
-        <ArrowLeft size={16} />
-        Back to Dashboard
-      </button>
+      <div className="flex items-center justify-between mb-6">
+        <button
+          onClick={() => router.push('/tourguide/dashboard')}
+          className="flex items-center gap-2 text-sm text-[#F5F0E8] opacity-70 hover:opacity-100 transition-opacity"
+        >
+          <ArrowLeft size={16} />
+          Back to Dashboard
+        </button>
+        <div className="flex items-center gap-2">
+          <Link
+            href="/thailand"
+            className="flex items-center gap-1.5 text-xs text-[#F5F0E8] opacity-70 hover:opacity-100 transition-opacity"
+            title="Home"
+          >
+            <Home size={14} />
+            Home
+          </Link>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-1.5 text-xs text-[#F5F0E8] opacity-70 hover:opacity-100 transition-opacity"
+            title="Log out"
+          >
+            <LogOut size={14} />
+            Log out
+          </button>
+        </div>
+      </div>
 
       <div className="flex items-center gap-3 mb-6">
         <div className="p-3 rounded-lg bg-[#C9A84C]/20">
@@ -144,9 +166,17 @@ export default function TourGuideTextTranslateForm() {
         </div>
 
         <div>
-          <label htmlFor="targetLanguage" className="block text-sm font-medium text-[#F5F0E8] mb-2">
-            Translate to
-          </label>
+          <div className="flex items-center justify-between mb-2">
+            <label htmlFor="targetLanguage" className="block text-sm font-medium text-[#F5F0E8]">Translate to</label>
+            <button
+              onClick={handleClear}
+              className="flex items-center gap-1.5 text-xs text-[#F5F0E8] opacity-70 hover:opacity-100 transition-opacity"
+              title="Clear"
+            >
+              <Trash2 size={14} />
+              Clear
+            </button>
+          </div>
           <select
             id="targetLanguage"
             value={targetLanguage}

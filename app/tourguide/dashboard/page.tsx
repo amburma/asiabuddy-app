@@ -67,7 +67,7 @@ export default async function TourGuideDashboard() {
   const features = [
     { id: 'text', name: 'Text Translate', icon: FileText, description: 'Translate text between languages' },
     { id: 'photo', name: 'Photo Translate', icon: Camera, description: 'Translate text from images' },
-    { id: 'voice', name: 'Voice Q&A', icon: Mic, description: 'Ask questions and get voice answers' },
+    { id: 'voice', name: 'Voice Translator', icon: Mic, description: 'Record your voice clearly to translate.' },
     { id: 'live', name: 'Live Translator', icon: Headphones, description: 'Real-time conversation translation' },
   ]
 
@@ -148,6 +148,14 @@ export default async function TourGuideDashboard() {
             if (feature.id === 'photo' && isEnabled) {
               return (
                 <Link key={feature.id} href="/tourguide/photo">
+                  {cardContent}
+                </Link>
+              )
+            }
+
+            if (feature.id === 'voice' && isEnabled) {
+              return (
+                <Link key={feature.id} href="/tourguide/voice">
                   {cardContent}
                 </Link>
               )

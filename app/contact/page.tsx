@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { UI_TRANSLATIONS } from '../../lib/i18n';
 import { SupportedLanguage } from '../../types/country';
 import { countries } from '../../data/countries';
@@ -53,6 +54,9 @@ const SOCIAL_VALUES = ['whatsapp', 'line', 'viber', 'telegram'] as const;
 const COUNTRY_VALUES = countries.filter(c => c.status === 'live').map(c => c.id) as readonly string[];
 
 export default function ContactPage() {
+  const searchParams = useSearchParams();
+  const referrerUrl = searchParams.get('ref');
+  
   const [language, setLanguage] = useState<SupportedLanguage>('EN');
   const [mounted, setMounted] = useState(false);
   
@@ -62,7 +66,7 @@ export default function ContactPage() {
     email: '',
     phone: '',
     country: 'thailand',
-    serviceType: '',
+    serviceType: referrerUrl ? 'tour' : '',
     message: '',
     socialApps: [] as string[]
   });
@@ -95,7 +99,7 @@ export default function ContactPage() {
 
     try {
       // Construct payload matching API expectations
-      const payload = {
+      const payload: any = {
         name: formData.name,
         phone: formData.phone,
         email: formData.email,
@@ -105,6 +109,11 @@ export default function ContactPage() {
         language: language.toLowerCase(),
         country: formData.country
       };
+
+      // Add referrerUrl to details if present
+      if (referrerUrl) {
+        payload.referrerUrl = referrerUrl;
+      }
 
       const response = await fetch('/api/inquiry', {
         method: 'POST',
@@ -357,6 +366,18 @@ export default function ContactPage() {
             </p>
           </div>
 
+          {/* Referrer URL Display */}
+          {referrerUrl && (
+            <div className="mb-6 p-4 bg-[#C9A84C]/10 border border-[#C9A84C]/30 rounded-lg">
+              <p className="text-sm font-semibold text-[#0D0D0D] mb-1">
+                Inquiring about:
+              </p>
+              <p className="text-sm text-gray-600 break-all">
+                {referrerUrl}
+              </p>
+            </div>
+          )}
+
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name */}
@@ -434,7 +455,8 @@ export default function ContactPage() {
                 required
                 value={formData.serviceType}
                 onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
-                className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-[#C9A84C] focus:ring-1 focus:ring-[#C9A84C] transition-colors text-[#0D0D0D]"
+                disabled={referrerUrl !== null}
+                className={`w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:outline-none focus:border-[#C9A84C] focus:ring-1 focus:ring-[#C9A84C] transition-colors text-[#0D0D0D] ${referrerUrl !== null ? 'bg-gray-50 cursor-not-allowed' : ''}`}
               >
                 <option value="">{contact?.serviceType || 'Select a service...'}</option>
                 <option value="tour">{contact?.serviceTour || '🗺️ Tour Package'}</option>

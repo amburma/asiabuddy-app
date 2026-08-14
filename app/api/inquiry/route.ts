@@ -78,6 +78,7 @@ export async function POST(req: NextRequest) {
     language?: string;
     salesperson_id?: string;
     country?: string;
+    referrerUrl?: string;
     // New format from HumanOperatorChat
     chatHistory?: { role: string; content: string }[];
     contactDetails?: {
@@ -214,7 +215,7 @@ export async function POST(req: NextRequest) {
   const primaryService = services[0];
   const tourType = tourTypeMapping[primaryService] ?? 'tour';
 
-  const bookingDetails = {
+  const bookingDetails: any = {
     socials,
     services,
     otherService,
@@ -223,6 +224,11 @@ export async function POST(req: NextRequest) {
     language: language || 'en',
     country: body.country,
   };
+
+  // Add referrerUrl to details if present
+  if (body.referrerUrl) {
+    bookingDetails.referrerUrl = body.referrerUrl;
+  }
   console.log('[INQUIRY] bookingDetails.language:', language || 'en');
 
   const customerInfo = {
@@ -232,13 +238,7 @@ export async function POST(req: NextRequest) {
     source: 'web' as const,
   };
 
-  const bookingParams: {
-    telegram_id: null;
-    tourType: 'tour' | 'flight' | 'car' | 'taxi' | 'hotel' | 'tickets';
-    bookingDetails: typeof bookingDetails;
-    customerInfo: typeof customerInfo;
-    salesperson_id?: string | null;
-  } = {
+  const bookingParams: any = {
     telegram_id: null,
     tourType: tourType as 'tour' | 'flight' | 'car' | 'taxi' | 'hotel' | 'tickets',
     bookingDetails,

@@ -3,11 +3,11 @@ import { redirect } from 'next/navigation'
 import { verifySessionToken } from '@/lib/tour-guide/auth'
 import { supabaseAdmin } from '@/lib/tour-guide/supabaseAdmin'
 import { normalizeLocale } from '@/lib/i18n'
-import TourGuideTextTranslateForm from '@/components/tour-guide/TourGuideTextTranslateForm'
+import TourGuideVoiceQAForm from '@/components/tour-guide/TourGuideVoiceQAForm'
 import FloatingContactButtonLoader from '@/components/shared/FloatingContactButtonLoader'
 import FloatingChatButtonLoader from '@/components/shared/FloatingChatButtonLoader'
 
-export default async function TourGuideTextPage() {
+export default async function TourGuideVoicePage() {
   const cookieStore = await cookies()
   const language = normalizeLocale(cookieStore.get('NEXT_LOCALE')?.value)
   const sessionCookie = cookieStore.get('tg_session')
@@ -42,7 +42,7 @@ export default async function TourGuideTextPage() {
   return (
     <div className="min-h-screen bg-[#0D0D0D] px-6 py-8">
       <div className="max-w-2xl mx-auto">
-        <TourGuideTextTranslateForm />
+        <TourGuideVoiceQAForm />
       </div>
       <FloatingContactButtonLoader language={language} />
       <FloatingChatButtonLoader language={language} country="thailand" />

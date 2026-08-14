@@ -52,7 +52,7 @@ export default function TourGuideLoginForm() {
 
   return (
     <div className="w-full max-w-md">
-      <div className="bg-[#0D0D0D] border border-[#D4AF37] rounded-lg p-8">
+      <div className="bg-[#0D0D0D] border border-[#C9A84C] rounded-lg p-8">
         <h1 className="text-2xl font-bold text-[#F5F0E8] text-center mb-6">
           {t.loginTitle}
         </h1>
@@ -67,7 +67,7 @@ export default function TourGuideLoginForm() {
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#D4AF37] rounded-md text-[#F5F0E8] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#C9A84C] rounded-md text-[#F5F0E8] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#C9A84C] focus:border-transparent"
               placeholder={t.username}
               required
               autoComplete="username"
@@ -84,7 +84,7 @@ export default function TourGuideLoginForm() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#D4AF37] rounded-md text-[#F5F0E8] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent"
+              className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#C9A84C] rounded-md text-[#F5F0E8] placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#C9A84C] focus:border-transparent"
               placeholder={t.password}
               required
               autoComplete="current-password"
@@ -101,7 +101,7 @@ export default function TourGuideLoginForm() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full h-[44px] bg-[#D4AF37] text-[#0D0D0D] font-semibold rounded-md hover:bg-[#b8942f] focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 focus:ring-offset-[#0D0D0D] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+            className="w-full h-[44px] bg-[#C9A84C] text-[#0D0D0D] font-semibold rounded-md hover:bg-[#b8942f] focus:outline-none focus:ring-2 focus:ring-[#C9A84C] focus:ring-offset-2 focus:ring-offset-[#0D0D0D] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
           >
             {isLoading ? (
               <div className="flex items-center gap-2">
