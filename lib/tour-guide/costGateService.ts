@@ -29,11 +29,26 @@ export const TOUR_GUIDE_RATES = {
   purchased: 1.50, // $/hour real-cost ceiling, purchased tier
 } as const;
 
+// Gemini 3.5 Live Translate Preview pricing, verified against 
+// https://ai.google.dev/gemini-api/docs/pricing on 2026-08-14.
+// PREVIEW MODEL — pricing has changed before without notice (see 
+// https://discuss.ai.google.dev/t/gemini-3-5-live-translate-preview-sudden-price-increase/176416).
+// Re-verify against the live pricing page before this constant is 
+// trusted for production billing decisions.
+export const LIVE_TRANSLATE_RATES = {
+  inputUsdPerMinute: 0.0053,
+  outputUsdPerMinute: 0.0315,
+} as const;
+
 export const TRIAL_CAP_SECONDS = 120;
 export const TRIAL_WARNING_AT_SECONDS = 90;
 export const BUDGET_WARNING_THRESHOLD = 0.8; // 80%, per plan §4.1 step 8 / §4.2 step 5
 
 export type TourGuideSource = 'package' | 'purchased' | 'trial';
+
+// NOTE: 'live' does not use TOUR_GUIDE_RATES — its dollar cost is 
+// computed per-tick via computeLiveTranslatorCostUsd() and passed 
+// directly to recordUsage(). See that function's docstring.
 export type TourGuideFeature = 'text' | 'ocr' | 'voice' | 'voice-qa' | 'live';
 
 export interface AccountStatus {
@@ -158,6 +173,22 @@ export async function assertBudgetAvailable(accountId: string): Promise<AccountS
   return status;
 }
 
+/**
+ * Computes the real dollar cost of a Live Translator tick from actual 
+ * audio duration, using LIVE_TRANSLATE_RATES. Unlike the other Tour 
+ * Guide features, Live Translator does not use a flat $/hour ceiling — 
+ * its cost is computed directly from real input/output audio seconds 
+ * and passed to recordUsage() as amountUsd, same as any other feature.
+ */
+export function computeLiveTranslatorCostUsd(
+  inputAudioSeconds: number,
+  outputAudioSeconds: number
+): number {
+  const inputCost = (inputAudioSeconds / 60) * LIVE_TRANSLATE_RATES.inputUsdPerMinute;
+  const outputCost = (outputAudioSeconds / 60) * LIVE_TRANSLATE_RATES.outputUsdPerMinute;
+  return inputCost + outputCost;
+}
+
 export interface UsageRecordResult {
   success: boolean; // false = DB rejected the deduction, cap would be exceeded
   totalCostUsd: number;
@@ -255,3 +286,11 @@ export async function recordTrialUsage(
     ended: row.remaining_seconds <= 0,
   };
 }
+
+// PILOT LOGGING TODO (Phase 4 build): when the Live Translator 
+// tick-reporting endpoint (/api/tour-guide/live/usage) is built, log 
+// each tick with: accountId, inputAudioSeconds, outputAudioSeconds, 
+// computed amountUsd, and session elapsed time, using a distinct 
+// prefix (e.g. [PILOT-DATA live-translator]) so real-world $/hour can 
+// be aggregated from logs during the pilot period before any repricing 
+// decision is made.
