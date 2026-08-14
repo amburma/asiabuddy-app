@@ -87,7 +87,6 @@ If the audio is completely silent or unintelligible, respond with exactly: UNCLE
     }
 
     const responseText = result.text?.trim();
-    console.log('[voice-qa] Raw Gemini response text:', responseText);
     if (!responseText) {
       return NextResponse.json({ error: 'Voice Q&A failed — empty response' }, { status: 502 });
     }
@@ -131,7 +130,6 @@ If the audio is completely silent or unintelligible, respond with exactly: UNCLE
 
     const original = originalMatch[1].trim();
     const translation = translationMatch[1].trim();
-    console.log('[voice-qa] Parsed question:', original, '| Parsed answer:', translation);
 
     return NextResponse.json({
       success: true,
