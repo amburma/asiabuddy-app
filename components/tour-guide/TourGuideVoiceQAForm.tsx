@@ -6,9 +6,9 @@ import Link from 'next/link'
 import { ArrowLeft, Mic, Loader2, AlertTriangle, Copy, Check, Trash2, LogOut, Home } from 'lucide-react'
 import { LANGUAGES } from '@/lib/tour-guide/languages'
 
-interface QAEntry {
-  question: string
-  answer: string
+interface TranslationEntry {
+  translation: string
+  timestamp: number
 }
 
 export default function TourGuideVoiceQAForm() {
@@ -20,7 +20,7 @@ export default function TourGuideVoiceQAForm() {
   const [remainingHours, setRemainingHours] = useState<number | null>(null)
   const [warning, setWarning] = useState(false)
   const [copied, setCopied] = useState(false)
-  const [history, setHistory] = useState<QAEntry[]>([])
+  const [history, setHistory] = useState<TranslationEntry[]>([])
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null)
   const audioChunksRef = useRef<Blob[]>([])
   const recordingStartTimeRef = useRef<number>(0)
@@ -139,7 +139,7 @@ export default function TourGuideVoiceQAForm() {
 
       // Add to history
       setHistory((prev) => [
-        { question: data.data.question || 'Your question', answer: data.data.answer },
+        { translation: data.data.translation, timestamp: Date.now() },
         ...prev,
       ])
       setRemainingHours(typeof data.remainingHours === 'number' ? data.remainingHours : null)
@@ -229,17 +229,7 @@ export default function TourGuideVoiceQAForm() {
 
       <div className="space-y-4">
         <div>
-          <div className="flex items-center justify-between mb-2">
-            <label className="block text-sm font-medium text-[#F5F0E8]">Response language</label>
-            <button
-              onClick={handleClearHistory}
-              className="flex items-center gap-1.5 text-xs text-[#F5F0E8] opacity-70 hover:opacity-100 transition-opacity"
-              title="Clear history"
-            >
-              <Trash2 size={14} />
-              Clear History
-            </button>
-          </div>
+          <label className="block text-sm font-medium text-[#F5F0E8] mb-2">Response language</label>
           <select
             id="targetLanguage"
             value={targetLanguage}
@@ -283,17 +273,21 @@ export default function TourGuideVoiceQAForm() {
 
       {history.length > 0 && (
         <div className="mt-6 space-y-4">
-          <label className="block text-sm font-medium text-[#F5F0E8]">Conversation History</label>
+          <div className="flex items-center justify-between mb-2">
+            <label className="block text-sm font-medium text-[#F5F0E8]">Translation History</label>
+            <button
+              onClick={handleClearHistory}
+              className="flex items-center gap-1.5 text-xs text-[#F5F0E8] opacity-70 hover:opacity-100 transition-opacity"
+              title="Clear history"
+            >
+              <Trash2 size={14} />
+              Clear History
+            </button>
+          </div>
           {history.map((entry, index) => (
-            <div key={index} className="space-y-2">
-              <div className="w-full px-4 py-3 bg-[#1a1a1a] border border-gray-700 rounded-md text-[#F5F0E8] opacity-70 text-sm">
-                <span className="text-xs text-[#C9A84C] block mb-1">Q:</span>
-                {entry.question}
-              </div>
-              <div className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#C9A84C] rounded-md text-[#F5F0E8] whitespace-pre-wrap">
-                <span className="text-xs text-[#C9A84C] block mb-1">A:</span>
-                {entry.answer}
-              </div>
+            <div key={index} className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#C9A84C] rounded-md text-[#F5F0E8] whitespace-pre-wrap">
+              <span className="text-xs text-[#C9A84C] block mb-1">Recording {history.length - index}:</span>
+              {entry.translation}
             </div>
           ))}
         </div>
