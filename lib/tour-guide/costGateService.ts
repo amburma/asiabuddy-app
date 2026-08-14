@@ -229,16 +229,15 @@ export async function recordUsage(
 
   if (error) throw error;
 
-  // TODO(verify): confirm field names against the live function signature.
-  const row = data as { success: boolean; total_cost_usd: number; remaining_usd: number };
+  const row = data as { success: boolean; new_total_usd: number; remaining_usd: number };
 
   const status = await getAccountStatus(accountId);
   const warning =
-    status.ceilingUsd > 0 ? row.total_cost_usd / status.ceilingUsd >= BUDGET_WARNING_THRESHOLD : false;
+    status.ceilingUsd > 0 ? row.new_total_usd / status.ceilingUsd >= BUDGET_WARNING_THRESHOLD : false;
 
   return {
     success: row.success,
-    totalCostUsd: row.total_cost_usd,
+    totalCostUsd: row.new_total_usd,
     remainingUsd: row.remaining_usd,
     warning,
   };
@@ -275,14 +274,13 @@ export async function recordTrialUsage(
 
   if (error) throw error;
 
-  // TODO(verify): confirm field names against the live function signature.
-  const row = data as { success: boolean; seconds_used: number; remaining_seconds: number };
+  const row = data as { success: boolean; new_seconds_used: number; remaining_seconds: number };
 
   return {
     success: row.success,
-    secondsUsed: row.seconds_used,
+    secondsUsed: row.new_seconds_used,
     remainingSeconds: row.remaining_seconds,
-    warning: row.seconds_used >= TRIAL_WARNING_AT_SECONDS,
+    warning: row.new_seconds_used >= TRIAL_WARNING_AT_SECONDS,
     ended: row.remaining_seconds <= 0,
   };
 }
