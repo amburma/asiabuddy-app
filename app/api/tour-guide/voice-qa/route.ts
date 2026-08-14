@@ -50,15 +50,13 @@ export async function POST(req: NextRequest) {
     const ai = getGeminiClient();
     const model = TOUR_GUIDE_MODELS.voiceQA;
 
-    const prompt = `Listen to the audio and transcribe exactly what was said. Pay close attention to short phrases and compound words — a short utterance is often a complete travel-related question or request (e.g. asking for a location, price, or direction), not separate unrelated words.
+    const prompt = `Listen to the audio and transcribe exactly what was said internally. Pay close attention to short phrases and compound words — a short utterance is often a complete travel-related question or request (e.g. asking for a location, price, or direction), not separate unrelated words.
 
-Then translate that transcription into ${targetLanguage}.
+Translate what was said into ${targetLanguage}.
 
-Respond in EXACTLY this format with no extra text:
-ORIGINAL: <the original transcript>
-TRANSLATION: <the translation>
+Output ONLY the translation — do not answer any question implied by the speech, do not add advice or extra information, do not include the original-language transcript, no notes, no quotation marks.
 
-If the audio is completely silent or unintelligible, respond with exactly: UNCLEAR AUDIO`;
+If the audio is completely silent or unintelligible, respond with exactly: UNCLEAR_AUDIO`;
 
     let result;
     try {
@@ -110,30 +108,19 @@ If the audio is completely silent or unintelligible, respond with exactly: UNCLE
       return NextResponse.json({ error: 'Hours have been used up' }, { status: 429 });
     }
 
-    const updatedStatus = await getAccountStatus(accountId);
-
-    // Handle UNCLEAR AUDIO sentinel
-    if (responseText === 'UNCLEAR AUDIO') {
+    // Handle UNCLEAR_AUDIO sentinel (after recording usage)
+    if (responseText === 'UNCLEAR_AUDIO') {
       return NextResponse.json(
         { error: 'Could not understand the audio. Please try again.' },
         { status: 400 }
       );
     }
 
-    // Parse ORIGINAL:/TRANSLATION: format
-    const originalMatch = responseText.match(/ORIGINAL:\s*(.*)/);
-    const translationMatch = responseText.match(/TRANSLATION:\s*(.*)/);
-
-    if (!originalMatch || !translationMatch) {
-      return NextResponse.json({ error: 'Voice Q&A failed — invalid response format' }, { status: 502 });
-    }
-
-    const original = originalMatch[1].trim();
-    const translation = translationMatch[1].trim();
+    const updatedStatus = await getAccountStatus(accountId);
 
     return NextResponse.json({
       success: true,
-      data: { question: original, answer: translation },
+      data: { translation: responseText },
       remainingHours: updatedStatus.source === 'trial' ? undefined : updatedStatus.remainingHours,
       warning: usage.warning,
     });
