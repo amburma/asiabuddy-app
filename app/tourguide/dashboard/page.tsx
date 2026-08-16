@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { verifySessionToken } from '@/lib/tour-guide/auth'
 import { supabaseAdmin } from '@/lib/tour-guide/supabaseAdmin'
 import { getAccountStatus } from '@/lib/tour-guide/costGateService'
-import { LogOut, FileText, Camera, Mic, Headphones } from 'lucide-react'
+import { FileText, Camera, Mic, Headphones } from 'lucide-react'
+import LogoutButton from '@/components/tour-guide/LogoutButton'
 
 export default async function TourGuideDashboard() {
   const cookieStore = await cookies()
@@ -62,15 +63,7 @@ export default async function TourGuideDashboard() {
               <p className="text-xs text-[#F5F0E8] opacity-70">Remaining</p>
               <p className="text-sm font-medium text-[#C9A84C]">{balanceDisplay}</p>
             </div>
-            <form action="/api/tour-guide/logout" method="POST">
-              <button
-                type="submit"
-                className="flex items-center gap-2 text-sm text-[#F5F0E8] hover:text-[#C9A84C] transition-colors"
-              >
-                <LogOut size={16} />
-                Logout
-              </button>
-            </form>
+            <LogoutButton />
           </div>
         </div>
       </header>

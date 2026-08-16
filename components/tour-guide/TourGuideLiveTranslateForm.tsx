@@ -3,9 +3,30 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Mic, Loader2, AlertTriangle, Trash2, LogOut, Home, Volume2, Activity } from 'lucide-react'
-import { LANGUAGES } from '@/lib/tour-guide/languages'
+import { ArrowLeft, Mic, Loader2, AlertTriangle, Trash2, LogOut, Home, Volume2, Activity, ArrowLeftRight } from 'lucide-react'
 import { GoogleGenAI, Modality } from '@google/genai'
+
+// Language options for live translation dropdowns
+const TARGET_LANGUAGES = [
+  { code: 'mm', name: 'Burmese' },
+  { code: 'th', name: 'Thai' },
+  { code: 'en', name: 'English' },
+  { code: 'zh-CN', name: 'Chinese (Mandarin)' },
+  { code: 'zh-HK', name: 'Chinese (Cantonese)' },
+  { code: 'hi', name: 'Hindi' },
+  { code: 'es', name: 'Spanish' },
+  { code: 'fr', name: 'French' },
+  { code: 'de', name: 'German' },
+  { code: 'ru', name: 'Russian' },
+  { code: 'ko', name: 'Korean' },
+  { code: 'ja', name: 'Japanese' },
+  { code: 'ar', name: 'Arabic' },
+  { code: 'vi', name: 'Vietnamese' },
+  { code: 'id', name: 'Indonesian' },
+  { code: 'my', name: 'Malay' },
+]
+
+
 
 // Helper function to convert ArrayBuffer to base64 (browser-compatible)
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
@@ -102,10 +123,14 @@ interface UsageResponse {
 
 export default function TourGuideLiveTranslateForm() {
   const router = useRouter()
-  const [targetLanguage, setTargetLanguage] = useState('Burmese')
+  const [sourceLanguage, setSourceLanguage] = useState('mm')
+  const [targetLanguage, setTargetLanguage] = useState('th')
   const [isLive, setIsLive] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isConnecting, setIsConnecting] = useState(false)
+  const [connectionError, setConnectionError] = useState('')
   const [error, setError] = useState('')
+  const [isTranslating, setIsTranslating] = useState(false)
   const [remainingHours, setRemainingHours] = useState<number | null>(null)
   const [remainingUsd, setRemainingUsd] = useState<number | null>(null)
   const [warning, setWarning] = useState(false)
@@ -139,16 +164,20 @@ export default function TourGuideLiveTranslateForm() {
   const sessionStartTimeRef = useRef<number>(0)
   const usageReportTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [audioActivity, setAudioActivity] = useState(0)
+  const audioActivityRef = useRef(0)
   
   // Manual VAD for turn-taking
   const isSpeakingRef = useRef<boolean>(false)
   const silenceTimerRef = useRef<NodeJS.Timeout | null>(null)
   const SPEECH_THRESHOLD = 10 // Match existing UI pulse threshold
-  const SILENCE_DURATION_MS = 3000 // 3 second silence threshold
+  const SILENCE_DURATION_MS = 900 // 0.9 second silence threshold (reduced from 3000ms for faster response)
   
   // Session management
   const isManualStopRef = useRef<boolean>(false)
+  const isLiveRef = useRef<boolean>(false)
   const sessionDurationWarningTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const performEmergencyCleanupRef = useRef<(() => void) | null>(null)
+  const reportUsageRef = useRef<(durationSeconds: number, isFinal?: boolean) => Promise<any>>(null)
 
   // Fetch AsiaBuddy ephemeral token (for budget/account validation)
   const fetchToken = useCallback(async () => {
@@ -187,10 +216,14 @@ export default function TourGuideLiveTranslateForm() {
   // Fetch Gemini ephemeral token (for Live API authentication)
   const fetchGeminiToken = useCallback(async () => {
     try {
+      // Convert language codes to full names for API
+      const sourceLangName = TARGET_LANGUAGES.find(l => l.code === sourceLanguage)?.name || sourceLanguage
+      const targetLangName = TARGET_LANGUAGES.find(l => l.code === targetLanguage)?.name || targetLanguage
+      
       const response = await fetch('/api/tour-guide/live-translate/gemini-token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ targetLanguage }),
+        body: JSON.stringify({ sourceLanguage: sourceLangName, targetLanguage: targetLangName }),
       })
       
       if (!response.ok) {
@@ -201,10 +234,12 @@ export default function TourGuideLiveTranslateForm() {
       const data: GeminiTokenResponse = await response.json()
       return data.token
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch Gemini token')
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch Gemini token'
+      setConnectionError(errorMessage)
+      setError(errorMessage)
       return null
     }
-  }, [targetLanguage])
+  }, [sourceLanguage, targetLanguage])
 
   // Report usage
   const reportUsage = useCallback(async (durationSeconds: number, isFinal = false) => {
@@ -225,8 +260,9 @@ export default function TourGuideLiveTranslateForm() {
       setWarning(data.accountStatus.warning)
       
       if (data.isExhausted) {
-        stopLiveTranslation()
-        setError('Budget exhausted. Please contact support to add more time.')
+        // Redirect to login page with trial expired parameter for conversion funnel
+        router.push('/tourguide/?trial=expired')
+        return
       }
       
       return data
@@ -236,68 +272,14 @@ export default function TourGuideLiveTranslateForm() {
     }
   }, [])
 
-  // Setup audio visualization with manual VAD
-  const setupAudioVisualization = useCallback((stream: MediaStream) => {
-    if (!audioContextRef.current) {
-      audioContextRef.current = new AudioContext()
-    }
-    
-    const source = audioContextRef.current.createMediaStreamSource(stream)
-    analyserRef.current = audioContextRef.current.createAnalyser()
-    analyserRef.current.fftSize = 256
-    source.connect(analyserRef.current)
-    
-    const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount)
-    
-    const updateActivity = () => {
-      if (!isLive || !analyserRef.current) return
-      
-      analyserRef.current.getByteFrequencyData(dataArray)
-      const average = dataArray.reduce((a, b) => a + b) / dataArray.length
-      setAudioActivity(average)
-      
-      // Manual VAD: detect speech start/stop transitions
-      const isNowSpeaking = average > SPEECH_THRESHOLD
-      
-      if (isNowSpeaking && !isSpeakingRef.current) {
-        // Speech started: send activityStart signal
-        isSpeakingRef.current = true
-        if (silenceTimerRef.current) {
-          clearTimeout(silenceTimerRef.current)
-          silenceTimerRef.current = null
-        }
-        if (liveSessionRef.current) {
-          console.log('[VAD] Speech detected - sending activityStart at', new Date().toISOString())
-          liveSessionRef.current.sendRealtimeInput({ activityStart: {} })
-        }
-      } else if (!isNowSpeaking && isSpeakingRef.current) {
-        // Speech stopped: start silence timer
-        if (silenceTimerRef.current) {
-          clearTimeout(silenceTimerRef.current)
-        }
-        silenceTimerRef.current = setTimeout(() => {
-          // Silence threshold reached: send activityEnd signal
-          isSpeakingRef.current = false
-          if (liveSessionRef.current) {
-            console.log('[VAD] Silence threshold reached - sending activityEnd at', new Date().toISOString())
-            liveSessionRef.current.sendRealtimeInput({ activityEnd: {} })
-          }
-        }, SILENCE_DURATION_MS)
-      }
-      
-      requestAnimationFrame(updateActivity)
-    }
-    
-    updateActivity()
-  }, [isLive, SPEECH_THRESHOLD, SILENCE_DURATION_MS])
-
   // Shared cleanup function for unexpected session termination
   const performEmergencyCleanup = useCallback(() => {
     // Final usage report before cleanup (fire-and-forget to avoid blocking cleanup)
     if (sessionStartTimeRef.current > 0) {
       const duration = (Date.now() - sessionStartTimeRef.current) / 1000
       // Fire-and-forget: don't await to avoid blocking cleanup
-      reportUsage(duration, true).catch(err => {
+      // Use ref to avoid circular dependency
+      reportUsageRef.current?.(duration, true).catch(err => {
         console.error('Final usage report failed during emergency cleanup:', err)
       })
       sessionStartTimeRef.current = 0
@@ -381,8 +363,10 @@ export default function TourGuideLiveTranslateForm() {
     // Update UI state
     setIsLive(false)
     setIsLoading(false)
+    setIsTranslating(false)
     setAudioActivity(0)
-  }, [reportUsage])
+    audioActivityRef.current = 0
+  }, [])
 
   // Queue audio chunk for gapless playback
   const queueAudioForPlayback = useCallback((base64Audio: string) => {
@@ -398,13 +382,18 @@ export default function TourGuideLiveTranslateForm() {
       
       // Schedule for gapless playback using monotonic time tracking
       let startTime: number
-      if (nextPlaybackTimeRef.current === 0 || nextPlaybackTimeRef.current < playbackAudioContextRef.current.currentTime) {
+      const currentTime = playbackAudioContextRef.current.currentTime
+      
+      if (nextPlaybackTimeRef.current === 0 || nextPlaybackTimeRef.current < currentTime) {
         // Starting fresh (first chunk or playback has gone idle)
-        startTime = playbackAudioContextRef.current.currentTime
+        // Start immediately with minimal latency
+        startTime = currentTime + 0.01 // Small buffer to avoid glitches
         playbackStartTimeRef.current = startTime
+        console.log('[STREAMING] Starting first chunk immediately at', startTime, 'seconds')
       } else {
         // Continue from where last chunk was scheduled to end
         startTime = nextPlaybackTimeRef.current
+        console.log('[STREAMING] Scheduling subsequent chunk at', startTime, 'seconds')
       }
       
       source.start(startTime)
@@ -426,12 +415,227 @@ export default function TourGuideLiveTranslateForm() {
         if (audioQueueRef.current.length === 0) {
           playbackStartTimeRef.current = 0
           nextPlaybackTimeRef.current = 0
+          console.log('[STREAMING] Playback queue empty, timing reset')
         }
       }
     } catch (e) {
       console.error('Error queueing audio for playback:', e)
     }
   }, [])
+
+  // Establish Gemini Live API connection (to be called on mount)
+  const establishConnection = useCallback(async () => {
+    setIsConnecting(true)
+    setConnectionError('')
+    
+    try {
+      // Fetch AsiaBuddy token first (for budget/account validation)
+      const asiaBuddyToken = await fetchToken()
+      if (!asiaBuddyToken) {
+        throw new Error('Failed to authenticate with AsiaBuddy')
+      }
+      
+      // Fetch Gemini ephemeral token (for Live API authentication)
+      const geminiToken = await fetchGeminiToken()
+      if (!geminiToken) {
+        throw new Error('Failed to get Gemini ephemeral token')
+      }
+      
+      // Connect to Gemini Live API
+      const ai = new GoogleGenAI({ apiKey: geminiToken })
+      
+      const config = {
+        responseModalities: [Modality.AUDIO],
+        inputAudioTranscription: {}, // Enable input audio transcription
+        outputAudioTranscription: {}, // Enable output audio transcription
+      }
+      
+      console.log('[MOUNT] Establishing Gemini Live API connection with config:', JSON.stringify(config, null, 2))
+      
+      const session = await ai.live.connect({
+        model: 'gemini-2.5-flash-native-audio-preview-12-2025',
+        config: config,
+        callbacks: {
+          onopen: () => {
+            console.log('[MOUNT] Gemini Live API connection opened successfully')
+            setIsConnecting(false)
+          },
+          onmessage: (message: any) => {
+            // Log raw message for debugging
+            console.log('[MOUNT RAW MESSAGE] Full Gemini Live API message:', JSON.stringify(message, null, 2))
+            
+            // Only process messages if session is live
+            // Note: We check the ref directly to avoid dependency issues
+            if (!isLiveRef.current) return
+            
+            // Check if we're receiving audio while model is responding (barge-in detection)
+            if (message.serverContent?.modelTurn?.parts) {
+              console.log('[BARGE-IN CHECK] Model started responding - checking if user still sending audio')
+              console.log('[BARGE-IN CHECK] PCM buffer size:', pcmBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0), 'samples')
+              console.log('[BARGE-IN CHECK] Audio activity level:', audioActivityRef.current)
+            }
+            
+            if (!message.serverContent) return
+            
+            const serverContent = message.serverContent
+            
+            // Show "Translating..." indicator when server starts processing (model begins responding)
+            if (serverContent.modelTurn?.parts && !inProgressEntryRef.current?.translatedText) {
+              setIsTranslating(true)
+            }
+            
+            // Handle interruption - stop all audio immediately
+            if (serverContent.interrupted) {
+              console.log('User interrupted - stopping audio playback')
+              stopAllPlayback(audioQueueRef.current, playbackAudioContextRef.current, playbackStartTimeRef, nextPlaybackTimeRef)
+              inProgressEntryRef.current = null
+              return
+            }
+            
+            // Initialize in-progress entry if needed
+            if (!inProgressEntryRef.current) {
+              inProgressEntryRef.current = {
+                sourceText: '',
+                translatedText: '',
+                timestamp: Date.now()
+              }
+            }
+            
+            // Append input transcription (source language)
+            if (serverContent.inputTranscription?.text) {
+              console.log('[TRANSCRIPT] Input transcription chunk:', serverContent.inputTranscription.text)
+              inProgressEntryRef.current.sourceText += serverContent.inputTranscription.text
+            }
+            
+            // Append output transcription (target language)  
+            if (serverContent.outputTranscription?.text) {
+              console.log('[TRANSCRIPT] Output transcription chunk:', serverContent.outputTranscription.text)
+              inProgressEntryRef.current.translatedText += serverContent.outputTranscription.text
+              // Clear "Translating..." indicator when first text chunk arrives
+              setIsTranslating(false)
+            }
+            
+            // Process audio parts from model turn
+            if (serverContent.modelTurn?.parts) {
+              for (const part of serverContent.modelTurn.parts) {
+                if (part.inlineData?.data) {
+                  // Queue audio for playback
+                  const base64Audio = part.inlineData.data
+                  console.log('[AUDIO RECEIVE] Model audio chunk received at', new Date().toISOString(), '- Queueing for playback')
+                  console.log('[AUDIO RECEIVE] Current PCM buffer size:', pcmBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0), 'samples')
+                  // Clear "Translating..." indicator when first audio chunk arrives
+                  setIsTranslating(false)
+                  queueAudioForPlayback(base64Audio)
+                }
+              }
+            }
+            
+            // Finalize entry on turn complete
+            if (serverContent.turnComplete) {
+              console.log('[TURN COMPLETE] Turn completed at', new Date().toISOString())
+              console.log('[TURN COMPLETE] Final source text:', inProgressEntryRef.current?.sourceText)
+              console.log('[TURN COMPLETE] Final translated text:', inProgressEntryRef.current?.translatedText)
+              if (inProgressEntryRef.current && 
+                  (inProgressEntryRef.current.sourceText || inProgressEntryRef.current.translatedText)) {
+                // Add finalized entry to transcript array
+                setTranscript(prev => [...prev, { ...inProgressEntryRef.current! }])
+                // Reset in-progress entry
+                inProgressEntryRef.current = null
+              }
+              // Clear "Translating..." indicator when turn completes
+              setIsTranslating(false)
+            }
+          },
+          onerror: (e: any) => {
+            console.error('[MOUNT] Gemini Live API error:', e.message)
+            const errorMessage = `Connection error: ${e.message}`
+            setConnectionError(errorMessage)
+            setError(errorMessage)
+            setIsConnecting(false)
+            
+            // Only perform cleanup if this is not a manual stop
+            if (!isManualStopRef.current) {
+              performEmergencyCleanupRef.current?.()
+            }
+          },
+          onclose: (e: any) => {
+            console.log('[MOUNT] Gemini Live API connection closed:', e.reason)
+            
+            // Handle unexpected close (server-initiated or network drop)
+            if (!isManualStopRef.current) {
+              const reason = e.reason || 'connection lost'
+              const errorMessage = `Session ended unexpectedly (${reason}). Please refresh the page to reconnect.`
+              setConnectionError(errorMessage)
+              setError(errorMessage)
+              performEmergencyCleanupRef.current?.()
+            }
+            
+            // Reset the manual stop flag for next session
+            isManualStopRef.current = false
+            setIsConnecting(false)
+          },
+        },
+      })
+      
+      liveSessionRef.current = session
+      wsRef.current = session as any // Store reference for cleanup
+      console.log('[MOUNT] Gemini Live API session established successfully')
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to establish connection'
+      setConnectionError(errorMessage)
+      setError(errorMessage)
+      setIsConnecting(false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchToken, fetchGeminiToken, queueAudioForPlayback, sourceLanguage, targetLanguage])
+
+  // Setup audio visualization with manual VAD
+  const setupAudioVisualization = useCallback((stream: MediaStream) => {
+    if (!audioContextRef.current) {
+      audioContextRef.current = new AudioContext()
+    }
+    
+    const source = audioContextRef.current.createMediaStreamSource(stream)
+    analyserRef.current = audioContextRef.current.createAnalyser()
+    analyserRef.current.fftSize = 256
+    source.connect(analyserRef.current)
+    
+    const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount)
+    
+    const updateActivity = () => {
+      if (!isLive || !analyserRef.current) return
+      
+      analyserRef.current.getByteFrequencyData(dataArray)
+      const average = dataArray.reduce((a, b) => a + b) / dataArray.length
+      setAudioActivity(average)
+      audioActivityRef.current = average
+      
+      // Manual VAD: detect speech start/stop transitions (for UI display only)
+      const isNowSpeaking = average > SPEECH_THRESHOLD
+      
+      if (isNowSpeaking && !isSpeakingRef.current) {
+        // Speech started: update UI state
+        isSpeakingRef.current = true
+        if (silenceTimerRef.current) {
+          clearTimeout(silenceTimerRef.current)
+          silenceTimerRef.current = null
+        }
+      } else if (!isNowSpeaking && isSpeakingRef.current) {
+        // Speech stopped: start silence timer
+        if (silenceTimerRef.current) {
+          clearTimeout(silenceTimerRef.current)
+        }
+        silenceTimerRef.current = setTimeout(() => {
+          // Silence threshold reached: update UI state
+          isSpeakingRef.current = false
+        }, SILENCE_DURATION_MS)
+      }
+      
+      requestAnimationFrame(updateActivity)
+    }
+    
+    updateActivity()
+  }, [isLive, SPEECH_THRESHOLD, SILENCE_DURATION_MS])
 
   // Start live translation
   const startLiveTranslation = async () => {
@@ -447,16 +651,26 @@ export default function TourGuideLiveTranslateForm() {
     setIsLoading(true)
     
     try {
-      // Fetch AsiaBuddy token first (for budget/account validation)
-      const asiaBuddyToken = await fetchToken()
-      if (!asiaBuddyToken) {
-        throw new Error('Failed to authenticate with AsiaBuddy')
+      // Close any existing session before creating a new one
+      if (liveSessionRef.current) {
+        try {
+          await liveSessionRef.current.close()
+          liveSessionRef.current = null
+          wsRef.current = null
+        } catch (closeErr) {
+          console.error('Error closing existing session:', closeErr)
+        }
       }
       
-      // Fetch Gemini ephemeral token (for Live API authentication)
-      const geminiToken = await fetchGeminiToken()
-      if (!geminiToken) {
-        throw new Error('Failed to get Gemini ephemeral token')
+      // Establish fresh connection with current language selection
+      await establishConnection()
+      
+      // Check if connection was successful
+      if (!liveSessionRef.current || connectionError) {
+        const errorMsg = connectionError || 'Failed to establish connection. Please try again.'
+        setError(errorMsg)
+        setIsLoading(false)
+        return
       }
       
       // Get microphone access early (for visualization)
@@ -464,130 +678,7 @@ export default function TourGuideLiveTranslateForm() {
       mediaStreamRef.current = stream
       setupAudioVisualization(stream)
 
-      // Connect to Gemini Live API FIRST (before starting PCM streaming)
-      let session
-      try {
-        const ai = new GoogleGenAI({ apiKey: geminiToken })
-        
-        const config = {
-          responseModalities: [Modality.AUDIO],
-          inputAudioTranscription: {}, // Enable input audio transcription
-          outputAudioTranscription: {}, // Enable output audio transcription
-        }
-        
-        console.log('Gemini Live API config being sent:', JSON.stringify(config, null, 2))
-        
-        session = await ai.live.connect({
-          model: 'gemini-2.5-flash-native-audio-preview-12-2025',
-          config: config,
-          callbacks: {
-            onopen: () => {
-              console.log('Gemini Live API connection opened successfully')
-            },
-            onmessage: (message: any) => {
-              // Log raw message for debugging barge-in vs VAD issues
-              console.log('[RAW MESSAGE] Full Gemini Live API message:', JSON.stringify(message, null, 2))
-              
-              // Check if we're receiving audio while model is responding (barge-in detection)
-              if (message.serverContent?.modelTurn?.parts) {
-                console.log('[BARGE-IN CHECK] Model started responding - checking if user still sending audio')
-                console.log('[BARGE-IN CHECK] PCM buffer size:', pcmBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0), 'samples')
-                console.log('[BARGE-IN CHECK] Audio activity level:', audioActivity)
-              }
-              
-              if (!message.serverContent) return
-              
-              const serverContent = message.serverContent
-              
-              // Handle interruption - stop all audio immediately
-              if (serverContent.interrupted) {
-                console.log('User interrupted - stopping audio playback')
-                stopAllPlayback(audioQueueRef.current, playbackAudioContextRef.current, playbackStartTimeRef, nextPlaybackTimeRef)
-                inProgressEntryRef.current = null
-                return
-              }
-              
-              // Initialize in-progress entry if needed
-              if (!inProgressEntryRef.current) {
-                inProgressEntryRef.current = {
-                  sourceText: '',
-                  translatedText: '',
-                  timestamp: Date.now()
-                }
-              }
-              
-              // Append input transcription (source language)
-              if (serverContent.inputTranscription?.text) {
-                console.log('[TRANSCRIPT] Input transcription chunk:', serverContent.inputTranscription.text)
-                inProgressEntryRef.current.sourceText += serverContent.inputTranscription.text
-              }
-              
-              // Append output transcription (target language)  
-              if (serverContent.outputTranscription?.text) {
-                console.log('[TRANSCRIPT] Output transcription chunk:', serverContent.outputTranscription.text)
-                inProgressEntryRef.current.translatedText += serverContent.outputTranscription.text
-              }
-              
-              // Process audio parts from model turn
-              if (serverContent.modelTurn?.parts) {
-                for (const part of serverContent.modelTurn.parts) {
-                  if (part.inlineData?.data) {
-                    // Queue audio for playback
-                    const base64Audio = part.inlineData.data
-                    console.log('[AUDIO RECEIVE] Model audio chunk received at', new Date().toISOString(), '- Queueing for playback')
-                    console.log('[AUDIO RECEIVE] Current PCM buffer size:', pcmBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0), 'samples')
-                    queueAudioForPlayback(base64Audio)
-                  }
-                }
-              }
-              
-              // Finalize entry on turn complete
-              if (serverContent.turnComplete) {
-                console.log('[TURN COMPLETE] Turn completed at', new Date().toISOString())
-                console.log('[TURN COMPLETE] Final source text:', inProgressEntryRef.current?.sourceText)
-                console.log('[TURN COMPLETE] Final translated text:', inProgressEntryRef.current?.translatedText)
-                if (inProgressEntryRef.current && 
-                    (inProgressEntryRef.current.sourceText || inProgressEntryRef.current.translatedText)) {
-                  // Add finalized entry to transcript array
-                  setTranscript(prev => [...prev, { ...inProgressEntryRef.current! }])
-                  // Reset in-progress entry
-                  inProgressEntryRef.current = null
-                }
-              }
-            },
-            onerror: (e: any) => {
-              console.error('Gemini Live API error:', e.message)
-              
-              // Only perform cleanup if this is not a manual stop
-              if (!isManualStopRef.current) {
-                setError(`Connection error: ${e.message}`)
-                performEmergencyCleanup()
-              }
-            },
-            onclose: (e: any) => {
-              console.log('Gemini Live API connection closed:', e.reason)
-              
-              // Handle unexpected close (server-initiated or network drop)
-              if (!isManualStopRef.current) {
-                const reason = e.reason || 'connection lost'
-                setError(`Session ended unexpectedly (${reason}). Please press Start to begin a new session.`)
-                performEmergencyCleanup()
-              }
-              
-              // Reset the manual stop flag for next session
-              isManualStopRef.current = false
-            },
-          },
-        })
-        
-        liveSessionRef.current = session
-        wsRef.current = session as any // Store reference for cleanup
-        console.log('Gemini Live API session established successfully')
-      } catch (liveError) {
-        throw new Error(liveError instanceof Error ? liveError.message : 'Failed to connect to Gemini Live API')
-      }
-
-      // NOW setup AudioWorklet for PCM streaming (after session is established)
+      // Setup AudioWorklet for PCM streaming (session is already established)
       if (!audioContextRef.current) {
         audioContextRef.current = new AudioContext()
       }
@@ -669,6 +760,7 @@ export default function TourGuideLiveTranslateForm() {
       }, 780000) // 13 minutes
       
       setIsLive(true)
+      isLiveRef.current = true
       setIsLoading(false)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to start live translation')
@@ -679,6 +771,7 @@ export default function TourGuideLiveTranslateForm() {
   // Stop live translation
   const stopLiveTranslation = useCallback(async () => {
     setIsLive(false)
+    isLiveRef.current = false
     
     // Set manual stop flag to prevent emergency cleanup from running
     isManualStopRef.current = true
@@ -782,6 +875,7 @@ export default function TourGuideLiveTranslateForm() {
     isSpeakingRef.current = false
     
     setAudioActivity(0)
+    audioActivityRef.current = 0
   }, [fetchToken, reportUsage])
 
   // Clear transcript
@@ -799,12 +893,53 @@ export default function TourGuideLiveTranslateForm() {
     }
   }
 
+  // Handle language swap
+  const handleSwapLanguages = () => {
+    const temp = sourceLanguage
+    setSourceLanguage(targetLanguage)
+    setTargetLanguage(temp)
+  }
+
+  // Handle source language change with same-language guard
+  const handleSourceLanguageChange = (newCode: string) => {
+    if (newCode === targetLanguage) {
+      // Auto-swap target to previous source value
+      const previousSource = sourceLanguage
+      setSourceLanguage(newCode)
+      setTargetLanguage(previousSource)
+    } else {
+      setSourceLanguage(newCode)
+    }
+  }
+
+  // Handle target language change with same-language guard
+  const handleTargetLanguageChange = (newCode: string) => {
+    if (newCode === sourceLanguage) {
+      // Auto-swap source to previous target value
+      const previousTarget = targetLanguage
+      setTargetLanguage(newCode)
+      setSourceLanguage(previousTarget)
+    } else {
+      setTargetLanguage(newCode)
+    }
+  }
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
       stopLiveTranslation()
     }
   }, [stopLiveTranslation])
+
+  // Assign the cleanup function to the ref after it's defined
+  useEffect(() => {
+    performEmergencyCleanupRef.current = performEmergencyCleanup
+  }, [performEmergencyCleanup])
+
+  // Assign reportUsage to ref after it's defined
+  useEffect(() => {
+    reportUsageRef.current = reportUsage
+  }, [reportUsage])
 
   return (
     <div>
@@ -826,6 +961,14 @@ export default function TourGuideLiveTranslateForm() {
             <Home size={14} />
             Home
           </Link>
+          <a
+            href="https://asiabuddy.app/contact"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-xs bg-[#C9A84C] text-[#0D0D0D] px-3 py-1.5 rounded-md hover:bg-[#b8942f] transition-colors font-medium"
+          >
+            Top Up Here
+          </a>
           <button
             onClick={handleLogout}
             className="flex items-center gap-1.5 text-xs text-[#F5F0E8] opacity-70 hover:opacity-100 transition-opacity"
@@ -861,8 +1004,31 @@ export default function TourGuideLiveTranslateForm() {
         </div>
       )}
 
+      {/* Connection Error */}
+      {connectionError && (
+        <div className="bg-red-900/20 border border-red-500 text-red-200 px-4 py-3 rounded-md text-sm mb-4">
+          <div className="flex items-start gap-2">
+            <AlertTriangle size={16} className="mt-0.5 shrink-0" />
+            <div>
+              <p className="font-medium">Connection Error</p>
+              <p className="mt-1">{connectionError}</p>
+              <button
+                onClick={() => {
+                  setConnectionError('')
+                  setError('')
+                  establishConnection()
+                }}
+                className="mt-2 text-xs bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded transition-colors"
+              >
+                Retry Connection
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Error */}
-      {error && (
+      {error && !connectionError && (
         <div className="bg-red-900/20 border border-red-500 text-red-200 px-4 py-3 rounded-md text-sm mb-4">
           {error}
         </div>
@@ -871,37 +1037,77 @@ export default function TourGuideLiveTranslateForm() {
       {/* Controls */}
       <div className="space-y-4 mb-6">
         <div>
-          <label className="block text-sm font-medium text-[#F5F0E8] mb-2">Target language</label>
-          <select
-            value={targetLanguage}
-            onChange={(e) => setTargetLanguage(e.target.value)}
-            disabled={isLive || isLoading}
-            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#C9A84C] rounded-md text-[#F5F0E8] focus:outline-none focus:ring-2 focus:ring-[#C9A84C] focus:border-transparent"
-          >
-            {LANGUAGES.map((lang) => (
-              <option key={lang} value={lang}>{lang}</option>
-            ))}
-          </select>
+          <label className="block text-sm font-medium text-[#F5F0E8] mb-2">Translation Direction</label>
+          <div className="flex items-center gap-3 bg-[#1a1a1a] border border-[#C9A84C] rounded-2xl p-3">
+            <div className="flex-1">
+              <select
+                value={sourceLanguage}
+                onChange={(e) => handleSourceLanguageChange(e.target.value)}
+                disabled={isLive || isLoading}
+                className="w-full bg-[#0D0D0D] text-[#F5F0E8] border border-[#C9A84C]/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#C9A84C] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {TARGET_LANGUAGES.map((lang) => (
+                  <option key={lang.code} value={lang.code} className="bg-[#0D0D0D] text-[#F5F0E8]">
+                    {lang.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <button
+              onClick={handleSwapLanguages}
+              disabled={isLive || isLoading}
+              className="p-2 rounded-full bg-[#C9A84C] text-[#0D0D0D] hover:bg-[#b8942f] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shrink-0"
+              title="Swap languages"
+            >
+              <ArrowLeftRight size={20} />
+            </button>
+            <div className="flex-1">
+              <select
+                value={targetLanguage}
+                onChange={(e) => handleTargetLanguageChange(e.target.value)}
+                disabled={isLive || isLoading}
+                className="w-full bg-[#0D0D0D] text-[#C9A84C] border border-[#C9A84C]/30 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#C9A84C] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {TARGET_LANGUAGES.map((lang) => (
+                  <option key={lang.code} value={lang.code} className="bg-[#0D0D0D] text-[#F5F0E8]">
+                    {lang.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
         </div>
+
+
 
         <button
           onClick={isLive ? stopLiveTranslation : startLiveTranslation}
-          disabled={isLoading}
+          disabled={isLoading || isConnecting || connectionError !== ''}
           className={`w-full h-[44px] font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-[#C9A84C] focus:ring-offset-2 focus:ring-offset-[#0D0D0D] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center ${
             isLive
               ? 'bg-red-600 text-white hover:bg-red-700'
               : 'bg-[#C9A84C] text-[#0D0D0D] hover:bg-[#b8942f]'
           }`}
         >
-          {isLoading ? (
+          {isConnecting ? (
             <div className="flex items-center gap-2">
               <Loader2 size={18} className="animate-spin" />
-              <span>Connecting...</span>
+              <span>Establishing Connection...</span>
+            </div>
+          ) : isLoading ? (
+            <div className="flex items-center gap-2">
+              <Loader2 size={18} className="animate-spin" />
+              <span>Starting...</span>
             </div>
           ) : isLive ? (
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
               <span>Stop Live Translation</span>
+            </div>
+          ) : connectionError ? (
+            <div className="flex items-center gap-2">
+              <AlertTriangle size={18} />
+              <span>Connection Failed</span>
             </div>
           ) : (
             <div className="flex items-center gap-2">
@@ -918,6 +1124,14 @@ export default function TourGuideLiveTranslateForm() {
             <span>Audio Level: {Math.round(audioActivity)}</span>
           </div>
         )}
+
+        {/* Translating Indicator */}
+        {isTranslating && (
+          <div className="flex items-center gap-2 text-sm text-[#C9A84C] animate-pulse">
+            <Loader2 size={16} className="animate-spin" />
+            <span>Translating...</span>
+          </div>
+        )}
       </div>
 
       {/* Two-column Transcript Display */}
@@ -925,7 +1139,7 @@ export default function TourGuideLiveTranslateForm() {
         {/* Source Speech */}
         <div className="bg-[#1a1a1a] border border-[#C9A84C]/30 rounded-md p-4">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-[#F5F0E8]">Source Speech</h3>
+            <h3 className="text-sm font-medium text-[#F5F0E8]">Source Speech ({TARGET_LANGUAGES.find(l => l.code === sourceLanguage)?.name || sourceLanguage})</h3>
             <button
               onClick={clearTranscript}
               className="flex items-center gap-1 text-xs text-[#C9A84C] opacity-70 hover:opacity-100 transition-opacity"
@@ -950,7 +1164,7 @@ export default function TourGuideLiveTranslateForm() {
 
         {/* Real-time Translation */}
         <div className="bg-[#1a1a1a] border border-[#C9A84C]/30 rounded-md p-4">
-          <h3 className="text-sm font-medium text-[#F5F0E8] mb-2">Translation ({targetLanguage})</h3>
+          <h3 className="text-sm font-medium text-[#F5F0E8] mb-2">Translation ({TARGET_LANGUAGES.find(l => l.code === targetLanguage)?.name || targetLanguage})</h3>
           <div className="space-y-2 max-h-96 overflow-y-auto">
             {transcript.length === 0 ? (
               <p className="text-sm text-[#F5F0E8]/50 italic">Translation will appear here...</p>

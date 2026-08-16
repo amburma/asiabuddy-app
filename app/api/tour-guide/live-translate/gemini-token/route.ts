@@ -29,9 +29,10 @@ export async function POST(req: NextRequest) {
     // Step 2: Check budget availability (same pattern as token/route.ts)
     await assertBudgetAvailable(session.accountId);
 
-    // Step 2.5: Parse target language from request body
+    // Step 2.5: Parse source and target languages from request body
     const body = await req.json();
-    const targetLanguage = body.targetLanguage || 'Burmese'; // Default to Burmese if not provided
+    const sourceLanguage = body.sourceLanguage || 'Burmese'; // Default to Burmese if not provided
+    const targetLanguage = body.targetLanguage || 'Thai'; // Default to Thai if not provided
 
     // Step 3: Get Gemini API key (server-side only, never returned to client)
     const geminiApiKey = process.env.GEMINI_TOUR_GUIDE_API_KEY;
@@ -57,11 +58,13 @@ export async function POST(req: NextRequest) {
         outputAudioTranscription: {},
         systemInstruction: {
           parts: [{ 
-            text: `You are a real-time interpreter. Listen to the user's speech. Wait until the user has finished a complete sentence or thought — indicated by a natural pause — before responding. Translate what they said into ${targetLanguage} and speak the translation aloud. Do not translate partial or incomplete sentences. Do not add commentary, only the translation.` 
+            text: `You are a real-time interpreter. Listen to the user's speech in ${sourceLanguage}. Wait until the user has finished a complete sentence or thought — indicated by a natural pause — before responding. Translate what they said into ${targetLanguage} and speak the translation aloud. Do not translate partial or incomplete sentences. Do not add commentary, only the translation.` 
           }]
         },
         realtimeInputConfig: {
-          automaticActivityDetection: { silenceDurationMs: 3000 }
+          automaticActivityDetection: {
+            silenceDurationMs: 3000
+          }
         },
       },
     };

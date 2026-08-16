@@ -110,6 +110,14 @@ export default function TourGuideTextTranslateForm() {
             <Home size={14} />
             Home
           </Link>
+          <a
+            href="https://asiabuddy.app/contact"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-xs bg-[#C9A84C] text-[#0D0D0D] px-3 py-1.5 rounded-md hover:bg-[#b8942f] transition-colors font-medium"
+          >
+            Top Up Here
+          </a>
           <button
             onClick={handleLogout}
             className="flex items-center gap-1.5 text-xs text-[#F5F0E8] opacity-70 hover:opacity-100 transition-opacity"
