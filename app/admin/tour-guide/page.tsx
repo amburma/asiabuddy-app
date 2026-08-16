@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { createClient } from '../../../lib/supabase/client';
-import { LogOut, UserPlus } from 'lucide-react';
+import { LogOut, UserPlus, Trash2, Plus, RotateCcw, Ban } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,6 +41,17 @@ export default function TourGuideAccountPage() {
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  // Accounts list state
+  const [accounts, setAccounts] = useState<any[]>([]);
+  const [accountsLoading, setAccountsLoading] = useState(true);
+  const [accountsError, setAccountsError] = useState('');
+  
+  // Top-up modal state
+  const [topUpAccountId, setTopUpAccountId] = useState<string | null>(null);
+  const [topUpHours, setTopUpHours] = useState('');
+  const [topUpError, setTopUpError] = useState('');
+  const [topUpSubmitting, setTopUpSubmitting] = useState(false);
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }: any) => {
@@ -84,6 +95,134 @@ export default function TourGuideAccountPage() {
     await supabase.auth.signOut();
     setUser(null);
     setIsLoggedIn(false);
+  };
+
+  const fetchAccounts = async () => {
+    setAccountsLoading(true);
+    setAccountsError('');
+    try {
+      const response = await fetch('/api/admin/tour-guide/accounts');
+      const data = await response.json();
+      
+      if (!response.ok) {
+        setAccountsError(data.error || 'Failed to fetch accounts');
+      } else {
+        setAccounts(data.data || []);
+      }
+    } catch (err: any) {
+      setAccountsError('An error occurred while fetching accounts');
+    } finally {
+      setAccountsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchAccounts();
+    }
+  }, [isLoggedIn]);
+
+  const handleTerminate = async (accountId: string) => {
+    if (!confirm('Are you sure you want to terminate this account? This will disable it from further use.')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/admin/tour-guide/accounts/${accountId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'terminate' }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        alert(data.error || 'Failed to terminate account');
+      } else {
+        fetchAccounts(); // Refresh the list
+      }
+    } catch (err) {
+      alert('An error occurred while terminating the account');
+    }
+  };
+
+  const handleReactivate = async (accountId: string) => {
+    try {
+      const response = await fetch(`/api/admin/tour-guide/accounts/${accountId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'reactivate' }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        alert(data.error || 'Failed to reactivate account');
+      } else {
+        fetchAccounts(); // Refresh the list
+      }
+    } catch (err) {
+      alert('An error occurred while reactivating the account');
+    }
+  };
+
+  const handleTopUp = async () => {
+    if (!topUpAccountId) return;
+
+    const hours = parseFloat(topUpHours);
+    if (isNaN(hours) || hours <= 0) {
+      setTopUpError('Please enter a valid positive number of hours');
+      return;
+    }
+
+    setTopUpError('');
+    setTopUpSubmitting(true);
+
+    try {
+      const response = await fetch(`/api/admin/tour-guide/accounts/${topUpAccountId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'topup', hours }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        setTopUpError(data.error || 'Failed to top up account');
+      } else {
+        setTopUpAccountId(null);
+        setTopUpHours('');
+        fetchAccounts(); // Refresh the list
+      }
+    } catch (err) {
+      setTopUpError('An error occurred while topping up the account');
+    } finally {
+      setTopUpSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (accountId: string, isPackageTier: boolean) => {
+    let confirmMessage = 'Are you sure you want to delete this account? This is permanent and cannot be undone.';
+    
+    if (isPackageTier) {
+      confirmMessage += ' This is a package-tier account linked to a booking.';
+    }
+
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/admin/tour-guide/accounts/${accountId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        alert(data.error || 'Failed to delete account');
+      } else {
+        fetchAccounts(); // Refresh the list
+      }
+    } catch (err) {
+      alert('An error occurred while deleting the account');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -352,6 +491,144 @@ export default function TourGuideAccountPage() {
             </button>
           </form>
         </div>
+
+        {/* Accounts List Section */}
+        <div className="bg-white rounded-2xl shadow-sm p-8 mt-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-6">Tour Guide Accounts</h2>
+
+          {accountsLoading && (
+            <div className="text-gray-500 text-sm">Loading accounts...</div>
+          )}
+
+          {accountsError && (
+            <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+              {accountsError}
+            </div>
+          )}
+
+          {!accountsLoading && !accountsError && accounts.length === 0 && (
+            <div className="text-gray-500 text-sm">No accounts found</div>
+          )}
+
+          {!accountsLoading && !accountsError && accounts.length > 0 && (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-3 px-2 font-bold text-gray-600 uppercase tracking-wider text-xs">Username</th>
+                    <th className="text-left py-3 px-2 font-bold text-gray-600 uppercase tracking-wider text-xs">Source</th>
+                    <th className="text-left py-3 px-2 font-bold text-gray-600 uppercase tracking-wider text-xs">Status</th>
+                    <th className="text-left py-3 px-2 font-bold text-gray-600 uppercase tracking-wider text-xs">Hours Allocated</th>
+                    <th className="text-left py-3 px-2 font-bold text-gray-600 uppercase tracking-wider text-xs">Hours Consumed</th>
+                    <th className="text-left py-3 px-2 font-bold text-gray-600 uppercase tracking-wider text-xs">Created At</th>
+                    <th className="text-left py-3 px-2 font-bold text-gray-600 uppercase tracking-wider text-xs">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {accounts.map((account) => (
+                    <tr key={account.id} className="border-b border-gray-100">
+                      <td className="py-3 px-2 text-gray-800">{account.username}</td>
+                      <td className="py-3 px-2 text-gray-600 capitalize">{account.source}</td>
+                      <td className="py-3 px-2">
+                        <span className={`inline-block px-2 py-1 rounded-full text-xs font-medium ${
+                          account.status === 'active' ? 'bg-emerald-100 text-emerald-700' :
+                          account.status === 'capped' ? 'bg-amber-100 text-amber-700' :
+                          'bg-gray-100 text-gray-700'
+                        }`}>
+                          {account.status}
+                        </span>
+                      </td>
+                      <td className="py-3 px-2 text-gray-800">{account.total_hours_allocated}</td>
+                      <td className="py-3 px-2 text-gray-600">{account.hours_consumed || 0}</td>
+                      <td className="py-3 px-2 text-gray-500">
+                        {new Date(account.created_at).toLocaleDateString()}
+                      </td>
+                      <td className="py-3 px-2">
+                        <div className="flex gap-2">
+                          {account.status === 'active' || account.status === 'capped' ? (
+                            <button
+                              onClick={() => handleTerminate(account.id)}
+                              className="flex items-center gap-1 text-xs text-red-500 hover:text-red-700 font-medium"
+                            >
+                              <Ban size={12} /> Terminate
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => handleReactivate(account.id)}
+                              className="flex items-center gap-1 text-xs text-emerald-500 hover:text-emerald-700 font-medium"
+                            >
+                              <RotateCcw size={12} /> Reactivate
+                            </button>
+                          )}
+                          <button
+                            onClick={() => setTopUpAccountId(account.id)}
+                            className="flex items-center gap-1 text-xs text-blue-500 hover:text-blue-700 font-medium"
+                          >
+                            <Plus size={12} /> Top Up
+                          </button>
+                          <button
+                            onClick={() => handleDelete(account.id, !!account.booking_id)}
+                            className="flex items-center gap-1 text-xs text-red-500 hover:text-red-700 font-medium"
+                          >
+                            <Trash2 size={12} /> Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+
+        {/* Top Up Modal */}
+        {topUpAccountId && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-md">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">Top Up Account</h3>
+              
+              {topUpError && (
+                <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
+                  {topUpError}
+                </div>
+              )}
+
+              <Field label="Hours to Add">
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0.01"
+                  value={topUpHours}
+                  onChange={e => setTopUpHours(e.target.value)}
+                  placeholder="Enter hours"
+                  className={inputCls}
+                  required
+                />
+              </Field>
+
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={() => {
+                    setTopUpAccountId(null);
+                    setTopUpHours('');
+                    setTopUpError('');
+                  }}
+                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 rounded-xl text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleTopUp}
+                  disabled={topUpSubmitting}
+                  className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl text-sm disabled:opacity-50"
+                >
+                  {topUpSubmitting ? 'Adding...' : 'Add Hours'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { verifySessionToken } from '@/lib/tour-guide/auth'
 import { supabaseAdmin } from '@/lib/tour-guide/supabaseAdmin'
 import { getAccountStatus } from '@/lib/tour-guide/costGateService'
-import { FileText, Camera, Mic, Headphones } from 'lucide-react'
+import { FileText, Camera, Mic, Headphones, Home } from 'lucide-react'
 import LogoutButton from '@/components/tour-guide/LogoutButton'
 
 export default async function TourGuideDashboard() {
@@ -59,6 +59,14 @@ export default async function TourGuideDashboard() {
             <p className="text-sm text-[#C9A84C]">{account.username} • {account.source}</p>
           </div>
           <div className="flex items-center gap-4">
+            <Link
+              href="/thailand"
+              className="flex items-center gap-1.5 text-xs text-[#F5F0E8] opacity-70 hover:opacity-100 transition-opacity"
+              title="Home"
+            >
+              <Home size={14} />
+              Home
+            </Link>
             <div className="text-right">
               <p className="text-xs text-[#F5F0E8] opacity-70">Remaining</p>
               <p className="text-sm font-medium text-[#C9A84C]">{balanceDisplay}</p>
