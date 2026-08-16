@@ -32,7 +32,7 @@ export default async function TourGuideVoicePage() {
   }
 
   // Trial accounts only ever get Live Translator (featureGateService.ts —
-  // TRIAL_ALLOWED_FEATURES = ['live']). The API route would 403 this
+  // TRIAL_ALLOWED_FEATURES = ['live-translate']). The API route would 403 this
   // anyway, but bounce them before they even see the form, for a cleaner
   // UX than "submit and get an error".
   if (account.source === 'trial') {

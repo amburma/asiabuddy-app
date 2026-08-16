@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
-import { Clock, DollarSign, ArrowLeft, Play, CheckCircle2 } from 'lucide-react'
+import { Clock, ArrowLeft, Play, CheckCircle2 } from 'lucide-react'
 import BookNowClient from './BookNowClient'
 import { ThaiLanguage } from '../../../../types/country'
 import { translateText } from '../../../../lib/translate'
@@ -249,11 +249,6 @@ export default async function TourDetailPage({
             {t.duration_days && (
               <span className="bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1">
                 <Clock size={10} /> {t.duration_days} Days
-              </span>
-            )}
-            {t.price_from && (
-              <span className="bg-gold-deep text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1">
-                <DollarSign size={10} /> USD {t.price_from}
               </span>
             )}
           </div>

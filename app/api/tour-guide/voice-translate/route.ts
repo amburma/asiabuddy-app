@@ -22,7 +22,7 @@ const voiceQASchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     // Cost Gate + Feature Gate. Trial accounts never get past this for
-    // feature='voice-translate' (featureGateService.ts restricts trial to 'live' only).
+    // feature='voice-translate' (featureGateService.ts restricts trial to 'live-translate' only).
     const gate = await gateFeatureRequestFromReq(req, 'voice-translate');
     if (!gate.ok) return gate.response;
     const { accountId } = gate;

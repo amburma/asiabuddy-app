@@ -537,3 +537,68 @@ distinguishing them, which reads as a contradiction. Clarified:
 written yet.** This section documents the agreed architecture and
 pricing approach so the next session can start implementation directly
 without re-litigating these decisions.
+
+---
+
+## Step 5.2 — Package Account E2E Test: ✅ COMPLETE (15 Aug 2026)
+
+### Test execution via pkgtest2 account
+
+**Account setup:** pkgtest2 account recreated with proper bcrypt hash after discovery of plaintext password placeholder from manual SQL insertion.
+
+**Test sequence:**
+1. ✅ Login: `/api/tour-guide/login` with username=pkgtest2, password=YourTestPassword123
+2. ✅ Dashboard: Loaded correctly showing 25.00h/25h allocation
+3. ✅ Text translation: Feature call successful, returned translation result
+4. ✅ Usage logging verified:
+   - `tour_guide_usage.hours_consumed`: 0 (no window rollover yet)
+   - `tour_guide_usage.current_window_cost_usd`: 0 (minimal usage)
+   - `tour_guide_usage.feature_breakdown`: `{ "text": 0.0000485 }` (cost recorded)
+   - `tour_guide_usage_log`: New row with feature='text', cost_usd=0.000049
+
+**Column precision investigation:** `total_cost_usd` field is `numeric(8,4)`, so small costs like $0.000049 round to 0.0000 in display. This is expected behavior, not a bug — the full precision is maintained in `feature_breakdown` JSONB.
+
+**Test account details:**
+- Username: pkgtest2
+- Password: YourTestPassword123  
+- Hours allocated: 25
+- Account ID: a7a8141f-da4c-428d-98c1-e92455c7b5fa
+- Status: Active and ready for further testing
+
+### Next: OCR feature testing
+
+Proceeding with OCR feature using the same proven pattern (login → action → check result → verify DB rows).
+
+---
+
+## HIGH-PRIORITY BACKLOG ITEM — Hours Window Rollover Billing Flaw (15 Aug 2026)
+
+### Issue confirmed via database investigation
+
+**Finding:** pkgtest account shows `hours_consumed = 1` with only `$0.1331` actual usage cost (6% of the $2.20 window cap). The dashboard displays `0.00h/1h` because `hours_consumed` increments purely from 60-minute wall-clock elapsed time since `current_window_start_at`, regardless of actual usage cost in that window.
+
+**Root cause:** The current billing design treats every 60-minute window as a full "hour" consumed from the allocation, even if the customer's actual API usage cost during that window is negligible (e.g., one small translation request then idle time).
+
+**Business impact:** This is not just a test artifact — it's a real billing design flaw affecting all package/hourly accounts. A customer who makes one small request then goes idle for over an hour loses a full 'hour' of their paid allocation for near-zero actual API cost.
+
+### Proposed solutions (requires product decision)
+
+**Option A — Threshold-based rollover:** Only increment `hours_consumed` when `current_window_cost_usd` reaches a meaningful threshold (e.g., ≥ 50% of the hourly rate cap) before allowing window rollover. This prevents allocating full hours for minimal usage.
+
+**Option B — Inactivity-based window reset:** Instead of hard-rolling over at 60 minutes regardless of usage, reset or extend the window on inactivity (e.g., if no API calls for X minutes, pause the window timer; resume on next call). This treats the allocation as actual usage time, not wall-clock time.
+
+**Option C — Mixed approach:** Combine both — require a minimum usage threshold AND implement inactivity pausing for fair allocation.
+
+### Current state
+
+- **Status:** BLOCKED — requires product decision on intended billing behavior before code changes
+- **Priority:** HIGH — directly affects customer billing fairness for all package/hourly accounts
+- **Evidence:** pkgtest account: `hours_consumed=1`, `total_cost_usd=0.1331`, `current_window_cost_usd=0`, status=`capped`
+- **Affected accounts:** All package and purchased tier accounts (trial accounts use separate `tour_guide_trial_usage` with 120s wall-clock cap, which is intentional)
+
+### Next steps
+
+1. Product decision: Choose between Option A, B, C, or accept current wall-clock rollover behavior as intended
+2. If change approved: Update `increment_tour_guide_usage()` function in migration `20260815_fix_ambiguous_hours_consumed.sql` to implement chosen logic
+3. Update dashboard display logic in `app/tourguide/dashboard/page.tsx` if billing model changes
+4. Test with pkgtest account to verify new behavior before production deployment

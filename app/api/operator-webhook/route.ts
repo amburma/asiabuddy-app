@@ -1,8 +1,9 @@
 import { Bot, InputFile } from 'grammy';
-import { getBooking, updateBookingStatus, getChatHistory } from '../../../lib/database';
+import { getBooking, updateBookingStatus, updateBooking, getChatHistory } from '../../../lib/database';
 import { generateAndUploadInvoicePDF } from '../../../lib/pdfGenerator';
 import { sendInvoiceEmail } from '../../../lib/emailService';
 import { getSupabaseAdmin, getSupabase } from '../../../lib/supabase';
+import { createTourGuideAccountForBooking } from '../../../lib/tour-guide/accountCreation';
 
 let operatorBot: Bot | null = null;
 let customerBot: Bot | null = null;
@@ -75,6 +76,55 @@ function getOperatorBot(): Bot {
         console.log("BOOKING SOURCE:", booking.source, "BOOKING DATA:", JSON.stringify(booking));
         console.log("BOOKING SOURCE CHECK:", booking.source);
         console.log("BOOKING EMAIL CHECK:", booking.customer_email);
+
+        // For tour bookings, ask for tour_days before confirming
+        if (booking.tour_type === 'tour') {
+          console.log("[APPROVE] Tour booking detected - requesting tour_days input");
+          
+          // Check for concurrency risk: ensure no other booking is already pending for this operator chat
+          const supabase = getSupabase();
+          const { data: existingPending, error: checkError } = await supabase
+            .from('bookings')
+            .select('id, customer_name')
+            .eq('pending_tour_days_approval', true)
+            .eq('details->>operator_chat_id', String(ctx.chat?.id))
+            .limit(1);
+          
+          if (checkError) {
+            console.error('[APPROVE] Error checking existing pending approvals:', checkError);
+            await ctx.answerCallbackQuery({ text: '❌ Error checking pending approvals.' });
+            return;
+          }
+          
+          if (existingPending && existingPending.length > 0) {
+            const existingBooking = existingPending[0];
+            console.log('[APPROVE] Concurrency check failed - existing pending approval for booking:', existingBooking.id);
+            await ctx.answerCallbackQuery({ 
+              text: `⚠️ Another tour booking (${existingBooking.customer_name || existingBooking.id.slice(-8)}) is already awaiting tour_days input. Please complete that first.`,
+              show_alert: true 
+            });
+            return;
+          }
+          
+          await ctx.editMessageText(
+            (ctx.msg?.text ?? '') + '\n\n⏳ <b>Tour booking detected.</b>\n\nPlease reply with the number of tour days (e.g., "3" for 3 days) to confirm this booking.',
+            { parse_mode: 'HTML' }
+          );
+          
+          // Set pending approval flag in database for persistent state
+          // Store operator chat ID in details to match incoming messages
+          const updatedDetails = {
+            ...booking.details,
+            operator_chat_id: ctx.chat?.id,
+            pending_tour_days_booking_id: bookingId
+          };
+          await updateBooking(bookingId, { 
+            pending_tour_days_approval: true,
+            details: updatedDetails
+          });
+          console.log("[APPROVE] Set pending_tour_days_approval flag for booking:", bookingId);
+          return;
+        }
 
         console.log("[APPROVE] Updating booking status to confirmed...");
         const t3 = Date.now();
@@ -310,6 +360,151 @@ function getOperatorBot(): Bot {
 
       } catch (err) {
         console.error('Rejection error:', err);
+      }
+    });
+
+    // Handle tour_days input for pending tour booking approvals
+    operatorBot.on('message:text', async (ctx) => {
+      const text = ctx.message.text.trim();
+      const chatId = ctx.chat.id;
+      
+      // Query database for pending tour_days approvals from this operator chat
+      // Use order by updated_at DESC to get the most recent pending approval
+      const supabase = getSupabase();
+      const { data: pendingBookings, error: queryError } = await supabase
+        .from('bookings')
+        .select('*')
+        .eq('pending_tour_days_approval', true)
+        .eq('details->>operator_chat_id', String(chatId))
+        .order('updated_at', { ascending: false })
+        .limit(1);
+      
+      if (queryError) {
+        console.error('[TOUR_DAYS] Error querying pending approvals:', queryError);
+        return;
+      }
+      
+      if (!pendingBookings || pendingBookings.length === 0) {
+        return; // No pending approvals for this chat
+      }
+      
+      const booking = pendingBookings[0];
+      const bookingId = booking.id;
+      console.log(`[TOUR_DAYS] Found pending booking: ${bookingId} (${booking.customer_name}) for chat: ${chatId}`);
+      
+      // Parse the number of tour days
+      const tourDays = parseInt(text, 10);
+      if (isNaN(tourDays) || tourDays <= 0) {
+        await ctx.reply('❌ Invalid input. Please enter a positive number for tour days (e.g., "3").');
+        return;
+      }
+      
+      console.log(`[TOUR_DAYS] Received tour_days: ${tourDays} for booking: ${bookingId}`);
+      
+      try {
+        // Update booking with tour_days, status, and clear pending flag
+        await updateBooking(bookingId, {
+          status: 'confirmed',
+          tour_days: tourDays,
+          pending_tour_days_approval: false
+        });
+        
+        console.log(`[TOUR_DAYS] Booking updated with tour_days: ${tourDays}, status: confirmed`);
+        
+        // Auto-create Tour Guide account for package-tier bookings
+        try {
+          const accountResult = await createTourGuideAccountForBooking(
+            bookingId,
+            tourDays,
+            {
+              customer_name: booking.customer_name,
+              customer_phone: booking.customer_phone,
+              customer_email: booking.customer_email,
+            }
+          );
+          
+          if (accountResult.success) {
+            console.log(`[TOUR_DAYS] Auto-created Tour Guide account ${accountResult.accountId} for booking ${bookingId}`);
+            if (accountResult.username && accountResult.password) {
+              console.log(`[TOUR_DAYS] Account credentials - Username: ${accountResult.username}, Password: ${accountResult.password}`);
+            }
+          } else {
+            console.error(`[TOUR_DAYS] Failed to auto-create Tour Guide account for booking ${bookingId}:`, accountResult.error);
+            // Log error but don't block the booking confirmation - admin can create manually as fallback
+          }
+        } catch (accountError) {
+          console.error(`[TOUR_DAYS] Exception creating Tour Guide account for booking ${bookingId}:`, accountError);
+          // Log error but don't block the booking confirmation
+        }
+        
+        // Continue with the rest of the approval flow
+        console.log("[APPROVE] Generating and uploading invoice PDF...");
+        const { buffer, driveUrl } = await generateAndUploadInvoicePDF(booking);
+        console.log("[APPROVE] PDF generated and uploaded - URL:", driveUrl);
+        
+        console.log("[APPROVE] Inserting invoice into Supabase...");
+        const supabaseAdmin = getSupabaseAdmin();
+        await supabaseAdmin
+          .from('invoices')
+          .insert({
+            booking_id: bookingId,
+            amount: 0,
+            status: 'unpaid',
+            pdf_url: driveUrl || null
+          });
+        console.log("[APPROVE] Invoice inserted into Supabase");
+        
+        // Track if this is a web booking with email for sending after ops handover
+        const isWebWithEmail = booking.source === 'web' && booking.customer_email;
+        
+        // Send confirmation to operator chat
+        if (isWebWithEmail) {
+          await ctx.reply(`✅ Booking ...${bookingId.slice(-8)} approved with ${tourDays} tour days. Invoice sent via email to ${booking.customer_email}.`);
+          console.log(`Booking ${bookingId} approved with ${tourDays} tour days. Invoice sent via email to ${booking.customer_email}`);
+        } else if (booking.source === 'web' && !booking.customer_email) {
+          const socialHandles = booking.details?.socials?.[0] || 'Not provided';
+          const alertMessage =
+            `⚠️ <b>No email provided. Manually contact customer:</b>\n\n` +
+            `👤 <b>Name:</b> ${booking.customer_name || 'N/A'}\n` +
+            `📞 <b>Phone:</b> ${booking.customer_phone || 'N/A'}\n` +
+            `💬 <b>Social:</b> ${socialHandles}\n` +
+            `🆔 <b>Booking ID:</b> ...${bookingId.slice(-8)}\n` +
+            `📅 <b>Tour Days:</b> ${tourDays}`;
+
+          const targetChatId = await getTargetChatId(booking.salesperson_id);
+          await sendMessageWithMigrationRetry(
+            getOperatorBot(),
+            targetChatId,
+            alertMessage,
+            { parse_mode: 'HTML' }
+          );
+
+          await ctx.reply(`✅ Booking ...${bookingId.slice(-8)} approved with ${tourDays} tour days. No email. Manual contact alert sent.`);
+          console.log(`Booking ${bookingId} approved with ${tourDays} tour days. No email provided. Manual contact alert sent.`);
+        } else if (booking.telegram_id) {
+          await getCustomerBot().api.sendDocument(
+            booking.telegram_id,
+            new InputFile(buffer, `invoice_${bookingId.slice(-8)}.pdf`),
+            {
+              caption:
+                `✅ Booking confirmed!\n` +
+                `📋 ID: ...${bookingId.slice(-8)}\n` +
+                `📅 Tour Days: ${tourDays}\n\n` +
+                `Thank you for choosing AsiaBuddy! 🌟`,
+            }
+          );
+
+          await ctx.reply(`✅ Booking ...${bookingId.slice(-8)} approved with ${tourDays} tour days. Invoice sent to customer.`);
+          console.log(`Booking ${bookingId} approved with ${tourDays} tour days. Invoice sent to ${booking.telegram_id}`);
+        } else {
+          await ctx.reply(`✅ Booking ...${bookingId.slice(-8)} approved with ${tourDays} tour days. No contact method available.`);
+        }
+        
+      } catch (error) {
+        console.error('[TOUR_DAYS] Error processing tour_days:', error);
+        await ctx.reply('❌ Error processing tour days. Please try again.');
+        // Clear pending flag on error to allow retry
+        await updateBooking(bookingId, { pending_tour_days_approval: false });
       }
     });
   }

@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/tour-guide/supabaseAdmin';
 import { hashPassword } from '@/lib/tour-guide/auth';
+import { createTourGuideAccountForBooking } from '@/lib/tour-guide/accountCreation';
 
 // Validation schemas for different sources
 const packageSchema = z.object({

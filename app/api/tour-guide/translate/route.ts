@@ -13,7 +13,7 @@ const translateSchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     // Cost Gate + Feature Gate. Trial accounts never get past this for
-    // feature='text' (featureGateService.ts restricts trial to 'live'
+    // feature='text' (featureGateService.ts restricts trial to 'live-translate'
     // only) — so this route never needs to touch recordTrialUsage(), only
     // the package/purchased path (recordUsage()) below.
     const gate = await gateFeatureRequestFromReq(req, 'text');

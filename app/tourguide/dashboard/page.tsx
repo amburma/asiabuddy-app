@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { verifySessionToken } from '@/lib/tour-guide/auth'
 import { supabaseAdmin } from '@/lib/tour-guide/supabaseAdmin'
+import { getAccountStatus } from '@/lib/tour-guide/costGateService'
 import { LogOut, FileText, Camera, Mic, Headphones } from 'lucide-react'
 
 export default async function TourGuideDashboard() {
@@ -29,46 +30,22 @@ export default async function TourGuideDashboard() {
     redirect('/tourguide')
   }
 
-  // Rate constants must stay in sync with increment_tour_guide_usage() in migration 20260814 — if that function's rates change, update here too.
-  const RATES = {
-    package: 0.15,
-    purchased: 1.5,
-  }
-
+  const status = await getAccountStatus(account.id)
   let balanceDisplay: string
-  let isTrial = account.source === 'trial'
-
-  if (isTrial) {
-    // For trial: query tour_guide_trial_usage
-    const { data: trialUsage } = await supabaseAdmin
-      .from('tour_guide_trial_usage')
-      .select('seconds_used')
-      .eq('account_id', account.id)
-      .single()
-
-    const secondsUsed = trialUsage?.seconds_used || 0
-    const secondsRemaining = 120 - secondsUsed
+  if (status.source === 'trial') {
+    const secondsRemaining = status.trialSecondsRemaining ?? 0
     balanceDisplay = `${secondsRemaining}s / 120s`
   } else {
-    // For package/purchased: query tour_guide_usage
-    const { data: usage } = await supabaseAdmin
-      .from('tour_guide_usage')
-      .select('total_cost_usd')
-      .eq('account_id', account.id)
-      .single()
-
-    const totalCostUsd = usage?.total_cost_usd || 0
-    const rate = RATES[account.source as keyof typeof RATES]
-    const hoursUsed = totalCostUsd / rate
-    const hoursRemaining = account.total_hours_allocated - hoursUsed
-    balanceDisplay = `${hoursRemaining.toFixed(2)}h / ${account.total_hours_allocated}h`
+    balanceDisplay = `${status.remainingHours.toFixed(2)}h / ${account.total_hours_allocated}h`
   }
+
+  let isTrial = account.source === 'trial'
 
   const features = [
     { id: 'text', name: 'Text Translate', icon: FileText, description: 'Translate text between languages' },
     { id: 'photo', name: 'Photo Translate', icon: Camera, description: 'Translate text from images' },
     { id: 'voice', name: 'Voice Translator', icon: Mic, description: 'Record your voice clearly to translate.' },
-    { id: 'live', name: 'Live Translator', icon: Headphones, description: 'Real-time conversation translation' },
+    { id: 'live-translate', name: 'Live Translator', icon: Headphones, description: 'Real-time conversation translation' },
   ]
 
   return (
@@ -102,7 +79,7 @@ export default async function TourGuideDashboard() {
       <main className="max-w-6xl mx-auto p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {features.map((feature) => {
-            const isEnabled = !isTrial || feature.id === 'live'
+            const isEnabled = !isTrial || feature.id === 'live-translate'
             const Icon = feature.icon
 
             const cardContent = (
@@ -156,6 +133,14 @@ export default async function TourGuideDashboard() {
             if (feature.id === 'voice' && isEnabled) {
               return (
                 <Link key={feature.id} href="/tourguide/voice">
+                  {cardContent}
+                </Link>
+              )
+            }
+
+            if (feature.id === 'live-translate' && isEnabled) {
+              return (
+                <Link key={feature.id} href="/tourguide/live">
                   {cardContent}
                 </Link>
               )

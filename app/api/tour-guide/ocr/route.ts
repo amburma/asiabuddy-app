@@ -20,7 +20,7 @@ const ocrSchema = z.object({
 export async function POST(req: NextRequest) {
   try {
     // Cost Gate + Feature Gate. Trial accounts never get past this for
-    // feature='ocr' (featureGateService.ts restricts trial to 'live' only).
+    // feature='ocr' (featureGateService.ts restricts trial to 'live-translate' only).
     const gate = await gateFeatureRequestFromReq(req, 'ocr');
     if (!gate.ok) return gate.response;
     const { accountId } = gate;

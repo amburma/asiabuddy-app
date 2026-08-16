@@ -6,7 +6,7 @@ import type { TourGuideFeature, TourGuideSource } from './costGateService';
  * tools already, so a trial there proves nothing; Live Translator is the
  * actual differentiator and the intended conversion funnel.
  */
-export const TRIAL_ALLOWED_FEATURES: readonly TourGuideFeature[] = ['live'] as const;
+export const TRIAL_ALLOWED_FEATURES: readonly TourGuideFeature[] = ['live-translate'] as const;
 
 export interface FeatureGateResult {
   allowed: boolean;

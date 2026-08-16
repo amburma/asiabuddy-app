@@ -3,11 +3,11 @@ import { redirect } from 'next/navigation'
 import { verifySessionToken } from '@/lib/tour-guide/auth'
 import { supabaseAdmin } from '@/lib/tour-guide/supabaseAdmin'
 import { normalizeLocale } from '@/lib/i18n'
-import TourGuideTextTranslateForm from '@/components/tour-guide/TourGuideTextTranslateForm'
+import TourGuideLiveTranslateForm from '@/components/tour-guide/TourGuideLiveTranslateForm'
 import FloatingContactButtonLoader from '@/components/shared/FloatingContactButtonLoader'
 import FloatingChatButtonLoader from '@/components/shared/FloatingChatButtonLoader'
 
-export default async function TourGuideTextPage() {
+export default async function TourGuideLivePage() {
   const cookieStore = await cookies()
   const language = normalizeLocale(cookieStore.get('NEXT_LOCALE')?.value)
   const sessionCookie = cookieStore.get('tg_session')
@@ -31,18 +31,14 @@ export default async function TourGuideTextPage() {
     redirect('/tourguide')
   }
 
-  // Trial accounts only ever get Live Translator (featureGateService.ts —
-  // TRIAL_ALLOWED_FEATURES = ['live-translate']). The API route would 403 this
-  // anyway, but bounce them before they even see the form, for a cleaner
-  // UX than "submit and get an error".
-  if (account.source === 'trial') {
-    redirect('/tourguide/dashboard')
-  }
+  // Live Translator is available to all account types including trial
+  // (TRIAL_ALLOWED_FEATURES = ['live-translate'] in featureGateService.ts)
+  // No source-based filtering needed here
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] px-6 pt-8 pb-40 md:pb-8">
-      <div className="max-w-2xl mx-auto">
-        <TourGuideTextTranslateForm />
+      <div className="max-w-4xl mx-auto">
+        <TourGuideLiveTranslateForm />
       </div>
       <FloatingContactButtonLoader language={language} />
       <FloatingChatButtonLoader language={language} country="thailand" />

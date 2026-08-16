@@ -28,6 +28,8 @@ export interface Booking {
   customer_email?: string;
   source?: 'telegram' | 'web';
   salesperson_id?: string | null;
+  tour_days?: number | null;
+  pending_tour_days_approval?: boolean;
 }
 
 export interface Invoice {
@@ -390,6 +392,35 @@ export async function updateBookingStatus(
     return data;
   } catch (error) {
     console.error('Unexpected error updating booking status:', error);
+    return null;
+  }
+}
+
+export async function updateBooking(
+  bookingId: string,
+  updates: {
+    status?: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+    tour_days?: number | null;
+    pending_tour_days_approval?: boolean;
+    details?: Record<string, any>;
+  }
+): Promise<Booking | null> {
+  try {
+    const { data, error } = await getSupabase()
+      .from('bookings')
+      .update(updates)
+      .eq('id', bookingId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating booking:', error);
+      return null;
+    }
+
+    return data;
+  } catch (error) {
+    console.error('Unexpected error updating booking:', error);
     return null;
   }
 }

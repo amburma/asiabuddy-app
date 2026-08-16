@@ -1,15 +1,20 @@
 // Kept short and Asia-travel-relevant rather than an exhaustive list —
 // Gemini will happily translate to any language named here regardless.
 export const LANGUAGES = [
-  'Burmese',
   'English',
   'Thai',
-  'Vietnamese',
-  'Chinese (Simplified)',
-  'Japanese',
+  'Burmese',
+  'Chinese (Mandarin)',
+  'Chinese (Cantonese)',
+  'Hindi',
+  'Spanish',
+  'French',
+  'German',
+  'Russian',
   'Korean',
-  'Khmer',
-  'Lao',
-  'Malay',
+  'Japanese',
+  'Arabic',
+  'Vietnamese',
   'Indonesian',
+  'Malay',
 ] as const

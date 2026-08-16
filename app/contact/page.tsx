@@ -56,6 +56,8 @@ const COUNTRY_VALUES = countries.filter(c => c.status === 'live').map(c => c.id)
 export default function ContactPage() {
   const searchParams = useSearchParams();
   const referrerUrl = searchParams.get('ref');
+  const tourSlug = searchParams.get('tour');
+  const source = searchParams.get('source');
   
   const [language, setLanguage] = useState<SupportedLanguage>('EN');
   const [mounted, setMounted] = useState(false);
@@ -66,10 +68,20 @@ export default function ContactPage() {
     email: '',
     phone: '',
     country: 'thailand',
-    serviceType: referrerUrl ? 'tour' : '',
+    serviceType: (referrerUrl || tourSlug) ? 'tour' : '',
     message: '',
     socialApps: [] as string[]
   });
+  
+  // Set initial message when tourSlug is present
+  useEffect(() => {
+    if (tourSlug) {
+      setFormData(prev => ({
+        ...prev,
+        message: `I'm interested in the tour: ${tourSlug}`
+      }));
+    }
+  }, [tourSlug]);
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -113,6 +125,14 @@ export default function ContactPage() {
       // Add referrerUrl to details if present
       if (referrerUrl) {
         payload.referrerUrl = referrerUrl;
+      }
+      
+      // Add tourSlug and source if present
+      if (tourSlug) {
+        payload.tourSlug = tourSlug;
+      }
+      if (source) {
+        payload.source = source;
       }
 
       const response = await fetch('/api/inquiry', {
@@ -367,13 +387,13 @@ export default function ContactPage() {
           </div>
 
           {/* Referrer URL Display */}
-          {referrerUrl && (
+          {(referrerUrl || tourSlug) && (
             <div className="mb-6 p-4 bg-[#C9A84C]/10 border border-[#C9A84C]/30 rounded-lg">
               <p className="text-sm font-semibold text-[#0D0D0D] mb-1">
                 Inquiring about:
               </p>
               <p className="text-sm text-gray-600 break-all">
-                {referrerUrl}
+                {tourSlug ? `Tour: ${tourSlug}` : referrerUrl}
               </p>
             </div>
           )}

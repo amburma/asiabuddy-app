@@ -4,30 +4,12 @@ import { supabaseAdmin } from './supabaseAdmin';
 // Rates
 // ---------------------------------------------------------------------------
 //
-// IMPORTANT: these constants MUST stay in sync with
-// `20260814_redefine_tour_guide_functions.sql`, which hardcodes the same
-// numbers inside `increment_tour_guide_usage()` (verified live, see Progress
-// Log Phase 0 test table). That migration is the source of truth for
-// enforcement.
-//
-// This deliberately does NOT match §1.2 / §4.2 of
-// AsiaBuddy_TourGuide_Project_Plan.md, which says package = $0.2/hr. The
-// Progress Log explicitly overrides the plan doc where they disagree, and
-// the verified DB function uses $0.15. Also note `tour_guide_account_status()`
-// (plan §3.5) still hardcodes $0.2 and was never listed as redefined in the
-// Progress Log — it's stale/inconsistent with the real cap. This service
-// intentionally does NOT call that SQL function; it reads the two base
-// tables directly and computes remaining budget here, using the rates below,
-// so there's exactly one place (this file + the migration) that needs to
-// agree, not three.
-//
-// TODO(before Phase 1 ships): either fix `tour_guide_account_status()` to
-// use these same rates or drop it, so nothing in the codebase still reads
-// the stale $0.2 figure.
-export const TOUR_GUIDE_RATES = {
-  package: 0.15, // $/hour real-cost ceiling, package tier
-  purchased: 1.50, // $/hour real-cost ceiling, purchased tier
-} as const;
+// IMPORTANT: BASE_RATE_USD_PER_HOUR MUST stay in sync with the backend cost
+// basis. This is the single source of truth for all duration<->cost conversion.
+// Update here if the underlying AI model changes.
+export const BASE_RATE_USD_PER_HOUR = 2.20; // Gemini-based backend cost basis. Single source of truth for all duration<->cost conversion. Update here if the underlying AI model changes.
+
+export const WINDOW_MINUTES = 60;
 
 // Gemini 3.5 Live Translate Preview pricing, verified against 
 // https://ai.google.dev/gemini-api/docs/pricing on 2026-08-14.
@@ -46,20 +28,21 @@ export const BUDGET_WARNING_THRESHOLD = 0.8; // 80%, per plan §4.1 step 8 / §4
 
 export type TourGuideSource = 'package' | 'purchased' | 'trial';
 
-// NOTE: 'live' does not use TOUR_GUIDE_RATES — its dollar cost is 
-// computed per-tick via computeLiveTranslatorCostUsd() and passed 
+// NOTE: 'live-translate' does not use BASE_RATE_USD_PER_HOUR — its dollar 
+// cost is computed per-tick via computeLiveTranslatorCostUsd() and passed 
 // directly to recordUsage(). See that function's docstring.
-export type TourGuideFeature = 'text' | 'ocr' | 'voice' | 'voice-translate' | 'live';
+export type TourGuideFeature = 'text' | 'ocr' | 'voice' | 'voice-translate' | 'live-translate';
 
 export interface AccountStatus {
   accountId: string;
   source: TourGuideSource;
   isActive: boolean;
   totalHoursAllocated: number; // not meaningful for 'trial' — see trialSeconds*
-  totalCostUsd: number; // 0 for 'trial'
-  ceilingUsd: number; // 0 for 'trial'
-  remainingUsd: number; // 0 for 'trial'
-  remainingHours: number; // 0 for 'trial' — for "X / Y hours" display, never show $ (plan §1.2)
+  hoursConsumed: number;
+  remainingHours: number; // total_hours_allocated - hoursConsumed
+  currentWindowCostUsd: number;
+  currentWindowStartAt: string | null; // ISO timestamp, null = no window open yet
+  isWindowBlocked: boolean; // true if currentWindowCostUsd >= BASE_RATE_USD_PER_HOUR
   trialSecondsUsed?: number;
   trialSecondsRemaining?: number;
   warning: boolean; // >=80% of budget used, or >=90s for trial
@@ -107,10 +90,11 @@ export async function getAccountStatus(accountId: string): Promise<AccountStatus
       source: 'trial',
       isActive: account.status === 'active' && trialUsage?.status !== 'exhausted',
       totalHoursAllocated: account.total_hours_allocated,
-      totalCostUsd: 0,
-      ceilingUsd: 0,
-      remainingUsd: 0,
+      hoursConsumed: 0,
       remainingHours: 0,
+      currentWindowCostUsd: 0,
+      currentWindowStartAt: null,
+      isWindowBlocked: false,
       trialSecondsUsed: secondsUsed,
       trialSecondsRemaining: remaining,
       warning: secondsUsed >= TRIAL_WARNING_AT_SECONDS,
@@ -119,27 +103,28 @@ export async function getAccountStatus(accountId: string): Promise<AccountStatus
 
   const { data: usage, error: usageErr } = await supabaseAdmin
     .from('tour_guide_usage')
-    .select('total_cost_usd, status')
+    .select('hours_consumed, current_window_start_at, current_window_cost_usd')
     .eq('account_id', accountId)
     .maybeSingle();
   if (usageErr) throw usageErr;
 
   const source = account.source as 'package' | 'purchased';
-  const rate = TOUR_GUIDE_RATES[source];
-  const ceilingUsd = account.total_hours_allocated * rate;
-  const totalCostUsd = usage?.total_cost_usd ?? 0;
-  const remainingUsd = Math.max(0, ceilingUsd - totalCostUsd);
+  const hoursConsumed = usage?.hours_consumed ?? 0;
+  const remainingHours = Math.max(0, account.total_hours_allocated - hoursConsumed);
+  const currentWindowCostUsd = usage?.current_window_cost_usd ?? 0;
+  const isWindowBlocked = currentWindowCostUsd >= BASE_RATE_USD_PER_HOUR;
 
   return {
     accountId,
     source,
-    isActive: account.status === 'active' && usage?.status !== 'capped',
+    isActive: account.status === 'active' && remainingHours > 0 && !isWindowBlocked,
     totalHoursAllocated: account.total_hours_allocated,
-    totalCostUsd,
-    ceilingUsd,
-    remainingUsd,
-    remainingHours: remainingUsd / rate,
-    warning: ceilingUsd > 0 ? totalCostUsd / ceilingUsd >= BUDGET_WARNING_THRESHOLD : false,
+    hoursConsumed,
+    remainingHours,
+    currentWindowCostUsd,
+    currentWindowStartAt: usage?.current_window_start_at ?? null,
+    isWindowBlocked,
+    warning: account.total_hours_allocated > 0 ? hoursConsumed / account.total_hours_allocated >= BUDGET_WARNING_THRESHOLD : false,
   };
 }
 
@@ -166,8 +151,10 @@ export async function assertBudgetAvailable(accountId: string): Promise<AccountS
     if ((status.trialSecondsRemaining ?? 0) <= 0) {
       throw new CostGateError('TRIAL_EXHAUSTED', 'Trial time has been used up');
     }
-  } else if (status.remainingUsd <= 0) {
+  } else if (status.remainingHours <= 0) {
     throw new CostGateError('CAPPED', 'Hours have been used up');
+  } else if (status.isWindowBlocked) {
+    throw new CostGateError('CAPPED', 'Hourly usage limit reached — access will resume when the current hour window rolls over');
   }
 
   return status;
@@ -190,9 +177,11 @@ export function computeLiveTranslatorCostUsd(
 }
 
 export interface UsageRecordResult {
-  success: boolean; // false = DB rejected the deduction, cap would be exceeded
-  totalCostUsd: number;
-  remainingUsd: number;
+  success: boolean;
+  hoursConsumed: number;
+  remainingHours: number;
+  currentWindowCostUsd: number;
+  isWindowBlocked: boolean;
   warning: boolean;
 }
 
@@ -203,43 +192,38 @@ export interface UsageRecordResult {
  * overshoot in the Progress Log). Call AFTER computing the real cost of the
  * external API response (plan §4.1 step 7), or every 5-10s during a Live
  * session (§4.2 step 2).
- *
- * NOTE: the exact result column names below (`success` / `total_cost_usd` /
- * `remaining_usd`) are inferred from the Progress Log's test-result
- * shorthand ("true/1.00/0.50" = success/total/remaining) — the actual body
- * of `20260814_redefine_tour_guide_functions.sql` wasn't among the docs
- * available when this was written. Confirm the real return shape with
- * `select proname, prorettype::regtype from pg_proc where proname =
- * 'increment_tour_guide_usage';` (or just re-view the migration file)
- * before wiring this into a live route, and adjust the destructuring below
- * if the names differ.
  */
 export async function recordUsage(
   accountId: string,
   feature: TourGuideFeature,
-  amountUsd: number
+  amountUsd: number,
+  durationSeconds?: number
 ): Promise<UsageRecordResult> {
   const { data, error } = await supabaseAdmin
     .rpc('increment_tour_guide_usage', {
       p_account_id: accountId,
       p_feature: feature,
       p_amount: amountUsd,
+      p_duration_seconds: durationSeconds ?? null,
     })
     .single();
-
   if (error) throw error;
-
-  const row = data as { success: boolean; new_total_usd: number; remaining_usd: number };
-
-  const status = await getAccountStatus(accountId);
-  const warning =
-    status.ceilingUsd > 0 ? row.new_total_usd / status.ceilingUsd >= BUDGET_WARNING_THRESHOLD : false;
-
+  const row = data as {
+    success: boolean;
+    hours_consumed: number;
+    remaining_hours: number;
+    current_window_cost_usd: number;
+    is_window_blocked: boolean;
+  };
   return {
     success: row.success,
-    totalCostUsd: row.new_total_usd,
-    remainingUsd: row.remaining_usd,
-    warning,
+    hoursConsumed: row.hours_consumed,
+    remainingHours: row.remaining_hours,
+    currentWindowCostUsd: row.current_window_cost_usd,
+    isWindowBlocked: row.is_window_blocked,
+    warning: row.remaining_hours > 0
+      ? row.hours_consumed / (row.hours_consumed + row.remaining_hours) >= BUDGET_WARNING_THRESHOLD
+      : true,
   };
 }
 
