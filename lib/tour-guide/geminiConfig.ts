@@ -14,7 +14,7 @@ export const TOUR_GUIDE_MODELS = {
   textTranslate: 'gemini-3.1-flash-lite',
   ocr: 'gemini-3.1-flash-lite',
   voiceQA: 'gemini-3.1-flash-lite',
-  liveTranslate: 'gemini-3.1-flash-live-preview',
+  liveTranslate: 'gemini-2.5-flash-native-audio-preview-12-2025',
 } as const;
 
 // $ per 1,000,000 tokens — as researched 14 Aug 2026 (see Progress Log).

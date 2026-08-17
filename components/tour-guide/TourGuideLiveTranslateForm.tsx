@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Mic, Loader2, AlertTriangle, Trash2, LogOut, Home, Volume2, Activity, ArrowLeftRight } from 'lucide-react'
 import { GoogleGenAI, Modality } from '@google/genai'
+import { TOUR_GUIDE_MODELS } from '@/lib/tour-guide/geminiConfig'
 
 // Language options for live translation dropdowns
 const TARGET_LANGUAGES = [
@@ -159,6 +160,11 @@ export default function TourGuideLiveTranslateForm() {
   const audioQueueRef = useRef<AudioBufferSourceNode[]>([])
   const playbackStartTimeRef = useRef<number>(0)
   const nextPlaybackTimeRef = useRef<number>(0)
+  
+  // Response latency tracking
+  const userTurnCompleteTimeRef = useRef<number>(0)
+  const firstAudioChunkReceivedRef = useRef<boolean>(false)
+  const userTurnEndTimeCapturedRef = useRef<boolean>(false)
   
   // Usage tracking
   const sessionStartTimeRef = useRef<number>(0)
@@ -351,12 +357,6 @@ export default function TourGuideLiveTranslateForm() {
     // Clear in-progress transcript entry
     inProgressEntryRef.current = null
     
-    // Clear silence timer
-    if (silenceTimerRef.current) {
-      clearTimeout(silenceTimerRef.current)
-      silenceTimerRef.current = null
-    }
-    
     // Reset speaking state
     isSpeakingRef.current = false
     
@@ -369,9 +369,27 @@ export default function TourGuideLiveTranslateForm() {
   }, [])
 
   // Queue audio chunk for gapless playback
-  const queueAudioForPlayback = useCallback((base64Audio: string) => {
+  const queueAudioForPlayback = useCallback(async (base64Audio: string) => {
+    // Check and resume AudioContext if suspended (browsers suspend contexts without user gesture)
+    // Do this at the top of every call, not just after creation
+    if (playbackAudioContextRef.current && playbackAudioContextRef.current.state === 'suspended') {
+      console.log('[STREAMING] AudioContext is suspended, resuming...')
+      await playbackAudioContextRef.current.resume().catch(err => {
+        console.error('[STREAMING] Failed to resume AudioContext:', err)
+      })
+    }
+    
     if (!playbackAudioContextRef.current) {
       playbackAudioContextRef.current = new AudioContext()
+      console.log('[STREAMING] AudioContext state:', playbackAudioContextRef.current.state)
+      
+      // Also check and resume newly created context
+      if (playbackAudioContextRef.current.state === 'suspended') {
+        console.log('[STREAMING] Newly created AudioContext is suspended, resuming...')
+        await playbackAudioContextRef.current.resume().catch(err => {
+          console.error('[STREAMING] Failed to resume newly created AudioContext:', err)
+        })
+      }
     }
     
     try {
@@ -420,6 +438,7 @@ export default function TourGuideLiveTranslateForm() {
       }
     } catch (e) {
       console.error('Error queueing audio for playback:', e)
+      console.error('Full error object:', JSON.stringify(e, null, 2))
     }
   }, [])
 
@@ -453,7 +472,7 @@ export default function TourGuideLiveTranslateForm() {
       console.log('[MOUNT] Establishing Gemini Live API connection with config:', JSON.stringify(config, null, 2))
       
       const session = await ai.live.connect({
-        model: 'gemini-2.5-flash-native-audio-preview-12-2025',
+        model: TOUR_GUIDE_MODELS.liveTranslate,
         config: config,
         callbacks: {
           onopen: () => {
@@ -473,6 +492,14 @@ export default function TourGuideLiveTranslateForm() {
               console.log('[BARGE-IN CHECK] Model started responding - checking if user still sending audio')
               console.log('[BARGE-IN CHECK] PCM buffer size:', pcmBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0), 'samples')
               console.log('[BARGE-IN CHECK] Audio activity level:', audioActivityRef.current)
+              
+              // Capture timestamp for latency measurement (user's turn is complete - model started responding)
+              // Only capture once per turn to avoid resetting on every streamed part
+              if (!userTurnEndTimeCapturedRef.current) {
+                userTurnCompleteTimeRef.current = Date.now()
+                userTurnEndTimeCapturedRef.current = true
+                console.log('[LATENCY] User turn end time captured at', new Date().toISOString())
+              }
             }
             
             if (!message.serverContent) return
@@ -523,9 +550,19 @@ export default function TourGuideLiveTranslateForm() {
                   const base64Audio = part.inlineData.data
                   console.log('[AUDIO RECEIVE] Model audio chunk received at', new Date().toISOString(), '- Queueing for playback')
                   console.log('[AUDIO RECEIVE] Current PCM buffer size:', pcmBufferRef.current.reduce((sum, chunk) => sum + chunk.length, 0), 'samples')
+                  
+                  // Calculate and log response latency on first audio chunk
+                  if (!firstAudioChunkReceivedRef.current && userTurnCompleteTimeRef.current > 0) {
+                    const elapsedMs = Date.now() - userTurnCompleteTimeRef.current
+                    console.log('[LATENCY] Time from user turn-complete to first audio chunk:', elapsedMs, 'ms')
+                    firstAudioChunkReceivedRef.current = true
+                  }
+                  
                   // Clear "Translating..." indicator when first audio chunk arrives
                   setIsTranslating(false)
-                  queueAudioForPlayback(base64Audio)
+                  queueAudioForPlayback(base64Audio).catch(err => {
+                    console.error('[STREAMING] Error in queueAudioForPlayback:', err)
+                  })
                 }
               }
             }
@@ -535,6 +572,11 @@ export default function TourGuideLiveTranslateForm() {
               console.log('[TURN COMPLETE] Turn completed at', new Date().toISOString())
               console.log('[TURN COMPLETE] Final source text:', inProgressEntryRef.current?.sourceText)
               console.log('[TURN COMPLETE] Final translated text:', inProgressEntryRef.current?.translatedText)
+              
+              // Reset latency tracking flags for next turn
+              userTurnEndTimeCapturedRef.current = false
+              firstAudioChunkReceivedRef.current = false
+              
               if (inProgressEntryRef.current && 
                   (inProgressEntryRef.current.sourceText || inProgressEntryRef.current.translatedText)) {
                 // Add finalized entry to transcript array
@@ -864,12 +906,6 @@ export default function TourGuideLiveTranslateForm() {
     
     // Clear in-progress transcript entry
     inProgressEntryRef.current = null
-    
-    // Clear silence timer
-    if (silenceTimerRef.current) {
-      clearTimeout(silenceTimerRef.current)
-      silenceTimerRef.current = null
-    }
     
     // Reset speaking state
     isSpeakingRef.current = false

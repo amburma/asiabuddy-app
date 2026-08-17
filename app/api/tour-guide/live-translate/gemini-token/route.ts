@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenAI, Modality } from '@google/genai';
 import { resolveAccountFromRequest } from '@/lib/tour-guide/auth';
 import { assertBudgetAvailable } from '@/lib/tour-guide/costGateService';
+import { TOUR_GUIDE_MODELS } from '@/lib/tour-guide/geminiConfig';
 
 // Gemini ephemeral token lifetime: 30 minutes for message sending
 // 1 minute for starting new sessions (default per Gemini docs)
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest) {
     // This model natively supports VAD-based turn detection via automaticActivityDetection
     
     const liveConnectConfig = {
-      model: 'gemini-2.5-flash-native-audio-preview-12-2025',
+      model: TOUR_GUIDE_MODELS.liveTranslate,
       config: {
         responseModalities: [Modality.AUDIO],
         inputAudioTranscription: {},
@@ -63,7 +64,7 @@ export async function POST(req: NextRequest) {
         },
         realtimeInputConfig: {
           automaticActivityDetection: {
-            silenceDurationMs: 3000
+            silenceDurationMs: 2000
           }
         },
       },
