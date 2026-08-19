@@ -60,7 +60,10 @@ export class CostGateError extends Error {
 
 /**
  * Reads current account + usage rows and computes remaining budget.
- * Pure read — does not enforce or deduct anything.
+ * For trial accounts: pure read — does not enforce or deduct anything.
+ * For package/purchased accounts: calls tour_guide_settle_window() to perform
+ * rolling 60-minute window rollover before reading the usage row, then returns
+ * the settled status. This is not a pure read for non-trial accounts.
  */
 export async function getAccountStatus(accountId: string): Promise<AccountStatus> {
   const { data: account, error: accErr } = await supabaseAdmin
@@ -100,6 +103,12 @@ export async function getAccountStatus(accountId: string): Promise<AccountStatus
       warning: secondsUsed >= TRIAL_WARNING_AT_SECONDS,
     };
   }
+
+  // Settle rolling window before reading usage for package/purchased accounts
+  const { error: settleErr } = await supabaseAdmin.rpc('tour_guide_settle_window', {
+    p_account_id: accountId,
+  });
+  if (settleErr) throw settleErr;
 
   const { data: usage, error: usageErr } = await supabaseAdmin
     .from('tour_guide_usage')
