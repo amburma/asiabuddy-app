@@ -11,7 +11,7 @@ import { getGeminiClient, computeCostUsd, TOUR_GUIDE_MODELS } from '@/lib/tour-g
 // duration limit (e.g. ~30 seconds for webm/opus at typical bitrates)
 // should be enforced client-side before base64-encoding to avoid opaque
 // Vercel failures.
-const voiceQASchema = z.object({
+const voiceTranslateSchema = z.object({
   audio: z.string().min(1),
   mimeType: z.string().refine((v) => v.startsWith('audio/webm'), {
     message: 'mimeType must be audio/webm or audio/webm;codecs=...',
@@ -28,7 +28,7 @@ export async function POST(req: NextRequest) {
     const { accountId } = gate;
 
     const body = await req.json();
-    const parsed = voiceQASchema.safeParse(body);
+    const parsed = voiceTranslateSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     }
 
     const ai = getGeminiClient();
-    const model = TOUR_GUIDE_MODELS.voiceQA;
+    const model = TOUR_GUIDE_MODELS.voiceTranslate;
 
     const prompt = `Listen to the audio and transcribe exactly what was said internally. Pay close attention to short phrases and compound words — a short utterance is often a complete travel-related question or request (e.g. asking for a location, price, or direction), not separate unrelated words.
 
