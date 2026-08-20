@@ -1014,6 +1014,12 @@ const ENGLISH_UI = {
     "loggingIn": "Logging in...",
     "invalidCredentials": "Invalid username or password",
     "loginError": "Login failed. Please try again."
+  },
+  "tourGuideWelcome": {
+    "welcomeHeading": "Welcome to AsiaBuddy Tour Guide",
+    "welcomeDescription": "AsiaBuddy empowers travelers and tour guides with AI-powered translation tools across 70+ languages, including Live Voice, Photo OCR, and Text translation. Log in above to access your dashboard.",
+    "buyServicesButton": "Buy Translation Services",
+    "backToHomeButton": "Back to Home"
   }
 };
 
@@ -2023,6 +2029,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "loggingIn": "กำลังเข้าสู่ระบบ...",
     "invalidCredentials": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
     "loginError": "เข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่"
+  },
+  "tourGuideWelcome": {
+    "welcomeHeading": "ยินดีต้อนรับสู่ AsiaBuddy Tour Guide",
+    "welcomeDescription": "AsiaBuddy ช่วยเพิ่มศักยภาพให้แก่ผู้เดินทางและมัคคุเทศก์ด้วยเครื่องมือแปลภาษาพลัง AI รองรับมากกว่า 70 ภาษา ครอบคลุมทั้งการแปลเสียงแบบเรียลไทม์ (Live Voice) การแปลข้อความจากภาพ (Photo OCR) และการแปลข้อความ (Text translation) เข้าสู่ระบบด้านบนเพื่อเข้าถึงแดชบอร์ดของคุณ",
+    "buyServicesButton": "Buy Translation Services",
+    "backToHomeButton": "Back to Home"
   }
 },
   MM: {
@@ -3023,6 +3035,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "loggingIn": "ဝင်ရောက်နေသည်...",
     "invalidCredentials": "အသုံးပြုသူအမည် သို့မဟုတ် စကားဝှက် မှားနေပါသည်",
     "loginError": "ဝင်ရောက်မှု မအောင်မြင်ပါ ထပ်မံကြိုးစားပါ"
+  },
+  "tourGuideWelcome": {
+    "welcomeHeading": "AsiaBuddy ခရီးသွားလမ်းညွှန်မှ နွေးထွေးစွာ ကြိုဆိုပါသည်",
+    "welcomeDescription": "AsiaBuddy သည် တိုက်ရိုက်အသံထွက်ဘာသာပြန်စနစ် (Live Voice)၊ ဓာတ်ပုံမှ စာသားဖတ်ယူဘာသာပြန်စနစ် (Photo OCR) နှင့် စာသားဘာသာပြန်စနစ် (Text translation) တို့အပါအဝင် ဘာသာစကား ၇၀ ကျော်အတွက် AI နည်းပညာသုံး ဘာသာပြန်ကိရိယာများဖြင့် ခရီးသွားများနှင့် ခရီးသွားလမ်းညွှန်များ၏ စွမ်းဆောင်ရည်ကို မြှင့်တင်ပေးလျက်ရှိပါသည်။ သင်၏ ဒက်ရှ်ဘုတ် (Dashboard) သို့ ဝင်ရောက်အသုံးပြုရန် အထက်ပါနေရာတွင် လော့ဂ်အင် (Log in) ဝင်ရောက်ပါ။",
+    "buyServicesButton": "Buy Translation Services",
+    "backToHomeButton": "Back to Home"
   }
 },
   ES: {
@@ -4023,6 +4041,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "loggingIn": "Iniciando sesión...",
     "invalidCredentials": "Usuario o contraseña inválidos",
     "loginError": "Error al iniciar sesión. Intente nuevamente."
+  },
+  "tourGuideWelcome": {
+    "welcomeHeading": "Bienvenido a AsiaBuddy Tour Guide",
+    "welcomeDescription": "AsiaBuddy potencia a viajeros y guías turísticos con herramientas de traducción basadas en IA en más de 70 idiomas, que incluyen traducción de voz en vivo (Live Voice), OCR de fotos (Photo OCR) y traducción de texto. Inicie sesión arriba para acceder a su panel de control.",
+    "buyServicesButton": "Buy Translation Services",
+    "backToHomeButton": "Back to Home"
   }
 },
   FR: {
@@ -5023,6 +5047,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "loggingIn": "Connexion...",
     "invalidCredentials": "Nom d'utilisateur ou mot de passe invalide",
     "loginError": "Échec de la connexion. Veuillez réessayer."
+  },
+  "tourGuideWelcome": {
+    "welcomeHeading": "Bienvenue sur AsiaBuddy Tour Guide",
+    "welcomeDescription": "AsiaBuddy dote les voyageurs et les guides touristiques d'outils de traduction optimisés par l'IA dans plus de 70 langues, comprenant la traduction vocale en direct (Live Voice), la reconnaissance de texte sur image (Photo OCR) et la traduction de texte. Connectez-vous ci-dessus pour accéder à votre tableau de bord.",
+    "buyServicesButton": "Buy Translation Services",
+    "backToHomeButton": "Back to Home"
   }
 },
   DE: {
@@ -6023,6 +6053,12 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
     "loggingIn": "Anmelden...",
     "invalidCredentials": "Ungültiger Benutzername oder Passwort",
     "loginError": "Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut."
+  },
+  "tourGuideWelcome": {
+    "welcomeHeading": "Willkommen bei AsiaBuddy Tour Guide",
+    "welcomeDescription": "AsiaBuddy unterstützt Reisende und Reiseleiter mit KI-gestützten Übersetzungstools für über 70 Sprachen, darunter Live-Sprachübersetzung (Live Voice), Texterkennung in Bildern (Photo OCR) und Textübersetzung. Melden Sie sich oben an, um auf Ihr Dashboard zuzugreifen.",
+    "buyServicesButton": "Buy Translation Services",
+    "backToHomeButton": "Back to Home"
   }
 },
 };
