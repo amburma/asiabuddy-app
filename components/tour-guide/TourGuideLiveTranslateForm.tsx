@@ -266,6 +266,8 @@ export default function TourGuideLiveTranslateForm() {
       setWarning(data.accountStatus.warning)
       
       if (data.isExhausted) {
+        // Stop the live WebSocket session immediately when budget is exhausted
+        stopLiveTranslation()
         // Redirect to login page with trial expired parameter for conversion funnel
         router.push('/tourguide/?trial=expired')
         return
