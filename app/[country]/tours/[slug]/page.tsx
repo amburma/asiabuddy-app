@@ -1,6 +1,5 @@
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
 import { createClient } from '../../../../lib/supabase/server'
+import { createPublicClient } from '../../../../lib/supabase/public-server'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -10,6 +9,7 @@ import BookNowClient from './BookNowClient'
 import { ThaiLanguage } from '../../../../types/country'
 import { translateText } from '../../../../lib/translate'
 import { cookies } from 'next/headers'
+import { unstable_cache } from 'next/cache'
 
 // ─── Types ────────────────────────────────────────────────────
 interface Tour {
@@ -87,6 +87,101 @@ export async function generateMetadata({
   }
 }
 
+// ─── Cached Data Fetching Functions ───────────────────────────
+function getCachedTour(slug: string, country: string) {
+  return unstable_cache(
+    async () => {
+      const supabase = createPublicClient()
+      const { data, error } = await supabase
+        .from('tours')
+        .select('*')
+        .eq('slug', slug)
+        .eq('country', country)
+        .single()
+      return { data, error }
+    },
+    [`tour-${slug}-${country}`],
+    { revalidate: 3600, tags: [`tour-${slug}`] }
+  )()
+}
+
+function getCachedItineraries(tourId: string) {
+  return unstable_cache(
+    async () => {
+      const supabase = createPublicClient()
+      const { data } = await supabase
+        .from('itineraries')
+        .select('*, landmarks(image_url, alt_text, name)')
+        .eq('tour_id', tourId)
+        .order('day_number', { ascending: true })
+      return data
+    },
+    [`itinerary-${tourId}`],
+    { revalidate: 3600, tags: [`itinerary-${tourId}`] }
+  )()
+}
+
+function getCachedTranslation(
+  tourId: string,
+  targetLanguage: string,
+  t: Tour,
+  highlights: string[],
+  inclusions: string[],
+  exclusions: string[],
+  itineraries: Itinerary[] | null
+) {
+  return unstable_cache(
+    async () => {
+      const translatedTour = {
+        ...t,
+        title: await translateText(t.title || '', targetLanguage),
+        short_description: await translateText(t.short_description || '', targetLanguage),
+        description: await translateText(t.description || '', targetLanguage),
+      }
+
+      const translatedHighlights = await Promise.all(
+        highlights.map((h: string) => translateText(h, targetLanguage))
+      )
+
+      const translatedInclusions = await Promise.all(
+        inclusions.map((i: string) => translateText(i, targetLanguage))
+      )
+
+      const translatedExclusions = await Promise.all(
+        exclusions.map((e: string) => translateText(e, targetLanguage))
+      )
+
+      let translatedItineraries = itineraries
+      if (itineraries && itineraries.length > 0) {
+        translatedItineraries = await Promise.all(
+          itineraries.map(async (day) => ({
+            ...day,
+            title: await translateText(day.title || '', targetLanguage),
+            content: await translateText(day.content || '', targetLanguage),
+            highlights: await Promise.all(
+              (Array.isArray(day.highlights) ? day.highlights : []).map((h: string) => translateText(h, targetLanguage))
+            ),
+            meals_included: await Promise.all(
+              (Array.isArray(day.meals_included) ? day.meals_included : []).map((m: string) => translateText(m, targetLanguage))
+            ),
+            accommodation: day.accommodation ? await translateText(day.accommodation, targetLanguage) : null,
+          }))
+        )
+      }
+
+      return {
+        translatedTour,
+        translatedHighlights,
+        translatedInclusions,
+        translatedExclusions,
+        translatedItineraries,
+      }
+    },
+    [`translation-${tourId}-${targetLanguage}`],
+    { revalidate: 3600, tags: [`translation-${tourId}-${targetLanguage}`] }
+  )()
+}
+
 // ─── YouTube ID ───────────────────────────────────────────────
 function getYouTubeId(url: string): string | null {
   const match = url.match(
@@ -142,18 +237,13 @@ export default async function TourDetailPage({
   params: Promise<{ country: string; slug: string }>
 }) {
   const { country, slug } = await params
-  const supabase = await createClient()
 
   // Detect user's preferred language from cookie
   const cookieStore = await cookies()
   const targetLanguage = cookieStore.get('NEXT_LOCALE')?.value || 'en'
 
-  const { data: tour, error } = await supabase
-    .from('tours')
-    .select('*')
-    .eq('slug', slug)
-    .eq('country', country)
-    .single()
+  // Fetch tour data with caching
+  const { data: tour, error } = await getCachedTour(slug, country)
 
   if (!tour) notFound()
   if (error) {
@@ -161,12 +251,8 @@ export default async function TourDetailPage({
     notFound()
   }
 
-  // Fetch itineraries with landmark photos ordered by day_number
-  const { data: itineraries } = await supabase
-    .from('itineraries')
-    .select('*, landmarks(image_url, alt_text, name)')
-    .eq('tour_id', tour.id)
-    .order('day_number', { ascending: true })
+  // Fetch itineraries with caching
+  const itineraries = await getCachedItineraries(tour.id)
 
   const t = tour as Tour
   const videoId = t.video_url ? getYouTubeId(t.video_url) : null
@@ -176,7 +262,7 @@ export default async function TourDetailPage({
 
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
 
-  // Translate tour data if needed
+  // Translate tour data if needed with caching
   let translatedTour = t
   let translatedItineraries = itineraries
   let translatedHighlights = highlights
@@ -184,41 +270,20 @@ export default async function TourDetailPage({
   let translatedExclusions = exclusions
 
   if (targetLanguage !== 'en') {
-    translatedTour = {
-      ...t,
-      title: await translateText(t.title || '', targetLanguage),
-      short_description: await translateText(t.short_description || '', targetLanguage),
-      description: await translateText(t.description || '', targetLanguage),
-    }
-
-    translatedHighlights = await Promise.all(
-      highlights.map((h: string) => translateText(h, targetLanguage))
+    const translationResult = await getCachedTranslation(
+      tour.id,
+      targetLanguage,
+      t,
+      highlights,
+      inclusions,
+      exclusions,
+      itineraries
     )
-
-    translatedInclusions = await Promise.all(
-      inclusions.map((i: string) => translateText(i, targetLanguage))
-    )
-
-    translatedExclusions = await Promise.all(
-      exclusions.map((e: string) => translateText(e, targetLanguage))
-    )
-
-    if (itineraries && itineraries.length > 0) {
-      translatedItineraries = await Promise.all(
-        itineraries.map(async (day) => ({
-          ...day,
-          title: await translateText(day.title || '', targetLanguage),
-          content: await translateText(day.content || '', targetLanguage),
-          highlights: await Promise.all(
-            (Array.isArray(day.highlights) ? day.highlights : []).map((h: string) => translateText(h, targetLanguage))
-          ),
-          meals_included: await Promise.all(
-            (Array.isArray(day.meals_included) ? day.meals_included : []).map((m: string) => translateText(m, targetLanguage))
-          ),
-          accommodation: day.accommodation ? await translateText(day.accommodation, targetLanguage) : null,
-        }))
-      )
-    }
+    translatedTour = translationResult.translatedTour
+    translatedHighlights = translationResult.translatedHighlights
+    translatedInclusions = translationResult.translatedInclusions
+    translatedExclusions = translationResult.translatedExclusions
+    translatedItineraries = translationResult.translatedItineraries
   }
 
   return (

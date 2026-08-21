@@ -2,7 +2,6 @@ import { getSupabase } from '../../../lib/supabase'
 import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { translateText } from '../../../lib/translate'
-import ToursComingSoon from '../../../components/shared/ToursComingSoon'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -55,15 +54,6 @@ export default async function ToursPage({
 }: {
   params: Promise<{ country: string }>
 }) {
-  // TEMPORARY BYPASS — set to false to restore the real Tours page.
-  // The full Tours page code below is untouched and fully functional.
-  const TOURS_COMING_SOON = true
-
-  if (TOURS_COMING_SOON) {
-    const { country } = await params
-    return <ToursComingSoon country={country} />
-  }
-
   const { country } = await params
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
 
