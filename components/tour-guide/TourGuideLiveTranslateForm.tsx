@@ -168,6 +168,14 @@ export default function TourGuideLiveTranslateForm() {
   
   // Usage tracking
   const sessionStartTimeRef = useRef<number>(0)
+  // Tracks cumulative seconds already reported/charged to the backend for the
+  // current session, so each report sends only the NEW (delta) seconds since
+  // the last report rather than the full cumulative session duration.
+  // (Fix 2026-08-21: reportUsage() was previously called with the full
+  // cumulative duration on every 10s tick, causing the backend to charge the
+  // running total repeatedly -> quadratic overcharge. See Billing
+  // Architecture v1 Section 11 / Progress Log v9 for full detail.)
+  const lastReportedDurationSecondsRef = useRef<number>(0)
   const usageReportTimerRef = useRef<NodeJS.Timeout | null>(null)
   const [audioActivity, setAudioActivity] = useState(0)
   const audioActivityRef = useRef(0)
@@ -283,14 +291,18 @@ export default function TourGuideLiveTranslateForm() {
   // Shared cleanup function for unexpected session termination
   const performEmergencyCleanup = useCallback(() => {
     // Final usage report before cleanup (fire-and-forget to avoid blocking cleanup)
+    // Sends only the un-reported delta seconds (see lastReportedDurationSecondsRef
+    // comment above) rather than the full cumulative session duration.
     if (sessionStartTimeRef.current > 0) {
-      const duration = (Date.now() - sessionStartTimeRef.current) / 1000
+      const totalElapsedSeconds = (Date.now() - sessionStartTimeRef.current) / 1000
+      const deltaSeconds = totalElapsedSeconds - lastReportedDurationSecondsRef.current
       // Fire-and-forget: don't await to avoid blocking cleanup
       // Use ref to avoid circular dependency
-      reportUsageRef.current?.(duration, true).catch(err => {
+      reportUsageRef.current?.(deltaSeconds, true).catch(err => {
         console.error('Final usage report failed during emergency cleanup:', err)
       })
       sessionStartTimeRef.current = 0
+      lastReportedDurationSecondsRef.current = 0
     }
     
     // Stop all audio playback
@@ -791,11 +803,18 @@ export default function TourGuideLiveTranslateForm() {
       }, 100) // Send every 100ms
       
       sessionStartTimeRef.current = Date.now()
+      lastReportedDurationSecondsRef.current = 0
       
       // Start periodic usage reporting (every 10 seconds)
+      // NOTE: reports the DELTA since the last report, not the cumulative
+      // session duration — the backend adds durationSeconds*rate to a
+      // running total on every call, so sending cumulative duration here
+      // would charge the same seconds repeatedly (fixed 2026-08-21).
       usageReportTimerRef.current = setInterval(() => {
-        const duration = (Date.now() - sessionStartTimeRef.current) / 1000
-        reportUsage(duration)
+        const totalElapsedSeconds = (Date.now() - sessionStartTimeRef.current) / 1000
+        const deltaSeconds = totalElapsedSeconds - lastReportedDurationSecondsRef.current
+        lastReportedDurationSecondsRef.current = totalElapsedSeconds
+        reportUsage(deltaSeconds)
       }, 10000)
       
       // Start session duration warning timer (13 minutes = 780,000 ms)
@@ -900,10 +919,14 @@ export default function TourGuideLiveTranslateForm() {
     }
     
     // Final usage report
+    // Sends only the un-reported delta seconds (see lastReportedDurationSecondsRef
+    // comment above) rather than the full cumulative session duration.
     if (sessionStartTimeRef.current > 0) {
-      const duration = (Date.now() - sessionStartTimeRef.current) / 1000
-      await reportUsage(duration, true)
+      const totalElapsedSeconds = (Date.now() - sessionStartTimeRef.current) / 1000
+      const deltaSeconds = totalElapsedSeconds - lastReportedDurationSecondsRef.current
+      await reportUsage(deltaSeconds, true)
       sessionStartTimeRef.current = 0
+      lastReportedDurationSecondsRef.current = 0
     }
     
     // Clear in-progress transcript entry
