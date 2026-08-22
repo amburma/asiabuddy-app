@@ -83,6 +83,7 @@ export default function GlobalAdminPage() {
   // Tours state
   const [toursItems, setToursItems] = useState<any[]>([]);
   const [showToursForm, setShowToursForm] = useState(true);
+  const [toursTourCode, setToursTourCode] = useState('');
   const [toursTitle, setToursTitle] = useState('');
   const [toursSlug, setToursSlug] = useState('');
   const [toursCountry, setToursCountry] = useState('thailand');
@@ -327,6 +328,7 @@ export default function GlobalAdminPage() {
   };
 
   const resetToursForm = () => {
+    setToursTourCode('');
     setToursTitle('');
     setToursSlug('');
     setToursCountry(selectedCountry);
@@ -422,6 +424,7 @@ export default function GlobalAdminPage() {
     try {
       // Step 2: Save tour to Supabase
       const tourData = {
+        tour_code: toursTourCode.trim() || null,
         title: toursTitle.trim(),
         slug: toursSlug.trim(),
         short_description: toursShortDesc.trim() || null,
@@ -763,6 +766,15 @@ export default function GlobalAdminPage() {
                   </button>
                   {tourSectionOpen.basics && (
                     <div className="space-y-4 bg-white p-5">
+                      <Field label="Tour Code">
+                        <input
+                          value={toursTourCode}
+                          onChange={e => setToursTourCode(e.target.value)}
+                          placeholder="e.g. ABT-TP"
+                          className={inputCls}
+                        />
+                      </Field>
+
                       <Field label="Title *">
                         <input
                           value={toursTitle}
@@ -1202,6 +1214,7 @@ export default function GlobalAdminPage() {
                       <button
                         onClick={async () => {
                           setEditing(item);
+                          setToursTourCode(item.tour_code || '');
                           setToursTitle(item.title || '');
                           setToursSlug(item.slug || '');
                           setToursCountry(item.country || selectedCountry);

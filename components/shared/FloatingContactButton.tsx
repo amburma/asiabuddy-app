@@ -7,6 +7,7 @@ import { SupportedLanguage } from '../../types/country'
 
 export default function FloatingContactButton({ language, country }: { language: string | SupportedLanguage; country?: string }) {
   const [mounted, setMounted] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -36,6 +37,8 @@ export default function FloatingContactButton({ language, country }: { language:
       {/* Main Button */}
       <Link href={`/${country}/contact`}>
         <button
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
           style={{
             position: 'relative',
             width: '64px',
@@ -50,43 +53,44 @@ export default function FloatingContactButton({ language, country }: { language:
             alignItems: 'center',
             justifyContent: 'center',
             transition: 'transform 0.2s ease',
+            transform: isHovered ? 'scale(1.1)' : 'scale(1)',
           }}
-          onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.1)')}
-          onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
           aria-label="Contact AsiaBuddy"
         >
           📩
         </button>
       </Link>
 
-      {/* Badge */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        background: 'white',
-        padding: '4px 10px',
-        borderRadius: '999px',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-        border: '1px solid #fef3c7',
-      }}>
-        <span style={{
-          width: '8px',
-          height: '8px',
-          borderRadius: '50%',
-          background: '#C9A84C',
-          display: 'inline-block',
-        }} />
-        <span style={{
-          fontSize: '10px',
-          fontWeight: '700',
-          color: '#B8943E',
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
+      {/* Badge - only show on hover */}
+      {isHovered && (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          background: 'white',
+          padding: '4px 10px',
+          borderRadius: '999px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          border: '1px solid #fef3c7',
         }}>
-          {badgeText}
-        </span>
-      </div>
+          <span style={{
+            width: '8px',
+            height: '8px',
+            borderRadius: '50%',
+            background: '#C9A84C',
+            display: 'inline-block',
+          }} />
+          <span style={{
+            fontSize: '10px',
+            fontWeight: '700',
+            color: '#B8943E',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+          }}>
+            {badgeText}
+          </span>
+        </div>
+      )}
     </div>
   )
 }

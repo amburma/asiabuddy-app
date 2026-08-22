@@ -14,6 +14,7 @@ import { unstable_cache } from 'next/cache'
 // ─── Types ────────────────────────────────────────────────────
 interface Tour {
   id: string
+  tour_code?: string
   title: string
   slug: string
   short_description: string
@@ -369,6 +370,12 @@ export default async function TourDetailPage({
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-sm border p-6">
               <div className="text-xs font-semibold text-orange-500 tracking-widest uppercase mb-2">OVERVIEW</div>
+              {t.tour_code && (
+                <div className="text-sm text-gray-600 mb-3">
+                  <span className="font-medium">Tour Code:</span>{' '}
+                  <span className="font-mono font-bold">{t.tour_code}</span>
+                </div>
+              )}
               <h2 className="text-2xl font-bold text-gray-900 mb-4">About This Tour</h2>
               {translatedTour.description ? (
                 <p className="text-gray-700 leading-relaxed whitespace-pre-line">
