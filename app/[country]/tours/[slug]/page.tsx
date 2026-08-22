@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
-import { Clock, ArrowLeft, Play, CheckCircle2 } from 'lucide-react'
+import { Clock, ArrowLeft, Play, CheckCircle2, ChevronDown } from 'lucide-react'
 import BookNowClient from './BookNowClient'
 import { ThaiLanguage } from '../../../../types/country'
 import { translateText, translateTourBatch } from '../../../../lib/translate'
@@ -298,16 +298,30 @@ export default async function TourDetailPage({
     <div className="min-h-screen bg-sacred-bg/30">
 
       {/* ── Hero ── */}
-      <div className="relative w-full h-[50vh] md:h-[65vh] overflow-hidden">
+      <div className="relative w-full h-[42vh] sm:h-[50vh] md:h-[65vh] overflow-hidden">
         {(() => {
           const heroImage = Array.isArray(t.images) && t.images.length > 0 ? t.images[0] : null;
           return heroImage ? (
-            <Image src={heroImage} alt={translatedTour.title} fill priority className="object-cover" sizes="100vw" />
+            <div className="absolute inset-0">
+              <Image 
+                src={heroImage} 
+                alt={translatedTour.title} 
+                fill 
+                priority 
+                className="object-cover animate-ken-burns" 
+                sizes="100vw" 
+              />
+            </div>
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-sacred-green to-emerald-950" />
+            <div className="w-full h-full bg-gradient-to-br from-sacred-green to-emerald-950 animate-ken-burns" />
           );
         })()}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+        
+        {/* Vignette overlay for cinematic effect */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.3)_100%)]" />
+        
+        {/* Strong gradient overlay for guaranteed text readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 via-black/10 to-transparent" />
 
         {/* Back */}
         <div className="absolute top-6 left-6 z-10">
@@ -320,22 +334,29 @@ export default async function TourDetailPage({
         </div>
 
         {/* Hero Content */}
-        <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16">
+        <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-12 lg:p-16">
           <div className="flex flex-wrap items-center gap-2 mb-4">
             {t.duration_days && (
-              <span className="bg-white/20 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1.5 rounded-full flex items-center gap-1">
-                <Clock size={10} /> {t.duration_days} Days
+              <span className="bg-white/15 backdrop-blur-md border border-white/20 text-white text-[10px] sm:text-[11px] font-bold uppercase tracking-widest px-4 py-2 rounded-full flex items-center gap-1.5 shadow-lg">
+                <Clock size={11} /> {t.duration_days} Day{t.duration_days !== 1 ? 's' : ''}
               </span>
             )}
           </div>
-          <h1 className="font-serif text-4xl md:text-6xl text-white font-bold leading-tight max-w-3xl mb-4">
+          <h1 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-white font-bold leading-tight max-w-3xl mb-4 drop-shadow-2xl">
             {translatedTour.title}
           </h1>
           {translatedTour.short_description && (
-            <p className="text-white/75 text-sm md:text-base max-w-2xl leading-relaxed">
+            <p className="text-white/90 text-sm sm:text-base md:text-lg max-w-2xl leading-relaxed drop-shadow-lg">
               {translatedTour.short_description}
             </p>
           )}
+        </div>
+
+        {/* Scroll-down cue */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full p-2 shadow-lg">
+            <ChevronDown className="text-white/80" size={20} />
+          </div>
         </div>
       </div>
 

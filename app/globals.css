@@ -62,3 +62,17 @@
 .btn-primary {
   @apply bg-gold-deep text-white px-6 py-2 rounded-full text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-sacred-green hover:shadow-lg disabled:opacity-50;
 }
+
+/* Ken Burns Effect - slow zoom/pan animation */
+@keyframes ken-burns {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+.animate-ken-burns {
+  animation: ken-burns 20s ease-in-out infinite alternate;
+}
