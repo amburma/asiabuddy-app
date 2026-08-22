@@ -592,3 +592,21 @@ Applies automatically to all 25 tours (shared single Hero component).
 - Floating widget overlap bug: FloatingChatButton (bottom-right) and FloatingContactButton (bottom-left), both fixed/z-9999, overlap page content ("About This Tour" heading, "RESERVE YOUR SPOT" card) on the tour detail page at certain viewport heights — likely site-wide since both are injected in app/[country]/layout.tsx. Investigated, root cause identified (content lacks bottom clearance for the fixed-position widgets), NOT YET FIXED — deferred as a separate task.
 
 ---
+
+## Session — 22 August 2026 (continued) — Floating Widget Fix + Tour Code Field
+
+### 1. Floating Widget Overlap Bug — FIXED (revised from earlier same-day fix)
+- Earlier same-day attempt added pb-[160px] bottom padding to the tour detail page's content container — this was INSUFFICIENT and the bug recurred, because FloatingChatButton and FloatingContactButton are position:fixed relative to the viewport, not the page bottom. On short-height browser windows (header + hero already filling most visible height), content immediately after the hero could sit under the widgets with zero scrolling — the earlier fix only helped when scrolled to the true page bottom.
+- Real fix: both widgets' always-visible tooltip ("Plan your trip now!") and badge ("LIVE SUPPORT" / "QUICK INQUIRY") now only render on hover (desktop) / tap-to-reveal (mobile), shrinking the default footprint from ~150px to just the 64px button. This resolves the overlap at any viewport height, not just specific breakpoints — a more robust fix than the padding approach.
+- Note for future sessions: if any lingering references to the pb-[160px] tour-detail-page workaround are found, they can likely be simplified/removed now that the root cause (widget footprint) is fixed at the source.
+
+### 2. New Feature — Tour Code Field
+- Purpose: reference code (e.g. "ABT-TP") for ground operations staff to use when creating bookings — not customer-facing marketing content.
+- DB: nullable `tour_code` TEXT column added to `tours` table (supabase/migrations/20260822_add_tour_code.sql). Applied manually via Supabase Dashboard SQL Editor (Supabase CLI not installed in this dev environment — note for future migrations, same manual process will be needed unless CLI is set up).
+- Admin panel (app/admin/page.tsx): text input added in the Tour Basic Info section, positioned directly above the Title field. Optional/nullable — not all tours need one.
+- Display: plain text on the tour detail page's Overview section, directly above the "About This Tour" heading (format: "Tour Code: ABT-TP"). Deliberately placed outside the Hero section per KIM's direction — Hero stays purely visual, Overview is where operational/reference info belongs. Only renders when a tour has a tour_code set.
+- First tour populated: bangkok-temple-premier-mall-discovery-tour → "ABT-TP". Remaining 24 tours do not have a code yet — to be filled in via admin panel as needed.
+
+### Status: All items from this full session (Hero image fix, loading skeleton, Hero redesign, landmark photo system removal, Task C folder restructure + migration, Task D verified, Task E closed, widget overlap fix, Tour Code field) are complete and pushed.
+
+---
