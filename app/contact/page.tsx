@@ -57,7 +57,6 @@ export default function ContactPage() {
   const searchParams = useSearchParams();
   const referrerUrl = searchParams.get('ref');
   const tourSlug = searchParams.get('tour');
-  const source = searchParams.get('source');
   
   const [language, setLanguage] = useState<SupportedLanguage>('EN');
   const [mounted, setMounted] = useState(false);
@@ -73,15 +72,7 @@ export default function ContactPage() {
     socialApps: [] as string[]
   });
   
-  // Set initial message when tourSlug is present
-  useEffect(() => {
-    if (tourSlug) {
-      setFormData(prev => ({
-        ...prev,
-        message: `I'm interested in the tour: ${tourSlug}`
-      }));
-    }
-  }, [tourSlug]);
+
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -122,17 +113,13 @@ export default function ContactPage() {
         country: formData.country
       };
 
-      // Add referrerUrl to details if present
-      if (referrerUrl) {
-        payload.referrerUrl = referrerUrl;
-      }
+      // Use referrerUrl as carrier for tour link
+      const tourPageUrl = tourSlug 
+        ? `https://asiabuddy.app/${formData.country}/tours/${tourSlug}` 
+        : referrerUrl; // fallback to whatever `ref` param was passed, if any
       
-      // Add tourSlug and source if present
-      if (tourSlug) {
-        payload.tourSlug = tourSlug;
-      }
-      if (source) {
-        payload.source = source;
+      if (tourPageUrl) {
+        payload.referrerUrl = tourPageUrl;
       }
 
       const response = await fetch('/api/inquiry', {
@@ -386,7 +373,9 @@ export default function ContactPage() {
                 Inquiring about:
               </p>
               <p className="text-sm text-gray-600 break-all">
-                {tourSlug ? `Tour: ${tourSlug}` : referrerUrl}
+                {tourSlug 
+                  ? `https://asiabuddy.app/${formData.country}/tours/${tourSlug}` 
+                  : referrerUrl}
               </p>
             </div>
           )}

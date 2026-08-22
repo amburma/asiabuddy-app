@@ -336,6 +336,10 @@ export async function POST(req: NextRequest) {
   const salespersonName = await getSalespersonName(body.salesperson_id);
   const salespersonSection = salespersonName ? `\n👤 *Sales:* ${salespersonName}` : '';
 
+  const referrerSection = bookingDetails.referrerUrl 
+    ? `\n🔗 *Referrer:* ${bookingDetails.referrerUrl}` 
+    : '';
+
   const message =
     `🔔 *New Web Inquiry — AsiaBuddy*\n` +
     `━━━━━━━━━━━━━━━━━━\n\n` +
@@ -349,6 +353,7 @@ export async function POST(req: NextRequest) {
     otherSection +
     chatSection +
     salespersonSection +
+    referrerSection +
     `\n\n━━━━━━━━━━━━━━━━━━\n` +
     `🆔 *Booking ID:* ${bookingIdShort}\n` +
     `⏰ Received at: ${new Date().toUTCString()}\n` +

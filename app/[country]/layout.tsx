@@ -139,7 +139,7 @@ export default async function CountryLayout({
       {activeCountryIds.includes(country.toLowerCase()) && (
         <>
           <FloatingChatButtonLoader language={language} country={country} />
-          <FloatingContactButtonLoader language={language} />
+          <FloatingContactButtonLoader language={language} country={country} />
         </>
       )}
     </div>

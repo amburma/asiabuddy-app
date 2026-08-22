@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { UI_TRANSLATIONS } from '../../lib/i18n'
 import { SupportedLanguage } from '../../types/country'
 
-export default function FloatingContactButton({ language }: { language: string | SupportedLanguage }) {
+export default function FloatingContactButton({ language, country }: { language: string | SupportedLanguage; country?: string }) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -13,6 +13,9 @@ export default function FloatingContactButton({ language }: { language: string |
   }, [])
 
   if (!mounted) return null
+
+  // Hide button if country is not provided
+  if (!country) return null
 
   const t = UI_TRANSLATIONS[language as SupportedLanguage] || UI_TRANSLATIONS.EN
   const badgeText = t.floatingBadge || 'Quick Inquiry'
@@ -31,7 +34,7 @@ export default function FloatingContactButton({ language }: { language: string |
       }}
     >
       {/* Main Button */}
-      <Link href="/contact">
+      <Link href={`/${country}/contact`}>
         <button
           style={{
             position: 'relative',
