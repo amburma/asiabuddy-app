@@ -4,7 +4,6 @@ import { useState, useEffect, useMemo } from 'react';
 import { createClient } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { LogOut, Plus, Pencil, Trash2, X, ChevronDown, ChevronRight, GripVertical, Upload, ArrowUp, ArrowDown, ImagePlus } from 'lucide-react';
-import LandmarkPhotoPicker from '../../components/admin/LandmarkPhotoPicker';
 
 export const dynamic = 'force-dynamic';
 
@@ -487,8 +486,6 @@ export default function GlobalAdminPage() {
           .map(([meal]) => meal.charAt(0).toUpperCase() + meal.slice(1))
           .join(','),
         accommodation: day.accommodation || '',
-        image_url: day.image_url || null,
-        landmark_id: day.landmark_id || null,
         sort_order: index,
       }));
 
@@ -511,7 +508,7 @@ export default function GlobalAdminPage() {
       // Refetch itinerary days with fresh UUIDs from database
       const { data: freshItineraryData } = await supabase
         .from('itineraries')
-        .select('*, landmarks(id, name, image_url)')
+        .select('*')
         .eq('tour_id', tourId)
         .order('sort_order', { ascending: true });
       
@@ -529,13 +526,6 @@ export default function GlobalAdminPage() {
             dinner: day.meals_included?.toLowerCase().includes('dinner') || false,
           },
           accommodation: day.accommodation || '',
-          image_url: day.image_url || '',
-          landmark_id: day.landmark_id || null,
-          landmark_photo: day.landmarks ? {
-            photo_id: day.landmarks.id,
-            display_name: day.landmarks.name,
-            image_url: day.landmarks.image_url
-          } : null,
         }));
         setItineraryDays(parsedDays);
       } else {
@@ -955,7 +945,7 @@ export default function GlobalAdminPage() {
                         <button type="button" onClick={() => { const value = tourImageInput.trim(); if (value) { setTourImageUrls(prev => prev.includes(value) ? prev : [...prev, value]); setTourImageInput(''); } }} className="rounded-lg border border-amber-400 px-4 py-2 text-sm font-semibold text-amber-600 transition hover:bg-amber-50">Add Image</button>
                       </div>
                       <div className="rounded-lg border border-dashed border-gray-200 p-3">
-                        <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-gray-700">
+                        <label className={`flex cursor-pointer items-center gap-2 text-sm font-medium ${!toursCountry || !toursSlug ? 'text-gray-400' : 'text-gray-700'}`}>
                           <Upload size={16} />
                           Upload from device
                           <input
@@ -965,8 +955,17 @@ export default function GlobalAdminPage() {
                             onChange={async e => {
                               const file = e.target.files?.[0];
                               if (!file) return;
+                              
+                              // Guard: block upload until country + slug are filled
+                              if (!toursCountry || !toursSlug) {
+                                setError('Please fill in Country and Tour Title (slug) before adding images.');
+                                return;
+                              }
+                              
                               setTourUploadStatus('uploading');
-                              const url = await uploadImageToStorage(file, 'tour-images');
+                              const sanitizedCountry = toursCountry.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+                              const sanitizedSlug = toursSlug.toLowerCase().replace(/[^a-z0-9-]/g, '-');
+                              const url = await uploadImageToStorage(file, 'tour-images', `${sanitizedCountry}/${sanitizedSlug}`);
                               if (url) {
                                 setTourImageUrls(prev => prev.includes(url) ? prev : [...prev, url]);
                                 setTourUploadStatus('done');
@@ -974,9 +973,10 @@ export default function GlobalAdminPage() {
                                 setTourUploadStatus('idle');
                               }
                             }}
-                            disabled={uploadingImage}
+                            disabled={uploadingImage || !toursCountry || !toursSlug}
                           />
                         </label>
+                        {(!toursCountry || !toursSlug) && <p className="mt-2 text-xs text-gray-500">Country and Tour Title required before upload</p>}
                         {tourUploadStatus === 'uploading' && <p className="mt-2 text-xs font-medium text-amber-600">Uploading...</p>}
                         {tourUploadStatus === 'done' && <p className="mt-2 text-xs font-medium text-emerald-600">✓ Done</p>}
                       </div>
@@ -1090,25 +1090,6 @@ export default function GlobalAdminPage() {
                               </button>
                             </div>
                           </Field>
-
-                          <Field label="Day Photo">
-                            {isRealDatabaseId(day.id) ? (
-                              <LandmarkPhotoPicker
-                                itineraryId={day.id}
-                                currentPhoto={day.landmark_photo}
-                                onChange={(photo) => setItineraryDays(prev => prev.map(item => item.id === day.id ? { 
-                                  ...item, 
-                                  landmark_photo: photo,
-                                  landmark_id: photo?.photo_id || null,
-                                  image_url: photo?.image_url || item.image_url 
-                                } : item))}
-                              />
-                            ) : (
-                              <div className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-500">
-                                Save the tour first to add a photo for this day.
-                              </div>
-                            )}
-                          </Field>
                         </div>
                         );
                       })}
@@ -1121,10 +1102,7 @@ export default function GlobalAdminPage() {
                         highlights: [], 
                         highlightsInput: '', 
                         meals: { breakfast: false, lunch: false, dinner: false }, 
-                        accommodation: '', 
-                        image_url: '', 
-                        landmark_id: null, 
-                        landmark_photo: null 
+                        accommodation: ''
                       }])} className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-amber-400 px-4 py-3 text-sm font-semibold text-amber-600 transition hover:bg-amber-50">
                         <Plus size={16} /> Add Next Day
                       </button>
@@ -1247,7 +1225,7 @@ export default function GlobalAdminPage() {
                           // Fetch existing itinerary days
                           const { data: itineraryData } = await supabase
                             .from('itineraries')
-                            .select('*, landmarks(id, name, image_url)')
+                            .select('*')
                             .eq('tour_id', item.id)
                             .order('sort_order', { ascending: true });
                           
@@ -1265,13 +1243,6 @@ export default function GlobalAdminPage() {
                                 dinner: day.meals_included?.toLowerCase().includes('dinner') || false,
                               },
                               accommodation: day.accommodation || '',
-                              image_url: day.image_url || '',
-                              landmark_id: day.landmark_id || null,
-                              landmark_photo: day.landmarks ? {
-                                photo_id: day.landmarks.id,
-                                display_name: day.landmarks.name,
-                                image_url: day.landmarks.image_url
-                              } : null,
                             }));
                             setItineraryDays(parsedDays);
                           } else {
