@@ -23,7 +23,6 @@ interface Tour {
   duration_days: number
   duration_nights: number
   group_size_max: number
-  image_url?: string
   images: string[]
   highlights: string[]
   inclusions: string[]
@@ -66,7 +65,7 @@ export async function generateMetadata({
   const supabase = await createClient()
   const { data } = await supabase
     .from('tours')
-    .select('title, short_description, image_url')
+    .select('title, short_description, images')
     .eq('slug', slug)
     .eq('country', countrySlug)
     .single()
@@ -75,13 +74,15 @@ export async function generateMetadata({
 
   if (!data) return { title: 'Tour – AsiaBuddy' }
 
+  const heroImage = Array.isArray(data.images) && data.images.length > 0 ? data.images[0] : null
+
   return {
     title: `${data.title} – AsiaBuddy ${country}`,
     description: data.short_description ?? undefined,
     openGraph: {
       title: `${data.title} – AsiaBuddy ${country}`,
       description: data.short_description ?? undefined,
-      images: data.image_url ? [data.image_url] : [],
+      images: heroImage ? [heroImage] : [],
       url: `https://asiabuddy.app/${countrySlug}/tours/${slug}`,
     },
   }
@@ -298,11 +299,14 @@ export default async function TourDetailPage({
 
       {/* ── Hero ── */}
       <div className="relative w-full h-[50vh] md:h-[65vh] overflow-hidden">
-        {t.image_url ? (
-          <Image src={t.image_url} alt={translatedTour.title} fill priority className="object-cover" sizes="100vw" />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-sacred-green to-emerald-950" />
-        )}
+        {(() => {
+          const heroImage = Array.isArray(t.images) && t.images.length > 0 ? t.images[0] : null;
+          return heroImage ? (
+            <Image src={heroImage} alt={translatedTour.title} fill priority className="object-cover" sizes="100vw" />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-sacred-green to-emerald-950" />
+          );
+        })()}
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
 
         {/* Back */}
