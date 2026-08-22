@@ -560,3 +560,35 @@ Paid customers (tour packages, flights, hotels, airport transfers, etc.) current
 - Also in progress: Tour Itinerary Generator Gem — converts a tour poster/program into a full Burmese-language day-by-day itinerary (Brief Itinerary, Itinerary Details, Travel Tips, Do's and Don'ts sections), to be used by staff to generate a tailored itinerary in response to a customer inquiry.
 
 ---
+
+## Session — 22 August 2026 — Tour Detail Page Hero Fix + Redesign, Landmark Photo System Removal
+
+### 1. Hero Image Bug Fix — COMPLETED
+- Root cause: app/[country]/tours/[slug]/page.tsx Hero section read `t.image_url` (a string field) but the `tours` table schema only has an `images` JSONB array column — no `image_url` column exists. This caused the Hero to always fall back to the gradient placeholder, on every tour, site-wide.
+- Fix: Hero now reads `t.images[0]` as the cover photo. Tour TypeScript interface updated to drop the non-existent `image_url` field and reflect `images: string[]`. generateMetadata's Supabase select + OpenGraph image also updated to use `images` instead of `image_url`.
+- scripts/check-tour-image.ts updated to verify against the correct field.
+
+### 2. Loading Skeleton — COMPLETED
+- Added app/[country]/tours/[slug]/loading.tsx (Next.js App Router loading UI convention) to give visual feedback during page navigation.
+- Context: investigation found the perceived slow-load was not a bug — it's the synchronous Gemini/Google Translate API call for non-English languages on cache miss (translation cached 1hr via unstable_cache). English users and cached non-English visits are fast (150-500ms); first-visit non-English can take 650-2500ms with zero loading feedback previously. Skeleton addresses the UX gap; actual translation latency was left as-is (acceptable given caching).
+
+### 3. Hero Section Full Redesign — COMPLETED
+Applies automatically to all 25 tours (shared single Hero component).
+- Readability: stronger gradient overlay (black/85 → black/50 → black/10), added drop-shadow on title/description text, responsive title sizing (text-2xl through xl:text-6xl so titles fit 1-2 lines on mobile instead of wrapping 3+), responsive hero height (h-[42vh] on mobile up to h-[65vh] desktop).
+- Premium polish: Ken Burns slow zoom/pan animation on hero image (new @keyframes ken-burns in app/globals.css), restyled duration badge (backdrop-blur, border, shadow), bouncing scroll-down chevron cue, radial vignette overlay. Fallback (no-image) gradient state gets the same treatment so tours without a photo yet still look intentional.
+- eslint.config.mjs updated (react/display-name rule disabled) to resolve an unrelated ESLint v9 compatibility build error encountered mid-session.
+
+### 4. Landmark Photo Library System — REMOVED (decision confirmed this session, implemented in a prior session but not previously logged here)
+- The Landmark Photo Library plan described in the 10 August 2026 entry above (Supabase schema for day-to-landmark photo linking, `components/[country]/LandmarkPhotoPicker.tsx`) has been SUPERSEDED. That approach was built, then deliberately removed.
+- components/admin/LandmarkPhotoPicker.tsx deleted entirely.
+- app/admin/page.tsx simplified: removed landmark photo picker UI, `image_url`/`landmark_id`/`landmark_photo` fields from itinerary day data structures, and related Supabase queries.
+- Replaced with: simpler direct image upload in the admin panel, organized by `country/slug` folder structure, with a guard requiring country + slug to be filled before upload is allowed. This connects directly to the still-open Task C below.
+- Note for future sessions: any reference to "Landmark Photo Library" or "day-to-landmark linking mechanism" in the 10 August entry above is OBSOLETE — do not resume that plan without re-confirming with KIM.
+
+### Known Open / Deferred Items (carried forward)
+- Task C (tour-images upload path restructure to tour-images/{country}/{tour-slug}/{filename}, country passed through upload handler) — IN PROGRESS, connects to the admin upload changes in section 4 above.
+- Task D (manual production verification: Book Now → Contact form → Telegram notification includes referrer link) — NOT YET DONE.
+- Task E (stale refresh token, cosmetic log noise only) — optional, low priority, not started.
+- Floating widget overlap bug: FloatingChatButton (bottom-right) and FloatingContactButton (bottom-left), both fixed/z-9999, overlap page content ("About This Tour" heading, "RESERVE YOUR SPOT" card) on the tour detail page at certain viewport heights — likely site-wide since both are injected in app/[country]/layout.tsx. Investigated, root cause identified (content lacks bottom clearance for the fixed-position widgets), NOT YET FIXED — deferred as a separate task.
+
+---
