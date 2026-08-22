@@ -361,7 +361,7 @@ export default async function TourDetailPage({
       </div>
 
       {/* ── Main ── */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-6 py-12 pb-[160px]">
 
         {/* SECTION A — Overview + Reserve Your Spot */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
