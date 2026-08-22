@@ -7,7 +7,7 @@ import { Metadata } from 'next'
 import { Clock, ArrowLeft, Play, CheckCircle2 } from 'lucide-react'
 import BookNowClient from './BookNowClient'
 import { ThaiLanguage } from '../../../../types/country'
-import { translateText } from '../../../../lib/translate'
+import { translateText, translateTourBatch } from '../../../../lib/translate'
 import { cookies } from 'next/headers'
 import { unstable_cache } from 'next/cache'
 
@@ -132,41 +132,48 @@ function getCachedTranslation(
 ) {
   return unstable_cache(
     async () => {
-      const translatedTour = {
-        ...t,
-        title: await translateText(t.title || '', targetLanguage),
-        short_description: await translateText(t.short_description || '', targetLanguage),
-        description: await translateText(t.description || '', targetLanguage),
+      // Build the batch translation data object
+      const batchData = {
+        title: t.title || '',
+        short_description: t.short_description || '',
+        description: t.description || '',
+        highlights: highlights,
+        inclusions: inclusions,
+        exclusions: exclusions,
+        itineraries: (itineraries || []).map(day => ({
+          title: day.title || '',
+          content: day.content || '',
+          highlights: Array.isArray(day.highlights) ? day.highlights : [],
+          meals_included: Array.isArray(day.meals_included) ? day.meals_included : [],
+          accommodation: day.accommodation || null,
+        })),
       }
 
-      const translatedHighlights = await Promise.all(
-        highlights.map((h: string) => translateText(h, targetLanguage))
-      )
+      // Single batch API call
+      const translatedData = await translateTourBatch(batchData, targetLanguage)
 
-      const translatedInclusions = await Promise.all(
-        inclusions.map((i: string) => translateText(i, targetLanguage))
-      )
+      // Map results back to expected structure
+      const translatedTour = {
+        ...t,
+        title: translatedData.title,
+        short_description: translatedData.short_description,
+        description: translatedData.description,
+      }
 
-      const translatedExclusions = await Promise.all(
-        exclusions.map((e: string) => translateText(e, targetLanguage))
-      )
+      const translatedHighlights = translatedData.highlights
+      const translatedInclusions = translatedData.inclusions
+      const translatedExclusions = translatedData.exclusions
 
       let translatedItineraries = itineraries
       if (itineraries && itineraries.length > 0) {
-        translatedItineraries = await Promise.all(
-          itineraries.map(async (day) => ({
-            ...day,
-            title: await translateText(day.title || '', targetLanguage),
-            content: await translateText(day.content || '', targetLanguage),
-            highlights: await Promise.all(
-              (Array.isArray(day.highlights) ? day.highlights : []).map((h: string) => translateText(h, targetLanguage))
-            ),
-            meals_included: await Promise.all(
-              (Array.isArray(day.meals_included) ? day.meals_included : []).map((m: string) => translateText(m, targetLanguage))
-            ),
-            accommodation: day.accommodation ? await translateText(day.accommodation, targetLanguage) : null,
-          }))
-        )
+        translatedItineraries = itineraries.map((day, index) => ({
+          ...day,
+          title: translatedData.itineraries[index]?.title || day.title,
+          content: translatedData.itineraries[index]?.content || day.content,
+          highlights: translatedData.itineraries[index]?.highlights || day.highlights,
+          meals_included: translatedData.itineraries[index]?.meals_included || day.meals_included,
+          accommodation: translatedData.itineraries[index]?.accommodation || day.accommodation,
+        }))
       }
 
       return {
