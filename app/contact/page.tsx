@@ -274,22 +274,22 @@ export default function ContactPage() {
               <div className="space-y-3">
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Mobile</p>
-                  <a href="tel:+1793956759" className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm hover:text-[#C9A84C] transition-colors">
+                  <a href="tel:+85362900683" className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm hover:text-[#C9A84C] transition-colors">
                     <PhoneIcon />
-                    <span>+1793956759</span>
+                    <span>+85362900683</span>
                   </a>
                 </div>
                 <div className="flex gap-3 pt-2">
-                  <a href="viber://chat?number=+1793956759" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Viber">
+                  <a href="viber://chat?number=+85362900683" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Viber">
                     <ViberIcon />
                   </a>
-                  <a href="https://wa.me/1793956759" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="WhatsApp">
+                  <a href="https://wa.me/85362900683" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="WhatsApp">
                     <WhatsAppIcon />
                   </a>
-                  <a href="https://t.me/+1793956759" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Telegram">
-                    <TelegramIcon />
+                  <a href="https://line.me/ti/p/~ktmyoaung1010@gmail.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="LINE">
+                    <LineIcon />
                   </a>
-                  <a href="mailto:asiabuddyapp@gmail.com" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Email">
+                  <a href="mailto:th@asiabuddy.app" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Email">
                     <EmailIcon />
                   </a>
                 </div>
@@ -325,6 +325,37 @@ export default function ContactPage() {
                     <TelegramIcon />
                   </a>
                   <a href="mailto:asiabuddyapp@gmail.com" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Email">
+                    <EmailIcon />
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Hong Kong & Macau Card */}
+            <div className="bg-[#0D0D0D] border border-[#C9A84C]/30 rounded-2xl p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl">🇭🇰🇲🇴</span>
+                <h3 className="text-lg font-serif font-bold text-[#F5F0E8]">Hong Kong & Macau</h3>
+              </div>
+              <div className="space-y-3">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">Mobile</p>
+                  <a href="tel:+85362900683" className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm hover:text-[#C9A84C] transition-colors">
+                    <PhoneIcon />
+                    <span>+85362900683</span>
+                  </a>
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <a href="viber://chat?number=+85362900683" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Viber">
+                    <ViberIcon />
+                  </a>
+                  <a href="https://wa.me/85362900683" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="WhatsApp">
+                    <WhatsAppIcon />
+                  </a>
+                  <a href="https://line.me/ti/p/~ktmyoaung1010@gmail.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="LINE">
+                    <LineIcon />
+                  </a>
+                  <a href="mailto:th@asiabuddy.app" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Email">
                     <EmailIcon />
                   </a>
                 </div>
