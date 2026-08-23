@@ -286,7 +286,7 @@ export default function ContactPage() {
                   <a href="https://wa.me/85362900683" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="WhatsApp">
                     <WhatsAppIcon />
                   </a>
-                  <a href="https://line.me/ti/p/~ktmyoaung1010@gmail.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="LINE">
+                  <a href="https://line.me/ti/p/NHANa-7WDU" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="LINE">
                     <LineIcon />
                   </a>
                   <a href="mailto:th@asiabuddy.app" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Email">
@@ -321,6 +321,9 @@ export default function ContactPage() {
                   <a href="https://wa.me/1793956759" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="WhatsApp">
                     <WhatsAppIcon />
                   </a>
+                  <a href="https://line.me/ti/p/M7yYfwHsWN" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="LINE">
+                    <LineIcon />
+                  </a>
                   <a href="https://t.me/+1793956759" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Telegram">
                     <TelegramIcon />
                   </a>
@@ -352,7 +355,7 @@ export default function ContactPage() {
                   <a href="https://wa.me/85362900683" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="WhatsApp">
                     <WhatsAppIcon />
                   </a>
-                  <a href="https://line.me/ti/p/~ktmyoaung1010@gmail.com" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="LINE">
+                  <a href="https://line.me/ti/p/NHANa-7WDU" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="LINE">
                     <LineIcon />
                   </a>
                   <a href="mailto:th@asiabuddy.app" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Email">
