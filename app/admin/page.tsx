@@ -239,7 +239,7 @@ export default function GlobalAdminPage() {
       .from('tours')
       .select('*')
       .eq('country', selectedCountry)
-      .order('created_at', { ascending: false });
+      .order('display_order', { ascending: true });
     setToursItems(data || []);
   };
 
@@ -581,6 +581,34 @@ export default function GlobalAdminPage() {
     if (resA.error || resB.error) {
       console.error('Reorder failed:', resA.error || resB.error);
       fetchDestinations();
+    }
+  };
+
+  const handleTourReorder = async (index: number, direction: 'up' | 'down') => {
+    const list = [...toursItems];
+    const swapIndex = direction === 'up' ? index - 1 : index + 1;
+    if (swapIndex < 0 || swapIndex >= list.length) return;
+
+    const itemA = list[index];
+    const itemB = list[swapIndex];
+
+    const orderA = itemA.display_order ?? index;
+    const orderB = itemB.display_order ?? swapIndex;
+
+    const newList = [...list];
+    newList[index] = { ...itemA, display_order: orderB };
+    newList[swapIndex] = { ...itemB, display_order: orderA };
+    newList.sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
+    setToursItems(newList);
+
+    const [resA, resB] = await Promise.all([
+      supabase.from('tours').update({ display_order: orderB }).eq('id', itemA.id),
+      supabase.from('tours').update({ display_order: orderA }).eq('id', itemB.id),
+    ]);
+
+    if (resA.error || resB.error) {
+      console.error('Reorder failed:', resA.error || resB.error);
+      fetchTours();
     }
   };
 
@@ -1199,8 +1227,26 @@ export default function GlobalAdminPage() {
               <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 py-12 text-center text-sm text-gray-400">No tours found for {selectedCountry}</div>
             ) : (
               <div className="space-y-3">
-                {toursItems.map(item => (
+                {toursItems.map((item, index) => (
                   <div key={item.id} className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex gap-1">
+                      <button
+                        onClick={() => handleTourReorder(index, 'up')}
+                        disabled={index === 0}
+                        style={{ opacity: index === 0 ? 0.3 : 1 }}
+                        className="px-2 py-1 text-gray-600 hover:text-emerald-600 disabled:cursor-not-allowed"
+                      >
+                        ▲
+                      </button>
+                      <button
+                        onClick={() => handleTourReorder(index, 'down')}
+                        disabled={index === toursItems.length - 1}
+                        style={{ opacity: index === toursItems.length - 1 ? 0.3 : 1 }}
+                        className="px-2 py-1 text-gray-600 hover:text-emerald-600 disabled:cursor-not-allowed"
+                      >
+                        ▼
+                      </button>
+                    </div>
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <h4 className="text-sm font-bold text-gray-800">{item.title}</h4>
