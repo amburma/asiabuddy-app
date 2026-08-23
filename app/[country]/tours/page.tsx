@@ -66,8 +66,7 @@ export default async function ToursPage({
     .select('*')
     .eq('status', 'active')
     .eq('country', country)
-    .order('featured', { ascending: false })
-    .order('created_at', { ascending: false })
+    .order('display_order', { ascending: true })
 
   if (error) {
     console.error('Error fetching tours:', error)
