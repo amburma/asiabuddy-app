@@ -279,6 +279,13 @@ export default function ContactPage() {
                     <span>+85362900683</span>
                   </a>
                 </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">LINE ID</p>
+                  <a href="https://line.me/ti/p/NHANa-7WDU" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm hover:text-[#C9A84C] transition-colors">
+                    <LineIcon />
+                    <span>kyawmyo1985</span>
+                  </a>
+                </div>
                 <div className="flex gap-3 pt-2">
                   <a href="viber://chat?number=+85362900683" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Viber">
                     <ViberIcon />
@@ -314,6 +321,13 @@ export default function ContactPage() {
                     <span>+1793956759</span>
                   </a>
                 </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">LINE ID</p>
+                  <a href="https://line.me/ti/p/M7yYfwHsWN" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm hover:text-[#C9A84C] transition-colors">
+                    <LineIcon />
+                    <span>asiabuddy.app</span>
+                  </a>
+                </div>
                 <div className="flex gap-3 pt-2">
                   <a href="viber://chat?number=+1793956759" className="flex items-center justify-center w-9 h-9 rounded-full border border-[#C9A84C]/30 text-[#C9A84C] hover:bg-[#C9A84C] hover:text-[#0D0D0D] transition-colors" title="Viber">
                     <ViberIcon />
@@ -346,6 +360,13 @@ export default function ContactPage() {
                   <a href="tel:+85362900683" className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm hover:text-[#C9A84C] transition-colors">
                     <PhoneIcon />
                     <span>+85362900683</span>
+                  </a>
+                </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.3em] text-[#C9A84C] mb-1">LINE ID</p>
+                  <a href="https://line.me/ti/p/NHANa-7WDU" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#F5F0E8]/80 text-sm hover:text-[#C9A84C] transition-colors">
+                    <LineIcon />
+                    <span>kyawmyo1985</span>
                   </a>
                 </div>
                 <div className="flex gap-3 pt-2">
