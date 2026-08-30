@@ -12,7 +12,10 @@ export default function ThquoPage() {
   // TEMPORARY TEST SCAFFOLD — remove after rehydration verification
   useEffect(() => {
     const testId = new URLSearchParams(window.location.search).get('testQuotationId');
-    if (testId) setQuotationId(testId);
+    if (testId) {
+      setQuotationId(testId);
+      setCurrentPhase('cost_input'); // skip Phase1/Phase2 stub flow entirely for rehydration testing
+    }
   }, []);
   
   const [totalPax, setTotalPax] = useState<number | null>(null);
