@@ -33,6 +33,12 @@ export interface CostInputPanelProps {
   quotationId: string;
   duration_days?: number;
   transport_mode?: 'private' | 'public';
+  phase2Data?: {
+    twin_rooms?: number;
+    double_rooms?: number;
+    extra_beds?: number;
+  };
+  hotelLevel?: number | null;
   onBack?: () => void;
   onComplete?: () => void;
   onIdUpdate?: (newId: string) => void;
@@ -42,6 +48,8 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
   quotationId: propQuotationId,
   duration_days,
   transport_mode,
+  phase2Data,
+  hotelLevel,
   onBack,
   onComplete,
   onIdUpdate,
@@ -57,7 +65,7 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
   const [costComponents, setCostComponents] = useState<CostComponents>({
     hotel: {
       per_night_rate: 0,
-      nights: duration_days || 1,
+      nights: duration_days ? Math.max(duration_days - 1, 1) : 1,
       notes: '',
     },
     transport: {
@@ -84,14 +92,16 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
 
   // Computed running subtotal (excluding contingency and currency buffers)
   const runningSubtotal = useMemo(() => {
-    const hotelTotal = costComponents.hotel.per_night_rate * costComponents.hotel.nights;
+    const fullRooms = (phase2Data?.twin_rooms || 0) + (phase2Data?.double_rooms || 0);
+    const extraBeds = phase2Data?.extra_beds || 0;
+    const isHotelExcluded = hotelLevel === 0;
+    const hotelTotal = isHotelExcluded ? 0 : costComponents.hotel.per_night_rate * costComponents.hotel.nights * (fullRooms + extraBeds * 0.5);
     const transportTotal = costComponents.transport.total_cost;
-    const mealsTotal = costComponents.meals.per_person_per_day_rate * costComponents.hotel.nights; // Using hotel nights as proxy for trip duration
+    const mealsTotal = costComponents.meals.per_person_per_day_rate * costComponents.hotel.nights;
     const ticketsTotal = costComponents.tickets_activities.reduce((sum, item) => sum + item.cost, 0);
     const guideTotal = costComponents.guide.amount;
-
     return hotelTotal + transportTotal + mealsTotal + ticketsTotal + guideTotal;
-  }, [costComponents]);
+  }, [costComponents, phase2Data, hotelLevel]);
 
   // Computed contingency (2% of running subtotal)
   const contingency = useMemo(() => {

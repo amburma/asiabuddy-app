@@ -278,6 +278,9 @@ export async function PATCH(req: NextRequest) {
         // Derive inputs for pricing calculation
         const total_pax = currentQuotation.phase1_data.totalPax || 0;
         const child_no_bed_count = currentQuotation.phase2_data.child_no_bed || 0;
+        const foc_count = currentQuotation.phase2_data.foc_count || 0;
+        const full_rooms = (currentQuotation.phase2_data.twin_rooms || 0) + (currentQuotation.phase2_data.double_rooms || 0);
+        const extra_beds = currentQuotation.phase2_data.extra_beds || 0;
 
         // Map cost_components to the expected format for calculateQuotationPrice
         const pricingInput = {
@@ -290,6 +293,7 @@ export async function PATCH(req: NextRequest) {
           },
           total_pax,
           child_no_bed_count,
+          foc_count,
           margin_pct: margin_pct, // Use provided margin_pct or let function default to 0.08
         };
 

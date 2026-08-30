@@ -15,6 +15,7 @@ interface FormData {
   
   // Step 2: Room breakdown (computed from totalPax or manual override)
   twin_rooms?: number;
+  double_rooms?: number;
   extra_beds?: number;
   room_override?: boolean;
   
@@ -37,7 +38,10 @@ interface FormData {
   // Step 6: Currency
   currency?: 'USD' | 'THB' | 'MMK' | 'EUR' | 'SGD' | null;
   
-  // Step 7: Passport/traveler name list
+  // Step 7: Hotel level
+  hotel_level?: number;
+  
+  // Step 8: Passport/traveler name list
   travelers?: Traveler[];
 }
 
@@ -45,7 +49,7 @@ export interface Phase2WizardProps {
   totalPax?: number;
   quotationId?: string;
   onBack?: () => void;
-  onComplete?: (id: string) => void;
+  onComplete?: (id: string, phase2Data?: FormData) => void;
   onIdUpdate?: (newId: string) => void;
 }
 
@@ -62,6 +66,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
     has_special_needs: false,
     travelers: [],
     room_override: false,
+    hotel_level: 3, // Default to mid-range hotel
   });
   
   const totalPax = propTotalPax || 2; // Default to 2 if not provided
@@ -158,6 +163,10 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
       return formData.currency !== null && formData.currency !== undefined;
     }
     if (currentStep === 7) {
+      // Hotel level is required
+      return formData.hotel_level !== undefined && formData.hotel_level !== null;
+    }
+    if (currentStep === 8) {
       // At least one traveler should be added
       const travelers = formData.travelers || [];
       return travelers.length > 0 && travelers.every(t => t.name.trim() !== '');
@@ -168,7 +177,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
   // Handle next button
   const handleNext = () => {
     if (isStepValid()) {
-      if (currentStep === 7) {
+      if (currentStep === 8) {
         // Phase 2 complete - submit
         handlePhase2Complete();
       } else {
@@ -216,9 +225,9 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
         }
       }
 
-      // Call onComplete callback with the new ID
+      // Call onComplete callback with the new ID and phase2Data
       if (onComplete) {
-        onComplete(result.id);
+        onComplete(result.id, formData);
       }
 
       // Move to confirmation summary
@@ -238,12 +247,12 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
         {/* Wizard Header */}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Phase 2 - Pricing Details</h1>
-          <p className="text-gray-600 text-sm">အဆင့် {currentStep} မှ 7</p>
+          <p className="text-gray-600 text-sm">အဆင့် {currentStep} မှ 8</p>
         </div>
 
         {/* Step Progress */}
         <div className="flex items-center justify-between mb-8">
-          {[1, 2, 3, 4, 5, 6, 7].map((step) => (
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((step) => (
             <div
               key={step}
               className={`flex-1 h-1 mx-1 rounded ${
@@ -645,7 +654,40 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
           </div>
         )}
 
-        {/* Step 7: Traveler Information */}
+        {/* Step 7: Hotel Level */}
+        {currentStep === 7 && (
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+              ဟိုတယ်အဆင့် (Hotel Level)
+            </h2>
+            
+            <div className="space-y-3">
+              {[
+                { value: 0, label: 'No Hotel', label_mm: 'ဟိုတယ်မပါ', description: 'Customers arrange their own accommodation' },
+                { value: 1, label: 'Budget', label_mm: 'ဈေးသက်သာ', description: '2-3 star hotels, guesthouses' },
+                { value: 2, label: 'Standard', label_mm: 'ပုံမှန်', description: '3-4 star hotels' },
+                { value: 3, label: 'Mid-Range', label_mm: 'အလယ်အလတ်', description: '4 star hotels' },
+                { value: 4, label: 'Premium', label_mm: 'အဆင့်မြင့်', description: '5 star hotels' },
+              ].map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => handleInputChange('hotel_level', option.value)}
+                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
+                    formData.hotel_level === option.value
+                      ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
+                      : 'border-gray-200 bg-white text-gray-700 hover:border-emerald-300'
+                  }`}
+                >
+                  <div className="font-medium text-sm">{option.label_mm}</div>
+                  <div className="text-xs text-gray-500 mt-1">{option.label}</div>
+                  <div className="text-xs text-gray-400 mt-1">{option.description}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Step 8: Traveler Information */}
         {currentStep === 7 && (
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
@@ -722,7 +764,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
         )}
 
         {/* Phase 2 Complete Summary */}
-        {currentStep === 8 && (
+        {currentStep === 9 && (
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
               Phase 2 ပြီးမြောက်ပါပြီ
@@ -761,6 +803,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                   <p>Elderly: {formData.has_elderly ? `Yes (${formData.elderly_count})` : 'No'}</p>
                   <p>Special Needs: {formData.has_special_needs ? 'Yes' : 'No'}</p>
                   <p>Currency: {formData.currency}</p>
+                  <p>Hotel Level: {formData.hotel_level === 0 ? 'No Hotel' : formData.hotel_level === 1 ? 'Budget' : formData.hotel_level === 2 ? 'Standard' : formData.hotel_level === 3 ? 'Mid-Range' : 'Premium'}</p>
                   <p>Travelers: {(formData.travelers || []).length} registered</p>
                 </div>
                 {onComplete && quotationId && (
