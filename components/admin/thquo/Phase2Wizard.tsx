@@ -688,7 +688,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
         )}
 
         {/* Step 8: Traveler Information */}
-        {currentStep === 7 && (
+        {currentStep === 8 && (
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
               ခရီးသည်အချက်အလက်များ
