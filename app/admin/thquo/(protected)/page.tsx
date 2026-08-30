@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Phase1Wizard, { Phase1WizardProps } from '@/components/admin/thquo/Phase1Wizard';
 import Phase2Wizard, { Phase2WizardProps } from '@/components/admin/thquo/Phase2Wizard';
 import CostInputPanel, { CostInputPanelProps } from '@/components/admin/thquo/CostInputPanel';
@@ -8,6 +8,13 @@ import CostInputPanel, { CostInputPanelProps } from '@/components/admin/thquo/Co
 export default function ThquoPage() {
   const [currentPhase, setCurrentPhase] = useState<'phase1' | 'phase2' | 'cost_input'>('phase1');
   const [quotationId, setQuotationId] = useState<string | null>(null);
+  
+  // TEMPORARY TEST SCAFFOLD — remove after rehydration verification
+  useEffect(() => {
+    const testId = new URLSearchParams(window.location.search).get('testQuotationId');
+    if (testId) setQuotationId(testId);
+  }, []);
+  
   const [totalPax, setTotalPax] = useState<number | null>(null);
   const [phase1Data, setPhase1Data] = useState<{ duration_days?: number; transport_mode?: 'private' | 'public' }>({});
   const [phase2Data, setPhase2Data] = useState<any>(null);
