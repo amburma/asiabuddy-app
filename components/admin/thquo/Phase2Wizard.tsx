@@ -820,7 +820,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
         )}
 
         {/* Navigation Buttons */}
-        {currentStep !== 8 && (
+        {currentStep !== 9 && (
           <div className="flex justify-between items-center pt-6 border-t border-gray-100">
             {currentStep > 1 ? (
               <button
