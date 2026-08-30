@@ -1,0 +1,477 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient as createClientFromSupabase } from '@supabase/supabase-js';
+import { createClient as createServerClient } from '@/lib/supabase/server';
+import { calculateQuotationPrice } from '@/lib/pricing/calculateQuotationPrice';
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS, PATCH',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+export async function OPTIONS() {
+  return new Response(null, { status: 204, headers: corsHeaders });
+}
+
+// Generate tour code using PostgreSQL function with race-safe sequential counter
+async function generateTourCode(supabase: any): Promise<string> {
+  const { data, error } = await supabase.rpc('generate_tour_code');
+  
+  if (error) {
+    console.error('Error generating tour code:', error);
+    throw new Error('Failed to generate tour code');
+  }
+  
+  return data;
+}
+
+// POST /api/quotations
+// Creates a new quotation with Phase 1 data
+export async function POST(req: NextRequest) {
+  try {
+    // Auth check - get admin session
+    const supabaseAuth = await createServerClient();
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Invalid or missing session' },
+        { status: 401, headers: corsHeaders }
+      );
+    }
+
+    // Check if user is on the thquo allowlist
+    const { data: allowlistEntry, error: allowlistError } = await supabaseAuth
+      .from('thquo_allowlist')
+      .select('id')
+      .eq('user_id', user.id)
+      .limit(1)
+      .maybeSingle();
+
+    if (allowlistError || !allowlistEntry) {
+      return NextResponse.json(
+        { error: 'Forbidden - Not on thquo allowlist' },
+        { status: 403, headers: corsHeaders }
+      );
+    }
+
+    // Use verified user ID as staff_id
+    const staff_id = user.id;
+
+    const body = await req.json();
+    const { phase1_data, action } = body;
+
+    // Validate required fields
+    if (!phase1_data) {
+      return NextResponse.json(
+        { error: 'Missing required field: phase1_data' },
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    const supabase = createClientFromSupabase(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    // Try to insert with retry logic for UNIQUE constraint violations
+    let lastError: any = null;
+    const maxRetries = 2; // Initial attempt + 1 retry
+
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        // Generate tour code using PostgreSQL function
+        const tour_code = await generateTourCode(supabase);
+
+        // Insert new quotation with status='phase1'
+        const { data: quotation, error: insertError } = await supabase
+          .from('quotations')
+          .insert({
+            tour_code,
+            revision: 1,
+            country: 'Thailand',
+            status: 'phase1',
+            phase1_data,
+            phase2_data: null,
+            cost_components: null,
+            margin_pct: null,
+            pricing_snapshot: null,
+            staff_id: staff_id || null,
+            revision_note: null,
+          })
+          .select('id, tour_code')
+          .single();
+
+        if (insertError) {
+          // Check if it's a UNIQUE constraint violation
+          if (insertError.code === '23505' && attempt < maxRetries - 1) {
+            // UNIQUE violation - retry with next sequence number
+            console.log(`UNIQUE constraint violation on attempt ${attempt + 1}, retrying...`);
+            lastError = insertError;
+            continue;
+          }
+          // Other error or max retries reached
+          throw insertError;
+        }
+
+        // Success - return the created quotation
+        return NextResponse.json(
+          { id: quotation.id, tour_code: quotation.tour_code },
+          { status: 201, headers: corsHeaders }
+        );
+
+      } catch (error) {
+        if (attempt === maxRetries - 1) {
+          // Last attempt failed
+          throw error;
+        }
+        // Continue to next retry
+        lastError = error;
+      }
+    }
+
+    // If we get here, all retries failed
+    console.error('Error inserting quotation after retries:', lastError);
+    return NextResponse.json(
+      { error: 'Failed to create quotation after retries', details: lastError },
+      { status: 500, headers: corsHeaders }
+    );
+
+  } catch (error) {
+    console.error('Unexpected error in POST /api/quotations:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500, headers: corsHeaders }
+    );
+  }
+}
+
+// PATCH /api/quotations
+// Updates quotation status and/or data
+export async function PATCH(req: NextRequest) {
+  try {
+    // Auth check - get admin session
+    const supabaseAuth = await createServerClient();
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Invalid or missing session' },
+        { status: 401, headers: corsHeaders }
+      );
+    }
+
+    // Check if user is on the thquo allowlist
+    const { data: allowlistEntry, error: allowlistError } = await supabaseAuth
+      .from('thquo_allowlist')
+      .select('id')
+      .eq('user_id', user.id)
+      .limit(1)
+      .maybeSingle();
+
+    if (allowlistError || !allowlistEntry) {
+      return NextResponse.json(
+        { error: 'Forbidden - Not on thquo allowlist' },
+        { status: 403, headers: corsHeaders }
+      );
+    }
+
+    const body = await req.json();
+    const { id, action, phase2_data, status, cost_components, margin_pct } = body;
+
+    // Validate required fields
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Missing required field: id' },
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    if (!action) {
+      return NextResponse.json(
+        { error: 'Missing required field: action' },
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    const supabase = createClientFromSupabase(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    // Handle revision history actions (INSERT new row) vs regular actions (UPDATE existing row)
+    const revisionActions = ['confirm_phase1', 'complete_phase2', 'calculate_pricing'];
+    
+    if (revisionActions.includes(action)) {
+      // Revision history: INSERT new row with incremented revision
+      // First, fetch the current quotation to get all required data
+      const { data: currentQuotation, error: fetchError } = await supabase
+        .from('quotations')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (fetchError || !currentQuotation) {
+        return NextResponse.json(
+          { error: 'Failed to fetch quotation', details: fetchError },
+          { status: 404, headers: corsHeaders }
+        );
+      }
+
+      // Get the maximum revision for this tour_code
+      const { data: maxRevisionData, error: maxRevisionError } = await supabase
+        .from('quotations')
+        .select('revision')
+        .eq('tour_code', currentQuotation.tour_code)
+        .order('revision', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (maxRevisionError) {
+        return NextResponse.json(
+          { error: 'Failed to fetch max revision', details: maxRevisionError },
+          { status: 500, headers: corsHeaders }
+        );
+      }
+
+      const nextRevision = (maxRevisionData?.revision || 0) + 1;
+
+      // Prepare new row data - copy forward all existing data
+      let insertData: any = {
+        tour_code: currentQuotation.tour_code,
+        revision: nextRevision,
+        country: currentQuotation.country,
+        status: currentQuotation.status,
+        phase1_data: currentQuotation.phase1_data,
+        phase2_data: currentQuotation.phase2_data,
+        cost_components: currentQuotation.cost_components,
+        margin_pct: currentQuotation.margin_pct,
+        pricing_snapshot: currentQuotation.pricing_snapshot,
+        staff_id: currentQuotation.staff_id,
+        revision_note: null,
+      };
+
+      // Apply action-specific changes
+      if (action === 'confirm_phase1') {
+        // Transition from phase1 to phase1_confirmed
+        insertData.status = 'phase1_confirmed';
+      } else if (action === 'complete_phase2') {
+        // Complete Phase 2 and transition to phase2
+        if (!phase2_data) {
+          return NextResponse.json(
+            { error: 'Missing phase2_data for complete_phase2 action' },
+            { status: 400, headers: corsHeaders }
+          );
+        }
+        insertData.status = 'phase2';
+        insertData.phase2_data = phase2_data;
+      } else if (action === 'calculate_pricing') {
+        // Calculate pricing using the pricing engine
+        // Validate that all required data is present
+        if (!currentQuotation.phase1_data || !currentQuotation.phase2_data || !currentQuotation.cost_components) {
+          return NextResponse.json(
+            { error: 'Cannot calculate pricing before Phase 1, Phase 2, and Cost Input are complete' },
+            { status: 400, headers: corsHeaders }
+          );
+        }
+
+        // Derive inputs for pricing calculation
+        const total_pax = currentQuotation.phase1_data.totalPax || 0;
+        const child_no_bed_count = currentQuotation.phase2_data.child_no_bed || 0;
+
+        // Map cost_components to the expected format for calculateQuotationPrice
+        const pricingInput = {
+          cost_components: {
+            hotel: currentQuotation.cost_components.hotel,
+            transport: currentQuotation.cost_components.transport,
+            meals: currentQuotation.cost_components.meals,
+            tickets_activities: currentQuotation.cost_components.tickets_activities,
+            guide: currentQuotation.cost_components.guide,
+          },
+          total_pax,
+          child_no_bed_count,
+          margin_pct: margin_pct, // Use provided margin_pct or let function default to 0.08
+        };
+
+        // Call the pricing calculation function
+        const pricingResult = calculateQuotationPrice(pricingInput);
+
+        insertData.status = 'priced';
+        insertData.pricing_snapshot = pricingResult;
+      }
+
+      // Insert the new revision row
+      const { data: quotation, error: insertError } = await supabase
+        .from('quotations')
+        .insert(insertData)
+        .select('id, tour_code, status, pricing_snapshot')
+        .single();
+
+      if (insertError) {
+        console.error('Error inserting new revision:', insertError);
+        return NextResponse.json(
+          { error: 'Failed to create new revision', details: insertError },
+          { status: 500, headers: corsHeaders }
+        );
+      }
+
+      return NextResponse.json(
+        { 
+          id: quotation.id, 
+          tour_code: quotation.tour_code, 
+          status: quotation.status,
+          pricing_snapshot: quotation.pricing_snapshot 
+        },
+        { status: 200, headers: corsHeaders }
+      );
+    }
+
+    // Regular actions: UPDATE existing row in place or create revision based on status
+    let updateData: any = {};
+
+    if (action === 'update_status') {
+      // Generic status update
+      if (!status) {
+        return NextResponse.json(
+          { error: 'Missing status field for update_status action' },
+          { status: 400, headers: corsHeaders }
+        );
+      }
+      updateData.status = status;
+    } else if (action === 'update_cost_components') {
+      // Update cost components with status-conditional revision logic
+      if (!cost_components) {
+        return NextResponse.json(
+          { error: 'Missing cost_components for update_cost_components action' },
+          { status: 400, headers: corsHeaders }
+        );
+      }
+
+      // Fetch current quotation to check status
+      const { data: currentQuotation, error: fetchError } = await supabase
+        .from('quotations')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (fetchError || !currentQuotation) {
+        return NextResponse.json(
+          { error: 'Failed to fetch quotation', details: fetchError },
+          { status: 404, headers: corsHeaders }
+        );
+      }
+
+      // Define draft statuses that allow in-place updates
+      const draftStatuses = ['phase1', 'phase1_confirmed', 'phase2', 'cost_input_complete'];
+      // Define statuses that require revision creation (frozen/amendment states)
+      const frozenStatuses = ['priced', 'sent', 'amended'];
+
+      if (frozenStatuses.includes(currentQuotation.status)) {
+        // Create new revision for frozen/amendment states
+        // Get the maximum revision for this tour_code
+        const { data: maxRevisionData, error: maxRevisionError } = await supabase
+          .from('quotations')
+          .select('revision')
+          .eq('tour_code', currentQuotation.tour_code)
+          .order('revision', { ascending: false })
+          .limit(1)
+          .single();
+
+        if (maxRevisionError) {
+          return NextResponse.json(
+            { error: 'Failed to fetch max revision', details: maxRevisionError },
+            { status: 500, headers: corsHeaders }
+          );
+        }
+
+        const nextRevision = (maxRevisionData?.revision || 0) + 1;
+
+        // Prepare new revision data - copy forward all existing data
+        let insertData: any = {
+          tour_code: currentQuotation.tour_code,
+          revision: nextRevision,
+          country: currentQuotation.country,
+          status: currentQuotation.status, // Keep current status (amendment workflow)
+          phase1_data: currentQuotation.phase1_data,
+          phase2_data: currentQuotation.phase2_data,
+          cost_components: cost_components, // Update with new cost components
+          margin_pct: currentQuotation.margin_pct,
+          pricing_snapshot: null, // Clear pricing snapshot since costs changed
+          staff_id: currentQuotation.staff_id,
+          revision_note: null,
+        };
+
+        // Insert the new revision row
+        const { data: quotation, error: insertError } = await supabase
+          .from('quotations')
+          .insert(insertData)
+          .select('id, tour_code, status, pricing_snapshot')
+          .single();
+
+        if (insertError) {
+          console.error('Error inserting new revision for cost update:', insertError);
+          return NextResponse.json(
+            { error: 'Failed to create new revision for cost update', details: insertError },
+            { status: 500, headers: corsHeaders }
+          );
+        }
+
+        return NextResponse.json(
+          { 
+            id: quotation.id, 
+            tour_code: quotation.tour_code, 
+            status: quotation.status,
+            pricing_snapshot: quotation.pricing_snapshot 
+          },
+          { status: 200, headers: corsHeaders }
+        );
+      } else if (draftStatuses.includes(currentQuotation.status)) {
+        // In-place update for draft states
+        updateData.status = 'cost_input_complete';
+        updateData.cost_components = cost_components;
+      } else {
+        return NextResponse.json(
+          { error: `Unknown status for cost update: ${currentQuotation.status}` },
+          { status: 400, headers: corsHeaders }
+        );
+      }
+    } else {
+      return NextResponse.json(
+        { error: `Unknown action: ${action}` },
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    const { data: quotation, error: updateError } = await supabase
+      .from('quotations')
+      .update(updateData)
+      .eq('id', id)
+      .select('id, tour_code, status, pricing_snapshot')
+      .single();
+
+    if (updateError) {
+      console.error('Error updating quotation:', updateError);
+      return NextResponse.json(
+        { error: 'Failed to update quotation', details: updateError },
+        { status: 500, headers: corsHeaders }
+      );
+    }
+
+    return NextResponse.json(
+      { 
+        id: quotation.id, 
+        tour_code: quotation.tour_code, 
+        status: quotation.status,
+        pricing_snapshot: quotation.pricing_snapshot 
+      },
+      { status: 200, headers: corsHeaders }
+    );
+
+  } catch (error) {
+    console.error('Unexpected error in PATCH /api/quotations:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500, headers: corsHeaders }
+    );
+  }
+}
