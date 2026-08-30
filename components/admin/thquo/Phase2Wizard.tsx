@@ -199,6 +199,14 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
     setSubmitError(null);
 
     try {
+      // Resolve room values: use override values if enabled, otherwise use computed values
+      const roomValues = formData.room_override
+        ? {
+            twin_rooms: formData.twin_rooms,
+            extra_beds: formData.extra_beds,
+          }
+        : computedRoomBreakdown();
+
       const response = await fetch('/api/quotations', {
         method: 'PATCH',
         headers: {
@@ -207,7 +215,10 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
         body: JSON.stringify({
           id: quotationId || '',
           action: 'complete_phase2',
-          phase2_data: formData,
+          phase2_data: {
+            ...formData,
+            ...roomValues,
+          },
         }),
       });
 
