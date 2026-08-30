@@ -62,6 +62,34 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
       setQuotationId(propQuotationId);
     }
   }, [propQuotationId]);
+
+  // Rehydrate cost components from existing quotation on mount
+  useEffect(() => {
+    if (!quotationId) return;
+
+    const rehydrateCostComponents = async () => {
+      try {
+        const response = await fetch(`/api/quotations?id=${quotationId}`, { method: 'GET' });
+        
+        if (!response.ok) {
+          console.error('Failed to rehydrate cost components:', response.status, response.statusText);
+          return;
+        }
+
+        const data = await response.json();
+        
+        if (data.cost_components) {
+          setCostComponents(data.cost_components);
+        }
+      } catch (error) {
+        console.error('Error rehydrating cost components:', error);
+        // Leave fields at default/empty state on failure
+      }
+    };
+
+    rehydrateCostComponents();
+  }, [quotationId]);
+
   const [costComponents, setCostComponents] = useState<CostComponents>({
     hotel: {
       per_night_rate: 0,

@@ -5,12 +5,86 @@ import { calculateQuotationPrice } from '@/lib/pricing/calculateQuotationPrice';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS, PATCH',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS, PATCH, GET',
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
 export async function OPTIONS() {
   return new Response(null, { status: 204, headers: corsHeaders });
+}
+
+// GET /api/quotations
+// Retrieves a quotation by ID
+export async function GET(request: NextRequest) {
+  try {
+    // Auth check - get admin session
+    const supabaseAuth = await createServerClient();
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Unauthorized - Invalid or missing session' },
+        { status: 401, headers: corsHeaders }
+      );
+    }
+
+    // Check if user is on the thquo allowlist
+    const { data: allowlistEntry, error: allowlistError } = await supabaseAuth
+      .from('thquo_allowlist')
+      .select('id')
+      .eq('user_id', user.id)
+      .limit(1)
+      .maybeSingle();
+
+    if (allowlistError || !allowlistEntry) {
+      return NextResponse.json(
+        { error: 'Forbidden - Not on thquo allowlist' },
+        { status: 403, headers: corsHeaders }
+      );
+    }
+
+    // Extract id from URL search params
+    const url = new URL(request.url);
+    const id = url.searchParams.get('id');
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Missing required parameter: id' },
+        { status: 400, headers: corsHeaders }
+      );
+    }
+
+    const supabase = createClientFromSupabase(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    // Query the quotations table for the row matching the id
+    const { data: quotation, error: fetchError } = await supabase
+      .from('quotations')
+      .select('*')
+      .eq('id', id)
+      .single();
+
+    if (fetchError || !quotation) {
+      return NextResponse.json(
+        { error: 'Quotation not found', details: fetchError },
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    return NextResponse.json(
+      quotation,
+      { status: 200, headers: corsHeaders }
+    );
+
+  } catch (error) {
+    console.error('Unexpected error in GET /api/quotations:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500, headers: corsHeaders }
+    );
+  }
 }
 
 // Generate tour code using PostgreSQL function with race-safe sequential counter
