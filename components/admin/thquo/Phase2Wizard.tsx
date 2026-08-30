@@ -238,7 +238,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
 
       // Call onComplete callback with the new ID and phase2Data
       if (onComplete) {
-        onComplete(result.id, formData);
+        onComplete(result.id, { ...formData, ...roomValues });
       }
 
       // Move to confirmation summary
