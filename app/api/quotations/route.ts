@@ -251,7 +251,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { id, action, phase2_data, status, cost_components, margin_pct } = body;
+    const { id, action, phase1_data, phase2_data, status, cost_components, margin_pct } = body;
 
     // Validate required fields
     if (!id) {
@@ -510,6 +510,102 @@ export async function PATCH(req: NextRequest) {
       } else {
         return NextResponse.json(
           { error: `Unknown status for cost update: ${currentQuotation.status}` },
+          { status: 400, headers: corsHeaders }
+        );
+      }
+    } else if (action === 'update_phase1_data') {
+      // Update phase1_data with status-conditional revision logic
+      if (!phase1_data) {
+        return NextResponse.json(
+          { error: 'Missing phase1_data for update_phase1_data action' },
+          { status: 400, headers: corsHeaders }
+        );
+      }
+
+      // Fetch current quotation to check status
+      const { data: currentQuotation, error: fetchError } = await supabase
+        .from('quotations')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (fetchError || !currentQuotation) {
+        return NextResponse.json(
+          { error: 'Failed to fetch quotation', details: fetchError },
+          { status: 404, headers: corsHeaders }
+        );
+      }
+
+      // Define draft statuses that allow in-place updates
+      const draftStatuses = ['phase1', 'phase1_confirmed', 'phase2', 'cost_input_complete'];
+      // Define statuses that require revision creation (frozen/amendment states)
+      const frozenStatuses = ['priced', 'sent', 'amended'];
+
+      if (frozenStatuses.includes(currentQuotation.status)) {
+        // Create new revision for frozen/amendment states
+        // Get the maximum revision for this tour_code
+        const { data: maxRevisionData, error: maxRevisionError } = await supabase
+          .from('quotations')
+          .select('revision')
+          .eq('tour_code', currentQuotation.tour_code)
+          .order('revision', { ascending: false })
+          .limit(1)
+          .single();
+
+        if (maxRevisionError) {
+          return NextResponse.json(
+            { error: 'Failed to fetch max revision', details: maxRevisionError },
+            { status: 500, headers: corsHeaders }
+          );
+        }
+
+        const nextRevision = (maxRevisionData?.revision || 0) + 1;
+
+        // Prepare new revision data - copy forward all existing data
+        let insertData: any = {
+          tour_code: currentQuotation.tour_code,
+          revision: nextRevision,
+          country: currentQuotation.country,
+          status: currentQuotation.status, // Keep current status (amendment workflow)
+          phase1_data: phase1_data, // Update with new phase1_data
+          phase2_data: currentQuotation.phase2_data,
+          cost_components: currentQuotation.cost_components,
+          margin_pct: currentQuotation.margin_pct,
+          pricing_snapshot: null, // Clear pricing snapshot since phase1 data changed
+          staff_id: currentQuotation.staff_id,
+          revision_note: null,
+        };
+
+        // Insert the new revision row
+        const { data: quotation, error: insertError } = await supabase
+          .from('quotations')
+          .insert(insertData)
+          .select('id, tour_code, status, pricing_snapshot')
+          .single();
+
+        if (insertError) {
+          console.error('Error inserting new revision for phase1 data update:', insertError);
+          return NextResponse.json(
+            { error: 'Failed to create new revision for phase1 data update', details: insertError },
+            { status: 500, headers: corsHeaders }
+          );
+        }
+
+        return NextResponse.json(
+          {
+            id: quotation.id,
+            tour_code: quotation.tour_code,
+            status: quotation.status,
+            pricing_snapshot: quotation.pricing_snapshot
+          },
+          { status: 200, headers: corsHeaders }
+        );
+      } else if (draftStatuses.includes(currentQuotation.status)) {
+        // In-place update for draft states
+        updateData.phase1_data = phase1_data;
+      } else {
+        return NextResponse.json(
+          { error: `Unknown status for phase1 data update: ${currentQuotation.status}` },
           { status: 400, headers: corsHeaders }
         );
       }
