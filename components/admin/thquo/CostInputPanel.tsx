@@ -14,7 +14,7 @@ interface CostComponents {
     notes: string;
   };
   transport: {
-    mode: 'private' | 'public';
+    mode: 'no_transport' | 'private' | 'public';
     total_cost: number;
     car_rental_kb_rate?: number; // TODO: KB lookup placeholder
   };
@@ -32,11 +32,12 @@ interface CostComponents {
 export interface CostInputPanelProps {
   quotationId: string;
   duration_days?: number;
-  transport_mode?: 'private' | 'public';
+  transport_mode?: 'no_transport' | 'private' | 'public';
   phase2Data?: {
     twin_rooms?: number;
     double_rooms?: number;
     extra_beds?: number;
+    currency?: 'USD' | 'THB' | 'MMK' | 'EUR' | 'SGD' | null;
   };
   hotelLevel?: number | null;
   onBack?: () => void;
@@ -118,13 +119,25 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
   const [pricingError, setPricingError] = useState<string | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
 
+  // Currency symbol mapping
+  const getCurrencySymbol = (currency: string | null | undefined): string => {
+    const symbols: Record<string, string> = {
+      USD: '$',
+      THB: '฿',
+      MMK: 'Ks',
+      EUR: '€',
+      SGD: 'S$',
+    };
+    return symbols[currency || ''] || '';
+  };
+
   // Computed running subtotal (excluding contingency and currency buffers)
   const runningSubtotal = useMemo(() => {
     const fullRooms = (phase2Data?.twin_rooms || 0) + (phase2Data?.double_rooms || 0);
     const extraBeds = phase2Data?.extra_beds || 0;
     const isHotelExcluded = hotelLevel === 0;
     const hotelTotal = isHotelExcluded ? 0 : costComponents.hotel.per_night_rate * costComponents.hotel.nights * (fullRooms + extraBeds * 0.5);
-    const transportTotal = costComponents.transport.total_cost;
+    const transportTotal = costComponents.transport.mode === 'no_transport' ? 0 : costComponents.transport.total_cost;
     const mealsTotal = costComponents.meals.per_person_per_day_rate * costComponents.hotel.nights;
     const ticketsTotal = costComponents.tickets_activities.reduce((sum, item) => sum + item.cost, 0);
     const guideTotal = costComponents.guide.amount;
@@ -145,6 +158,12 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
   const grandTotal = useMemo(() => {
     return runningSubtotal + contingency + currencyRiskBuffer;
   }, [runningSubtotal, contingency, currencyRiskBuffer]);
+
+  const TRANSPORT_MODE_LABELS: Record<CostComponents['transport']['mode'], string> = {
+    no_transport: 'No Transport Service',
+    private: 'Private',
+    public: 'Public',
+  };
 
   const handleInputChange = (section: keyof CostComponents, field: string, value: any) => {
     setCostComponents({
@@ -320,11 +339,17 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
           <h2 className="text-lg font-semibold text-gray-800 mb-4">Transport</h2>
           <div className="bg-gray-50 p-3 rounded-lg mb-4">
             <p className="text-sm text-gray-600">
-              Mode: <span className="font-semibold text-gray-800 capitalize">{costComponents.transport.mode}</span>
+              Mode: <span className="font-semibold text-gray-800">{TRANSPORT_MODE_LABELS[costComponents.transport.mode]}</span>
             </p>
           </div>
           
-          {costComponents.transport.mode === 'private' ? (
+          {costComponents.transport.mode === 'no_transport' ? (
+            <div className="bg-gray-50 border-2 border-gray-200 rounded-lg p-4">
+              <p className="text-sm text-gray-600">
+                Transport Service မလိုပါ — this component contributes {getCurrencySymbol(phase2Data?.currency)}0 to the running subtotal.
+              </p>
+            </div>
+          ) : costComponents.transport.mode === 'private' ? (
             <div className="space-y-4">
               <div className="bg-amber-50 border-2 border-amber-200 rounded-lg p-4">
                 <p className="text-sm text-amber-800 font-medium mb-2">
@@ -481,19 +506,19 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-700">Running Subtotal</span>
-              <span className="text-sm font-semibold text-gray-800">${runningSubtotal.toFixed(2)}</span>
+              <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{runningSubtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-700">Contingency (2%)</span>
-              <span className="text-sm font-semibold text-emerald-700">${contingency.toFixed(2)}</span>
+              <span className="text-sm font-semibold text-emerald-700">{getCurrencySymbol(phase2Data?.currency)}{contingency.toFixed(2)}</span>
             </div>
             <div className="flex justify-between items-center">
               <span className="text-sm text-gray-700">Currency Risk Buffer (2%)</span>
-              <span className="text-sm font-semibold text-emerald-700">${currencyRiskBuffer.toFixed(2)}</span>
+              <span className="text-sm font-semibold text-emerald-700">{getCurrencySymbol(phase2Data?.currency)}{currencyRiskBuffer.toFixed(2)}</span>
             </div>
             <div className="border-t border-emerald-300 pt-3 flex justify-between items-center">
               <span className="text-base font-semibold text-gray-800">Grand Total</span>
-              <span className="text-base font-bold text-emerald-800">${grandTotal.toFixed(2)}</span>
+              <span className="text-base font-bold text-emerald-800">{getCurrencySymbol(phase2Data?.currency)}{grandTotal.toFixed(2)}</span>
             </div>
           </div>
         </div>
@@ -514,41 +539,41 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
             <div className="space-y-3">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-700">Total Direct Cost</span>
-                <span className="text-sm font-semibold text-gray-800">${pricingSnapshot.total_direct_cost.toFixed(2)}</span>
+                <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.total_direct_cost.toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-700">Contingency</span>
-                <span className="text-sm font-semibold text-blue-700">${pricingSnapshot.contingency.toFixed(2)}</span>
+                <span className="text-sm font-semibold text-blue-700">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.contingency.toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-700">Currency Buffer</span>
-                <span className="text-sm font-semibold text-blue-700">${pricingSnapshot.currency_buffer.toFixed(2)}</span>
+                <span className="text-sm font-semibold text-blue-700">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.currency_buffer.toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-700">Subtotal</span>
-                <span className="text-sm font-semibold text-gray-800">${pricingSnapshot.subtotal.toFixed(2)}</span>
+                <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-700">Gross Tour Price</span>
-                <span className="text-sm font-semibold text-gray-800">${pricingSnapshot.gross_tour_price.toFixed(2)}</span>
+                <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.gross_tour_price.toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-700">Group Discounted Price</span>
-                <span className="text-sm font-semibold text-blue-700">${pricingSnapshot.group_discounted_price.toFixed(2)}</span>
+                <span className="text-sm font-semibold text-blue-700">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.group_discounted_price.toFixed(2)}</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-700">Adult Price Per Person</span>
-                <span className="text-sm font-semibold text-gray-800">${pricingSnapshot.adult_price_per_person.toFixed(2)}</span>
+                <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.adult_price_per_person.toFixed(2)}</span>
               </div>
               {pricingSnapshot.child_no_bed_price_per_person !== null && (
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-700">Child (No Bed) Price Per Person</span>
-                  <span className="text-sm font-semibold text-blue-700">${pricingSnapshot.child_no_bed_price_per_person.toFixed(2)}</span>
+                  <span className="text-sm font-semibold text-blue-700">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.child_no_bed_price_per_person.toFixed(2)}</span>
                 </div>
               )}
               <div className="border-t border-blue-300 pt-3 flex justify-between items-center">
                 <span className="text-base font-semibold text-gray-800">Total Package Price</span>
-                <span className="text-base font-bold text-blue-800">${pricingSnapshot.total_package_price.toFixed(2)}</span>
+                <span className="text-base font-bold text-blue-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.total_package_price.toFixed(2)}</span>
               </div>
             </div>
           </div>

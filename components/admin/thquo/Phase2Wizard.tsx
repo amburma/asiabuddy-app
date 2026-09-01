@@ -8,66 +8,116 @@ interface Traveler {
   nationality?: string;
 }
 
+interface PriceCategory {
+  id: string;
+  category_label: string;
+  age_range_min?: number;
+  age_range_max?: number;
+  unit_price: number;
+  pax_count: number;
+  category_subtotal: number;
+}
+
+interface Activity {
+  id: string;
+  day_number: number;
+  date: string;
+  activity_name: string;
+  location?: string;
+  notes_source?: string;
+  price_categories: PriceCategory[];
+  activity_subtotal: number;
+}
+
 interface FormData {
-  // Step 1: Exact travel dates
-  exact_start_date?: string;
-  exact_end_date?: string;
-  
-  // Step 2: Room breakdown (computed from totalPax or manual override)
+  // Step 1: Room breakdown (computed from totalPax or manual override)
   twin_rooms?: number;
   double_rooms?: number;
   extra_beds?: number;
   room_override?: boolean;
   
-  // Step 3: 4-category pax breakdown
+  // Step 2: 4-category pax breakdown
   adults?: number;
   child_with_bed?: number;
   child_no_bed?: number;
   infants?: number;
+  // FOC (Free of Charge) pax count, nested under Adult category (added 2026-08-31).
+  // Deliberately NOT included in the live-sum-vs-Phase-1-total validation — FOC pax
+  // ride along an existing paying group rather than adding headcount (Roadmap § Survey
+  // Wizard Phase 2, Step 2). Feeds the still-pending FOC-divisor pricing decision.
+  foc_count?: number;
   
-  // Step 4: Meal restrictions
+  // Step 3: Meal restrictions
   meal_restrictions?: string[];
   dietary_notes?: string;
+  // "No Food Service" option (added 2026-08-31) — when true, Final Calculation must
+  // exclude the Meals line entirely, same exclude-the-line pattern as Phase 1's
+  // "No Hotel Service"/"No Transport Service" (Roadmap § Survey Wizard Phase 1).
+  // NOTE: calculateQuotationPrice.ts and CostInputPanel.tsx's running subtotal both
+  // need a follow-up change to actually read this flag — out of scope for this file.
+  no_food_service?: boolean;
   
-  // Step 5: Elderly/special-needs flags
+  // Step 4: Elderly/special-needs flags
   has_elderly?: boolean;
   elderly_count?: number;
   has_special_needs?: boolean;
   special_needs_notes?: string;
   
-  // Step 6: Currency
+  // Step 5: Currency
   currency?: 'USD' | 'THB' | 'MMK' | 'EUR' | 'SGD' | null;
   
-  // Step 7: Hotel level
-  hotel_level?: number;
-  
-  // Step 8: Passport/traveler name list
+  // Step 6: Passport/traveler name list
   travelers?: Traveler[];
+  // "Fill in later" deferred-entry toggle (added 2026-08-31) — this toggle already
+  // existed as "Will provide later" in the original locked spec (Roadmap § Survey
+  // Wizard Phase 2, Step 6); this is the implementation of it, not a new design.
+  travelers_deferred?: boolean;
+  
+  // Step 7: Day-by-Day Program/Activities Survey
+  activities?: Activity[];
 }
 
 export interface Phase2WizardProps {
   totalPax?: number;
   quotationId?: string;
+  startDate?: string;
+  endDate?: string;
+  hotelLevel?: string | null;
   onBack?: () => void;
   onComplete?: (id: string, phase2Data?: FormData) => void;
   onIdUpdate?: (newId: string) => void;
 }
 
-const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTotalPax, quotationId: propQuotationId, onBack, onComplete, onIdUpdate }) => {
+const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTotalPax, quotationId: propQuotationId, startDate, endDate, hotelLevel, onBack, onComplete, onIdUpdate }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     adults: 0,
     child_with_bed: 0,
     child_no_bed: 0,
     infants: 0,
+    foc_count: 0,
     meal_restrictions: [],
+    no_food_service: false,
     has_elderly: false,
     elderly_count: 0,
     has_special_needs: false,
     travelers: [],
+    travelers_deferred: false,
     room_override: false,
-    hotel_level: 3, // Default to mid-range hotel
+    activities: [],
   });
+
+  // Currency symbol mapping
+  const getCurrencySymbol = (currency: string | null | undefined): string => {
+    const symbols: Record<string, string> = {
+      USD: '$',
+      THB: '฿',
+      MMK: 'Ks',
+      EUR: '€',
+      SGD: 'S$',
+    };
+    return symbols[currency || ''] || '';
+  };
   
   const totalPax = propTotalPax || 2; // Default to 2 if not provided
   const [quotationId, setQuotationId] = useState<string | null>(propQuotationId || null);
@@ -82,9 +132,61 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
     }
   }, [propQuotationId]);
 
+  // Rehydrate phase2_data from existing quotation on mount (F5 refresh support)
+  useEffect(() => {
+    if (!quotationId) return;
+
+    // Only rehydrate if local state is still at default/empty values
+    // (avoids overwriting in-memory state during normal Back/Forward navigation)
+    const isDefaultState =
+      formData.adults === 0 &&
+      formData.child_with_bed === 0 &&
+      formData.child_no_bed === 0 &&
+      formData.infants === 0 &&
+      formData.foc_count === 0 &&
+      (formData.meal_restrictions?.length ?? 0) === 0 &&
+      !formData.no_food_service &&
+      !formData.has_elderly &&
+      formData.elderly_count === 0 &&
+      !formData.has_special_needs &&
+      (formData.travelers?.length ?? 0) === 0 &&
+      !formData.travelers_deferred &&
+      !formData.room_override &&
+      (formData.activities?.length ?? 0) === 0;
+
+    if (!isDefaultState) return;
+
+    const rehydratePhase2Data = async () => {
+      try {
+        const response = await fetch(`/api/quotations?id=${quotationId}`, { method: 'GET' });
+
+        if (!response.ok) {
+          console.error('Failed to rehydrate phase2_data:', response.status, response.statusText);
+          return;
+        }
+
+        const data = await response.json();
+
+        if (data.phase2_data) {
+          setFormData(data.phase2_data);
+        }
+      } catch (error) {
+        console.error('Error rehydrating phase2_data:', error);
+        // Leave fields at default/empty state on failure
+      }
+    };
+
+    rehydratePhase2Data();
+  }, [quotationId, formData]);
+
   // Handle input changes
+  // FIX (2026-08-31): was setFormData({ ...formData, [field]: value }) using the stale
+  // `formData` closure. Calling this more than once inside the same synchronous handler
+  // (e.g. the Staff Override toggle below) caused every call but the last to be silently
+  // overwritten — this was the actual root cause of "Staff Override completely
+  // non-functional" (Session Update 2026-08-30 backlog #5). Functional update form fixes it.
   const handleInputChange = (field: keyof FormData, value: any) => {
-    setFormData({ ...formData, [field]: value });
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   // Handle array changes (for meal_restrictions)
@@ -120,6 +222,128 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
     });
   };
 
+  // Handle activities list changes
+  const addActivity = () => {
+    const activities = formData.activities || [];
+    const nextDayNumber = activities.length + 1;
+    
+    // Auto-calculate date from startDate + day_number
+    let autoDate = '';
+    if (startDate) {
+      const startDateObj = new Date(startDate);
+      startDateObj.setDate(startDateObj.getDate() + (nextDayNumber - 1));
+      autoDate = startDateObj.toISOString().split('T')[0];
+    }
+    
+    setFormData({
+      ...formData,
+      activities: [
+        ...activities,
+        {
+          id: crypto.randomUUID(),
+          day_number: nextDayNumber,
+          date: autoDate,
+          activity_name: '',
+          location: '',
+          notes_source: '',
+          price_categories: [],
+          activity_subtotal: 0
+        }
+      ]
+    });
+  };
+
+  const updateActivity = (index: number, field: keyof Activity, value: any) => {
+    const activities = formData.activities || [];
+    const updated = [...activities];
+    updated[index] = { ...updated[index], [field]: value };
+    
+    // Recalculate activity subtotal when price categories change
+    if (field === 'price_categories') {
+      const subtotal = updated[index].price_categories.reduce(
+        (sum, cat) => sum + cat.category_subtotal,
+        0
+      );
+      updated[index].activity_subtotal = subtotal;
+    }
+    
+    setFormData({ ...formData, activities: updated });
+  };
+
+  const removeActivity = (index: number) => {
+    const activities = formData.activities || [];
+    setFormData({
+      ...formData,
+      activities: activities.filter((_, i) => i !== index)
+    });
+  };
+
+  // Handle price category changes within an activity
+  const addPriceCategory = (activityIndex: number) => {
+    const activities = formData.activities || [];
+    const updated = [...activities];
+    const activity = updated[activityIndex];
+    
+    const newCategory: PriceCategory = {
+      id: crypto.randomUUID(),
+      category_label: '',
+      age_range_min: undefined,
+      age_range_max: undefined,
+      unit_price: 0,
+      pax_count: 0,
+      category_subtotal: 0
+    };
+    
+    activity.price_categories = [...(activity.price_categories || []), newCategory];
+    updated[activityIndex] = activity;
+    
+    setFormData({ ...formData, activities: updated });
+  };
+
+  const updatePriceCategory = (activityIndex: number, categoryIndex: number, field: keyof PriceCategory, value: any) => {
+    const activities = formData.activities || [];
+    const updated = [...activities];
+    const activity = updated[activityIndex];
+    const categories = activity.price_categories || [];
+    const updatedCategories = [...categories];
+    
+    updatedCategories[categoryIndex] = { ...updatedCategories[categoryIndex], [field]: value };
+    
+    // Recalculate category subtotal when unit_price or pax_count changes
+    if (field === 'unit_price' || field === 'pax_count') {
+      const category = updatedCategories[categoryIndex];
+      category.category_subtotal = category.unit_price * category.pax_count;
+    }
+    
+    activity.price_categories = updatedCategories;
+    
+    // Recalculate activity subtotal
+    activity.activity_subtotal = activity.price_categories.reduce(
+      (sum, cat) => sum + cat.category_subtotal,
+      0
+    );
+    
+    updated[activityIndex] = activity;
+    setFormData({ ...formData, activities: updated });
+  };
+
+  const removePriceCategory = (activityIndex: number, categoryIndex: number) => {
+    const activities = formData.activities || [];
+    const updated = [...activities];
+    const activity = updated[activityIndex];
+    
+    activity.price_categories = (activity.price_categories || []).filter((_, i) => i !== categoryIndex);
+    
+    // Recalculate activity subtotal
+    activity.activity_subtotal = activity.price_categories.reduce(
+      (sum, cat) => sum + cat.category_subtotal,
+      0
+    );
+    
+    updated[activityIndex] = activity;
+    setFormData({ ...formData, activities: updated });
+  };
+
   // Computed room breakdown from totalPax
   const computedRoomBreakdown = () => {
     if (totalPax % 2 === 0) {
@@ -140,36 +364,35 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
   // Check if current step is valid
   const isStepValid = () => {
     if (currentStep === 1) {
-      return formData.exact_start_date && formData.exact_end_date;
-    }
-    if (currentStep === 2) {
-      // Step 2 is always valid since we have computed defaults
+      // Step 1 is always valid since we have computed defaults
       return true;
     }
-    if (currentStep === 3) {
+    if (currentStep === 2) {
       const total = (formData.adults || 0) + (formData.child_with_bed || 0) + 
                    (formData.child_no_bed || 0) + (formData.infants || 0);
       return total > 0;
     }
-    if (currentStep === 4) {
+    if (currentStep === 3) {
       // Meal restrictions are optional
       return true;
     }
-    if (currentStep === 5) {
+    if (currentStep === 4) {
       // Elderly/special-needs are optional
       return true;
     }
-    if (currentStep === 6) {
+    if (currentStep === 5) {
       return formData.currency !== null && formData.currency !== undefined;
     }
-    if (currentStep === 7) {
-      // Hotel level is required
-      return formData.hotel_level !== undefined && formData.hotel_level !== null;
-    }
-    if (currentStep === 8) {
-      // At least one traveler should be added
+    if (currentStep === 6) {
+      // Deferred entry: staff can defer traveler info entirely.
+      if (formData.travelers_deferred) return true;
+      // Otherwise, at least one traveler should be added
       const travelers = formData.travelers || [];
       return travelers.length > 0 && travelers.every(t => t.name.trim() !== '');
+    }
+    if (currentStep === 7) {
+      // Activities are optional for now
+      return true;
     }
     return false;
   };
@@ -177,7 +400,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
   // Handle next button
   const handleNext = () => {
     if (isStepValid()) {
-      if (currentStep === 8) {
+      if (currentStep === 7) {
         // Phase 2 complete - submit
         handlePhase2Complete();
       } else {
@@ -203,6 +426,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
       const roomValues = formData.room_override
         ? {
             twin_rooms: formData.twin_rooms,
+            double_rooms: formData.double_rooms,
             extra_beds: formData.extra_beds,
           }
         : computedRoomBreakdown();
@@ -242,7 +466,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
       }
 
       // Move to confirmation summary
-      setCurrentStep(8);
+      setCurrentStep(7);
 
     } catch (error) {
       console.error('Error completing Phase 2:', error);
@@ -258,12 +482,12 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
         {/* Wizard Header */}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Phase 2 - Pricing Details</h1>
-          <p className="text-gray-600 text-sm">အဆင့် {currentStep} မှ 8</p>
+          <p className="text-gray-600 text-sm">အဆင့် {currentStep} မှ 7</p>
         </div>
 
         {/* Step Progress */}
         <div className="flex items-center justify-between mb-8">
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((step) => (
+          {[1, 2, 3, 4, 5, 6, 7].map((step) => (
             <div
               key={step}
               className={`flex-1 h-1 mx-1 rounded ${
@@ -273,43 +497,8 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
           ))}
         </div>
 
-        {/* Step 1: Exact Travel Dates */}
+        {/* Step 1: Room Breakdown */}
         {currentStep === 1 && (
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              တိကျသော ခရီးစဉ်ရက်စွဲများ
-            </h2>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  စတင်ရက်စွဲ
-                </label>
-                <input
-                  type="date"
-                  value={formData.exact_start_date || ''}
-                  onChange={(e) => handleInputChange('exact_start_date', e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-all"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  ပြီးဆုံးရက်စွဲ
-                </label>
-                <input
-                  type="date"
-                  value={formData.exact_end_date || ''}
-                  onChange={(e) => handleInputChange('exact_end_date', e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-all"
-                />
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 2: Room Breakdown */}
-        {currentStep === 2 && (
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
               အခန်းခွဲခြားမှု (Room Breakdown)
@@ -340,7 +529,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                   <div className="text-sm font-medium text-amber-700 mb-1">
                     လက်ရေးဖြင့် ပြင်ဆင်ထားသော အခန်းခွဲခြားမှု (Manual Override):
                   </div>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-3 gap-3">
                     <div>
                       <label className="block text-xs font-medium text-gray-700 mb-1">
                         Twin Rooms
@@ -350,6 +539,18 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                         min="0"
                         value={formData.twin_rooms || 0}
                         onChange={(e) => handleInputChange('twin_rooms', parseInt(e.target.value) || 0)}
+                        className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:border-emerald-500 focus:outline-none transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">
+                        Double Rooms
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={formData.double_rooms || 0}
+                        onChange={(e) => handleInputChange('double_rooms', parseInt(e.target.value) || 0)}
                         className="w-full px-3 py-2 rounded-lg border-2 border-gray-300 focus:border-emerald-500 focus:outline-none transition-all"
                       />
                     </div>
@@ -384,6 +585,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                     // Initialize with computed values when enabling override
                     const computed = computedRoomBreakdown();
                     handleInputChange('twin_rooms', computed.twin_rooms);
+                    handleInputChange('double_rooms', 0);
                     handleInputChange('extra_beds', computed.extra_beds);
                   }
                 }}
@@ -401,8 +603,8 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
           </div>
         )}
 
-        {/* Step 3: Pax Breakdown */}
-        {currentStep === 3 && (
+        {/* Step 2: Pax Breakdown */}
+        {currentStep === 2 && (
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
               ခရီးသည်အရေအတွက် (အမျိုးအစားခွဲခြား)
@@ -424,6 +626,29 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                   <span className="w-8 text-center font-semibold">{formData.adults || 0}</span>
                   <button
                     onClick={() => handleInputChange('adults', (formData.adults || 0) + 1)}
+                    className="w-10 h-10 rounded-lg border-2 border-gray-300 text-gray-600 hover:border-emerald-500 hover:bg-emerald-50 transition-all"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+
+              {/* FOC (Free of Charge) pax count — nested under Adult category, added 2026-08-31 */}
+              <div className="flex items-center justify-between p-4 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50 ml-4">
+                <div>
+                  <div className="font-medium text-gray-800 text-sm">FOC (အခမဲ့) — Adult အောက်</div>
+                  <div className="text-xs text-gray-500">Free of Charge pax — စုစုပေါင်း အရေအတွက်ထဲ မထည့်ပါ</div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => handleInputChange('foc_count', Math.max(0, (formData.foc_count || 0) - 1))}
+                    className="w-10 h-10 rounded-lg border-2 border-gray-300 text-gray-600 hover:border-emerald-500 hover:bg-emerald-50 transition-all"
+                  >
+                    −
+                  </button>
+                  <span className="w-8 text-center font-semibold">{formData.foc_count || 0}</span>
+                  <button
+                    onClick={() => handleInputChange('foc_count', (formData.foc_count || 0) + 1)}
                     className="w-10 h-10 rounded-lg border-2 border-gray-300 text-gray-600 hover:border-emerald-500 hover:bg-emerald-50 transition-all"
                   >
                     +
@@ -500,17 +725,42 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
 
             <div className="mt-4 text-sm text-emerald-600 font-medium">
               စုစုပေါင်း: {(formData.adults || 0) + (formData.child_with_bed || 0) + (formData.child_no_bed || 0) + (formData.infants || 0)} ဦး
+              {(formData.foc_count || 0) > 0 && (
+                <span className="text-amber-600 font-normal"> {' '}+ FOC {formData.foc_count} ဦး (အပေါ်ကစုစုပေါင်းထဲ မပါ)</span>
+              )}
             </div>
           </div>
         )}
 
-        {/* Step 4: Meal Restrictions */}
-        {currentStep === 4 && (
+        {/* Step 3: Meal Restrictions */}
+        {currentStep === 3 && (
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
               အစားအသောက် ကန့်သတ်ချက်များ
             </h2>
-            
+
+            {/* "No Food Service" option (added 2026-08-31) — same exclude-the-line
+                pattern as Phase 1's No Hotel/No Transport options */}
+            <div className="flex items-center justify-between p-4 rounded-xl border-2 border-gray-200">
+              <div>
+                <div className="font-medium text-gray-800">Food Service မလိုပါ</div>
+                <div className="text-xs text-gray-500">No Food Service — Final Calculation မှာ Meals line ကို ဖယ်ထားမည်</div>
+              </div>
+              <button
+                onClick={() => handleInputChange('no_food_service', !formData.no_food_service)}
+                className={`w-16 h-8 rounded-full transition-all ${
+                  formData.no_food_service ? 'bg-emerald-500' : 'bg-gray-300'
+                }`}
+              >
+                <div
+                  className={`w-6 h-6 bg-white rounded-full transition-all ${
+                    formData.no_food_service ? 'translate-x-8' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
+
+            {!formData.no_food_service && (
             <div className="space-y-3">
               {[
                 { value: 'vegetarian', label: 'ဟင်းလျာသက်သက် (Vegetarian)', label_mm: 'ဟင်းလျာသက်သက်' },
@@ -534,7 +784,9 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                 </button>
               ))}
             </div>
+            )}
 
+            {!formData.no_food_service && (
             <div className="mt-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 အခြားမှတ်ချက်များ (ရှိလျှင်)
@@ -547,11 +799,12 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                 className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-all resize-none"
               />
             </div>
+            )}
           </div>
         )}
 
-        {/* Step 5: Elderly/Special Needs */}
-        {currentStep === 5 && (
+        {/* Step 4: Elderly/Special Needs */}
+        {currentStep === 4 && (
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
               လူကြီးများ / အထူးလိုအပ်ချက်များ
@@ -633,8 +886,8 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
           </div>
         )}
 
-        {/* Step 6: Currency */}
-        {currentStep === 6 && (
+        {/* Step 5: Currency */}
+        {currentStep === 5 && (
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
               ငွေကြေးအမျိုးအစား
@@ -665,46 +918,35 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
           </div>
         )}
 
-        {/* Step 7: Hotel Level */}
-        {currentStep === 7 && (
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
-              ဟိုတယ်အဆင့် (Hotel Level)
-            </h2>
-            
-            <div className="space-y-3">
-              {[
-                { value: 0, label: 'No Hotel', label_mm: 'ဟိုတယ်မပါ', description: 'Customers arrange their own accommodation' },
-                { value: 1, label: 'Budget', label_mm: 'ဈေးသက်သာ', description: '2-3 star hotels, guesthouses' },
-                { value: 2, label: 'Standard', label_mm: 'ပုံမှန်', description: '3-4 star hotels' },
-                { value: 3, label: 'Mid-Range', label_mm: 'အလယ်အလတ်', description: '4 star hotels' },
-                { value: 4, label: 'Premium', label_mm: 'အဆင့်မြင့်', description: '5 star hotels' },
-              ].map((option) => (
-                <button
-                  key={option.value}
-                  onClick={() => handleInputChange('hotel_level', option.value)}
-                  className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
-                    formData.hotel_level === option.value
-                      ? 'border-emerald-500 bg-emerald-50 text-emerald-700'
-                      : 'border-gray-200 bg-white text-gray-700 hover:border-emerald-300'
-                  }`}
-                >
-                  <div className="font-medium text-sm">{option.label_mm}</div>
-                  <div className="text-xs text-gray-500 mt-1">{option.label}</div>
-                  <div className="text-xs text-gray-400 mt-1">{option.description}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Step 8: Traveler Information */}
-        {currentStep === 8 && (
+        {/* Step 6: Traveler Information */}
+        {currentStep === 6 && (
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
               ခရီးသည်အချက်အလက်များ
             </h2>
-            
+
+            {/* "Fill in later" deferred-entry toggle (added 2026-08-31) —
+                implements the "Will provide later" option already in the locked spec */}
+            <div className="flex items-center justify-between p-4 rounded-xl border-2 border-gray-200">
+              <div>
+                <div className="font-medium text-gray-800">နောက်မှ ဖြည့်မည်</div>
+                <div className="text-xs text-gray-500">Fill in later — ခရီးသွား အချက်အလက်များကို ယခု မထည့်ဘဲ ဆက်သွားနိုင်သည်</div>
+              </div>
+              <button
+                onClick={() => handleInputChange('travelers_deferred', !formData.travelers_deferred)}
+                className={`w-16 h-8 rounded-full transition-all ${
+                  formData.travelers_deferred ? 'bg-emerald-500' : 'bg-gray-300'
+                }`}
+              >
+                <div
+                  className={`w-6 h-6 bg-white rounded-full transition-all ${
+                    formData.travelers_deferred ? 'translate-x-8' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
+
+            {!formData.travelers_deferred && (
             <div className="space-y-4">
               {(formData.travelers || []).map((traveler, index) => (
                 <div key={index} className="p-4 rounded-xl border-2 border-gray-200 space-y-3">
@@ -771,11 +1013,204 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                 ခရီးသည်ထပ်ထည့်မည်
               </button>
             </div>
+            )}
+          </div>
+        )}
+
+        {/* Step 7: Day-by-Day Program/Activities Survey */}
+        {currentStep === 7 && (
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+              နေ့စဉ် အစီအစဉ် / လှုပ်ရှားမှုများ
+            </h2>
+            
+            <div className="space-y-6">
+              {(formData.activities || []).map((activity, activityIndex) => (
+                <div key={activity.id} className="p-4 rounded-xl border-2 border-gray-200 space-y-4">
+                  <div className="flex justify-between items-center">
+                    <div className="font-medium text-gray-800">Day {activity.day_number}</div>
+                    {(formData.activities || []).length > 1 && (
+                      <button
+                        onClick={() => removeActivity(activityIndex)}
+                        className="text-red-600 hover:text-red-700 text-sm"
+                      >
+                        ဖျက်မည်
+                      </button>
+                    )}
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        ရက်စွဲ
+                      </label>
+                      <input
+                        type="date"
+                        value={activity.date}
+                        onChange={(e) => updateActivity(activityIndex, 'date', e.target.value)}
+                        className="w-full px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-all"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        လှုပ်ရှားမှု အမည် *
+                      </label>
+                      <input
+                        type="text"
+                        value={activity.activity_name}
+                        onChange={(e) => updateActivity(activityIndex, 'activity_name', e.target.value)}
+                        placeholder="Grand Palace + Reclining Buddha"
+                        className="w-full px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-all"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      တည်နေရာ (ရှိလျှင်)
+                    </label>
+                    <input
+                      type="text"
+                      value={activity.location || ''}
+                      onChange={(e) => updateActivity(activityIndex, 'location', e.target.value)}
+                      placeholder="Bangkok Old City"
+                      className="w-full px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-all"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      မှတ်ချက် / ရင်းမြစ် (ရှိလျှင်)
+                    </label>
+                    <input
+                      type="text"
+                      value={activity.notes_source || ''}
+                      onChange={(e) => updateActivity(activityIndex, 'notes_source', e.target.value)}
+                      placeholder="https://klook.com/..."
+                      className="w-full px-4 py-2 rounded-lg border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-all"
+                    />
+                  </div>
+                  
+                  {/* Price Categories */}
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <div className="font-medium text-gray-700 text-sm">စျေးနှုန်း အမျိုးအစားများ</div>
+                      <button
+                        onClick={() => addPriceCategory(activityIndex)}
+                        className="text-emerald-600 hover:text-emerald-700 text-sm"
+                      >
+                        + အမျိုးအစားထပ်ထည့်မည်
+                      </button>
+                    </div>
+                    
+                    {(activity.price_categories || []).map((category, categoryIndex) => (
+                      <div key={category.id} className="p-3 rounded-lg border border-gray-200 space-y-2">
+                        <div className="flex justify-between items-center">
+                          <div className="text-xs text-gray-500">Category #{categoryIndex + 1}</div>
+                          {(activity.price_categories || []).length > 1 && (
+                            <button
+                              onClick={() => removePriceCategory(activityIndex, categoryIndex)}
+                              className="text-red-600 hover:text-red-700 text-xs"
+                            >
+                              ဖျက်မည်
+                            </button>
+                          )}
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">
+                              အမည် *
+                            </label>
+                            <input
+                              type="text"
+                              value={category.category_label}
+                              onChange={(e) => updatePriceCategory(activityIndex, categoryIndex, 'category_label', e.target.value)}
+                              placeholder="Adult"
+                              className="w-full px-3 py-1.5 rounded border border-gray-200 focus:border-emerald-500 focus:outline-none text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">
+                              ယူနစ် စျေး *
+                            </label>
+                            <input
+                              type="number"
+                              value={category.unit_price}
+                              onChange={(e) => updatePriceCategory(activityIndex, categoryIndex, 'unit_price', parseFloat(e.target.value) || 0)}
+                              placeholder="0"
+                              className="w-full px-3 py-1.5 rounded border border-gray-200 focus:border-emerald-500 focus:outline-none text-sm"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="grid grid-cols-3 gap-2">
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">
+                              အသက် အနိမ့်
+                            </label>
+                            <input
+                              type="number"
+                              value={category.age_range_min || ''}
+                              onChange={(e) => updatePriceCategory(activityIndex, categoryIndex, 'age_range_min', e.target.value ? parseFloat(e.target.value) : undefined)}
+                              placeholder="-"
+                              className="w-full px-3 py-1.5 rounded border border-gray-200 focus:border-emerald-500 focus:outline-none text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">
+                              အသက် အမြင့်
+                            </label>
+                            <input
+                              type="number"
+                              value={category.age_range_max || ''}
+                              onChange={(e) => updatePriceCategory(activityIndex, categoryIndex, 'age_range_max', e.target.value ? parseFloat(e.target.value) : undefined)}
+                              placeholder="-"
+                              className="w-full px-3 py-1.5 rounded border border-gray-200 focus:border-emerald-500 focus:outline-none text-sm"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-600 mb-1">
+                              ဦးရေ *
+                            </label>
+                            <input
+                              type="number"
+                              value={category.pax_count}
+                              onChange={(e) => updatePriceCategory(activityIndex, categoryIndex, 'pax_count', parseInt(e.target.value) || 0)}
+                              placeholder="0"
+                              className="w-full px-3 py-1.5 rounded border border-gray-200 focus:border-emerald-500 focus:outline-none text-sm"
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="text-right text-sm font-medium text-emerald-600">
+                          {getCurrencySymbol(formData.currency)}{category.category_subtotal.toFixed(2)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="text-right font-medium text-gray-800 pt-2 border-t border-gray-200">
+                    Activity Subtotal: {getCurrencySymbol(formData.currency)}{activity.activity_subtotal.toFixed(2)}
+                  </div>
+                </div>
+              ))}
+              
+              <button
+                onClick={addActivity}
+                className="w-full p-4 rounded-xl border-2 border-dashed border-gray-300 text-gray-600 hover:border-emerald-500 hover:text-emerald-600 transition-all flex items-center justify-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                နေ့ထပ်ထည့်မည်
+              </button>
+            </div>
           </div>
         )}
 
         {/* Phase 2 Complete Summary */}
-        {currentStep === 9 && (
+        {currentStep === 7 && (
           <div className="space-y-4">
             <h2 className="text-lg font-semibold text-gray-800 mb-4">
               Phase 2 ပြီးမြောက်ပါပြီ
@@ -804,18 +1239,18 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                   Phase 2 အချက်အလက်များ စုဆောင်းပြီးမြောက်ပါပြီ
                 </p>
                 <div className="text-xs text-emerald-600 space-y-1">
-                  <p>Travel Dates: {formData.exact_start_date} to {formData.exact_end_date}</p>
+                  <p>Travel Dates: {startDate} to {endDate}</p>
                   <p>Room Breakdown: {formData.room_override 
                     ? `${formData.twin_rooms} Twin Rooms + ${formData.extra_beds} Extra Bed${formData.extra_beds !== 1 ? 's' : ''} (manual override)`
                     : `${computedRoomBreakdown().twin_rooms} Twin Rooms + ${computedRoomBreakdown().extra_beds} Extra Bed${computedRoomBreakdown().extra_beds !== 1 ? 's' : ''} (computed)`
                   }</p>
-                  <p>Pax: Adults {formData.adults}, Child+Bed {formData.child_with_bed}, Child No Bed {formData.child_no_bed}, Infants {formData.infants}</p>
-                  <p>Meal Restrictions: {(formData.meal_restrictions || []).length} selected</p>
+                  <p>Pax: Adults {formData.adults}, Child+Bed {formData.child_with_bed}, Child No Bed {formData.child_no_bed}, Infants {formData.infants}{(formData.foc_count || 0) > 0 ? `, FOC ${formData.foc_count}` : ''}</p>
+                  <p>Meals: {formData.no_food_service ? 'No Food Service' : `${(formData.meal_restrictions || []).length} restriction(s) selected`}</p>
                   <p>Elderly: {formData.has_elderly ? `Yes (${formData.elderly_count})` : 'No'}</p>
                   <p>Special Needs: {formData.has_special_needs ? 'Yes' : 'No'}</p>
                   <p>Currency: {formData.currency}</p>
-                  <p>Hotel Level: {formData.hotel_level === 0 ? 'No Hotel' : formData.hotel_level === 1 ? 'Budget' : formData.hotel_level === 2 ? 'Standard' : formData.hotel_level === 3 ? 'Mid-Range' : 'Premium'}</p>
-                  <p>Travelers: {(formData.travelers || []).length} registered</p>
+                  <p>Hotel Level: {hotelLevel === 'no_hotel' ? 'No Hotel' : hotelLevel === 'budget' ? 'Budget' : hotelLevel === 'standard' ? 'Standard' : hotelLevel === 'deluxe' ? 'Deluxe' : hotelLevel === 'luxury' ? 'Luxury' : 'Not specified'}</p>
+                  <p>Travelers: {formData.travelers_deferred ? 'Deferred (Fill in later)' : `${(formData.travelers || []).length} registered`}</p>
                 </div>
                 {onComplete && quotationId && (
                   <button
@@ -831,8 +1266,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
         )}
 
         {/* Navigation Buttons */}
-        {currentStep !== 9 && (
-          <div className="flex justify-between items-center pt-6 border-t border-gray-100">
+        <div className="flex justify-between items-center pt-6 border-t border-gray-100">
             {currentStep > 1 ? (
               <button
                 onClick={handlePrevious}
@@ -862,7 +1296,6 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
               {isSubmitting ? 'လုပ်ဆောင်နေသည်...' : (currentStep === 7 ? 'ပြီးမြောက်ပါပြီ' : 'ရှေ့သို့')}
             </button>
           </div>
-        )}
       </div>
     </div>
   );
