@@ -80,7 +80,6 @@ interface FormData {
 export interface Phase2WizardProps {
   totalPax?: number;
   quotationId?: string;
-  tourCode?: string;
   startDate?: string;
   endDate?: string;
   hotelLevel?: string | null;
@@ -89,7 +88,7 @@ export interface Phase2WizardProps {
   onIdUpdate?: (newId: string) => void;
 }
 
-const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTotalPax, quotationId: propQuotationId, tourCode, startDate, endDate, hotelLevel, onBack, onComplete, onIdUpdate }) => {
+const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTotalPax, quotationId: propQuotationId, startDate, endDate, hotelLevel, onBack, onComplete, onIdUpdate }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     adults: 0,
@@ -1240,7 +1239,6 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                   Phase 2 အချက်အလက်များ စုဆောင်းပြီးမြောက်ပါပြီ
                 </p>
                 <div className="text-xs text-emerald-600 space-y-1">
-                  {tourCode && <p>Tour Code: {tourCode}</p>}
                   <p>Travel Dates: {startDate} to {endDate}</p>
                   <p>Room Breakdown: {formData.room_override 
                     ? `${formData.twin_rooms} Twin Rooms + ${formData.extra_beds} Extra Bed${formData.extra_beds !== 1 ? 's' : ''} (manual override)`
