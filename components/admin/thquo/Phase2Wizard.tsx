@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface Traveler {
   name: string;
@@ -80,6 +80,7 @@ interface FormData {
 export interface Phase2WizardProps {
   totalPax?: number;
   quotationId?: string;
+  tourCode?: string;
   startDate?: string;
   endDate?: string;
   hotelLevel?: string | null;
@@ -88,7 +89,7 @@ export interface Phase2WizardProps {
   onIdUpdate?: (newId: string) => void;
 }
 
-const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTotalPax, quotationId: propQuotationId, startDate, endDate, hotelLevel, onBack, onComplete, onIdUpdate }) => {
+const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTotalPax, quotationId: propQuotationId, tourCode, startDate, endDate, hotelLevel, onBack, onComplete, onIdUpdate }) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     adults: 0,
@@ -132,12 +133,11 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
     }
   }, [propQuotationId]);
 
-  // Rehydrate phase2_data from existing quotation on mount (F5 refresh support)
-  useEffect(() => {
-    if (!quotationId) return;
+  const hasAttemptedRehydration = useRef(false);
 
-    // Only rehydrate if local state is still at default/empty values
-    // (avoids overwriting in-memory state during normal Back/Forward navigation)
+  useEffect(() => {
+    if (!quotationId || hasAttemptedRehydration.current) return;
+
     const isDefaultState =
       formData.adults === 0 &&
       formData.child_with_bed === 0 &&
@@ -154,7 +154,10 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
       !formData.room_override &&
       (formData.activities?.length ?? 0) === 0;
 
+    hasAttemptedRehydration.current = true;
     if (!isDefaultState) return;
+
+    let cancelled = false;
 
     const rehydratePhase2Data = async () => {
       try {
@@ -166,18 +169,37 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
         }
 
         const data = await response.json();
+        if (cancelled) return;
 
         if (data.phase2_data) {
-          setFormData(data.phase2_data);
+          setFormData(prev => {
+            const prevIsStillDefault =
+              prev.adults === 0 &&
+              prev.child_with_bed === 0 &&
+              prev.child_no_bed === 0 &&
+              prev.infants === 0 &&
+              prev.foc_count === 0 &&
+              (prev.meal_restrictions?.length ?? 0) === 0 &&
+              !prev.no_food_service &&
+              !prev.has_elderly &&
+              prev.elderly_count === 0 &&
+              !prev.has_special_needs &&
+              (prev.travelers?.length ?? 0) === 0 &&
+              !prev.travelers_deferred &&
+              !prev.room_override &&
+              (prev.activities?.length ?? 0) === 0;
+            return prevIsStillDefault ? data.phase2_data : prev;
+          });
         }
       } catch (error) {
         console.error('Error rehydrating phase2_data:', error);
-        // Leave fields at default/empty state on failure
       }
     };
 
     rehydratePhase2Data();
-  }, [quotationId, formData]);
+
+    return () => { cancelled = true; };
+  }, [quotationId]);
 
   // Handle input changes
   // FIX (2026-08-31): was setFormData({ ...formData, [field]: value }) using the stale
@@ -465,6 +487,9 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
         onComplete(result.id, { ...formData, ...roomValues });
       }
 
+      // Sync resolved room values back into formData for Step 7 summary display
+      setFormData(prev => ({ ...prev, ...roomValues }));
+
       // Move to confirmation summary
       setCurrentStep(7);
 
@@ -483,6 +508,9 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Phase 2 - Pricing Details</h1>
           <p className="text-gray-600 text-sm">အဆင့် {currentStep} မှ 7</p>
+          {tourCode && (
+            <p className="text-xs text-gray-400 mt-1">Tour Code: {tourCode}</p>
+          )}
         </div>
 
         {/* Step Progress */}
@@ -1120,13 +1148,13 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                         <div className="grid grid-cols-2 gap-2">
                           <div>
                             <label className="block text-xs font-medium text-gray-600 mb-1">
-                              အမည် *
+                              Type
                             </label>
                             <input
                               type="text"
                               value={category.category_label}
                               onChange={(e) => updatePriceCategory(activityIndex, categoryIndex, 'category_label', e.target.value)}
-                              placeholder="Adult"
+                              placeholder="Adult (or) Child"
                               className="w-full px-3 py-1.5 rounded border border-gray-200 focus:border-emerald-500 focus:outline-none text-sm"
                             />
                           </div>
@@ -1252,14 +1280,6 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                   <p>Hotel Level: {hotelLevel === 'no_hotel' ? 'No Hotel' : hotelLevel === 'budget' ? 'Budget' : hotelLevel === 'standard' ? 'Standard' : hotelLevel === 'deluxe' ? 'Deluxe' : hotelLevel === 'luxury' ? 'Luxury' : 'Not specified'}</p>
                   <p>Travelers: {formData.travelers_deferred ? 'Deferred (Fill in later)' : `${(formData.travelers || []).length} registered`}</p>
                 </div>
-                {onComplete && quotationId && (
-                  <button
-                    onClick={() => onComplete(quotationId)}
-                    className="mt-4 w-full px-4 py-3 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-medium transition-all"
-                  >
-                    Continue to Cost Input
-                  </button>
-                )}
               </div>
             )}
           </div>

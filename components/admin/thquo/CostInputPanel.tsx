@@ -38,6 +38,7 @@ export interface CostInputPanelProps {
     double_rooms?: number;
     extra_beds?: number;
     currency?: 'USD' | 'THB' | 'MMK' | 'EUR' | 'SGD' | null;
+    activitiesTotal?: number;
   };
   hotelLevel?: number | null;
   onBack?: () => void;
@@ -139,7 +140,7 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
     const hotelTotal = isHotelExcluded ? 0 : costComponents.hotel.per_night_rate * costComponents.hotel.nights * (fullRooms + extraBeds * 0.5);
     const transportTotal = costComponents.transport.mode === 'no_transport' ? 0 : costComponents.transport.total_cost;
     const mealsTotal = costComponents.meals.per_person_per_day_rate * costComponents.hotel.nights;
-    const ticketsTotal = costComponents.tickets_activities.reduce((sum, item) => sum + item.cost, 0);
+    const ticketsTotal = costComponents.tickets_activities.reduce((sum, item) => sum + item.cost, 0) + (phase2Data?.activitiesTotal ?? 0);
     const guideTotal = costComponents.guide.amount;
     return hotelTotal + transportTotal + mealsTotal + ticketsTotal + guideTotal;
   }, [costComponents, phase2Data, hotelLevel]);
@@ -457,6 +458,12 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
               Add Ticket/Activity
             </button>
           </div>
+          <div className="mt-4 pt-4 border-t border-gray-200">
+            <div className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+              <span className="text-sm text-gray-600">Day-by-Day Survey Activities</span>
+              <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{(phase2Data?.activitiesTotal ?? 0).toFixed(2)}</span>
+            </div>
+          </div>
         </div>
 
         {/* Guide Section */}
@@ -537,44 +544,60 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
               </button>
             </div>
             <div className="space-y-3">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-700">Total Direct Cost</span>
-                <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.total_direct_cost.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-700">Contingency</span>
-                <span className="text-sm font-semibold text-blue-700">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.contingency.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-700">Currency Buffer</span>
-                <span className="text-sm font-semibold text-blue-700">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.currency_buffer.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-700">Subtotal</span>
-                <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.subtotal.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-700">Gross Tour Price</span>
-                <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.gross_tour_price.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-700">Group Discounted Price</span>
-                <span className="text-sm font-semibold text-blue-700">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.group_discounted_price.toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-gray-700">Adult Price Per Person</span>
-                <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.adult_price_per_person.toFixed(2)}</span>
-              </div>
+              {pricingSnapshot.total_direct_cost !== null && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-700">Total Direct Cost</span>
+                  <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.total_direct_cost.toFixed(2)}</span>
+                </div>
+              )}
+              {pricingSnapshot.contingency !== null && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-700">Contingency</span>
+                  <span className="text-sm font-semibold text-blue-700">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.contingency.toFixed(2)}</span>
+                </div>
+              )}
+              {pricingSnapshot.currency_buffer !== null && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-700">Currency Buffer</span>
+                  <span className="text-sm font-semibold text-blue-700">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.currency_buffer.toFixed(2)}</span>
+                </div>
+              )}
+              {pricingSnapshot.subtotal !== null && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-700">Subtotal</span>
+                  <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.subtotal.toFixed(2)}</span>
+                </div>
+              )}
+              {pricingSnapshot.gross_tour_price !== null && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-700">Gross Tour Price</span>
+                  <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.gross_tour_price.toFixed(2)}</span>
+                </div>
+              )}
+              {pricingSnapshot.group_discounted_price !== null && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-700">Group Discounted Price</span>
+                  <span className="text-sm font-semibold text-blue-700">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.group_discounted_price.toFixed(2)}</span>
+                </div>
+              )}
+              {pricingSnapshot.adult_price_per_person !== null && (
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-700">Adult Price Per Person</span>
+                  <span className="text-sm font-semibold text-gray-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.adult_price_per_person.toFixed(2)}</span>
+                </div>
+              )}
               {pricingSnapshot.child_no_bed_price_per_person !== null && (
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-700">Child (No Bed) Price Per Person</span>
                   <span className="text-sm font-semibold text-blue-700">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.child_no_bed_price_per_person.toFixed(2)}</span>
                 </div>
               )}
-              <div className="border-t border-blue-300 pt-3 flex justify-between items-center">
-                <span className="text-base font-semibold text-gray-800">Total Package Price</span>
-                <span className="text-base font-bold text-blue-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.total_package_price.toFixed(2)}</span>
-              </div>
+              {pricingSnapshot.total_package_price !== null && (
+                <div className="border-t border-blue-300 pt-3 flex justify-between items-center">
+                  <span className="text-base font-semibold text-gray-800">Total Package Price</span>
+                  <span className="text-base font-bold text-blue-800">{getCurrencySymbol(phase2Data?.currency)}{pricingSnapshot.total_package_price.toFixed(2)}</span>
+                </div>
+              )}
             </div>
           </div>
         )}
