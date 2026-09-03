@@ -48,7 +48,7 @@ export interface CostInputPanelProps {
 
 const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
   quotationId: propQuotationId,
-  duration_days,
+  duration_days = 1,
   transport_mode,
   phase2Data,
   hotelLevel,
@@ -141,7 +141,9 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
     const transportTotal = costComponents.transport.mode === 'no_transport' ? 0 : costComponents.transport.total_cost;
     const mealsTotal = costComponents.meals.per_person_per_day_rate * costComponents.hotel.nights;
     const ticketsTotal = costComponents.tickets_activities.reduce((sum, item) => sum + item.cost, 0) + (phase2Data?.activitiesTotal ?? 0);
-    const guideTotal = costComponents.guide.amount;
+    const guideTotal = costComponents.guide.rate_type === 'per_day'
+      ? costComponents.guide.amount * duration_days
+      : costComponents.guide.amount;
     return hotelTotal + transportTotal + mealsTotal + ticketsTotal + guideTotal;
   }, [costComponents, phase2Data, hotelLevel]);
 

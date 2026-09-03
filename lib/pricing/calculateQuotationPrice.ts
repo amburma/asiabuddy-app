@@ -29,6 +29,9 @@ interface PricingInput {
   child_no_bed_count: number;
   foc_count?: number;
   margin_pct?: number;
+  duration_days?: number;
+  full_rooms?: number;
+  extra_beds?: number;
 }
 
 interface PricingSnapshot {
@@ -44,10 +47,10 @@ interface PricingSnapshot {
 }
 
 export function calculateQuotationPrice(input: PricingInput): PricingSnapshot {
-  const { cost_components, total_pax, child_no_bed_count, foc_count = 0, margin_pct = 0.08 } = input;
+  const { cost_components, total_pax, child_no_bed_count, foc_count = 0, margin_pct = 0.08, duration_days = 1, full_rooms = 0, extra_beds = 0 } = input;
 
   // Calculate hotel cost (per room basis)
-  const hotelTotal = cost_components.hotel.per_night_rate * cost_components.hotel.nights;
+  const hotelTotal = cost_components.hotel.per_night_rate * cost_components.hotel.nights * (full_rooms + extra_beds * 0.5);
   
   // Calculate transport cost
   const transportTotal = cost_components.transport.total_cost;
@@ -59,7 +62,9 @@ export function calculateQuotationPrice(input: PricingInput): PricingSnapshot {
   const ticketsTotal = cost_components.tickets_activities.reduce((sum, item) => sum + item.cost, 0);
   
   // Calculate guide cost
-  const guideTotal = cost_components.guide.amount;
+  const guideTotal = cost_components.guide.rate_type === 'per_day'
+    ? cost_components.guide.amount * duration_days
+    : cost_components.guide.amount;
   
   // Total direct cost
   const total_direct_cost = hotelTotal + transportTotal + mealsTotal + ticketsTotal + guideTotal;
