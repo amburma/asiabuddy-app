@@ -43,13 +43,14 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Extract id from URL search params
+    // Extract id or tour_code from URL search params
     const url = new URL(request.url);
     const id = url.searchParams.get('id');
+    const tour_code = url.searchParams.get('tour_code');
 
-    if (!id) {
+    if (!id && !tour_code) {
       return NextResponse.json(
-        { error: 'Missing required parameter: id' },
+        { error: 'Missing required parameter: id or tour_code' },
         { status: 400, headers: corsHeaders }
       );
     }
@@ -59,18 +60,42 @@ export async function GET(request: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    // Query the quotations table for the row matching the id
-    const { data: quotation, error: fetchError } = await supabase
-      .from('quotations')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (fetchError || !quotation) {
-      return NextResponse.json(
-        { error: 'Quotation not found', details: fetchError },
-        { status: 404, headers: corsHeaders }
-      );
+    // Query by id or tour_code
+    let quotation, fetchError;
+    if (id) {
+      // Query the quotations table for the row matching the id
+      const result = await supabase
+        .from('quotations')
+        .select('*')
+        .eq('id', id)
+        .single();
+      quotation = result.data;
+      fetchError = result.error;
+      
+      if (fetchError || !quotation) {
+        return NextResponse.json(
+          { error: 'Quotation not found', details: fetchError },
+          { status: 404, headers: corsHeaders }
+        );
+      }
+    } else {
+      // Query the quotations table for the row matching the tour_code
+      const result = await supabase
+        .from('quotations')
+        .select('*')
+        .eq('tour_code', tour_code)
+        .order('revision', { ascending: false })
+        .limit(1)
+        .single();
+      quotation = result.data;
+      fetchError = result.error;
+      
+      if (fetchError || !quotation) {
+        return NextResponse.json(
+          { error: 'Tour Code not found' },
+          { status: 404, headers: corsHeaders }
+        );
+      }
     }
 
     return NextResponse.json(
@@ -355,6 +380,7 @@ export async function PATCH(req: NextRequest) {
         const foc_count = currentQuotation.phase2_data.foc_count || 0;
         const full_rooms = (currentQuotation.phase2_data.twin_rooms || 0) + (currentQuotation.phase2_data.double_rooms || 0);
         const extra_beds = currentQuotation.phase2_data.extra_beds || 0;
+        const duration_days = currentQuotation.phase1_data.duration_days || 1;
 
         // Calculate activities survey total from phase2_data
         const activitiesSurveyTotal = (currentQuotation.phase2_data.activities || [])
@@ -378,6 +404,9 @@ export async function PATCH(req: NextRequest) {
           child_no_bed_count,
           foc_count,
           margin_pct: margin_pct,
+          duration_days,
+          full_rooms,
+          extra_beds,
         };
 
         const pricingResult = calculateQuotationPrice(pricingInput);
@@ -470,6 +499,7 @@ export async function PATCH(req: NextRequest) {
       const foc_count = currentQuotation.phase2_data.foc_count || 0;
       const full_rooms = (currentQuotation.phase2_data.twin_rooms || 0) + (currentQuotation.phase2_data.double_rooms || 0);
       const extra_beds = currentQuotation.phase2_data.extra_beds || 0;
+      const duration_days = currentQuotation.phase1_data.duration_days || 1;
 
       // Calculate activities survey total from phase2_data
       const activitiesSurveyTotal = (currentQuotation.phase2_data.activities || [])
@@ -493,6 +523,9 @@ export async function PATCH(req: NextRequest) {
         child_no_bed_count,
         foc_count,
         margin_pct: margin_pct,
+        duration_days,
+        full_rooms,
+        extra_beds,
       };
 
       const pricingResult = calculateQuotationPrice(pricingInput);
