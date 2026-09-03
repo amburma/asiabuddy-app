@@ -273,25 +273,29 @@ export async function PATCH(req: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    // Handle revision history actions (INSERT new row) vs regular actions (UPDATE existing row)
-    const revisionActions = ['confirm_phase1', 'complete_phase2', 'calculate_pricing'];
-    
-    if (revisionActions.includes(action)) {
-      // Revision history: INSERT new row with incremented revision
-      // First, fetch the current quotation to get all required data
-      const { data: currentQuotation, error: fetchError } = await supabase
-        .from('quotations')
-        .select('*')
-        .eq('id', id)
-        .single();
+    // Shared status-conditional rule for all quotation modification actions
+    // Define draft statuses that allow in-place updates
+    const draftStatuses = ['phase1', 'phase1_confirmed', 'phase2', 'cost_input_complete'];
+    // Define statuses that require revision creation (frozen/amendment states)
+    const frozenStatuses = ['priced', 'sent', 'amended'];
 
-      if (fetchError || !currentQuotation) {
-        return NextResponse.json(
-          { error: 'Failed to fetch quotation', details: fetchError },
-          { status: 404, headers: corsHeaders }
-        );
-      }
+    // Fetch current quotation to check status and get required data
+    const { data: currentQuotation, error: fetchError } = await supabase
+      .from('quotations')
+      .select('*')
+      .eq('id', id)
+      .single();
 
+    if (fetchError || !currentQuotation) {
+      return NextResponse.json(
+        { error: 'Failed to fetch quotation', details: fetchError },
+        { status: 404, headers: corsHeaders }
+      );
+    }
+
+    // Handle all actions based on current status
+    if (frozenStatuses.includes(currentQuotation.status)) {
+      // Create new revision for frozen/amendment states
       // Get the maximum revision for this tour_code
       const { data: maxRevisionData, error: maxRevisionError } = await supabase
         .from('quotations')
@@ -310,7 +314,7 @@ export async function PATCH(req: NextRequest) {
 
       const nextRevision = (maxRevisionData?.revision || 0) + 1;
 
-      // Prepare new row data - copy forward all existing data
+      // Prepare new revision data - copy forward all existing data
       let insertData: any = {
         tour_code: currentQuotation.tour_code,
         revision: nextRevision,
@@ -327,10 +331,8 @@ export async function PATCH(req: NextRequest) {
 
       // Apply action-specific changes
       if (action === 'confirm_phase1') {
-        // Transition from phase1 to phase1_confirmed
         insertData.status = 'phase1_confirmed';
       } else if (action === 'complete_phase2') {
-        // Complete Phase 2 and transition to phase2
         if (!phase2_data) {
           return NextResponse.json(
             { error: 'Missing phase2_data for complete_phase2 action' },
@@ -340,8 +342,6 @@ export async function PATCH(req: NextRequest) {
         insertData.status = 'phase2';
         insertData.phase2_data = phase2_data;
       } else if (action === 'calculate_pricing') {
-        // Calculate pricing using the pricing engine
-        // Validate that all required data is present
         if (!currentQuotation.phase1_data || !currentQuotation.phase2_data || !currentQuotation.cost_components) {
           return NextResponse.json(
             { error: 'Cannot calculate pricing before Phase 1, Phase 2, and Cost Input are complete' },
@@ -350,13 +350,12 @@ export async function PATCH(req: NextRequest) {
         }
 
         // Derive inputs for pricing calculation
-        const total_pax = currentQuotation.phase1_data.totalPax || 0;
+        const total_pax = currentQuotation.phase1_data.total_pax || 0;
         const child_no_bed_count = currentQuotation.phase2_data.child_no_bed || 0;
         const foc_count = currentQuotation.phase2_data.foc_count || 0;
         const full_rooms = (currentQuotation.phase2_data.twin_rooms || 0) + (currentQuotation.phase2_data.double_rooms || 0);
         const extra_beds = currentQuotation.phase2_data.extra_beds || 0;
 
-        // Map cost_components to the expected format for calculateQuotationPrice
         const pricingInput = {
           cost_components: {
             hotel: currentQuotation.cost_components.hotel,
@@ -368,14 +367,43 @@ export async function PATCH(req: NextRequest) {
           total_pax,
           child_no_bed_count,
           foc_count,
-          margin_pct: margin_pct, // Use provided margin_pct or let function default to 0.08
+          margin_pct: margin_pct,
         };
 
-        // Call the pricing calculation function
         const pricingResult = calculateQuotationPrice(pricingInput);
-
         insertData.status = 'priced';
         insertData.pricing_snapshot = pricingResult;
+      } else if (action === 'update_cost_components') {
+        if (!cost_components) {
+          return NextResponse.json(
+            { error: 'Missing cost_components for update_cost_components action' },
+            { status: 400, headers: corsHeaders }
+          );
+        }
+        insertData.cost_components = cost_components;
+        insertData.pricing_snapshot = null;
+      } else if (action === 'update_phase1_data') {
+        if (!phase1_data) {
+          return NextResponse.json(
+            { error: 'Missing phase1_data for update_phase1_data action' },
+            { status: 400, headers: corsHeaders }
+          );
+        }
+        insertData.phase1_data = phase1_data;
+        insertData.pricing_snapshot = null;
+      } else if (action === 'update_status') {
+        if (!status) {
+          return NextResponse.json(
+            { error: 'Missing status field for update_status action' },
+            { status: 400, headers: corsHeaders }
+          );
+        }
+        insertData.status = status;
+      } else {
+        return NextResponse.json(
+          { error: `Unknown action: ${action}` },
+          { status: 400, headers: corsHeaders }
+        );
       }
 
       // Insert the new revision row
@@ -404,11 +432,70 @@ export async function PATCH(req: NextRequest) {
       );
     }
 
-    // Regular actions: UPDATE existing row in place or create revision based on status
+    // In-place update for draft statuses
     let updateData: any = {};
 
-    if (action === 'update_status') {
-      // Generic status update
+    if (action === 'confirm_phase1') {
+      updateData.status = 'phase1_confirmed';
+    } else if (action === 'complete_phase2') {
+      if (!phase2_data) {
+        return NextResponse.json(
+          { error: 'Missing phase2_data for complete_phase2 action' },
+          { status: 400, headers: corsHeaders }
+        );
+      }
+      updateData.status = 'phase2';
+      updateData.phase2_data = phase2_data;
+    } else if (action === 'calculate_pricing') {
+      if (!currentQuotation.phase1_data || !currentQuotation.phase2_data || !currentQuotation.cost_components) {
+        return NextResponse.json(
+          { error: 'Cannot calculate pricing before Phase 1, Phase 2, and Cost Input are complete' },
+          { status: 400, headers: corsHeaders }
+        );
+      }
+
+      // Derive inputs for pricing calculation
+      const total_pax = currentQuotation.phase1_data.total_pax || 0;
+      const child_no_bed_count = currentQuotation.phase2_data.child_no_bed || 0;
+      const foc_count = currentQuotation.phase2_data.foc_count || 0;
+      const full_rooms = (currentQuotation.phase2_data.twin_rooms || 0) + (currentQuotation.phase2_data.double_rooms || 0);
+      const extra_beds = currentQuotation.phase2_data.extra_beds || 0;
+
+      const pricingInput = {
+        cost_components: {
+          hotel: currentQuotation.cost_components.hotel,
+          transport: currentQuotation.cost_components.transport,
+          meals: currentQuotation.cost_components.meals,
+          tickets_activities: currentQuotation.cost_components.tickets_activities,
+          guide: currentQuotation.cost_components.guide,
+        },
+        total_pax,
+        child_no_bed_count,
+        foc_count,
+        margin_pct: margin_pct,
+      };
+
+      const pricingResult = calculateQuotationPrice(pricingInput);
+      updateData.status = 'priced';
+      updateData.pricing_snapshot = pricingResult;
+    } else if (action === 'update_cost_components') {
+      if (!cost_components) {
+        return NextResponse.json(
+          { error: 'Missing cost_components for update_cost_components action' },
+          { status: 400, headers: corsHeaders }
+        );
+      }
+      updateData.status = 'cost_input_complete';
+      updateData.cost_components = cost_components;
+    } else if (action === 'update_phase1_data') {
+      if (!phase1_data) {
+        return NextResponse.json(
+          { error: 'Missing phase1_data for update_phase1_data action' },
+          { status: 400, headers: corsHeaders }
+        );
+      }
+      updateData.phase1_data = phase1_data;
+    } else if (action === 'update_status') {
       if (!status) {
         return NextResponse.json(
           { error: 'Missing status field for update_status action' },
@@ -416,199 +503,6 @@ export async function PATCH(req: NextRequest) {
         );
       }
       updateData.status = status;
-    } else if (action === 'update_cost_components') {
-      // Update cost components with status-conditional revision logic
-      if (!cost_components) {
-        return NextResponse.json(
-          { error: 'Missing cost_components for update_cost_components action' },
-          { status: 400, headers: corsHeaders }
-        );
-      }
-
-      // Fetch current quotation to check status
-      const { data: currentQuotation, error: fetchError } = await supabase
-        .from('quotations')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (fetchError || !currentQuotation) {
-        return NextResponse.json(
-          { error: 'Failed to fetch quotation', details: fetchError },
-          { status: 404, headers: corsHeaders }
-        );
-      }
-
-      // Define draft statuses that allow in-place updates
-      const draftStatuses = ['phase1', 'phase1_confirmed', 'phase2', 'cost_input_complete'];
-      // Define statuses that require revision creation (frozen/amendment states)
-      const frozenStatuses = ['priced', 'sent', 'amended'];
-
-      if (frozenStatuses.includes(currentQuotation.status)) {
-        // Create new revision for frozen/amendment states
-        // Get the maximum revision for this tour_code
-        const { data: maxRevisionData, error: maxRevisionError } = await supabase
-          .from('quotations')
-          .select('revision')
-          .eq('tour_code', currentQuotation.tour_code)
-          .order('revision', { ascending: false })
-          .limit(1)
-          .single();
-
-        if (maxRevisionError) {
-          return NextResponse.json(
-            { error: 'Failed to fetch max revision', details: maxRevisionError },
-            { status: 500, headers: corsHeaders }
-          );
-        }
-
-        const nextRevision = (maxRevisionData?.revision || 0) + 1;
-
-        // Prepare new revision data - copy forward all existing data
-        let insertData: any = {
-          tour_code: currentQuotation.tour_code,
-          revision: nextRevision,
-          country: currentQuotation.country,
-          status: currentQuotation.status, // Keep current status (amendment workflow)
-          phase1_data: currentQuotation.phase1_data,
-          phase2_data: currentQuotation.phase2_data,
-          cost_components: cost_components, // Update with new cost components
-          margin_pct: currentQuotation.margin_pct,
-          pricing_snapshot: null, // Clear pricing snapshot since costs changed
-          staff_id: currentQuotation.staff_id,
-          revision_note: null,
-        };
-
-        // Insert the new revision row
-        const { data: quotation, error: insertError } = await supabase
-          .from('quotations')
-          .insert(insertData)
-          .select('id, tour_code, status, pricing_snapshot')
-          .single();
-
-        if (insertError) {
-          console.error('Error inserting new revision for cost update:', insertError);
-          return NextResponse.json(
-            { error: 'Failed to create new revision for cost update', details: insertError },
-            { status: 500, headers: corsHeaders }
-          );
-        }
-
-        return NextResponse.json(
-          { 
-            id: quotation.id, 
-            tour_code: quotation.tour_code, 
-            status: quotation.status,
-            pricing_snapshot: quotation.pricing_snapshot 
-          },
-          { status: 200, headers: corsHeaders }
-        );
-      } else if (draftStatuses.includes(currentQuotation.status)) {
-        // In-place update for draft states
-        updateData.status = 'cost_input_complete';
-        updateData.cost_components = cost_components;
-      } else {
-        return NextResponse.json(
-          { error: `Unknown status for cost update: ${currentQuotation.status}` },
-          { status: 400, headers: corsHeaders }
-        );
-      }
-    } else if (action === 'update_phase1_data') {
-      // Update phase1_data with status-conditional revision logic
-      if (!phase1_data) {
-        return NextResponse.json(
-          { error: 'Missing phase1_data for update_phase1_data action' },
-          { status: 400, headers: corsHeaders }
-        );
-      }
-
-      // Fetch current quotation to check status
-      const { data: currentQuotation, error: fetchError } = await supabase
-        .from('quotations')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (fetchError || !currentQuotation) {
-        return NextResponse.json(
-          { error: 'Failed to fetch quotation', details: fetchError },
-          { status: 404, headers: corsHeaders }
-        );
-      }
-
-      // Define draft statuses that allow in-place updates
-      const draftStatuses = ['phase1', 'phase1_confirmed', 'phase2', 'cost_input_complete'];
-      // Define statuses that require revision creation (frozen/amendment states)
-      const frozenStatuses = ['priced', 'sent', 'amended'];
-
-      if (frozenStatuses.includes(currentQuotation.status)) {
-        // Create new revision for frozen/amendment states
-        // Get the maximum revision for this tour_code
-        const { data: maxRevisionData, error: maxRevisionError } = await supabase
-          .from('quotations')
-          .select('revision')
-          .eq('tour_code', currentQuotation.tour_code)
-          .order('revision', { ascending: false })
-          .limit(1)
-          .single();
-
-        if (maxRevisionError) {
-          return NextResponse.json(
-            { error: 'Failed to fetch max revision', details: maxRevisionError },
-            { status: 500, headers: corsHeaders }
-          );
-        }
-
-        const nextRevision = (maxRevisionData?.revision || 0) + 1;
-
-        // Prepare new revision data - copy forward all existing data
-        let insertData: any = {
-          tour_code: currentQuotation.tour_code,
-          revision: nextRevision,
-          country: currentQuotation.country,
-          status: currentQuotation.status, // Keep current status (amendment workflow)
-          phase1_data: phase1_data, // Update with new phase1_data
-          phase2_data: currentQuotation.phase2_data,
-          cost_components: currentQuotation.cost_components,
-          margin_pct: currentQuotation.margin_pct,
-          pricing_snapshot: null, // Clear pricing snapshot since phase1 data changed
-          staff_id: currentQuotation.staff_id,
-          revision_note: null,
-        };
-
-        // Insert the new revision row
-        const { data: quotation, error: insertError } = await supabase
-          .from('quotations')
-          .insert(insertData)
-          .select('id, tour_code, status, pricing_snapshot')
-          .single();
-
-        if (insertError) {
-          console.error('Error inserting new revision for phase1 data update:', insertError);
-          return NextResponse.json(
-            { error: 'Failed to create new revision for phase1 data update', details: insertError },
-            { status: 500, headers: corsHeaders }
-          );
-        }
-
-        return NextResponse.json(
-          {
-            id: quotation.id,
-            tour_code: quotation.tour_code,
-            status: quotation.status,
-            pricing_snapshot: quotation.pricing_snapshot
-          },
-          { status: 200, headers: corsHeaders }
-        );
-      } else if (draftStatuses.includes(currentQuotation.status)) {
-        // In-place update for draft states
-        updateData.phase1_data = phase1_data;
-      } else {
-        return NextResponse.json(
-          { error: `Unknown status for phase1 data update: ${currentQuotation.status}` },
-          { status: 400, headers: corsHeaders }
-        );
-      }
     } else {
       return NextResponse.json(
         { error: `Unknown action: ${action}` },
