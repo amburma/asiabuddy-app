@@ -375,12 +375,14 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
       // Even: total_pax / 2 Twin rooms, 0 Extra Beds
       return {
         twin_rooms: totalPax / 2,
+        double_rooms: 0,
         extra_beds: 0,
       };
     } else {
       // Odd: (total_pax - 1) / 2 Twin rooms + 1 Extra Bed
       return {
         twin_rooms: (totalPax - 1) / 2,
+        double_rooms: 0,
         extra_beds: 1,
       };
     }
@@ -1272,8 +1274,8 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                 <div className="text-xs text-emerald-600 space-y-1">
                   <p>Travel Dates: {startDate} to {endDate}</p>
                   <p>Room Breakdown: {formData.room_override 
-                    ? `${formData.twin_rooms} Twin Rooms + ${formData.extra_beds} Extra Bed${formData.extra_beds !== 1 ? 's' : ''} (manual override)`
-                    : `${computedRoomBreakdown().twin_rooms} Twin Rooms + ${computedRoomBreakdown().extra_beds} Extra Bed${computedRoomBreakdown().extra_beds !== 1 ? 's' : ''} (computed)`
+                    ? `${formData.twin_rooms} Twin Room${formData.twin_rooms !== 1 ? 's' : ''} + ${formData.double_rooms} Double Room${formData.double_rooms !== 1 ? 's' : ''} + ${formData.extra_beds} Extra Bed${formData.extra_beds !== 1 ? 's' : ''} (manual override)`
+                    : `${computedRoomBreakdown().twin_rooms} Twin Room${computedRoomBreakdown().twin_rooms !== 1 ? 's' : ''} + ${computedRoomBreakdown().double_rooms} Double Room${computedRoomBreakdown().double_rooms !== 1 ? 's' : ''} + ${computedRoomBreakdown().extra_beds} Extra Bed${computedRoomBreakdown().extra_beds !== 1 ? 's' : ''} (computed)`
                   }</p>
                   <p>Pax: Adults {formData.adults}, Child+Bed {formData.child_with_bed}, Child No Bed {formData.child_no_bed}, Infants {formData.infants}{(formData.foc_count || 0) > 0 ? `, FOC ${formData.foc_count}` : ''}</p>
                   <p>Meals: {formData.no_food_service ? 'No Food Service' : `${(formData.meal_restrictions || []).length} restriction(s) selected`}</p>
