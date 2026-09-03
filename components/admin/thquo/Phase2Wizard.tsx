@@ -154,7 +154,6 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
       !formData.room_override &&
       (formData.activities?.length ?? 0) === 0;
 
-    hasAttemptedRehydration.current = true;
     if (!isDefaultState) return;
 
     let cancelled = false;
@@ -188,7 +187,11 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
               !prev.travelers_deferred &&
               !prev.room_override &&
               (prev.activities?.length ?? 0) === 0;
-            return prevIsStillDefault ? data.phase2_data : prev;
+            if (prevIsStillDefault) {
+              hasAttemptedRehydration.current = true;
+              return data.phase2_data;
+            }
+            return prev;
           });
         }
       } catch (error) {
