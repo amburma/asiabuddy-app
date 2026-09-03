@@ -356,12 +356,22 @@ export async function PATCH(req: NextRequest) {
         const full_rooms = (currentQuotation.phase2_data.twin_rooms || 0) + (currentQuotation.phase2_data.double_rooms || 0);
         const extra_beds = currentQuotation.phase2_data.extra_beds || 0;
 
+        // Calculate activities survey total from phase2_data
+        const activitiesSurveyTotal = (currentQuotation.phase2_data.activities || [])
+          .reduce((sum: number, a: { activity_subtotal?: number }) => sum + (a.activity_subtotal || 0), 0);
+
+        // Combine manual tickets/activities with activities survey total
+        const combinedTicketsActivities = [
+          ...(currentQuotation.cost_components.tickets_activities || []),
+          ...(activitiesSurveyTotal > 0 ? [{ name: 'Day-by-Day Activities Survey', cost: activitiesSurveyTotal }] : [])
+        ];
+
         const pricingInput = {
           cost_components: {
             hotel: currentQuotation.cost_components.hotel,
             transport: currentQuotation.cost_components.transport,
             meals: currentQuotation.cost_components.meals,
-            tickets_activities: currentQuotation.cost_components.tickets_activities,
+            tickets_activities: combinedTicketsActivities,
             guide: currentQuotation.cost_components.guide,
           },
           total_pax,
@@ -461,12 +471,22 @@ export async function PATCH(req: NextRequest) {
       const full_rooms = (currentQuotation.phase2_data.twin_rooms || 0) + (currentQuotation.phase2_data.double_rooms || 0);
       const extra_beds = currentQuotation.phase2_data.extra_beds || 0;
 
+      // Calculate activities survey total from phase2_data
+      const activitiesSurveyTotal = (currentQuotation.phase2_data.activities || [])
+        .reduce((sum: number, a: { activity_subtotal?: number }) => sum + (a.activity_subtotal || 0), 0);
+
+      // Combine manual tickets/activities with activities survey total
+      const combinedTicketsActivities = [
+        ...(currentQuotation.cost_components.tickets_activities || []),
+        ...(activitiesSurveyTotal > 0 ? [{ name: 'Day-by-Day Activities Survey', cost: activitiesSurveyTotal }] : [])
+      ];
+
       const pricingInput = {
         cost_components: {
           hotel: currentQuotation.cost_components.hotel,
           transport: currentQuotation.cost_components.transport,
           meals: currentQuotation.cost_components.meals,
-          tickets_activities: currentQuotation.cost_components.tickets_activities,
+          tickets_activities: combinedTicketsActivities,
           guide: currentQuotation.cost_components.guide,
         },
         total_pax,
