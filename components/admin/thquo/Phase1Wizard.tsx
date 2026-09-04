@@ -269,6 +269,8 @@ const Phase1WizardComponent: React.FC<Phase1WizardProps> = ({
           throw new Error(result.error || 'Failed to update quotation');
         }
         tourCode = result.tour_code;
+        id = result.id;
+        if (onIdUpdate && result.id) onIdUpdate(result.id);
       } else {
         // New quotation — create the real DB row (fixes the fake-local-ID bug from 67303f0c).
         const response = await fetch('/api/quotations', {
