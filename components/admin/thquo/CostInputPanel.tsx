@@ -40,7 +40,7 @@ export interface CostInputPanelProps {
     currency?: 'USD' | 'THB' | 'MMK' | 'EUR' | 'SGD' | null;
     activitiesTotal?: number;
   };
-  hotelLevel?: number | null;
+  hotelLevel?: 'no_hotel' | 'budget' | 'standard' | 'deluxe' | 'luxury' | null;
   onBack?: () => void;
   onComplete?: () => void;
   onIdUpdate?: (newId: string) => void;
@@ -79,10 +79,22 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
         }
 
         const data = await response.json();
-        
+
         if (data.cost_components) {
           setCostComponents(data.cost_components);
         }
+
+        // Capture additional fields for customer message generation
+        if (data.tour_code) setTourCode(data.tour_code);
+        if (data.phase1_data?.destinations) setDestinations(data.phase1_data.destinations);
+        if (data.phase1_data?.total_pax) setTotalPax(data.phase1_data.total_pax);
+        if (data.phase2_data?.foc_count !== undefined) setFocCount(data.phase2_data.foc_count);
+        if (data.phase2_data?.no_food_service !== undefined) setNoFoodService(data.phase2_data.no_food_service);
+        if (data.phase2_data?.meal_restrictions) setMealRestrictions(data.phase2_data.meal_restrictions);
+        if (data.phase2_data?.activities) setActivities(data.phase2_data.activities);
+        if (data.phase2_data?.child_with_bed !== undefined) setChildWithBed(data.phase2_data.child_with_bed);
+        if (data.phase2_data?.child_no_bed !== undefined) setChildNoBed(data.phase2_data.child_no_bed);
+        if (data.pricing_snapshot) setPricingSnapshot(data.pricing_snapshot);
       } catch (error) {
         console.error('Error rehydrating cost components:', error);
         // Leave fields at default/empty state on failure
@@ -120,6 +132,19 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
   const [pricingError, setPricingError] = useState<string | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
 
+  // Customer message generation state
+  const [tourCode, setTourCode] = useState<string | null>(null);
+  const [destinations, setDestinations] = useState<string[]>([]);
+  const [totalPax, setTotalPax] = useState<number>(0);
+  const [focCount, setFocCount] = useState<number>(0);
+  const [noFoodService, setNoFoodService] = useState<boolean>(false);
+  const [mealRestrictions, setMealRestrictions] = useState<string[]>([]);
+  const [activities, setActivities] = useState<any[]>([]);
+  const [childWithBed, setChildWithBed] = useState<number>(0);
+  const [childNoBed, setChildNoBed] = useState<number>(0);
+  const [showCustomerMessage, setShowCustomerMessage] = useState(false);
+  const [customerMessage, setCustomerMessage] = useState('');
+
   // Currency symbol mapping
   const getCurrencySymbol = (currency: string | null | undefined): string => {
     const symbols: Record<string, string> = {
@@ -136,7 +161,7 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
   const runningSubtotal = useMemo(() => {
     const fullRooms = (phase2Data?.twin_rooms || 0) + (phase2Data?.double_rooms || 0);
     const extraBeds = phase2Data?.extra_beds || 0;
-    const isHotelExcluded = hotelLevel === 0;
+    const isHotelExcluded = hotelLevel === 'no_hotel';
     const hotelTotal = isHotelExcluded ? 0 : costComponents.hotel.per_night_rate * costComponents.hotel.nights * (fullRooms + extraBeds * 0.5);
     const transportTotal = costComponents.transport.mode === 'no_transport' ? 0 : costComponents.transport.total_cost;
     const mealsTotal = costComponents.meals.per_person_per_day_rate * costComponents.hotel.nights;
@@ -283,6 +308,82 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const generateCustomerMessage = (): string => {
+    const QUOTE_VALIDITY_DAYS = 7;
+    const DEPOSIT_PERCENTAGE = 50;
+
+    const nights = costComponents.hotel.nights;
+    const transportLabel = transport_mode === 'no_transport' ? 'မပါဝင်ပါ' : TRANSPORT_MODE_LABELS[transport_mode || 'private'];
+    const mealLabel = noFoodService ? 'မပါဝင်ပါ' : (mealRestrictions.length > 0 ? mealRestrictions.join(', ') : 'ပါဝင်ပါသည်');
+    const activitiesList = activities.map((a) => a.activity_name).join(', ');
+    const adultCount = totalPax - childWithBed - childNoBed - focCount;
+
+    let message = `🌟 ${tourCode} — ခရီးစဉ် အကျဉ်းချုပ် 🌟
+
+📅 ကာလ: ${duration_days} ရက် (${nights} ညများ)
+📍 ခရီးစဉ်: ${destinations.join(', ')}
+
+✅ ပါဝင်သော Services —
+🏨 ဟိုတယ် (${hotelLevel === 'no_hotel' ? 'No Hotel' : hotelLevel === 'budget' ? 'Budget' : hotelLevel === 'standard' ? 'Standard' : hotelLevel === 'deluxe' ? 'Deluxe' : hotelLevel === 'luxury' ? 'Luxury' : 'Not specified'} level, ${nights} ညများ)
+🚐 သွားလာရေး (${transportLabel})
+🍽️ အစားအစာ (${mealLabel})`;
+
+    if (activitiesList) {
+      message += `
+🎟️ လှည့်လည်ကြည့်ရှုမှုများ — ${activitiesList}`;
+    }
+
+    message += `
+👤 Guide
+
+⚠️ ဖော်ပြပါ Quotation တွင် မည်သည့် Flight Service လုံးဝ မပါဝင်ပါ။
+⚠️ Visa Fee, Personal Expenses, Travel Insurance, Tips/Gratuities များ ပါဝင်မှု မရှိပါ။
+
+👥 စုစုပေါင်း Pax — ${totalPax} ဦး`;
+
+    if (focCount > 0) {
+      message += `
+🎁 FOC (အခမဲ့) — ${focCount} ဦး ပါဝင်ပါသည်`;
+    }
+
+    const currency = getCurrencySymbol(phase2Data?.currency);
+    const adultPrice = pricingSnapshot?.adult_price_per_person?.toFixed(2) || '0.00';
+    message += `
+💰 လူကြီး (Adult) — ${adultCount} ယောက်: ${currency}${adultPrice}`;
+
+    if (childWithBed > 0) {
+      const childWithBedPrice = pricingSnapshot?.child_with_bed_price_per_person?.toFixed(2) || '0.00';
+      message += `
+💰 ကလေး (With Bed) — ${childWithBed} ယောက်: ${currency}${childWithBedPrice}`;
+    }
+
+    if (childNoBed > 0) {
+      const childNoBedPrice = pricingSnapshot?.child_no_bed_price_per_person?.toFixed(2) || '0.00';
+      message += `
+💰 ကလေး (No Bed) — ${childNoBed} ယောက်: ${currency}${childNoBedPrice}`;
+    }
+
+    message += `
+
+📆 ဤ Quotation သည် ရက်ပေါင်း ${QUOTE_VALIDITY_DAYS} ရက် အထိသာ တရားဝင်ပါသည်။
+💳 အတည်ပြုရန် Deposit ${DEPOSIT_PERCENTAGE}% လိုအပ်ပါသည်။
+ℹ️ Cancellation/Refund Policy အသေးစိတ်အတွက် ဆက်သွယ်မေးမြန်းပါ။
+
+📩 AsiaBuddy.app/contact မှတစ်ဆင့် ဆက်သွယ်စုံစမ်းနိုင်ပါသည်။`;
+
+    return message;
+  };
+
+  const handleGenerateCustomerMessage = () => {
+    const message = generateCustomerMessage();
+    setCustomerMessage(message);
+    setShowCustomerMessage(true);
+  };
+
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(customerMessage);
   };
 
   return (
@@ -621,6 +722,37 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
             </p>
           </div>
         )}
+
+        {/* Customer Inquiry Respond Section */}
+        <div className="space-y-4 p-4 rounded-xl border-2 border-purple-200 bg-purple-50">
+          <div className="flex justify-between items-center">
+            <h2 className="text-lg font-semibold text-gray-800">Customer Inquiry Respond</h2>
+            <button
+              onClick={handleGenerateCustomerMessage}
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-all bg-purple-500 hover:bg-purple-600 text-white"
+            >
+              Generate Message
+            </button>
+          </div>
+          {showCustomerMessage && (
+            <div className="space-y-3">
+              <textarea
+                value={customerMessage}
+                onChange={(e) => setCustomerMessage(e.target.value)}
+                rows={20}
+                className="w-full px-4 py-3 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:outline-none transition-all resize-none text-sm"
+              />
+              <div className="flex justify-end">
+                <button
+                  onClick={handleCopyToClipboard}
+                  className="px-4 py-2 rounded-lg text-sm font-medium transition-all bg-emerald-500 hover:bg-emerald-600 text-white"
+                >
+                  Copy to Clipboard
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Navigation Buttons */}
         <div className="flex justify-between items-center pt-6 border-t border-gray-100">

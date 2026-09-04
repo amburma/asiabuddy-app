@@ -189,7 +189,7 @@ export default function ThquoPage() {
               (sum: number, a: { activity_subtotal?: number }) => sum + (a.activity_subtotal ?? 0), 0
             ),
           } : undefined}
-          hotelLevel={phase2Data?.hotel_level}
+          hotelLevel={phase1Data.hotel_level}
           onBack={() => setCurrentPhase('phase2')}
           onIdUpdate={handleIdUpdate}
         />
