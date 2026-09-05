@@ -1169,6 +1169,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                             </label>
                             <input
                               type="number"
+                              step="0.01"
                               value={category.unit_price}
                               onChange={(e) => updatePriceCategory(activityIndex, categoryIndex, 'unit_price', parseFloat(e.target.value) || 0)}
                               placeholder="0"

@@ -405,6 +405,7 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
               </label>
               <input
                 type="number"
+                step="0.01"
                 min="0"
                 value={costComponents.hotel.per_night_rate}
                 onChange={(e) => handleInputChange('hotel', 'per_night_rate', parseFloat(e.target.value) || 0)}
@@ -461,6 +462,7 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
                 </p>
                 <input
                   type="number"
+                  step="0.01"
                   min="0"
                   value={costComponents.transport.car_rental_kb_rate || ''}
                   onChange={(e) => handleInputChange('transport', 'car_rental_kb_rate', parseFloat(e.target.value) || undefined)}
@@ -480,6 +482,7 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
               </label>
               <input
                 type="number"
+                step="0.01"
                 min="0"
                 value={costComponents.transport.total_cost}
                 onChange={(e) => handleInputChange('transport', 'total_cost', parseFloat(e.target.value) || 0)}
@@ -498,6 +501,7 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
             </label>
             <input
               type="number"
+              step="0.01"
               min="0"
               value={costComponents.meals.per_person_per_day_rate}
               onChange={(e) => handleInputChange('meals', 'per_person_per_day_rate', parseFloat(e.target.value) || 0)}
@@ -536,6 +540,7 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
                 <div className="w-32">
                   <input
                     type="number"
+                    step="0.01"
                     min="0"
                     value={item.cost}
                     onChange={(e) => updateTicketActivity(index, 'cost', parseFloat(e.target.value) || 0)}
@@ -601,6 +606,7 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
               </label>
               <input
                 type="number"
+                step="0.01"
                 min="0"
                 value={costComponents.guide.amount}
                 onChange={(e) => handleInputChange('guide', 'amount', parseFloat(e.target.value) || 0)}
