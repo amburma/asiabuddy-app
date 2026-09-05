@@ -27,6 +27,7 @@ interface PricingInput {
   cost_components: CostComponents;
   total_pax: number;
   child_no_bed_count: number;
+  child_with_bed_count: number;
   foc_count?: number;
   margin_pct?: number;
   duration_days?: number;
@@ -42,12 +43,13 @@ interface PricingSnapshot {
   gross_tour_price: number;
   group_discounted_price: number;
   adult_price_per_person: number;
+  child_with_bed_price_per_person: number | null;
   child_no_bed_price_per_person: number | null;
   total_package_price: number;
 }
 
 export function calculateQuotationPrice(input: PricingInput): PricingSnapshot {
-  const { cost_components, total_pax, child_no_bed_count, foc_count = 0, margin_pct = 0.08, duration_days = 1, full_rooms = 0, extra_beds = 0 } = input;
+  const { cost_components, total_pax, child_no_bed_count, child_with_bed_count, foc_count = 0, margin_pct = 0.08, duration_days = 1, full_rooms = 0, extra_beds = 0 } = input;
 
   // Calculate hotel cost (per room basis)
   const hotelTotal = cost_components.hotel.per_night_rate * cost_components.hotel.nights * (full_rooms + extra_beds * 0.5);
@@ -86,14 +88,22 @@ export function calculateQuotationPrice(input: PricingInput): PricingSnapshot {
   const group_discounted_price = gross_tour_price * (1 - group_discount_rate);
   
   // Calculate per-person pricing
-  const paying_adult_count = total_pax - child_no_bed_count - foc_count;
-  const adult_price_per_person = group_discounted_price / (paying_adult_count + (child_no_bed_count * 0.5));
+  const paying_adult_count = total_pax - child_no_bed_count - child_with_bed_count - foc_count;
+  const full_price_divisor = paying_adult_count + child_with_bed_count + (child_no_bed_count * 0.5);
+  const base_per_person_price = group_discounted_price / full_price_divisor;
   
-  // Child no bed price (50% of adult price)
-  const child_no_bed_price_per_person = child_no_bed_count > 0 ? adult_price_per_person * 0.5 : null;
+  // Adult price per person
+  const adult_price_per_person = base_per_person_price;
+  
+  // Child with bed price per person (same as adult, full price)
+  const child_with_bed_price_per_person = child_with_bed_count > 0 ? base_per_person_price : null;
+  
+  // Child no bed price per person (50% discount)
+  const child_no_bed_price_per_person = child_no_bed_count > 0 ? base_per_person_price * 0.5 : null;
   
   // Total package price
   const total_package_price = (adult_price_per_person * paying_adult_count) + 
+                              (child_with_bed_price_per_person ? child_with_bed_price_per_person * child_with_bed_count : 0) +
                               (child_no_bed_price_per_person ? child_no_bed_price_per_person * child_no_bed_count : 0);
   
   return {
@@ -104,6 +114,7 @@ export function calculateQuotationPrice(input: PricingInput): PricingSnapshot {
     gross_tour_price,
     group_discounted_price,
     adult_price_per_person,
+    child_with_bed_price_per_person,
     child_no_bed_price_per_person,
     total_package_price,
   };
