@@ -398,6 +398,7 @@ const Phase1WizardComponent: React.FC<Phase1WizardProps> = ({
               onChange={(e) => setTotalPax(Number(e.target.value))}
               className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg text-sm"
             />
+            <p className="text-xs text-gray-500 mt-1">Infant (2 နှစ်အောက်) မပါဝင်ပါ — Total Pax တွက်ချက်ရာတွင် ထည့်စရာမလိုပါ</p>
           </div>
         );
 
