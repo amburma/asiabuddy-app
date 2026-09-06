@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
 
 interface TicketActivity {
   name: string;
@@ -57,7 +58,10 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
   onIdUpdate,
 }) => {
   const [quotationId, setQuotationId] = useState<string>(propQuotationId);
-  
+
+  // createClient() returns null on the server or if env vars are missing
+  const [supabase] = useState(() => createClient());
+
   // Update local quotationId when prop changes
   useEffect(() => {
     if (propQuotationId) {
@@ -144,6 +148,50 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
   const [childNoBed, setChildNoBed] = useState<number>(0);
   const [showCustomerMessage, setShowCustomerMessage] = useState(false);
   const [customerMessage, setCustomerMessage] = useState('');
+
+  // Car rental lookup state
+  const [routeFrom, setRouteFrom] = useState('');
+  const [routeTo, setRouteTo] = useState('');
+  const [vehicleCategory, setVehicleCategory] = useState('');
+  const [tripType, setTripType] = useState('');
+  const [durationHours, setDurationHours] = useState('');
+  const [lookupResult, setLookupResult] = useState<any>(null);
+  const [lookupError, setLookupError] = useState<string | null>(null);
+  const [showDurationField, setShowDurationField] = useState(false);
+  const [durationOptions, setDurationOptions] = useState<number[]>([]);
+  const [isLookingUp, setIsLookingUp] = useState(false);
+
+  // Destinations for route selection
+  const [dbDestinations, setDbDestinations] = useState<string[]>([]);
+  const [destinationsLoading, setDestinationsLoading] = useState(true);
+  const [destinationsError, setDestinationsError] = useState<string | null>(null);
+
+  // Fetch destinations on mount
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setDestinationsLoading(true);
+      setDestinationsError(null);
+      if (!supabase) {
+        if (!cancelled) {
+          setDestinationsError('Supabase client unavailable (check env vars)');
+          setDestinationsLoading(false);
+        }
+        return;
+      }
+      const { data, error } = await supabase.from('destinations').select('name');
+      if (cancelled) return;
+      if (error) {
+        setDestinationsError(error.message);
+      } else {
+        setDbDestinations((data ?? []).map((row: { name: string }) => row.name));
+      }
+      setDestinationsLoading(false);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Currency symbol mapping
   const getCurrencySymbol = (currency: string | null | undefined): string => {
@@ -386,6 +434,55 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
     navigator.clipboard.writeText(customerMessage);
   };
 
+  const handleCarRentalLookup = async () => {
+    setIsLookingUp(true);
+    setLookupError(null);
+    setLookupResult(null);
+
+    try {
+      const params = new URLSearchParams({
+        route_from: routeFrom,
+        route_to: routeTo,
+        trip_type: tripType,
+        vehicle_category: vehicleCategory,
+      });
+
+      if (durationHours) {
+        params.append('duration_hours', durationHours);
+      }
+
+      const response = await fetch(`/api/car-rental-lookup?${params.toString()}`);
+
+      if (response.status === 404) {
+        setLookupError('Route not found in KB — please enter the rate manually below');
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(`Lookup failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.needs_duration_hours && data.options) {
+        setShowDurationField(true);
+        const distinctDurations: number[] = Array.from(new Set<number>(data.options.map((opt: any) => opt.duration_hours)));
+        setDurationOptions(distinctDurations);
+        setLookupError('Please select duration to refine lookup');
+        return;
+      }
+
+      if (data.rate) {
+        setLookupResult(data.rate);
+        setShowDurationField(false);
+      }
+    } catch (error) {
+      setLookupError(error instanceof Error ? error.message : 'Lookup failed');
+    } finally {
+      setIsLookingUp(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-8">
       <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
@@ -457,22 +554,134 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
           ) : costComponents.transport.mode === 'private' ? (
             <div className="space-y-4">
               <div className="bg-amber-50 border-2 border-amber-200 rounded-lg p-4">
-                <p className="text-sm text-amber-800 font-medium mb-2">
-                  Car Rental (KB rate) - TODO placeholder
+                <p className="text-sm text-amber-800 font-medium mb-3">
+                  Car Rental (KB rate lookup)
                 </p>
+                
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Route From</label>
+                    {destinationsLoading && <p className="text-xs text-gray-500">Loading destinations...</p>}
+                    {destinationsError && <p className="text-xs text-red-600">Failed to load destinations</p>}
+                    {!destinationsLoading && !destinationsError && (
+                      <select
+                        value={routeFrom}
+                        onChange={(e) => setRouteFrom(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border-2 border-amber-300 bg-white focus:border-emerald-500 focus:outline-none transition-all text-sm"
+                      >
+                        <option value="">Select destination</option>
+                        {dbDestinations.map((name) => (
+                          <option key={name} value={name}>
+                            {name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Route To</label>
+                    {destinationsLoading && <p className="text-xs text-gray-500">Loading destinations...</p>}
+                    {destinationsError && <p className="text-xs text-red-600">Failed to load destinations</p>}
+                    {!destinationsLoading && !destinationsError && (
+                      <select
+                        value={routeTo}
+                        onChange={(e) => setRouteTo(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border-2 border-amber-300 bg-white focus:border-emerald-500 focus:outline-none transition-all text-sm"
+                      >
+                        <option value="">Select destination</option>
+                        {dbDestinations.map((name) => (
+                          <option key={name} value={name}>
+                            {name}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Vehicle Category</label>
+                    <select
+                      value={vehicleCategory}
+                      onChange={(e) => setVehicleCategory(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg border-2 border-amber-300 bg-white focus:border-emerald-500 focus:outline-none transition-all text-sm"
+                    >
+                      <option value="">Select category</option>
+                      <option value="Sedan/SUV">Sedan/SUV (1-3 Pax)</option>
+                      <option value="VIP Van">VIP Van (4-8 Pax)</option>
+                      <option value="Coaster/Minibus">Coaster/Minibus (9-15 Pax)</option>
+                      <option value="Medium Bus">Medium Bus (16-25 Pax)</option>
+                      <option value="Large Bus">Large Bus (26-40 Pax)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Trip Type</label>
+                    <select
+                      value={tripType}
+                      onChange={(e) => setTripType(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg border-2 border-amber-300 bg-white focus:border-emerald-500 focus:outline-none transition-all text-sm"
+                    >
+                      <option value="">Select type</option>
+                      <option value="One-way">One-way</option>
+                      <option value="Day Tour">Day Tour</option>
+                      <option value="Day Trip">Day Trip</option>
+                      <option value="The Whole Trip">The Whole Trip</option>
+                    </select>
+                  </div>
+                </div>
+
+                {showDurationField && (
+                  <div className="mb-3">
+                    <label className="block text-xs font-medium text-gray-700 mb-1">Duration (hours)</label>
+                    <select
+                      value={durationHours}
+                      onChange={(e) => setDurationHours(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg border-2 border-amber-300 bg-white focus:border-emerald-500 focus:outline-none transition-all text-sm"
+                    >
+                      <option value="">Select duration</option>
+                      {durationOptions.map((hours) => (
+                        <option key={hours} value={hours.toString()}>
+                          {hours} hours
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                <button
+                  onClick={handleCarRentalLookup}
+                  disabled={isLookingUp || !routeFrom || !routeTo || !vehicleCategory || !tripType}
+                  className="w-full px-4 py-2 rounded-lg text-sm font-medium transition-all bg-amber-500 hover:bg-amber-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed mb-3"
+                >
+                  {isLookingUp ? 'Looking up...' : 'Lookup Rate'}
+                </button>
+
+                {lookupError && (
+                  <div className="bg-amber-100 border-2 border-amber-300 rounded-lg p-3 mb-3">
+                    <p className="text-xs text-amber-800">{lookupError}</p>
+                  </div>
+                )}
+
+                {lookupResult && (
+                  <div className="bg-emerald-50 border-2 border-emerald-200 rounded-lg p-3 mb-3">
+                    <p className="text-xs text-emerald-800 font-medium">
+                      KB Rate found: {lookupResult.price_thb} THB — please convert manually to {phase2Data?.currency || 'your currency'} and enter below
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Total Cost (Manual Entry)
+                </label>
                 <input
                   type="number"
                   step="0.01"
                   min="0"
-                  value={costComponents.transport.car_rental_kb_rate || ''}
-                  onChange={(e) => handleInputChange('transport', 'car_rental_kb_rate', parseFloat(e.target.value) || undefined)}
-                  placeholder="KB rate lookup not yet implemented"
-                  className="w-full px-4 py-2 rounded-lg border-2 border-amber-300 bg-amber-50 focus:border-emerald-500 focus:outline-none transition-all"
-                  disabled
+                  value={costComponents.transport.total_cost}
+                  onChange={(e) => handleInputChange('transport', 'total_cost', parseFloat(e.target.value) || 0)}
+                  placeholder="Enter total cost manually"
+                  className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-all"
                 />
-                <p className="text-xs text-amber-600 mt-2">
-                  KB lookup will be implemented in a future update
-                </p>
               </div>
             </div>
           ) : (

@@ -186,6 +186,10 @@ const Phase1WizardComponent: React.FC<Phase1WizardProps> = ({
     setCustomDestinationInput('');
   };
 
+  const removeDestination = (name: string) => {
+    setSelectedDestinations((prev) => prev.filter((d) => d !== name));
+  };
+
   // --- Themes (preset chips + free-type add, same pattern as destinations) ---
   const PRESET_THEMES = [
     'Beach', 'Culture', 'Adventure', 'Nature', 'Food', 'Shopping', 'Family-friendly', 'Relaxation',
@@ -348,8 +352,15 @@ const Phase1WizardComponent: React.FC<Phase1WizardProps> = ({
             {selectedDestinations.length > 0 && (
               <div className="flex flex-wrap gap-2 pt-2">
                 {selectedDestinations.map((d) => (
-                  <span key={d} className="px-3 py-1 bg-emerald-50 border border-emerald-300 rounded-full text-xs text-emerald-800">
+                  <span key={d} className="px-3 py-1 bg-emerald-50 border border-emerald-300 rounded-full text-xs text-emerald-800 flex items-center gap-1">
                     {d}
+                    <button
+                      type="button"
+                      onClick={() => removeDestination(d)}
+                      className="ml-1 text-emerald-600 hover:text-emerald-800 font-bold"
+                    >
+                      ×
+                    </button>
                   </span>
                 ))}
               </div>
