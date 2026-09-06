@@ -188,6 +188,7 @@ export default function ThquoPage() {
             activitiesTotal: (phase2Data.activities ?? []).reduce(
               (sum: number, a: { activity_subtotal?: number }) => sum + (a.activity_subtotal ?? 0), 0
             ),
+            no_food_service: phase2Data.no_food_service,
           } : undefined}
           hotelLevel={phase1Data.hotel_level}
           onBack={() => setCurrentPhase('phase2')}
