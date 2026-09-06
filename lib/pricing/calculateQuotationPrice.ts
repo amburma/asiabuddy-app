@@ -33,6 +33,7 @@ interface PricingInput {
   duration_days?: number;
   full_rooms?: number;
   extra_beds?: number;
+  no_food_service?: boolean;
 }
 
 interface PricingSnapshot {
@@ -58,7 +59,7 @@ export function calculateQuotationPrice(input: PricingInput): PricingSnapshot {
   const transportTotal = cost_components.transport.total_cost;
   
   // Calculate meals cost (per person per day)
-  const mealsTotal = cost_components.meals.per_person_per_day_rate * cost_components.hotel.nights * total_pax;
+  const mealsTotal = input.no_food_service ? 0 : cost_components.meals.per_person_per_day_rate * cost_components.hotel.nights * total_pax;
   
   // Calculate tickets/activities cost
   const ticketsTotal = cost_components.tickets_activities.reduce((sum, item) => sum + item.cost, 0);
@@ -74,8 +75,8 @@ export function calculateQuotationPrice(input: PricingInput): PricingSnapshot {
   // Contingency (2%)
   const contingency = total_direct_cost * 0.02;
   
-  // Currency buffer (2%)
-  const currency_buffer = total_direct_cost * 0.02;
+  // Currency buffer (2% of total_direct_cost + contingency)
+  const currency_buffer = (total_direct_cost + contingency) * 0.02;
   
   // Subtotal
   const subtotal = total_direct_cost + contingency + currency_buffer;

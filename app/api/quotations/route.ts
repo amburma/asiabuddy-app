@@ -366,6 +366,7 @@ export async function PATCH(req: NextRequest) {
         }
         insertData.status = 'phase2';
         insertData.phase2_data = phase2_data;
+        insertData.pricing_snapshot = null;
       } else if (action === 'calculate_pricing') {
         if (!currentQuotation.phase1_data || !currentQuotation.phase2_data || !currentQuotation.cost_components) {
           return NextResponse.json(
@@ -382,6 +383,7 @@ export async function PATCH(req: NextRequest) {
         const full_rooms = (currentQuotation.phase2_data.twin_rooms || 0) + (currentQuotation.phase2_data.double_rooms || 0);
         const extra_beds = currentQuotation.phase2_data.extra_beds || 0;
         const duration_days = currentQuotation.phase1_data.duration_days || 1;
+        const no_food_service = currentQuotation.phase2_data?.no_food_service || false;
 
         // Calculate activities survey total from phase2_data
         const activitiesSurveyTotal = (currentQuotation.phase2_data.activities || [])
@@ -409,6 +411,7 @@ export async function PATCH(req: NextRequest) {
           duration_days,
           full_rooms,
           extra_beds,
+          no_food_service,
         };
 
         const pricingResult = calculateQuotationPrice(pricingInput);
@@ -503,6 +506,7 @@ export async function PATCH(req: NextRequest) {
       const full_rooms = (currentQuotation.phase2_data.twin_rooms || 0) + (currentQuotation.phase2_data.double_rooms || 0);
       const extra_beds = currentQuotation.phase2_data.extra_beds || 0;
       const duration_days = currentQuotation.phase1_data.duration_days || 1;
+      const no_food_service = currentQuotation.phase2_data?.no_food_service || false;
 
       // Calculate activities survey total from phase2_data
       const activitiesSurveyTotal = (currentQuotation.phase2_data.activities || [])
@@ -530,6 +534,7 @@ export async function PATCH(req: NextRequest) {
         duration_days,
         full_rooms,
         extra_beds,
+        no_food_service,
       };
 
       const pricingResult = calculateQuotationPrice(pricingInput);
