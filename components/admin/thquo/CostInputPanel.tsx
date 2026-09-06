@@ -13,15 +13,18 @@ interface CostComponents {
     per_night_rate: number;
     nights: number;
     notes: string;
+    is_complimentary?: boolean;
   };
   transport: {
     mode: 'no_transport' | 'private' | 'public';
     total_cost: number;
     car_rental_kb_rate?: number; // TODO: KB lookup placeholder
+    is_complimentary?: boolean;
   };
   meals: {
     per_person_per_day_rate: number;
     notes: string;
+    is_complimentary?: boolean;
   };
   tickets_activities: TicketActivity[];
   guide: {
@@ -40,6 +43,7 @@ export interface CostInputPanelProps {
     extra_beds?: number;
     currency?: 'USD' | 'THB' | 'MMK' | 'EUR' | 'SGD' | null;
     activitiesTotal?: number;
+    no_food_service?: boolean;
   };
   hotelLevel?: 'no_hotel' | 'budget' | 'standard' | 'deluxe' | 'luxury' | null;
   onBack?: () => void;
@@ -113,15 +117,18 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
       per_night_rate: 0,
       nights: duration_days ? Math.max(duration_days - 1, 1) : 1,
       notes: '',
+      is_complimentary: false,
     },
     transport: {
       mode: transport_mode || 'private',
       total_cost: 0,
       car_rental_kb_rate: undefined,
+      is_complimentary: false,
     },
     meals: {
       per_person_per_day_rate: 0,
       notes: '',
+      is_complimentary: false,
     },
     tickets_activities: [],
     guide: {
@@ -212,23 +219,23 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
     const isHotelExcluded = hotelLevel === 'no_hotel';
     const hotelTotal = isHotelExcluded ? 0 : costComponents.hotel.per_night_rate * costComponents.hotel.nights * (fullRooms + extraBeds * 0.5);
     const transportTotal = costComponents.transport.mode === 'no_transport' ? 0 : costComponents.transport.total_cost;
-    const mealsTotal = costComponents.meals.per_person_per_day_rate * costComponents.hotel.nights;
+    const mealsTotal = phase2Data?.no_food_service ? 0 : costComponents.meals.per_person_per_day_rate * costComponents.hotel.nights * (totalPax || 0);
     const ticketsTotal = costComponents.tickets_activities.reduce((sum, item) => sum + item.cost, 0) + (phase2Data?.activitiesTotal ?? 0);
     const guideTotal = costComponents.guide.rate_type === 'per_day'
       ? costComponents.guide.amount * duration_days
       : costComponents.guide.amount;
     return hotelTotal + transportTotal + mealsTotal + ticketsTotal + guideTotal;
-  }, [costComponents, phase2Data, hotelLevel]);
+  }, [costComponents, phase2Data, hotelLevel, totalPax, duration_days]);
 
   // Computed contingency (2% of running subtotal)
   const contingency = useMemo(() => {
     return runningSubtotal * 0.02;
   }, [runningSubtotal]);
 
-  // Computed currency risk buffer (2% of running subtotal)
+  // Computed currency risk buffer (2% of running subtotal + contingency)
   const currencyRiskBuffer = useMemo(() => {
-    return runningSubtotal * 0.02;
-  }, [runningSubtotal]);
+    return (runningSubtotal + contingency) * 0.02;
+  }, [runningSubtotal, contingency]);
 
   // Grand total
   const grandTotal = useMemo(() => {
@@ -434,6 +441,36 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
     navigator.clipboard.writeText(customerMessage);
   };
 
+  const isMessageBlocked = (): { blocked: boolean; reasons: string[] } => {
+    const reasons: string[] = [];
+
+    // Check hotel (only if not excluded)
+    if (hotelLevel !== 'no_hotel') {
+      if (costComponents.hotel.per_night_rate === 0 && !costComponents.hotel.is_complimentary) {
+        reasons.push('Hotel rate is $0 — enter a rate or mark Complimentary');
+      }
+    }
+
+    // Check transport (only if not excluded)
+    if (costComponents.transport.mode !== 'no_transport') {
+      if (costComponents.transport.total_cost === 0 && !costComponents.transport.is_complimentary) {
+        reasons.push('Transport cost is $0 — enter a cost or mark Complimentary');
+      }
+    }
+
+    // Check meals (only if not excluded)
+    if (!noFoodService) {
+      if (costComponents.meals.per_person_per_day_rate === 0 && !costComponents.meals.is_complimentary) {
+        reasons.push('Meals rate is $0 — enter a rate or mark Complimentary');
+      }
+    }
+
+    return {
+      blocked: reasons.length > 0,
+      reasons,
+    };
+  };
+
   const handleCarRentalLookup = async () => {
     setIsLookingUp(true);
     setLookupError(null);
@@ -508,6 +545,20 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
                 onChange={(e) => handleInputChange('hotel', 'per_night_rate', parseFloat(e.target.value) || 0)}
                 className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-all"
               />
+              {hotelLevel !== 'no_hotel' && (
+                <div className="mt-2 flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="hotel-complimentary"
+                    checked={costComponents.hotel.is_complimentary || false}
+                    onChange={(e) => handleInputChange('hotel', 'is_complimentary', e.target.checked)}
+                    className="w-4 h-4 rounded border-gray-300 text-emerald-500 focus:ring-emerald-500"
+                  />
+                  <label htmlFor="hotel-complimentary" className="text-xs text-gray-600">
+                    Complimentary / No Charge
+                  </label>
+                </div>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -682,6 +733,18 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
                   placeholder="Enter total cost manually"
                   className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-all"
                 />
+                <div className="mt-2 flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="transport-complimentary"
+                    checked={costComponents.transport.is_complimentary || false}
+                    onChange={(e) => handleInputChange('transport', 'is_complimentary', e.target.checked)}
+                    className="w-4 h-4 rounded border-gray-300 text-emerald-500 focus:ring-emerald-500"
+                  />
+                  <label htmlFor="transport-complimentary" className="text-xs text-gray-600">
+                    Complimentary / No Charge
+                  </label>
+                </div>
               </div>
             </div>
           ) : (
@@ -697,6 +760,18 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
                 onChange={(e) => handleInputChange('transport', 'total_cost', parseFloat(e.target.value) || 0)}
                 className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-all"
               />
+              <div className="mt-2 flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="transport-public-complimentary"
+                  checked={costComponents.transport.is_complimentary || false}
+                  onChange={(e) => handleInputChange('transport', 'is_complimentary', e.target.checked)}
+                  className="w-4 h-4 rounded border-gray-300 text-emerald-500 focus:ring-emerald-500"
+                />
+                <label htmlFor="transport-public-complimentary" className="text-xs text-gray-600">
+                  Complimentary / No Charge
+                </label>
+              </div>
             </div>
           )}
         </div>
@@ -716,6 +791,20 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
               onChange={(e) => handleInputChange('meals', 'per_person_per_day_rate', parseFloat(e.target.value) || 0)}
               className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-emerald-500 focus:outline-none transition-all"
             />
+              {!noFoodService && (
+                <div className="mt-2 flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id="meals-complimentary"
+                    checked={costComponents.meals.is_complimentary || false}
+                    onChange={(e) => handleInputChange('meals', 'is_complimentary', e.target.checked)}
+                    className="w-4 h-4 rounded border-gray-300 text-emerald-500 focus:ring-emerald-500"
+                  />
+                  <label htmlFor="meals-complimentary" className="text-xs text-gray-600">
+                    Complimentary / No Charge
+                  </label>
+                </div>
+              )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -944,11 +1033,19 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
             <h2 className="text-lg font-semibold text-gray-800">Customer Inquiry Respond</h2>
             <button
               onClick={handleGenerateCustomerMessage}
-              className="px-4 py-2 rounded-lg text-sm font-medium transition-all bg-purple-500 hover:bg-purple-600 text-white"
+              disabled={isMessageBlocked().blocked}
+              className="px-4 py-2 rounded-lg text-sm font-medium transition-all bg-purple-500 hover:bg-purple-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               Generate Message
             </button>
           </div>
+          {isMessageBlocked().blocked && (
+            <div className="text-xs text-red-600 space-y-1">
+              {isMessageBlocked().reasons.map((reason, index) => (
+                <div key={index}>• {reason}</div>
+              ))}
+            </div>
+          )}
           {showCustomerMessage && (
             <div className="space-y-3">
               <textarea
