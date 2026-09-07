@@ -197,6 +197,19 @@ export async function DELETE(
       );
     }
 
+    const { error: usageLogDeleteError } = await supabaseAdmin
+      .from('tour_guide_usage_log')
+      .delete()
+      .eq('account_id', accountId);
+
+    if (usageLogDeleteError) {
+      console.error('Error deleting tour_guide_usage_log rows:', usageLogDeleteError);
+      return NextResponse.json(
+        { error: 'Failed to delete account usage log records' },
+        { status: 500 }
+      );
+    }
+
     // Delete the account
     const { error: deleteError } = await supabaseAdmin
       .from('tour_guide_accounts')
