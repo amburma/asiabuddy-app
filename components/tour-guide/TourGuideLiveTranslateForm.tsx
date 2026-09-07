@@ -7,6 +7,9 @@ import { ArrowLeft, Mic, Loader2, AlertTriangle, Trash2, LogOut, Home, Volume2, 
 import { GoogleGenAI, Modality } from '@google/genai'
 import { TOUR_GUIDE_MODELS } from '@/lib/tour-guide/geminiConfig'
 
+// Temporary feature disable flag
+const LIVE_TRANSLATE_TEMP_DISABLED = true
+
 // Language options for live translation dropdowns
 const TARGET_LANGUAGES = [
   { code: 'mm', name: 'Burmese' },
@@ -695,6 +698,12 @@ export default function TourGuideLiveTranslateForm() {
 
   // Start live translation
   const startLiveTranslation = async () => {
+    // Temporary feature disable guard
+    if (LIVE_TRANSLATE_TEMP_DISABLED) {
+      setError('Live Translator is temporarily unavailable')
+      return
+    }
+
     // Guard against double-start
     if (isLive || isLoading) {
       return
