@@ -415,6 +415,7 @@ export async function PATCH(req: NextRequest) {
         };
 
         const pricingResult = calculateQuotationPrice(pricingInput);
+        insertData.margin_pct = margin_pct ?? 0.08;
         insertData.status = 'priced';
         insertData.pricing_snapshot = pricingResult;
       } else if (action === 'update_cost_components') {
@@ -538,6 +539,7 @@ export async function PATCH(req: NextRequest) {
       };
 
       const pricingResult = calculateQuotationPrice(pricingInput);
+      updateData.margin_pct = margin_pct ?? 0.08;
       updateData.status = 'priced';
       updateData.pricing_snapshot = pricingResult;
     } else if (action === 'update_cost_components') {

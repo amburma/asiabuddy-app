@@ -103,6 +103,14 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
         if (data.phase2_data?.child_with_bed !== undefined) setChildWithBed(data.phase2_data.child_with_bed);
         if (data.phase2_data?.child_no_bed !== undefined) setChildNoBed(data.phase2_data.child_no_bed);
         if (data.pricing_snapshot) setPricingSnapshot(data.pricing_snapshot);
+        if (data.margin_pct !== undefined && data.margin_pct !== null) {
+          setMarginInput((data.margin_pct * 100).toString());
+          setAppliedMargin(data.margin_pct * 100);
+          setIsManualMargin(true);
+        } else {
+          setAppliedMargin(8);
+          setIsManualMargin(false);
+        }
       } catch (error) {
         console.error('Error rehydrating cost components:', error);
         // Leave fields at default/empty state on failure
@@ -142,6 +150,9 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
   const [pricingSnapshot, setPricingSnapshot] = useState<any>(null);
   const [pricingError, setPricingError] = useState<string | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
+  const [marginInput, setMarginInput] = useState<string>('');
+  const [appliedMargin, setAppliedMargin] = useState<number | null>(null);
+  const [isManualMargin, setIsManualMargin] = useState(false);
 
   // Customer message generation state
   const [tourCode, setTourCode] = useState<string | null>(null);
@@ -286,15 +297,24 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
     setPricingError(null);
 
     try {
+      const requestBody: any = {
+        id: quotationId,
+        action: 'calculate_pricing',
+      };
+
+      if (marginInput.trim() !== '') {
+        const marginValue = parseFloat(marginInput);
+        if (!isNaN(marginValue) && marginValue >= 0) {
+          requestBody.margin_pct = marginValue / 100;
+        }
+      }
+
       const response = await fetch('/api/quotations', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          id: quotationId,
-          action: 'calculate_pricing',
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       const result = await response.json();
@@ -312,6 +332,12 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
       }
 
       setPricingSnapshot(result.pricing_snapshot);
+      const manualMargin = marginInput.trim() !== '' ? parseFloat(marginInput) : 8;
+      setAppliedMargin(manualMargin);
+      setIsManualMargin(marginInput.trim() !== '');
+      if (marginInput.trim() === '') {
+        setMarginInput('');
+      }
     } catch (error) {
       console.error('Error calculating pricing:', error);
       setPricingError(error instanceof Error ? error.message : 'An error occurred');
@@ -942,14 +968,44 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
           <div className="space-y-4 p-4 rounded-xl border-2 border-blue-200 bg-blue-50">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold text-gray-800">Pricing Snapshot</h2>
-              <button
-                onClick={calculatePricing}
-                disabled={isCalculating}
-                className="px-4 py-2 rounded-lg text-sm font-medium transition-all bg-blue-500 hover:bg-blue-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                {isCalculating ? 'Recalculating...' : 'Recalculate'}
-              </button>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-700">Profit Margin %</label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="100"
+                    placeholder="8"
+                    value={marginInput}
+                    onChange={(e) => {
+                      setMarginInput(e.target.value);
+                      if (e.target.value.trim() === '') {
+                        setAppliedMargin(8);
+                        setIsManualMargin(false);
+                      } else {
+                        setIsManualMargin(true);
+                      }
+                    }}
+                    className="w-20 px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-blue-500 focus:outline-none transition-all text-sm"
+                  />
+                </div>
+                <button
+                  onClick={calculatePricing}
+                  disabled={isCalculating}
+                  className="px-4 py-2 rounded-lg text-sm font-medium transition-all bg-blue-500 hover:bg-blue-600 text-white disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  {isCalculating ? 'Recalculating...' : 'Recalculate'}
+                </button>
+              </div>
             </div>
+            {appliedMargin !== null && (
+              <div className="bg-blue-100 border-2 border-blue-300 rounded-lg p-3 mb-4">
+                <p className="text-sm text-blue-800 font-medium">
+                  Margin: {appliedMargin.toFixed(1)}%{isManualMargin ? ' (manual)' : ''}
+                </p>
+              </div>
+            )}
             <div className="space-y-3">
               {pricingSnapshot.total_direct_cost !== null && (
                 <div className="flex justify-between items-center">
