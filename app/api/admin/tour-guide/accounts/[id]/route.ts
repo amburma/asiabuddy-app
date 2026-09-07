@@ -170,6 +170,33 @@ export async function DELETE(
 
     const isPackageTier = !!account.booking_id;
 
+    // Delete dependent rows first to avoid FK constraint violations
+    const { error: usageDeleteError } = await supabaseAdmin
+      .from('tour_guide_usage')
+      .delete()
+      .eq('account_id', accountId);
+
+    if (usageDeleteError) {
+      console.error('Error deleting tour_guide_usage:', usageDeleteError);
+      return NextResponse.json(
+        { error: 'Failed to delete account usage data' },
+        { status: 500 }
+      );
+    }
+
+    const { error: trialUsageDeleteError } = await supabaseAdmin
+      .from('tour_guide_trial_usage')
+      .delete()
+      .eq('account_id', accountId);
+
+    if (trialUsageDeleteError) {
+      console.error('Error deleting tour_guide_trial_usage:', trialUsageDeleteError);
+      return NextResponse.json(
+        { error: 'Failed to delete account trial usage data' },
+        { status: 500 }
+      );
+    }
+
     // Delete the account
     const { error: deleteError } = await supabaseAdmin
       .from('tour_guide_accounts')
