@@ -13,7 +13,8 @@ interface TranslationEntry {
 
 export default function TourGuideVoiceTranslateForm() {
   const router = useRouter()
-  const [targetLanguage, setTargetLanguage] = useState('Burmese')
+  const [languageA, setLanguageA] = useState('Burmese')
+  const [languageB, setLanguageB] = useState('German')
   const [isRecording, setIsRecording] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -26,6 +27,11 @@ export default function TourGuideVoiceTranslateForm() {
   const recordingStartTimeRef = useRef<number>(0)
 
   const handleRecordStart = async () => {
+    if (languageA === languageB) {
+      setError('Please choose two different languages.')
+      return
+    }
+
     setError('')
     audioChunksRef.current = []
 
@@ -55,7 +61,7 @@ export default function TourGuideVoiceTranslateForm() {
         console.log('Audio base64 length:', base64.length, 'characters')
 
         // Send to API
-        await handleVoiceSubmit(base64, mimeType, targetLanguage)
+        await handleVoiceSubmit(base64, mimeType, languageA, languageB)
       }
 
       recorder.start()
@@ -104,7 +110,7 @@ export default function TourGuideVoiceTranslateForm() {
     })
   }
 
-  const handleVoiceSubmit = async (audio: string, mimeType: string, targetLanguage: string) => {
+  const handleVoiceSubmit = async (audio: string, mimeType: string, languageA: string, languageB: string) => {
     setIsLoading(true)
     setError('')
     setCopied(false)
@@ -113,7 +119,7 @@ export default function TourGuideVoiceTranslateForm() {
       const response = await fetch('/api/tour-guide/voice-translate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ audio, mimeType, targetLanguage }),
+        body: JSON.stringify({ audio, mimeType, languageA, languageB }),
       })
       const data = await response.json()
 
@@ -237,11 +243,11 @@ export default function TourGuideVoiceTranslateForm() {
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-[#F5F0E8] mb-2">Response language</label>
+          <label className="block text-sm font-medium text-[#F5F0E8] mb-2">Language 1</label>
           <select
-            id="targetLanguage"
-            value={targetLanguage}
-            onChange={(e) => setTargetLanguage(e.target.value)}
+            id="languageA"
+            value={languageA}
+            onChange={(e) => setLanguageA(e.target.value)}
             className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#C9A84C] rounded-md text-[#F5F0E8] focus:outline-none focus:ring-2 focus:ring-[#C9A84C] focus:border-transparent"
             disabled={isRecording || isLoading}
           >
@@ -250,6 +256,25 @@ export default function TourGuideVoiceTranslateForm() {
             ))}
           </select>
         </div>
+
+        <div>
+          <label className="block text-sm font-medium text-[#F5F0E8] mb-2">Language 2</label>
+          <select
+            id="languageB"
+            value={languageB}
+            onChange={(e) => setLanguageB(e.target.value)}
+            className="w-full px-4 py-3 bg-[#1a1a1a] border border-[#C9A84C] rounded-md text-[#F5F0E8] focus:outline-none focus:ring-2 focus:ring-[#C9A84C] focus:border-transparent"
+            disabled={isRecording || isLoading}
+          >
+            {LANGUAGES.map((lang) => (
+              <option key={lang} value={lang}>{lang}</option>
+            ))}
+          </select>
+        </div>
+
+        {languageA === languageB && (
+          <p className="text-xs text-red-300">Please choose two different languages.</p>
+        )}
 
         <button
           onClick={isRecording ? handleRecordStop : handleRecordStart}
