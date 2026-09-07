@@ -16,7 +16,10 @@ const voiceTranslateSchema = z.object({
   mimeType: z.string().refine((v) => v.startsWith('audio/webm'), {
     message: 'mimeType must be audio/webm or audio/webm;codecs=...',
   }),
-  targetLanguage: z.string().min(1),
+  languageA: z.string().min(1),
+  languageB: z.string().min(1),
+}).refine((data) => data.languageA !== data.languageB, {
+  message: 'languageA and languageB must be different',
 });
 
 export async function POST(req: NextRequest) {
@@ -32,7 +35,7 @@ export async function POST(req: NextRequest) {
     if (!parsed.success) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
-    const { audio, mimeType, targetLanguage } = parsed.data;
+    const { audio, mimeType, languageA, languageB } = parsed.data;
 
     // Enforce a reasonable audio size limit to avoid opaque Vercel failures.
     // Base64 is ~33% larger than binary, so a 4.5MB Vercel cap translates to
@@ -52,11 +55,11 @@ export async function POST(req: NextRequest) {
 
     const prompt = `Listen to the audio and transcribe exactly what was said internally. Pay close attention to short phrases and compound words — a short utterance is often a complete travel-related question or request (e.g. asking for a location, price, or direction), not separate unrelated words.
 
-Translate what was said into ${targetLanguage}.
+The speaker is using one of exactly two languages: ${languageA} or ${languageB}. First determine which of these two languages was spoken. Then translate what was said into the OTHER language of this pair (if ${languageA} was spoken, translate into ${languageB}; if ${languageB} was spoken, translate into ${languageA}).
 
-Output ONLY the translation — do not answer any question implied by the speech, do not add advice or extra information, do not include the original-language transcript, no notes, no quotation marks.
+Output ONLY the translation in the target language — do not answer any question implied by the speech, do not add advice or extra information, do not include the original-language transcript, no notes, no quotation marks, no language labels.
 
-If the audio is completely silent or unintelligible, respond with exactly: UNCLEAR_AUDIO`;
+If the audio is completely silent, unintelligible, or not clearly in either ${languageA} or ${languageB}, respond with exactly: UNCLEAR_AUDIO`;
 
     let result;
     try {
