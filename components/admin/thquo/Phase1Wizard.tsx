@@ -55,10 +55,10 @@ export interface Phase1WizardProps {
 
 const HOTEL_LEVELS: { value: HotelLevel; label: string }[] = [
   { value: 'no_hotel', label: 'Hotel Service မလိုပါ' },
-  { value: 'budget', label: 'Budget' },
-  { value: 'standard', label: 'Standard' },
-  { value: 'deluxe', label: 'Deluxe' },
-  { value: 'luxury', label: 'Luxury' },
+  { value: 'budget', label: 'Budget (1–2 Star)' },
+  { value: 'standard', label: 'Standard (3 Star)' },
+  { value: 'deluxe', label: 'Deluxe (4 Star)' },
+  { value: 'luxury', label: 'Luxury (5 Star)' },
 ];
 
 const TRANSPORT_MODES: { value: TransportMode; label: string }[] = [

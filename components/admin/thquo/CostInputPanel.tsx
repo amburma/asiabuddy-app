@@ -407,7 +407,7 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
 📍 ခရီးစဉ်: ${destinations.join(', ')}
 
 ✅ ပါဝင်သော Services —
-🏨 ဟိုတယ် (${hotelLevel === 'no_hotel' ? 'No Hotel' : hotelLevel === 'budget' ? 'Budget' : hotelLevel === 'standard' ? 'Standard' : hotelLevel === 'deluxe' ? 'Deluxe' : hotelLevel === 'luxury' ? 'Luxury' : 'Not specified'} level, ${nights} ညများ)
+🏨 ဟိုတယ် (${hotelLevel === 'no_hotel' ? 'No Hotel' : hotelLevel === 'budget' ? 'Budget (1–2 Star)' : hotelLevel === 'standard' ? 'Standard (3 Star)' : hotelLevel === 'deluxe' ? 'Deluxe (4 Star)' : hotelLevel === 'luxury' ? 'Luxury (5 Star)' : 'Not specified'} level, ${nights} ညများ)
 🚐 သွားလာရေး (${transportLabel})
 🍽️ အစားအစာ (${mealLabel})`;
 

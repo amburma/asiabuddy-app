@@ -1283,7 +1283,7 @@ const Phase2WizardComponent: React.FC<Phase2WizardProps> = ({ totalPax: propTota
                   <p>Elderly: {formData.has_elderly ? `Yes (${formData.elderly_count})` : 'No'}</p>
                   <p>Special Needs: {formData.has_special_needs ? 'Yes' : 'No'}</p>
                   <p>Currency: {formData.currency}</p>
-                  <p>Hotel Level: {hotelLevel === 'no_hotel' ? 'No Hotel' : hotelLevel === 'budget' ? 'Budget' : hotelLevel === 'standard' ? 'Standard' : hotelLevel === 'deluxe' ? 'Deluxe' : hotelLevel === 'luxury' ? 'Luxury' : 'Not specified'}</p>
+                  <p>Hotel Level: {hotelLevel === 'no_hotel' ? 'No Hotel' : hotelLevel === 'budget' ? 'Budget (1–2 Star)' : hotelLevel === 'standard' ? 'Standard (3 Star)' : hotelLevel === 'deluxe' ? 'Deluxe (4 Star)' : hotelLevel === 'luxury' ? 'Luxury (5 Star)' : 'Not specified'}</p>
                   <p>Travelers: {formData.travelers_deferred ? 'Deferred (Fill in later)' : `${(formData.travelers || []).length} registered`}</p>
                 </div>
               </div>
