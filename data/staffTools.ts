@@ -33,5 +33,30 @@ export const staffTools: StaffCategory[] = [
         url: "https://gemini.google.com/gem/12z1BHqRNNEE7TU2fRK2wZxGqkd3Ocjz0?usp=sharing"
       }
     ]
+  },
+  {
+    name: "Tour Package Calculation",
+    tools: [
+      {
+        name: "Tour Package များ ဈေးနှုန်းတွက်ရန်",
+        url: "https://asiabuddy.app/admin/thquo"
+      },
+      {
+        name: "Hotel ဈေးနှုန်းများရှာရန်",
+        url: "https://www.perplexity.ai/projects/asiabuddy-hotel-pricing-resear-40QN.Z20TB.7gWmXZZ3aOQ"
+      },
+      {
+        name: "Transport ဈေးနှုန်းများရှာရန်",
+        url: "https://www.perplexity.ai/projects/transport-car-rental-pricing-r-QbrE4ONFS_OrmXifMkP2fA"
+      },
+      {
+        name: "အစားအသောက် ဈေးနှုန်းများရှာရန်",
+        url: "https://www.perplexity.ai/projects/meals-pricing-research-6eHy49XoQlyJH5RxCPorWQ"
+      },
+      {
+        name: "ဝင်ကြေးလက်မှတ်များ / Activities ဈေးနှုန်းများရှာရန်",
+        url: "https://www.perplexity.ai/projects/tickets-activities-pricing-res-Jh5KqQIUQueZAHLfKEm25w"
+      }
+    ]
   }
 ];
