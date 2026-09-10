@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { createClient } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { LogOut, Plus, Pencil, Trash2, X, ChevronDown, ChevronRight, GripVertical, Upload, ArrowUp, ArrowDown, ImagePlus } from 'lucide-react';
@@ -169,6 +169,7 @@ export default function GlobalAdminPage() {
   const [postImages, setPostImages] = useState('');
   const [blogImagePreview, setBlogImagePreview] = useState('');
   const [postPublished, setPostPublished] = useState(false);
+  const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Itineraries state
   const [itineraryItems, setItineraryItems] = useState<any[]>([]);
@@ -1669,8 +1670,41 @@ export default function GlobalAdminPage() {
                 <textarea value={postExcerpt} onChange={e => setPostExcerpt(e.target.value)} rows={3} placeholder="Brief summary..." className={`${inputCls} resize-none`} />
               </Field>
 
+              <Field label="Upload Image for Content">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const publicUrl = await uploadImageToStorage(file, 'blog-images');
+                      if (publicUrl) {
+                        const textarea = contentTextareaRef.current;
+                        if (textarea) {
+                          const cursorPosition = textarea.selectionStart;
+                          const currentContent = postContent;
+                          const markdown = `\n\n![](${publicUrl})\n\n`;
+                          const newContent = currentContent.slice(0, cursorPosition) + markdown + currentContent.slice(cursorPosition);
+                          setPostContent(newContent);
+                          setTimeout(() => {
+                            textarea.focus();
+                            textarea.setSelectionRange(cursorPosition + markdown.length, cursorPosition + markdown.length);
+                          }, 0);
+                        }
+                      }
+                    }}
+                    disabled={uploadingImage}
+                    className="flex-1 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"
+                  />
+                  {uploadingImage && (
+                    <span className="text-xs text-emerald-600 font-medium">Uploading...</span>
+                  )}
+                </div>
+              </Field>
+
               <Field label="Content *">
-                <textarea value={postContent} onChange={e => setPostContent(e.target.value)} rows={12} placeholder="Write your content here..." className={`${inputCls} resize-none`} />
+                <textarea value={postContent} onChange={e => setPostContent(e.target.value)} rows={12} placeholder="Write your content here..." className={`${inputCls} resize-none`} ref={contentTextareaRef} />
               </Field>
 
               <Field label="Author">
@@ -1702,6 +1736,28 @@ export default function GlobalAdminPage() {
                       if (publicUrl) {
                         setPostCoverImage(publicUrl);
                         setBlogImagePreview(publicUrl);
+                      }
+                    }}
+                    disabled={uploadingImage}
+                    className="flex-1 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100"
+                  />
+                  {uploadingImage && (
+                    <span className="text-xs text-emerald-600 font-medium">Uploading...</span>
+                  )}
+                </div>
+              </Field>
+
+              <Field label="Add Image to Gallery">
+                <div className="flex items-center gap-3">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const publicUrl = await uploadImageToStorage(file, 'blog-images');
+                      if (publicUrl) {
+                        setPostImages(prev => prev ? `${prev}, ${publicUrl}` : publicUrl);
                       }
                     }}
                     disabled={uploadingImage}
