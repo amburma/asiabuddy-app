@@ -703,7 +703,7 @@ export default function GlobalAdminPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 scroll-smooth">
 
       {/* HEADER */}
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-40">
@@ -718,6 +718,38 @@ export default function GlobalAdminPage() {
           <LogOut size={13} /> Logout
         </button>
       </header>
+
+      {/* STICKY NAVIGATION */}
+      <nav className="sticky top-16 z-50 bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 py-3">
+          <div className="flex gap-2 overflow-x-auto">
+            <a
+              href="#section-posts"
+              className="flex items-center justify-center min-h-[44px] px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm whitespace-nowrap transition"
+            >
+              Posts
+            </a>
+            <a
+              href="#section-tours-list"
+              className="flex items-center justify-center min-h-[44px] px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-sm whitespace-nowrap transition"
+            >
+              Tours
+            </a>
+            <a
+              href="#section-destinations"
+              className="flex items-center justify-center min-h-[44px] px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm whitespace-nowrap transition"
+            >
+              Destinations
+            </a>
+            <a
+              href="#section-itinerary"
+              className="flex items-center justify-center min-h-[44px] px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-sm whitespace-nowrap transition"
+            >
+              Itinerary Editor
+            </a>
+          </div>
+        </div>
+      </nav>
 
       {/* COUNTRY SELECTOR */}
       <div className="max-w-3xl mx-auto px-6 pt-6">
@@ -746,7 +778,7 @@ export default function GlobalAdminPage() {
       </div>
 
       {/* TOURS + ITINERARY EDITOR */}
-      <div className="max-w-7xl mx-auto px-6 pb-8">
+      <div id="section-itinerary" className="max-w-7xl mx-auto px-6 pb-8 scroll-mt-36">
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div className="flex flex-col gap-3 border-b border-gray-100 px-6 py-5 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -1215,7 +1247,7 @@ export default function GlobalAdminPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 pb-8">
+      <div id="section-tours-list" className="max-w-7xl mx-auto px-6 pb-8 scroll-mt-36">
         <div className="rounded-2xl bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
@@ -1353,7 +1385,7 @@ export default function GlobalAdminPage() {
       </div>
 
       {/* DESTINATIONS MANAGEMENT */}
-      <div className="max-w-3xl mx-auto px-6 pb-8">
+      <div id="section-destinations" className="max-w-3xl mx-auto px-6 pb-8 scroll-mt-36">
         <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
 
           <div className="flex items-center justify-between">
@@ -1627,7 +1659,7 @@ export default function GlobalAdminPage() {
       </div>
 
       {/* POSTS MANAGEMENT */}
-      <div className="max-w-3xl mx-auto px-6 pb-16">
+      <div id="section-posts" className="max-w-3xl mx-auto px-6 pb-16 scroll-mt-36">
         <div className="bg-white rounded-2xl shadow-sm p-6 space-y-6">
 
           <div className="flex items-center justify-between">
