@@ -30,19 +30,22 @@ export async function generateMetadata({
 }
 
 // ─── Cached Data Fetching Functions ───────────────────────────
-function getCachedPosts(country: string) {
+function getCachedPosts(country: string, page: number) {
   return unstable_cache(
     async () => {
       const supabase = createPublicClient()
-      const { data, error } = await supabase
+      const from = (page - 1) * 9
+      const to = from + 8
+      const { data, error, count } = await supabase
         .from('posts')
-        .select('id, title, slug, excerpt, cover_image, author, created_at')
+        .select('id, title, slug, excerpt, cover_image, author, created_at', { count: 'exact' })
         .eq('country', country)
         .eq('published', true)
         .order('created_at', { ascending: false })
-      return { data, error }
+        .range(from, to)
+      return { data, error, count }
     },
-    [`posts-${country}`],
+    [`posts-${country}-page-${page}`],
     { revalidate: 3600, tags: [`posts-${country}`] }
   )
 }
@@ -65,11 +68,17 @@ function truncateExcerpt(excerpt: string | null, maxLength: number = 120): strin
 // ─── Main Page Component ───────────────────────────────────────
 export default async function BlogListingPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ country: string }>
+  searchParams: Promise<{ page?: string }>
 }) {
   const { country: countrySlug } = await params
-  const { data: posts, error } = await getCachedPosts(countrySlug)()
+  const { page } = await searchParams
+  const currentPage = Math.max(1, parseInt(page || '1', 10))
+  const POSTS_PER_PAGE = 9
+  const { data: posts, error, count } = await getCachedPosts(countrySlug, currentPage)()
+  const totalPages = Math.ceil((count || 0) / 9)
 
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
 
@@ -135,6 +144,24 @@ export default async function BlogListingPage({
                     </div>
                   </div>
                 </article>
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-12 flex-wrap">
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+              <Link
+                key={pageNum}
+                href={`/${countrySlug}/blog?page=${pageNum}`}
+                className={`min-w-[40px] h-10 flex items-center justify-center rounded-lg text-sm font-semibold transition ${
+                  pageNum === currentPage
+                    ? 'bg-[#D4AF37] text-white'
+                    : 'bg-white text-[#0D0D0D] border border-gray-200 hover:border-[#D4AF37]'
+                }`}
+              >
+                {pageNum}
               </Link>
             ))}
           </div>
