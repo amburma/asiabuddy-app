@@ -1914,7 +1914,7 @@ export default function GlobalAdminPage() {
                           }
                           // Add gallery images from comma-separated field
                           if (item.images) {
-                            const galleryUrls = item.images.split(',').map(url => url.trim()).filter(Boolean);
+                            const galleryUrls = item.images.split(',').map((url: string) => url.trim()).filter(Boolean);
                             urlsToDelete.push(...galleryUrls);
                           }
                           // Deduplicate URLs
