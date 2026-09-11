@@ -1898,12 +1898,35 @@ export default function GlobalAdminPage() {
                       <button
                         onClick={async () => {
                           if (!confirm('Delete this post?')) return;
+                          // Collect all image URLs to delete from storage
+                          const urlsToDelete: string[] = [];
+                          // Add cover image
                           if (item.cover_image) {
-                            const filePath = extractStoragePath(item.cover_image, 'blog-images');
-                            if (filePath) {
-                              const { error: storageError } = await supabase.storage.from('blog-images').remove([filePath]);
-                              if (storageError) console.error('Post storage delete error:', storageError);
+                            urlsToDelete.push(item.cover_image);
+                          }
+                          // Extract images from content using Markdown image syntax
+                          if (item.content) {
+                            const contentImageRegex = /!\[[^\]]*\]\(([^)]+)\)/g;
+                            let match;
+                            while ((match = contentImageRegex.exec(item.content)) !== null) {
+                              urlsToDelete.push(match[1]);
                             }
+                          }
+                          // Add gallery images from comma-separated field
+                          if (item.images) {
+                            const galleryUrls = item.images.split(',').map(url => url.trim()).filter(Boolean);
+                            urlsToDelete.push(...galleryUrls);
+                          }
+                          // Deduplicate URLs
+                          const uniqueUrls = Array.from(new Set(urlsToDelete));
+                          // Extract storage paths and filter out external URLs
+                          const pathsToDelete = uniqueUrls
+                            .map(url => extractStoragePath(url, 'blog-images'))
+                            .filter((path): path is string => path !== null);
+                          // Batch delete all storage files
+                          if (pathsToDelete.length > 0) {
+                            const { error: storageError } = await supabase.storage.from('blog-images').remove(pathsToDelete);
+                            if (storageError) console.error('Post storage delete error:', storageError);
                           }
                           await supabase.from('posts').delete().eq('id', item.id);
                           fetchPosts();
