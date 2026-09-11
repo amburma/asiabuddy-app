@@ -1,8 +1,24 @@
+import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
 const MarkdownComponents: any = {
+  img: ({ node, src, alt, title, ...props }: any) => (
+    <figure className="my-6">
+      <img
+        src={src}
+        alt={alt || ''}
+        className="w-full h-auto rounded-lg shadow-md object-cover"
+        {...props}
+      />
+      {alt && (
+        <figcaption className="text-sm text-gray-500 text-center mt-2 italic">
+          {alt}
+        </figcaption>
+      )}
+    </figure>
+  ),
   h1: ({ node, ...props }: any) => (
     <h1 className="text-2xl font-serif text-sacred-green mb-8 border-b border-gold-soft/20 pb-4 leading-tight" {...props} />
   ),
@@ -15,14 +31,23 @@ const MarkdownComponents: any = {
   h4: ({ node, ...props }: any) => (
     <h4 className="text-sm font-bold text-gray-800 mt-6 mb-2" {...props} />
   ),
-  p: ({ node, ...props }: any) => (
-    <p className="text-xs text-left text-gray-700 leading-relaxed mb-5" {...props} />
-  ),
+  p: ({ node, children, ...props }: any) => {
+    // Check if this paragraph contains only an image element
+    const hasOnlyImage = React.Children.count(children) === 1 && 
+      React.isValidElement(children) && 
+      (children as any).type === MarkdownComponents.img;
+    
+    if (hasOnlyImage) {
+      return <div className="text-base md:text-lg text-left text-gray-700 leading-relaxed mb-5" {...props}>{children}</div>;
+    }
+    
+    return <p className="text-base md:text-lg text-left text-gray-700 leading-relaxed mb-5" {...props}>{children}</p>;
+  },
   ul: ({ node, ...props }: any) => (
     <ul className="space-y-3 mb-6 list-none p-0" {...props} />
   ),
   li: ({ node, ...props }: any) => (
-    <li className="flex gap-3 text-xs text-gray-700 leading-relaxed">
+    <li className="flex gap-3 text-base md:text-lg text-gray-700 leading-relaxed">
       <span className="text-gold-deep mt-1 flex-shrink-0">•</span>
       <span {...props} />
     </li>
@@ -44,7 +69,7 @@ const MarkdownComponents: any = {
   ),
   table: ({ node, ...props }: any) => (
     <div className="overflow-x-auto mb-6 rounded-lg border border-gray-100">
-      <table className="w-full text-xs" {...props} />
+      <table className="w-full text-sm md:text-base" {...props} />
     </div>
   ),
   thead: ({ node, ...props }: any) => (

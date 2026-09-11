@@ -104,6 +104,18 @@ function extractFirstBlockquote(content: string): { firstBlockquote: string; rem
   return { firstBlockquote: '', remainingContent: content }
 }
 
+function extractFirstParagraph(content: string): { firstParagraph: string; remainingContent: string } {
+  const lines = content.trim().split('\n')
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim()
+    if (line && !line.startsWith('>') && !line.startsWith('#') && !line.startsWith('!') && !line.startsWith('|')) {
+      const remaining = [...lines.slice(0, i), ...lines.slice(i + 1)].join('\n').trim()
+      return { firstParagraph: line, remainingContent: remaining }
+    }
+  }
+  return { firstParagraph: '', remainingContent: content }
+}
+
 // ─── Main Page Component ───────────────────────────────────────
 export default async function BlogPostPage({
   params,
@@ -119,6 +131,7 @@ export default async function BlogPostPage({
 
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
   const { firstBlockquote, remainingContent } = extractFirstBlockquote(post.content)
+  const { firstParagraph, remainingContent: bodyContent } = extractFirstParagraph(remainingContent)
   const readingTime = calculateReadingTime(post.content)
   const formattedDate = formatDate(post.created_at)
 
@@ -134,7 +147,7 @@ export default async function BlogPostPage({
         </div>
 
         {/* H1 Title */}
-        <h1 className="text-[#0D0D0D] font-bold text-[24px] md:text-[32px] lg:text-[36px] leading-tight mb-4 max-w-3xl">
+        <h1 className="font-serif text-[#0D0D0D] font-bold text-[24px] md:text-[32px] lg:text-[36px] leading-tight mb-4 max-w-3xl">
           {post.title}
         </h1>
 
@@ -154,6 +167,13 @@ export default async function BlogPostPage({
           <span>{readingTime} min read</span>
         </div>
 
+        {/* Intro Paragraph */}
+        {firstParagraph && (
+          <p className="text-base md:text-lg text-[#0D0D0D] leading-relaxed mb-8 max-w-3xl">
+            {firstParagraph}
+          </p>
+        )}
+
         {/* Cover Image */}
         {post.cover_image && (
           <div className="mb-8">
@@ -172,7 +192,7 @@ export default async function BlogPostPage({
 
         {/* Main Content */}
         <div className="prose prose-lg max-w-none">
-          <MarkdownRenderer content={remainingContent} />
+          <MarkdownRenderer content={bodyContent} />
         </div>
 
         {/* Photo Gallery */}
