@@ -347,9 +347,11 @@ export default async function ToursPage({
                   )}
                   
                   {/* Price Badge */}
-                  <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur text-orange-600 font-black text-sm px-3 py-1.5 rounded-xl shadow">
-                    From {tour.price_from?.toLocaleString() ?? 'N/A'} {tour.currency}
-                  </div>
+                  {tour.price_from ? (
+                    <div className="absolute bottom-4 right-4 bg-white/95 backdrop-blur text-orange-600 font-black text-sm px-3 py-1.5 rounded-xl shadow">
+                      From {tour.price_from.toLocaleString()} {tour.currency}
+                    </div>
+                  ) : null}
 
                   {/* CARD BODY */}
                   <div className="p-6">
