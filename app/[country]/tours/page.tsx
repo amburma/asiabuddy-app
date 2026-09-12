@@ -59,23 +59,15 @@ export default async function ToursPage({
   const cookieStore = await cookies()
   const targetLanguage = (cookieStore.get('NEXT_LOCALE')?.value ?? 'EN').toUpperCase()
 
-  console.time('Supabase tours query')
   const supabase = getSupabase()
-  let tours, error
-  try {
-    const result = await supabase
-      .from('tours')
-      .select('*')
-      .eq('status', 'active')
-      .eq('country', country)
-      .order('display_order', { ascending: true })
-    tours = result.data
-    error = result.error
-  } catch (e) {
-    console.error('Supabase tours query failed with exception:', e)
-    error = e
-  }
-  console.timeEnd('Supabase tours query')
+  const result = await supabase
+    .from('tours')
+    .select('*')
+    .eq('status', 'active')
+    .eq('country', country)
+    .order('display_order', { ascending: true })
+  const tours = result.data
+  const error = result.error
 
   if (error) {
     console.error('Error fetching tours:', error)
