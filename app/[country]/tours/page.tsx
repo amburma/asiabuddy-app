@@ -1,7 +1,6 @@
 import { getSupabase } from '../../../lib/supabase'
 import Link from 'next/link'
 import { cookies } from 'next/headers'
-import { translateText } from '../../../lib/translate'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -84,118 +83,203 @@ export default async function ToursPage({
 
   const activeTours = tours || []
 
-  // 🌟 (ကမ္ဘာ့အဆင့်မီ စနစ်) စာမျက်နှာပေါ်ရှိ စာသားအားလုံးအား API (၁) ကြိမ်တည်းဖြင့် Batch ဘာသာပြန်ခြင်း 🌟
-  const translationPayload = {
-    homeText: "Home",
-    toursText: "Tours",
-    backText: `Back to ${countryName}`,
-    titleText: `Tours in ${countryName}`,
-    subtitleText: "Handpicked experiences. Unforgettable memories.",
-    verifiedText: "100% Verified Tours",
-    guaranteeText: "Best Price Guarantee",
-    supportText: "24/7 Support",
-    availText: "Available Experiences",
-    exploreTitle: `Tours in ${countryName}`,
-    tourCountText: `${activeTours.length} tour${activeTours.length !== 1 ? 's' : ''} available`,
-    exploreCtaText: "Explore This Tour →",
-    maxGroupText: "Max",
-    peopleText: "people",
-    dayText: "Day",
-    nightText: "Night",
-    // ခရီးစဉ်များကို payload ထဲသို့ စုစည်းထည့်သွင်းခြင်း
-    tours: activeTours.map((t) => ({
-      id: t.id,
-      title: t.title || '',
-      short_description: t.short_description || ''
-    }))
+  // Static UI text translations for supported languages
+  const UI_TEXT: Record<string, {
+    homeText: string;
+    toursText: string;
+    backTextPrefix: string;
+    titleTextPrefix: string;
+    subtitleText: string;
+    verifiedText: string;
+    guaranteeText: string;
+    supportText: string;
+    availText: string;
+    exploreTitlePrefix: string;
+    tourCountTextPrefix: string;
+    tourCountTextPlural: string;
+    exploreCtaText: string;
+    maxGroupText: string;
+    peopleText: string;
+    dayText: string;
+    nightText: string;
+    emptyStateTitle: string;
+    emptyStateDescription: string;
+  }> = {
+    EN: {
+      homeText: "Home",
+      toursText: "Tours",
+      backTextPrefix: "Back to",
+      titleTextPrefix: "Tours in",
+      subtitleText: "Handpicked experiences. Unforgettable memories.",
+      verifiedText: "100% Verified Tours",
+      guaranteeText: "Best Price Guarantee",
+      supportText: "24/7 Support",
+      availText: "Available Experiences",
+      exploreTitlePrefix: "Tours in",
+      tourCountTextPrefix: " tour available",
+      tourCountTextPlural: " tours available",
+      exploreCtaText: "Explore This Tour →",
+      maxGroupText: "Max",
+      peopleText: "people",
+      dayText: "Day",
+      nightText: "Night",
+      emptyStateTitle: "No Tours Available Yet",
+      emptyStateDescription: "We're curating amazing experiences for you. Check back soon!",
+    },
+    MM: {
+      homeText: "ပင်မစာမျက်နှာ",
+      toursText: "ခရီးစဉ်များ",
+      backTextPrefix: "သို့ပြန်သွားရန်",
+      titleTextPrefix: "ခရီးစဉ်များ",
+      subtitleText: "ရွေးချယ်ထားသောအတွေ့အကြုံများ။ မမေ့နိုင်သောမှတ်ဉာဏ်များ။",
+      verifiedText: "100% အတည်ပြုခရီးစဉ်များ",
+      guaranteeText: "အကောင်းဆုံးစျေးနှုန်းအာမခံ",
+      supportText: "၂၄/၇ အထောက်အပံ့",
+      availText: "ရရှိနိုင်သောအတွေ့အကြုံများ",
+      exploreTitlePrefix: "ခရီးစဉ်များ",
+      tourCountTextPrefix: " ခရီးစဉ်ရရှိနိုင်သည်",
+      tourCountTextPlural: " ခရီးစဉ်များရရှိနိုင်သည်",
+      exploreCtaText: "ဤခရီးစဉ်ကိုလေ့လာရန် →",
+      maxGroupText: "အများဆုံး",
+      peopleText: "လူများ",
+      dayText: "ရက်",
+      nightText: "ည",
+      emptyStateTitle: "ခရီးစဉ်များမရှိသေးပါ",
+      emptyStateDescription: "သင့်အတွက်အံ့ဖွယ်အတွေ့အကြုံများကို ရွေးချယ်နေပါသည်။ မကြာမီပြန်လာကြည့်ရှုပါ!",
+    },
+    TH: {
+      homeText: "หน้าแรก",
+      toursText: "ทัวร์",
+      backTextPrefix: "กลับไปยัง",
+      titleTextPrefix: "ทัวร์ใน",
+      subtitleText: "ประสบการณ์ที่คัดสรรแล้ว ความทรงจำที่ไม่อาจลืมเสียได้",
+      verifiedText: "ทัวร์ที่ได้รับการยืนยัน 100%",
+      guaranteeText: "รับประกันราคาที่ดีที่สุด",
+      supportText: "สนับสนุน 24/7",
+      availText: "ประสบการณ์ที่มีให้บริการ",
+      exploreTitlePrefix: "ทัวร์ใน",
+      tourCountTextPrefix: " ทัวร์ที่มีให้บริการ",
+      tourCountTextPlural: " ทัวร์ที่มีให้บริการ",
+      exploreCtaText: "สำรวจทัวร์นี้ →",
+      maxGroupText: "สูงสุด",
+      peopleText: "คน",
+      dayText: "วัน",
+      nightText: "คืน",
+      emptyStateTitle: "ยังไม่มีทัวร์ให้บริการ",
+      emptyStateDescription: "เรากำลังคัดสรรประสบการณ์ที่น่าทึ่งให้คุณ กลับมาเช็คอีกครั้งเร็วๆ นี้!",
+    },
+    DE: {
+      homeText: "Startseite",
+      toursText: "Touren",
+      backTextPrefix: "Zurück zu",
+      titleTextPrefix: "Touren in",
+      subtitleText: "Handverlesene Erlebnisse. Unvergessliche Erinnerungen.",
+      verifiedText: "100% verifizierte Touren",
+      guaranteeText: "Bestpreisgarantie",
+      supportText: "24/7 Support",
+      availText: "Verfügbare Erlebnisse",
+      exploreTitlePrefix: "Touren in",
+      tourCountTextPrefix: " Tour verfügbar",
+      tourCountTextPlural: " Touren verfügbar",
+      exploreCtaText: "Diese Tour erkunden →",
+      maxGroupText: "Max",
+      peopleText: "Personen",
+      dayText: "Tag",
+      nightText: "Nacht",
+      emptyStateTitle: "Noch keine Touren verfügbar",
+      emptyStateDescription: "Wir kuratieren großartige Erlebnisse für Sie. Schauen Sie bald wieder vorbei!",
+    },
+    FR: {
+      homeText: "Accueil",
+      toursText: "Visites",
+      backTextPrefix: "Retour à",
+      titleTextPrefix: "Visites à",
+      subtitleText: "Expériences sélectionnées. Souvenirs inoubliables.",
+      verifiedText: "Visites 100% vérifiées",
+      guaranteeText: "Garantie meilleur prix",
+      supportText: "Support 24/7",
+      availText: "Expériences disponibles",
+      exploreTitlePrefix: "Visites à",
+      tourCountTextPrefix: " visite disponible",
+      tourCountTextPlural: " visites disponibles",
+      exploreCtaText: "Explorer cette visite →",
+      maxGroupText: "Max",
+      peopleText: "personnes",
+      dayText: "jour",
+      nightText: "nuit",
+      emptyStateTitle: "Aucune visite disponible pour le moment",
+      emptyStateDescription: "Nous sélectionnons d'excellentes expériences pour vous. Revenez bientôt!",
+    },
+    ES: {
+      homeText: "Inicio",
+      toursText: "Tours",
+      backTextPrefix: "Volver a",
+      titleTextPrefix: "Tours en",
+      subtitleText: "Experiencias seleccionadas. Recuerdos inolvidables.",
+      verifiedText: "Tours 100% verificados",
+      guaranteeText: "Garantía de mejor precio",
+      supportText: "Soporte 24/7",
+      availText: "Experiencias disponibles",
+      exploreTitlePrefix: "Tours en",
+      tourCountTextPrefix: " tour disponible",
+      tourCountTextPlural: " tours disponibles",
+      exploreCtaText: "Explorar este tour →",
+      maxGroupText: "Máx",
+      peopleText: "personas",
+      dayText: "día",
+      nightText: "noche",
+      emptyStateTitle: "Aún no hay tours disponibles",
+      emptyStateDescription: "Estamos curando experiencias increíbles para ti. ¡Vuelve pronto!",
+    },
   }
 
-  let translatedData: typeof translationPayload | null = null
+  // Select UI text based on target language, fallback to EN
+  const uiLabels = UI_TEXT[targetLanguage] || UI_TEXT.EN
 
-  if (activeTours.length > 0 && targetLanguage !== 'EN') {
-    try {
-      console.time('Translation API call')
-      // API ကို ၁ ကြိမ်တည်းသာ တိုက်ရိုက်ပို့သည်
-      const jsonString = JSON.stringify(translationPayload)
+  // Construct dynamic strings with proper language context
+  const homeText = uiLabels.homeText
+  const toursText = uiLabels.toursText
+  const backText = `${uiLabels.backTextPrefix} ${countryName}`
+  const titleText = `${uiLabels.titleTextPrefix} ${countryName}`
+  const subtitleText = uiLabels.subtitleText
+  const verifiedText = uiLabels.verifiedText
+  const guaranteeText = uiLabels.guaranteeText
+  const supportText = uiLabels.supportText
+  const availText = uiLabels.availText
+  const exploreTitle = `${uiLabels.exploreTitlePrefix} ${countryName}`
+  const tourCountText = `${activeTours.length}${activeTours.length !== 1 ? uiLabels.tourCountTextPlural : uiLabels.tourCountTextPrefix}`
+  const exploreCtaText = uiLabels.exploreCtaText
+  const maxGroupText = uiLabels.maxGroupText
+  const peopleText = uiLabels.peopleText
+  const dayText = uiLabels.dayText
+  const nightText = uiLabels.nightText
+  const emptyStateTitle = uiLabels.emptyStateTitle
+  const emptyStateDescription = uiLabels.emptyStateDescription
 
-      // Map language code to full language name for the prompt
-      const langMap: Record<string, string> = {
-        'EN': 'English',
-        'MY': 'Myanmar (Burmese)',
-        'MM': 'Myanmar (Burmese)',
-        'ZH': 'Chinese (Simplified)',
-        'JA': 'Japanese',
-        'KO': 'Korean',
-        'DE': 'German',
-        'FR': 'French',
-        'ES': 'Spanish',
-        'AR': 'Arabic',
-        'RU': 'Russian',
-        'TH': 'Thai',
-      }
-      const targetLanguageName = langMap[targetLanguage] || targetLanguage
-
-      const prompt = `You are a professional JSON translation engine. Translate all the VALUE fields in this JSON object into ${targetLanguageName}.
-      Keep the JSON keys exactly the same. Do not translate brand names like 'AsiaBuddy' or person names like 'Zaw Zaw'.
-      Return ONLY the translated JSON output, no other explanations or markdown backticks: ${jsonString}`
-
-      const translatedJSONString = await translateText(prompt, targetLanguage, { raw: true })
-      console.timeEnd('Translation API call')
-
-      // Markdown backticks ကင်းစင်အောင် သန့်စင်ပြီး JSON parse ခြင်း
-      const cleanJSON = translatedJSONString.replace(/```json/g, '').replace(/```/g, '').trim()
-      const firstBracket = Math.min(
-        ...[cleanJSON.indexOf('{'), cleanJSON.indexOf('[')]
-          .filter((i) => i >= 0)
-      )
-      const lastBracket = Math.max(
-        cleanJSON.lastIndexOf('}'),
-        cleanJSON.lastIndexOf(']')
-      )
-      const jsonPayload =
-        firstBracket >= 0 && lastBracket > firstBracket
-          ? cleanJSON.slice(firstBracket, lastBracket + 1)
-          : cleanJSON
-
-      translatedData = JSON.parse(jsonPayload)
-    } catch (e) {
-      console.timeEnd('Translation API call')
-      console.error("Batch translation failed, falling back to English safely:", e)
-      if (e instanceof Error) {
-        console.error("Translation error stack:", e.stack)
+  // Build translated tours using static multilingual columns
+  const translatedTours = activeTours.map((tour) => {
+    const lang = targetLanguage.toLowerCase()
+    
+    // For English, use original columns directly
+    if (targetLanguage === 'EN') {
+      return {
+        ...tour,
+        title: tour.title || '',
+        short_description: tour.short_description || '',
       }
     }
-  }
-
-  if (!translatedData) {
-    translatedData = translationPayload
-  }
-
-  // ဘာသာပြန်ပြီးသား စာသားများအား ပြန်လည်ထုတ်ယူခြင်း
-  const homeText = translatedData.homeText || translationPayload.homeText
-  const toursText = translatedData.toursText || translationPayload.toursText
-  const backText = translatedData.backText || translationPayload.backText
-  const titleText = translatedData.titleText || translationPayload.titleText
-  const subtitleText = translatedData.subtitleText || translationPayload.subtitleText
-  const verifiedText = translatedData.verifiedText || translationPayload.verifiedText
-  const guaranteeText = translatedData.guaranteeText || translationPayload.guaranteeText
-  const supportText = translatedData.supportText || translationPayload.supportText
-  const availText = translatedData.availText || translationPayload.availText
-  const exploreTitle = translatedData.exploreTitle || translationPayload.exploreTitle
-  const tourCountText = translatedData.tourCountText || translationPayload.tourCountText
-  const exploreCtaText = translatedData.exploreCtaText || translationPayload.exploreCtaText
-  const maxGroupText = translatedData.maxGroupText || translationPayload.maxGroupText
-  const peopleText = translatedData.peopleText || translationPayload.peopleText
-  const dayText = translatedData.dayText || translationPayload.dayText
-  const nightText = translatedData.nightText || translationPayload.nightText
-
-  // ခရီးစဉ်များကို ဘာသာပြန်အချက်အလက်ဖြင့် ပြန်လည်တွဲဆက်ခြင်း
-  const translatedTours = activeTours.map((tour, index) => {
-    const translatedTourData = translatedData.tours?.[index]
+    
+    // For other languages, try static columns, fall back to English
+    const titleColumn = `title_${lang}` as keyof typeof tour
+    const descColumn = `short_description_${lang}` as keyof typeof tour
+    
+    const translatedTitle = (tour[titleColumn] as string)?.trim() || tour.title || ''
+    const translatedDesc = (tour[descColumn] as string)?.trim() || tour.short_description || ''
+    
     return {
       ...tour,
-      title: translatedTourData?.title ?? tour.title ?? '',
-      short_description: translatedTourData?.short_description ?? tour.short_description ?? '',
+      title: translatedTitle,
+      short_description: translatedDesc,
     }
   })
 
@@ -227,10 +311,10 @@ export default async function ToursPage({
             <div className="min-h-[400px] flex flex-col items-center justify-center text-center py-24">
               <div className="text-8xl mb-6">🌏</div>
               <h3 className="text-3xl font-black text-gray-800 mb-3">
-                No Tours Available Yet
+                {emptyStateTitle}
               </h3>
               <p className="text-gray-400 text-lg max-w-md">
-                We're curating amazing experiences for you. Check back soon!
+                {emptyStateDescription}
               </p>
               <Link
                 href={`/${country}`}
