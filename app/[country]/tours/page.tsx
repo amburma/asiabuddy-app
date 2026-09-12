@@ -60,13 +60,23 @@ export default async function ToursPage({
   const cookieStore = await cookies()
   const targetLanguage = (cookieStore.get('NEXT_LOCALE')?.value ?? 'EN').toUpperCase()
 
+  console.time('Supabase tours query')
   const supabase = getSupabase()
-  const { data: tours, error } = await supabase
-    .from('tours')
-    .select('*')
-    .eq('status', 'active')
-    .eq('country', country)
-    .order('display_order', { ascending: true })
+  let tours, error
+  try {
+    const result = await supabase
+      .from('tours')
+      .select('*')
+      .eq('status', 'active')
+      .eq('country', country)
+      .order('display_order', { ascending: true })
+    tours = result.data
+    error = result.error
+  } catch (e) {
+    console.error('Supabase tours query failed with exception:', e)
+    error = e
+  }
+  console.timeEnd('Supabase tours query')
 
   if (error) {
     console.error('Error fetching tours:', error)
@@ -104,6 +114,7 @@ export default async function ToursPage({
 
   if (activeTours.length > 0 && targetLanguage !== 'EN') {
     try {
+      console.time('Translation API call')
       // API ကို ၁ ကြိမ်တည်းသာ တိုက်ရိုက်ပို့သည်
       const jsonString = JSON.stringify(translationPayload)
 
@@ -129,6 +140,7 @@ export default async function ToursPage({
       Return ONLY the translated JSON output, no other explanations or markdown backticks: ${jsonString}`
 
       const translatedJSONString = await translateText(prompt, targetLanguage, { raw: true })
+      console.timeEnd('Translation API call')
 
       // Markdown backticks ကင်းစင်အောင် သန့်စင်ပြီး JSON parse ခြင်း
       const cleanJSON = translatedJSONString.replace(/```json/g, '').replace(/```/g, '').trim()
@@ -147,7 +159,11 @@ export default async function ToursPage({
 
       translatedData = JSON.parse(jsonPayload)
     } catch (e) {
+      console.timeEnd('Translation API call')
       console.error("Batch translation failed, falling back to English safely:", e)
+      if (e instanceof Error) {
+        console.error("Translation error stack:", e.stack)
+      }
     }
   }
 
