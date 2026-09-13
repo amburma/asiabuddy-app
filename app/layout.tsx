@@ -4,6 +4,7 @@ import { Playfair_Display, Inter, DM_Mono } from 'next/font/google'
 import { cookies } from 'next/headers'
 import Script from "next/script"
 import { normalizeLocale } from '../lib/i18n'
+import type { Metadata } from 'next'
 
 const playfair = Playfair_Display({ 
   subsets: ['latin'],
@@ -17,12 +18,18 @@ const inter = Inter({
   display: 'swap',
 })
 
-const dmMono = DM_Mono({ 
+const dmMono = DM_Mono({
   subsets: ['latin'],
   weight: '400',
   variable: '--font-dm-mono',
   display: 'swap',
 })
+
+export const metadata: Metadata = {
+  verification: {
+    google: 'i90KoyVumPGoX8hfDXlDxntRlz92crpHUnMUx7Fj6ZM',
+  },
+}
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = await cookies()
