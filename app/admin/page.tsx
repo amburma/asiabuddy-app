@@ -1856,6 +1856,11 @@ export default function GlobalAdminPage() {
                       await supabase.from('posts').insert(payload);
                       setSuccess('Post created successfully');
                     }
+                    await fetch('/api/admin/revalidate-posts', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ country: selectedCountry }),
+                    });
                     resetPostForm();
                     fetchPosts();
                   } catch {
@@ -1940,6 +1945,11 @@ export default function GlobalAdminPage() {
                             if (storageError) console.error('Post storage delete error:', storageError);
                           }
                           await supabase.from('posts').delete().eq('id', item.id);
+                          await fetch('/api/admin/revalidate-posts', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ country: item.country }),
+                          });
                           fetchPosts();
                         }}
                         className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-xs font-medium hover:bg-red-100"
