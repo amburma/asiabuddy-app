@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { UI_TRANSLATIONS } from '../../lib/i18n'
+import Script from 'next/script'
 
 export default async function AboutPage() {
   const cookieStore = await cookies()
@@ -142,6 +143,35 @@ export default async function AboutPage() {
           </Link>
         </div>
       </section>
+
+      {/* JSON-LD Structured Data */}
+      <Script
+        id="structured-data-about"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Organization",
+                "@id": "https://asiabuddy.app/#organization",
+                "name": "AsiaBuddy",
+                "url": "https://asiabuddy.app",
+                "description": "We know what it feels like to land in an unfamiliar city without a trusted guide — confused by signage, unsure about transport, overwhelmed by choices. That feeling is exactly what AsiaBuddy was built to eliminate.",
+                "logo": "https://asiabuddy.app/AB_Logo.png"
+              },
+              {
+                "@type": "AboutPage",
+                "@id": "https://asiabuddy.app/about",
+                "name": "About AsiaBuddy",
+                "about": {
+                  "@id": "https://asiabuddy.app/#organization"
+                }
+              }
+            ]
+          })
+        }}
+      />
 
     </div>
   )
