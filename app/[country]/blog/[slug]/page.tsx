@@ -168,13 +168,6 @@ export default async function BlogPostPage({
           <span>{readingTime} min read</span>
         </div>
 
-        {/* Intro Paragraph */}
-        {firstParagraph && (
-          <p className="text-base md:text-lg text-[#0D0D0D] leading-relaxed mb-8 max-w-3xl">
-            {firstParagraph}
-          </p>
-        )}
-
         {/* Cover Image */}
         {post.cover_image && (
           <div className="mb-8">
@@ -184,6 +177,13 @@ export default async function BlogPostPage({
               className="w-full h-auto rounded-lg shadow-sm object-cover max-h-[500px]"
             />
           </div>
+        )}
+
+        {/* Intro Paragraph */}
+        {firstParagraph && (
+          <p className="text-base md:text-lg text-[#0D0D0D] leading-relaxed mb-8 max-w-3xl">
+            {firstParagraph}
+          </p>
         )}
 
         {/* Key Takeaway Box */}
