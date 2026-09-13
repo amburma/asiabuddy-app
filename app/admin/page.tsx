@@ -1869,7 +1869,7 @@ export default function GlobalAdminPage() {
                     await fetch('/api/admin/revalidate-posts', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify({ country: selectedCountry }),
+                      body: JSON.stringify({ country: selectedCountry, slug: postSlug }),
                     });
                     resetPostForm();
                     fetchPosts();
@@ -1959,7 +1959,7 @@ export default function GlobalAdminPage() {
                           await fetch('/api/admin/revalidate-posts', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ country: item.country }),
+                            body: JSON.stringify({ country: item.country, slug: item.slug }),
                           });
                           fetchPosts();
                         }}
