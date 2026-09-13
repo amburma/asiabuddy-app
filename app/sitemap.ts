@@ -13,22 +13,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 1.0,
     },
-    {
-      url: `${baseUrl}/thailand`,
+  ]
+
+  // Add country-specific static routes for all active countries
+  activeCountryIds.forEach((country) => {
+    staticRoutes.push({
+      url: `${baseUrl}/${country}`,
       changeFrequency: 'weekly',
       priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/thailand/tours`,
+    })
+    staticRoutes.push({
+      url: `${baseUrl}/${country}/tours`,
       changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/thailand/destination`,
+      priority: 0.8,
+    })
+    staticRoutes.push({
+      url: `${baseUrl}/${country}/destination`,
       changeFrequency: 'weekly',
       priority: 0.8,
-    },
-  ]
+    })
+    staticRoutes.push({
+      url: `${baseUrl}/${country}/blog`,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    })
+  })
 
   // Dynamic routes from Supabase
   let dynamicRoutes: MetadataRoute.Sitemap = []
@@ -65,10 +74,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .map((dest) => ({
         url: `${baseUrl}/${dest.country}/destination`,
         changeFrequency: 'weekly' as const,
-        priority: 0.7,
+        priority: 0.8,
         lastModified: dest.updated_at ? new Date(dest.updated_at) : undefined,
       }))
       dynamicRoutes.push(...destinationRoutes)
+    }
+
+    // Fetch blog posts
+    const { data: posts } = await supabase
+      .from('posts')
+      .select('slug, country, updated_at')
+      .eq('published', true)
+
+    if (posts) {
+      const postRoutes = posts
+        .filter(post => activeCountryIds.includes(post.country))
+        .map((post) => ({
+        url: `${baseUrl}/${post.country}/blog/${post.slug}`,
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+        lastModified: post.updated_at ? new Date(post.updated_at) : undefined,
+      }))
+      dynamicRoutes.push(...postRoutes)
     }
   } catch {
     // Supabase fetch fails — return static routes only
