@@ -23,6 +23,7 @@ const ENGLISH_UI = {
   "destinations": "Destinations",
   "tourPackages": "Tour Packages",
   "travelBlog": "Travel Blog",
+  "aboutUs": "About Us",
   "menu": "Menu",
   "menuCategories": {
     "travel": "Travel Planning",
@@ -1038,6 +1039,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "destinations": "สถานที่",
   "tourPackages": "แพ็กเกจทัวร์",
   "travelBlog": "บล็อกการท่องเที่ยว",
+  "aboutUs": "เกี่ยวกับเรา",
   "menu": "Menu",
   "menuCategories": {
     "travel": "Travel Planning",
@@ -2044,6 +2046,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "destinations": "တည်နေရာများ",
   "tourPackages": "ခရီးစဉ် ပက်ကေ့ချ်",
   "travelBlog": "ခရီးသွား ဘလော့ဂ်",
+  "aboutUs": "ကျွန်ုပ်တို့ အကြောင်း",
   "menu": "Menu",
   "menuCategories": {
     "travel": "Travel Planning",
@@ -3050,6 +3053,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "destinations": "Destinos",
   "tourPackages": "Paquetes Turísticos",
   "travelBlog": "Blog de Viajes",
+  "aboutUs": "Sobre Nosotros",
   "menu": "Menú",
   "menuCategories": {
     "travel": "Planificación de Viajes",
@@ -4056,6 +4060,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "destinations": "Destinations",
   "tourPackages": "Forfaits Touristiques",
   "travelBlog": "Blog Voyage",
+  "aboutUs": "À Propos",
   "menu": "Menu",
   "menuCategories": {
     "travel": "Planification de Voyage",
@@ -5062,6 +5067,7 @@ export const UI_TRANSLATIONS: Record<SupportedLanguage, typeof ENGLISH_UI> = {
   "destinations": "Ziele",
   "tourPackages": "Reisepakete",
   "travelBlog": "Reiseblog",
+  "aboutUs": "Über Uns",
   "menu": "Menü",
   "menuCategories": {
     "travel": "Reiseplanung",
