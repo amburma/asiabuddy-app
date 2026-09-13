@@ -162,6 +162,7 @@ export default function GlobalAdminPage() {
   const [showPostForm, setShowPostForm] = useState(false);
   const [postTitle, setPostTitle] = useState('');
   const [postSlug, setPostSlug] = useState('');
+  const [postSlugManuallyEdited, setPostSlugManuallyEdited] = useState(false);
   const [postExcerpt, setPostExcerpt] = useState('');
   const [postContent, setPostContent] = useState('');
   const [postAuthor, setPostAuthor] = useState('AsiaBuddy Team');
@@ -394,7 +395,7 @@ export default function GlobalAdminPage() {
   };
 
   const resetPostForm = () => {
-    setPostTitle(''); setPostSlug(''); setPostExcerpt('');
+    setPostTitle(''); setPostSlug(''); setPostSlugManuallyEdited(false); setPostExcerpt('');
     setPostContent(''); setPostAuthor('AsiaBuddy Team');
     setPostCoverImage(''); setPostImages(''); setBlogImagePreview(''); setPostPublished(false);
     setShowPostForm(false); setEditing(null);
@@ -1687,15 +1688,24 @@ export default function GlobalAdminPage() {
                   value={postTitle}
                   onChange={e => {
                     setPostTitle(e.target.value);
-                    setPostSlug(generateSlug(e.target.value));
+                    if (!postSlugManuallyEdited) {
+                      setPostSlug(generateSlug(e.target.value));
+                    }
                   }}
                   placeholder="Post title..."
                   className={inputCls}
                 />
               </Field>
 
-              <Field label="Slug (auto-generated)">
-                <input value={postSlug} readOnly className={`${inputCls} bg-gray-50 text-gray-400`} />
+              <Field label="Slug">
+                <input
+                  value={postSlug}
+                  onChange={e => {
+                    setPostSlug(e.target.value);
+                    setPostSlugManuallyEdited(true);
+                  }}
+                  className={inputCls}
+                />
               </Field>
 
               <Field label="Excerpt">
@@ -1882,6 +1892,7 @@ export default function GlobalAdminPage() {
                           setEditing(item);
                           setPostTitle(item.title || '');
                           setPostSlug(item.slug || '');
+                          setPostSlugManuallyEdited(true);
                           setPostExcerpt(item.excerpt || '');
                           setPostContent(item.content || '');
                           setPostAuthor(item.author || 'AsiaBuddy Team');

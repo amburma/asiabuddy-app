@@ -9,6 +9,7 @@ import MarkdownRenderer from '../../../../components/shared/MarkdownRenderer'
 import KeyTakeawayBox from './KeyTakeawayBox'
 import PhotoGallery from './PhotoGallery'
 import StickyCTA from './StickyCTA'
+import ArticleShareButtons from './ArticleShareButtons'
 
 // ─── Types ────────────────────────────────────────────────────
 interface Post {
@@ -200,8 +201,18 @@ export default async function BlogPostPage({
           <PhotoGallery images={post.images} />
         )}
 
+        {/* Share Buttons */}
+        <div className="mt-12 pt-8 border-t border-gray-200">
+          <h3 className="text-sm font-semibold text-gray-700 mb-4">Share this post</h3>
+          <ArticleShareButtons
+            postTitle={post.title}
+            postSlug={post.slug}
+            country={countrySlug}
+          />
+        </div>
+
         {/* Back Button */}
-        <div className="mt-12 pt-8 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
+        <div className="mt-8 pt-8 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
           <Link href={`/${countrySlug}`} className="inline-flex items-center gap-2 text-[#D4AF37] font-semibold hover:underline">
             ← Back to {country} Guide
           </Link>
@@ -212,11 +223,7 @@ export default async function BlogPostPage({
       </article>
 
       {/* Sticky CTA Bar (Mobile) */}
-      <StickyCTA 
-        postTitle={post.title}
-        postSlug={post.slug}
-        country={countrySlug}
-      />
+      <StickyCTA country={countrySlug} />
     </div>
   )
 }
