@@ -1,6 +1,7 @@
 import { getSupabase } from '../../lib/supabase'
 import Link from 'next/link'
 import dynamic from 'next/dynamic'
+import { unstable_cache } from 'next/cache'
 const ChatWidgetGrid = dynamic(() => import('../../components/shared/ChatWidgetGrid'))
 import DestinationTabs from '../../components/thailand/DestinationTabs'
 import InformationSection from '../../components/shared/InformationSection'
@@ -90,6 +91,27 @@ export default async function CountryPage({
   const klookLinks = await getKlookLinksByCity(defaultCity)
   const transfer12goLinks = await getTransferLinksByCity(defaultCity, '12go')
   const transferWayawayLinks = await getTransferLinksByCity(defaultCity, 'wayaway')
+
+  // 5. Fetch latest blog posts
+  function getCachedLatestPosts(country: string) {
+    return unstable_cache(
+      async () => {
+        const supabase = getSupabase()
+        const { data, error } = await supabase
+          .from('posts')
+          .select('id, title, slug, excerpt, cover_image, author, created_at')
+          .eq('country', country)
+          .eq('published', true)
+          .order('created_at', { ascending: false })
+          .limit(3)
+        return { data, error }
+      },
+      [`posts-${country}-latest`],
+      { revalidate: 3600, tags: [`posts-${country}`] }
+    )
+  }
+
+  const { data: latestPosts, error: latestPostsError } = await getCachedLatestPosts(lowerCountry)()
 
   return (
     <>
@@ -259,7 +281,72 @@ export default async function CountryPage({
         </section>
       )}
 
-      {/* SECTION 4 — CHAT WIDGETS */}
+      {/* SECTION — LATEST FROM THE BLOG */}
+      {latestPosts && latestPosts.length > 0 && (
+        <section className="bg-sacred-bg py-12 px-4">
+          <div className="max-w-7xl mx-auto">
+            <h2 className="text-xs font-bold tracking-[0.2em] text-amber-600 uppercase text-center">
+              FROM THE BLOG
+            </h2>
+            <div className="w-12 h-0.5 bg-amber-500 mt-2 mb-8 mx-auto" />
+
+            {/* Blog Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {latestPosts.map((post: any) => (
+                <Link
+                  key={post.id}
+                  href={`/${lowerCountry}/blog/${post.slug}`}
+                  className="glass-card group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                >
+                  {/* Image */}
+                  <div className="h-56 w-full overflow-hidden">
+                    {post.cover_image ? (
+                      <img
+                        src={post.cover_image}
+                        alt={post.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-sacred-bg/30" />
+                    )}
+                  </div>
+                  {/* Card Body */}
+                  <div className="p-6">
+                    {/* Title */}
+                    <h3 className="font-serif text-xl text-sacred-green font-bold mb-2">
+                      {post.title}
+                    </h3>
+                    {/* Excerpt */}
+                    {post.excerpt && (
+                      <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                        {post.excerpt.length > 100 ? post.excerpt.slice(0, 100) + '...' : post.excerpt}
+                      </p>
+                    )}
+                    {/* Author + Date */}
+                    <div className="text-xs text-gray-500">
+                      <span className="font-medium">{post.author}</span>
+                      <span className="mx-1">•</span>
+                      <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            {/* View All Button */}
+            <div className="text-center">
+              <Link
+                href={`/${lowerCountry}/blog`}
+                className="inline-block border border-gold-deep text-sacred-green font-bold px-10 py-3 rounded-full transition-all duration-300 hover:bg-gold-deep hover:text-white font-sans"
+              >
+                View All Posts →
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* SECTION 5 — CHAT WIDGETS */}
       {lowerCountry === 'thailand' && (
         <section id="chat" className="bg-sacred-bg pt-0 pb-12 px-4">
           <div className="max-w-7xl mx-auto text-center">
@@ -268,7 +355,7 @@ export default async function CountryPage({
         </section>
       )}
 
-      {/* SECTION 5 — FOOTER */}
+      {/* SECTION 6 — FOOTER */}
       <Footer country={lowerCountry} />
     </>
   )
