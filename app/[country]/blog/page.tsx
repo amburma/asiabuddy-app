@@ -133,16 +133,16 @@ export default async function BlogListingPage({
                     alt={featuredPost[0].title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
                     <span className="inline-block bg-[#D4AF37] text-white text-xs font-bold px-3 py-1 rounded-full mb-4">
                       FEATURED
                     </span>
-                    <h2 className="text-white font-bold text-2xl md:text-4xl mb-3 line-clamp-2">
+                    <h2 className="text-white font-bold text-2xl md:text-4xl mb-3 line-clamp-2 drop-shadow-md">
                       {featuredPost[0].title}
                     </h2>
                     {featuredPost[0].excerpt && (
-                      <p className="text-white/90 text-base md:text-lg mb-6 line-clamp-2 max-w-3xl">
+                      <p className="text-white/90 text-base md:text-lg mb-6 line-clamp-2 max-w-3xl drop-shadow-md">
                         {truncateExcerpt(featuredPost[0].excerpt, 200)}
                       </p>
                     )}
