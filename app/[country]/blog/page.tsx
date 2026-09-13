@@ -12,6 +12,7 @@ interface Post {
   cover_image: string | null
   author: string
   created_at: string
+  is_featured?: boolean
 }
 
 // ─── Metadata ─────────────────────────────────────────────────
@@ -38,14 +39,34 @@ function getCachedPosts(country: string, page: number) {
       const to = from + 8
       const { data, error, count } = await supabase
         .from('posts')
-        .select('id, title, slug, excerpt, cover_image, author, created_at', { count: 'exact' })
+        .select('id, title, slug, excerpt, cover_image, author, created_at, is_featured', { count: 'exact' })
         .eq('country', country)
         .eq('published', true)
+        .eq('is_featured', false)
         .order('created_at', { ascending: false })
         .range(from, to)
       return { data, error, count }
     },
     [`posts-${country}-page-${page}`],
+    { revalidate: 3600, tags: [`posts-${country}`] }
+  )
+}
+
+function getCachedFeaturedPost(country: string) {
+  return unstable_cache(
+    async () => {
+      const supabase = createPublicClient()
+      const { data, error } = await supabase
+        .from('posts')
+        .select('id, title, slug, excerpt, cover_image, author, created_at, is_featured')
+        .eq('country', country)
+        .eq('published', true)
+        .eq('is_featured', true)
+        .order('created_at', { ascending: false })
+        .limit(1)
+      return { data, error }
+    },
+    [`featured-post-${country}`],
     { revalidate: 3600, tags: [`posts-${country}`] }
   )
 }
@@ -78,6 +99,7 @@ export default async function BlogListingPage({
   const currentPage = Math.max(1, parseInt(page || '1', 10))
   const POSTS_PER_PAGE = 9
   const { data: posts, error, count } = await getCachedPosts(countrySlug, currentPage)()
+  const { data: featuredPost } = await getCachedFeaturedPost(countrySlug)()
   const totalPages = Math.ceil((count || 0) / 9)
 
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
@@ -96,6 +118,51 @@ export default async function BlogListingPage({
 
       {/* Content */}
       <div className="max-w-6xl mx-auto px-4 pb-12">
+        {/* Featured Post Banner */}
+        {featuredPost && featuredPost.length > 0 && (
+          <Link
+            href={`/${countrySlug}/blog/${featuredPost[0].slug}`}
+            className="group block mb-12"
+          >
+            <article className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
+              {/* Cover Image */}
+              {featuredPost[0].cover_image ? (
+                <div className="relative aspect-[21/9] overflow-hidden bg-gray-100">
+                  <img
+                    src={featuredPost[0].cover_image}
+                    alt={featuredPost[0].title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                  <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
+                    <span className="inline-block bg-[#D4AF37] text-white text-xs font-bold px-3 py-1 rounded-full mb-4">
+                      FEATURED
+                    </span>
+                    <h2 className="text-white font-bold text-2xl md:text-4xl mb-3 line-clamp-2">
+                      {featuredPost[0].title}
+                    </h2>
+                    {featuredPost[0].excerpt && (
+                      <p className="text-white/90 text-base md:text-lg mb-6 line-clamp-2 max-w-3xl">
+                        {truncateExcerpt(featuredPost[0].excerpt, 200)}
+                      </p>
+                    )}
+                    <div className="inline-flex items-center gap-2 bg-white text-[#0D0D0D] font-bold px-6 py-3 rounded-xl hover:bg-[#D4AF37] hover:text-white transition-colors">
+                      Read Now
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="aspect-[21/9] bg-gray-100 flex items-center justify-center">
+                  <span className="text-gray-400 text-sm">No image</span>
+                </div>
+              )}
+            </article>
+          </Link>
+        )}
+
         {error || !posts || posts.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-gray-500 text-lg">No posts yet</p>

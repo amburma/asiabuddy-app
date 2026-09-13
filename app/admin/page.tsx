@@ -170,6 +170,7 @@ export default function GlobalAdminPage() {
   const [postImages, setPostImages] = useState('');
   const [blogImagePreview, setBlogImagePreview] = useState('');
   const [postPublished, setPostPublished] = useState(false);
+  const [postIsFeatured, setPostIsFeatured] = useState(false);
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Itineraries state
@@ -398,6 +399,7 @@ export default function GlobalAdminPage() {
     setPostTitle(''); setPostSlug(''); setPostSlugManuallyEdited(false); setPostExcerpt('');
     setPostContent(''); setPostAuthor('AsiaBuddy Team');
     setPostCoverImage(''); setPostImages(''); setBlogImagePreview(''); setPostPublished(false);
+    setPostIsFeatured(false);
     setShowPostForm(false); setEditing(null);
     setSuccess(''); setError('');
   };
@@ -1822,6 +1824,13 @@ export default function GlobalAdminPage() {
                 </div>
               </Field>
 
+              <Field label="Featured">
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" checked={postIsFeatured} onChange={e => setPostIsFeatured(e.target.checked)} className="w-4 h-4 text-emerald-500 rounded" />
+                  <span className="text-sm text-gray-600">Feature this post (show as banner, hide from grid)</span>
+                </div>
+              </Field>
+
               {error && <p className="text-red-500 text-sm">{error}</p>}
               {success && <p className="text-emerald-600 text-sm font-medium">{success}</p>}
 
@@ -1847,6 +1856,7 @@ export default function GlobalAdminPage() {
                         ? postImages.split(',').map((s: string) => s.trim()).filter(Boolean) 
                         : null,
                       published: postPublished,
+                      is_featured: postIsFeatured,
                       updated_at: new Date().toISOString(),
                     };
                     if (editing) {
@@ -1904,6 +1914,7 @@ export default function GlobalAdminPage() {
                           setPostCoverImage(item.cover_image || '');
                           setPostImages(Array.isArray(item.images) ? item.images.join(', ') : '');
                           setPostPublished(item.published || false);
+                          setPostIsFeatured(item.is_featured || false);
                           setShowPostForm(true);
                           window.scrollTo(0, 0);
                         }}
