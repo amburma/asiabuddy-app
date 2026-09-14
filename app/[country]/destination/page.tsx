@@ -1,21 +1,10 @@
 import { getSupabase } from '../../../lib/supabase'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { countryContent } from '../../../data/countryContent'
 
 export const revalidate = 3600
 // Revalidate every 1 hour
-
-interface Destination {
-  id: string
-  country: string
-  name: string
-  short_description: string
-  description: string
-  hero_image: string
-  featured_image: string
-  status: string
-  created_at: string
-  updated_at: string
-}
 
 interface Tour {
   id: string
@@ -33,25 +22,23 @@ export async function generateMetadata(
   { params }: { params: Promise<{ country: string }> }
 ) {
   const { country: countrySlug } = await params
-  const supabase = getSupabase()
-  const { data: destination } = await supabase
-    .from('destinations')
-    .select('short_description')
-    .eq('country', countrySlug)
-    .single()
+  const content = countryContent[countrySlug]
 
-  const country = countrySlug.charAt(0).toUpperCase() 
-    + countrySlug.slice(1)
+  if (!content) {
+    return {
+      title: `${countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)} Travel Guide — AsiaBuddy`,
+      description: `Explore ${countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)} with AsiaBuddy — tours, travel tips, and expert guidance.`,
+    }
+  }
 
   return {
-    title: `${country} Travel Guide — AsiaBuddy`,
-    description: destination?.short_description 
-      ?? `Explore ${country} with AsiaBuddy — 
-         tours, travel tips, and expert guidance.`,
+    title: `${content.name} Travel Guide — AsiaBuddy`,
+    description: content.description,
     openGraph: {
-      title: `${country} Travel Guide — AsiaBuddy`,
-      description: destination?.short_description ?? '',
+      title: `${content.name} Travel Guide — AsiaBuddy`,
+      description: content.description,
       url: `https://asiabuddy.app/${countrySlug}/destination`,
+      images: content.image ? [{ url: `https://asiabuddy.app${content.image}` }] : undefined,
     },
   }
 }
@@ -62,21 +49,15 @@ export default async function DestinationPage({
   params: Promise<{ country: string }>
 }) {
   const { country } = await params
-  const countryName = country.charAt(0).toUpperCase() + country.slice(1)
+  const content = countryContent[country]
+
+  if (!content) {
+    notFound()
+  }
+
+  const countryName = content.name
 
   const supabase = getSupabase()
-
-  // Fetch destination data
-  const { data: destination, error: destError } = await supabase
-    .from('destinations')
-    .select('short_description')
-    .eq('country', country)
-    .limit(1)
-    .single()
-
-  if (destError) {
-    console.error('Error fetching destination:', destError)
-  }
 
   // Fetch featured tours
   const { data: tours, error: toursError } = await supabase
@@ -92,7 +73,16 @@ export default async function DestinationPage({
   }
 
   const featuredTours = tours || []
-  const tagline = destination?.short_description || `Your journey to ${countryName} begins here.`
+  const tagline = content.description || `Your journey to ${countryName} begins here.`
+
+  // Prepare JSON-LD
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'TouristDestination',
+    name: content.name,
+    description: content.description,
+    image: content.image ? [`https://asiabuddy.app${content.image}`] : []
+  }
 
   return (
     <>
@@ -372,6 +362,12 @@ export default async function DestinationPage({
           </div>
         </div>
       </div>
+
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     </>
   )
 }
