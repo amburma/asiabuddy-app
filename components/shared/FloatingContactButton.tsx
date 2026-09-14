@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { UI_TRANSLATIONS } from '../../lib/i18n'
 import { SupportedLanguage } from '../../types/country'
 
-export default function FloatingContactButton({ language, country }: { language: string | SupportedLanguage; country?: string }) {
+export default function FloatingContactButton({ language, country, raisedOnMobile = false }: { language: string | SupportedLanguage; country?: string; raisedOnMobile?: boolean }) {
   const [mounted, setMounted] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
 
@@ -25,7 +25,7 @@ export default function FloatingContactButton({ language, country }: { language:
     <div
       style={{
         position: 'fixed',
-        bottom: '24px',
+        bottom: raisedOnMobile ? '96px' : '24px',
         left: '24px',
         zIndex: 9999,
         display: 'flex',
