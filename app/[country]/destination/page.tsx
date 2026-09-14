@@ -319,15 +319,17 @@ export default async function DestinationPage({
                       {/* Bottom row */}
                       <div className="flex justify-between items-center">
                         {/* Price */}
-                        <div>
-                          <div className="font-['Inter'] text-xs text-[#6B7280]">From</div>
-                          <div className="font-['Playfair_Display'] text-2xl text-[#E07B20] font-bold">
-                            {tour.price_from.toLocaleString()}
+                        {tour.price_from && (
+                          <div>
+                            <div className="font-['Inter'] text-xs text-[#6B7280]">From</div>
+                            <div className="font-['Playfair_Display'] text-2xl text-[#E07B20] font-bold">
+                              {tour.price_from.toLocaleString()}
+                            </div>
+                            <div className="font-['Inter'] text-xs text-[#6B7280]">
+                              USD
+                            </div>
                           </div>
-                          <div className="font-['Inter'] text-xs text-[#6B7280]">
-                            USD
-                          </div>
-                        </div>
+                        )}
                         
                         {/* View Tour link */}
                         <span className="text-[#E07B20] text-sm font-semibold hover:text-[#C45E00] transition-colors">
