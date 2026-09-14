@@ -296,7 +296,8 @@ export default async function TourDetailPage({
   }
 
   return (
-    <div className="min-h-screen bg-sacred-bg/30">
+    <>
+      <div className="min-h-screen bg-sacred-bg/30">
 
       {/* ── Hero ── */}
       <div className="relative w-full h-[42vh] sm:h-[50vh] md:h-[65vh] overflow-hidden">
@@ -573,5 +574,44 @@ export default async function TourDetailPage({
         </div>
       </div>
     </div>
+
+    {/* JSON-LD Structured Data */}
+    <script
+      id="structured-data-tour"
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "TouristTrip",
+          "name": translatedTour.title,
+          "description": translatedTour.short_description || translatedTour.description,
+          "image": Array.isArray(translatedTour.images) && translatedTour.images.length > 0 ? (translatedTour.images.length > 3 ? translatedTour.images.slice(0, 3) : translatedTour.images) : [],
+          "provider": {
+            "@type": "TravelAgency",
+            "name": "AsiaBuddy",
+            "url": "https://asiabuddy.app"
+          },
+          ...(translatedTour.price_from !== null && {
+            "offers": {
+              "@type": "Offer",
+              "price": translatedTour.price_from,
+              "priceCurrency": translatedTour.currency,
+              "availability": "https://schema.org/InStock"
+            }
+          }),
+          "itinerary": translatedItineraries && translatedItineraries.length > 0 ? {
+            "@type": "ItemList",
+            "itemListElement": translatedItineraries.map((day, index) => ({
+              "@type": "ListItem",
+              "position": index + 1,
+              "name": day.title || `Day ${day.day_number}`,
+              "description": day.content ? day.content.trim() : ""
+            }))
+          } : undefined,
+          ...(translatedTour.duration_days && { "duration": `P${translatedTour.duration_days}D` })
+        })
+      }}
+    />
+    </>
   )
 }
