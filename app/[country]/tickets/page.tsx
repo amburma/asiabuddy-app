@@ -24,6 +24,14 @@ export async function generateMetadata({
       title: `${country} Tickets & Activities — AsiaBuddy`,
       description: `Find the best tickets and activities in ${country}.`,
       url: `https://asiabuddy.app/${countrySlug}/tickets`,
+      images: [
+        {
+          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'AsiaBuddy - Travel Asia Like a Local',
+        },
+      ],
     },
   }
 }

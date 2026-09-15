@@ -27,6 +27,19 @@ export async function generateMetadata({
   return {
     title: `Blog – AsiaBuddy ${country}`,
     description: `Travel guides, tips, and stories for ${country}`,
+    openGraph: {
+      title: `Blog – AsiaBuddy ${country}`,
+      description: `Travel guides, tips, and stories for ${country}`,
+      url: `https://asiabuddy.app/${countrySlug}/blog`,
+      images: [
+        {
+          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'AsiaBuddy - Travel Asia Like a Local',
+        },
+      ],
+    },
   }
 }
 

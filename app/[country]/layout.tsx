@@ -104,11 +104,27 @@ export async function generateMetadata({
       url: `https://asiabuddy.app/${country}`,
       siteName: 'AsiaBuddy',
       type: 'website',
+      images: [
+        {
+          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'AsiaBuddy - Travel Asia Like a Local',
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: `${countryName} Travel Guide — AsiaBuddy`,
       description,
+      images: [
+        {
+          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'AsiaBuddy - Travel Asia Like a Local',
+        },
+      ],
     },
     alternates: {
       canonical: `https://asiabuddy.app/${country}`,

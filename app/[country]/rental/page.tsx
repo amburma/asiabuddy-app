@@ -23,6 +23,14 @@ export async function generateMetadata({
       title: `${country} Car Rental — AsiaBuddy`,
       description: `Find flexible car rental options in ${country}.`,
       url: `https://asiabuddy.app/${countrySlug}/rental`,
+      images: [
+        {
+          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'AsiaBuddy - Travel Asia Like a Local',
+        },
+      ],
     },
   }
 }

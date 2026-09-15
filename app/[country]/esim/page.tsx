@@ -23,6 +23,14 @@ export async function generateMetadata({
       title: `${country} eSIM — Stay Connected | AsiaBuddy`,
       description: `Get an instant eSIM for ${country}.`,
       url: `https://asiabuddy.app/${countrySlug}/esim`,
+      images: [
+        {
+          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'AsiaBuddy - Travel Asia Like a Local',
+        },
+      ],
     },
   }
 }

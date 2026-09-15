@@ -34,6 +34,14 @@ export async function generateMetadata({
       title: `${country} Flights — AsiaBuddy`,
       description: `Find the best flight deals to ${country}.`,
       url: `https://asiabuddy.app/${countrySlug}/flights`,
+      images: [
+        {
+          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'AsiaBuddy - Travel Asia Like a Local',
+        },
+      ],
     },
   }
 }

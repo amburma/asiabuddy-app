@@ -29,6 +29,27 @@ export const metadata: Metadata = {
   verification: {
     google: 'i90KoyVumPGoX8hfDXlDxntRlz92crpHUnMUx7Fj6ZM',
   },
+  openGraph: {
+    images: [
+      {
+        url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'AsiaBuddy - Travel Asia Like a Local',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    images: [
+      {
+        url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'AsiaBuddy - Travel Asia Like a Local',
+      },
+    ],
+  },
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

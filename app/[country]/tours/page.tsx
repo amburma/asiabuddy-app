@@ -44,6 +44,14 @@ export async function generateMetadata(
       title: `${country} Tours & Packages — AsiaBuddy`,
       description: `Handpicked ${country} tours and experiences.`,
       url: `https://asiabuddy.app/${countrySlug}/tours`,
+      images: [
+        {
+          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'AsiaBuddy - Travel Asia Like a Local',
+        },
+      ],
     },
   }
 }

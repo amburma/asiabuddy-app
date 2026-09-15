@@ -24,6 +24,14 @@ export async function generateMetadata({
       title: `${country} Transfers — AsiaBuddy`,
       description: `Find stress-free transfers in ${country}.`,
       url: `https://asiabuddy.app/${countrySlug}/transfers`,
+      images: [
+        {
+          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'AsiaBuddy - Travel Asia Like a Local',
+        },
+      ],
     },
   }
 }

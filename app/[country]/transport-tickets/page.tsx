@@ -26,6 +26,14 @@ export async function generateMetadata({
       title: `${country} Bus, Train & Ferry Tickets — AsiaBuddy`,
       description: `Find the best transport tickets in ${country}.`,
       url: `https://asiabuddy.app/${countrySlug}/transport-tickets`,
+      images: [
+        {
+          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'AsiaBuddy - Travel Asia Like a Local',
+        },
+      ],
     },
   }
 }

@@ -21,6 +21,14 @@ export async function generateMetadata({
       title: `${country} Hotels — AsiaBuddy`,
       description: `Find the best hotels in ${country}.`,
       url: `https://asiabuddy.app/${countrySlug}/hotels`,
+      images: [
+        {
+          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'AsiaBuddy - Travel Asia Like a Local',
+        },
+      ],
     },
   }
 }
