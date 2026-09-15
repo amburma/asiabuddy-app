@@ -18,7 +18,7 @@ const purchasedSchema = z.object({
   source: z.literal('purchased'),
   username: z.string().min(1, 'Username is required'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
-  phone_or_whatsapp: z.string().min(1, 'Phone/WhatsApp is required'),
+  phone_or_whatsapp: z.string().optional(),
   total_hours_allocated: z.number().positive('Total hours must be positive'),
 });
 
@@ -26,7 +26,7 @@ const trialSchema = z.object({
   source: z.literal('trial'),
   username: z.string().min(1, 'Username is required'),
   password: z.string().min(8, 'Password must be at least 8 characters'),
-  phone_or_whatsapp: z.string().min(1, 'Phone/WhatsApp is required'),
+  phone_or_whatsapp: z.string().optional(),
 });
 
 const createAccountSchema = z.discriminatedUnion('source', [
@@ -83,11 +83,11 @@ export async function POST(req: NextRequest) {
       accountData.total_hours_allocated = data.tour_days * 2;
     } else if (data.source === 'purchased') {
       accountData.booking_id = null;
-      accountData.phone_or_whatsapp = data.phone_or_whatsapp;
+      accountData.phone_or_whatsapp = data.phone_or_whatsapp || null;
       accountData.total_hours_allocated = data.total_hours_allocated;
     } else if (data.source === 'trial') {
       accountData.booking_id = null;
-      accountData.phone_or_whatsapp = data.phone_or_whatsapp;
+      accountData.phone_or_whatsapp = data.phone_or_whatsapp || null;
       accountData.total_hours_allocated = 0; // unused for trial — enforcement is via tour_guide_trial_usage's fixed 120s cap, not this field
     }
 

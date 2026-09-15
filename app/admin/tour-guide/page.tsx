@@ -36,7 +36,7 @@ export default function TourGuideAccountPage() {
   const [password, setPassword] = useState('');
   const [bookingId, setBookingId] = useState('');
   const [tourDays, setTourDays] = useState('');
-  const [phoneOrWhatsapp, setPhoneOrWhatsapp] = useState('');
+
   const [totalHoursAllocated, setTotalHoursAllocated] = useState('');
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -249,13 +249,6 @@ export default function TourGuideAccountPage() {
           payload.booking_id = bookingId;
         }
       } else {
-        if (!phoneOrWhatsapp) {
-          setSubmitError('Phone/WhatsApp is required for purchased and trial accounts');
-          setSubmitting(false);
-          return;
-        }
-        payload.phone_or_whatsapp = phoneOrWhatsapp;
-
         if (source === 'purchased') {
           if (!totalHoursAllocated) {
             setSubmitError('Total hours allocated is required for purchased accounts');
@@ -285,7 +278,6 @@ export default function TourGuideAccountPage() {
         setPassword('');
         setBookingId('');
         setTourDays('');
-        setPhoneOrWhatsapp('');
         setTotalHoursAllocated('');
       }
     } catch (err: any) {
@@ -449,17 +441,6 @@ export default function TourGuideAccountPage() {
 
             {source !== 'package' && (
               <>
-                <Field label="Phone / WhatsApp">
-                  <input
-                    type="text"
-                    value={phoneOrWhatsapp}
-                    onChange={e => setPhoneOrWhatsapp(e.target.value)}
-                    placeholder="Enter phone or WhatsApp number"
-                    className={inputCls}
-                    required
-                  />
-                </Field>
-
                 {source === 'purchased' && (
                   <Field label="Total Hours Allocated">
                     <input
