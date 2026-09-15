@@ -9,7 +9,7 @@ import { notFound } from 'next/navigation'
 
 export const dynamic = 'force-dynamic'
 
-const COUNTRY_META: Record<string, { name: string; description: string }> = {
+export const COUNTRY_META: Record<string, { name: string; description: string }> = {
   thailand: {
     name: 'Thailand',
     description:

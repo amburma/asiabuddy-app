@@ -18,6 +18,7 @@ import Footer from '../../components/shared/Footer'
 import { UI_TRANSLATIONS } from '../../lib/i18n'
 import ServicesStrip from '../../components/shared/services/ServicesStrip'
 import TicketServiceCard from '../../components/shared/services/TicketServiceCard'
+import { COUNTRY_META } from './layout'
 
 export default async function CountryPage({
   params,
@@ -113,8 +114,34 @@ export default async function CountryPage({
 
   const { data: latestPosts, error: latestPostsError } = await getCachedLatestPosts(lowerCountry)()
 
+  // Build JSON-LD structured data
+  const meta = COUNTRY_META[lowerCountry]
+  const description = meta?.description ?? `Explore ${countryName} with AsiaBuddy — tours, travel tips, and booking services.`
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        name: 'AsiaBuddy',
+        url: 'https://asiabuddy.app',
+        description,
+      },
+      {
+        '@type': 'Organization',
+        name: 'AsiaBuddy',
+        url: 'https://asiabuddy.app',
+        logo: 'https://asiabuddy.app/Logo.png',
+      },
+    ],
+  }
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* SECTION 1 — HERO */}
       <section id="home" className="relative min-h-[40vh] flex items-center justify-center overflow-hidden bg-sacred-green/5">
         {/* Background Image */}
