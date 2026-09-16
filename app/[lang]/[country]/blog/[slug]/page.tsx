@@ -10,6 +10,7 @@ import KeyTakeawayBox from './KeyTakeawayBox'
 import PhotoGallery from './PhotoGallery'
 import StickyCTA from './StickyCTA'
 import ArticleShareButtons from './ArticleShareButtons'
+import { buildAlternates } from '@/lib/seo-alternates'
 
 // ─── Types ────────────────────────────────────────────────────
 interface Post {
@@ -31,9 +32,9 @@ interface Post {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ country: string; slug: string }>
+  params: Promise<{ lang: string; country: string; slug: string }>
 }): Promise<Metadata> {
-  const { country: countrySlug, slug } = await params
+  const { lang, country: countrySlug, slug } = await params
   const supabase = await createClient()
   const { data } = await supabase
     .from('posts')
@@ -45,6 +46,8 @@ export async function generateMetadata({
 
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
 
+  const alternates = buildAlternates(lang, `/${countrySlug}/blog/${slug}`)
+
   if (!data) return { title: 'Blog Post – AsiaBuddy' }
 
   return {
@@ -55,6 +58,10 @@ export async function generateMetadata({
       description: data.excerpt ?? undefined,
       images: data.cover_image ? [data.cover_image] : [],
       url: `https://asiabuddy.app/${countrySlug}/blog/${slug}`,
+    },
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
   }
 }
@@ -121,9 +128,9 @@ function extractFirstParagraph(content: string): { firstParagraph: string; remai
 export default async function BlogPostPage({
   params,
 }: {
-  params: Promise<{ country: string; slug: string }>
+  params: Promise<{ lang: string; country: string; slug: string }>
 }) {
-  const { country: countrySlug, slug } = await params
+  const { lang, country: countrySlug, slug } = await params
   const { data: post, error } = await getCachedPost(slug, countrySlug)()
 
   if (error || !post) {

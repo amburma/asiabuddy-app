@@ -1,6 +1,28 @@
 import Link from 'next/link'
 import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
 import { SupportedLanguage } from '@/types/country'
+import { Metadata } from 'next'
+import { buildAlternates } from '@/lib/seo-alternates'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string; country: string }>
+}): Promise<Metadata> {
+  const { lang, country } = await params
+  const countryName = country.charAt(0).toUpperCase() + country.slice(1)
+
+  const alternates = buildAlternates(lang, `/${country}/services`)
+
+  return {
+    title: `Services — ${countryName} Travel — AsiaBuddy`,
+    description: `Explore all travel services available for ${countryName} including tours, hotels, transfers, and more.`,
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
+  }
+}
 
 export default async function ServicesPage({
   params,

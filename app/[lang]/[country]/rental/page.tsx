@@ -3,6 +3,7 @@ import { translateText } from '@/lib/translate'
 import { getCarRentalLinksByCity } from '@/lib/queries/carRentalLinks'
 import CarRentalChatWrapper from '@/components/shared/CarRentalChatWrapper'
 import { normalizeLocale } from '@/lib/i18n'
+import { buildAlternates } from '@/lib/seo-alternates'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -14,6 +15,8 @@ export async function generateMetadata({
 }) {
   const { lang, country: countrySlug } = await params
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
+
+  const alternates = buildAlternates(lang, `/${countrySlug}/rental`)
 
   return {
     title: `${country} Car Rental — AsiaBuddy`,
@@ -30,6 +33,10 @@ export async function generateMetadata({
           alt: 'AsiaBuddy - Travel Asia Like a Local',
         },
       ],
+    },
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
   }
 }

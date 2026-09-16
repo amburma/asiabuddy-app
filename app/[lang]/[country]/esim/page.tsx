@@ -3,6 +3,7 @@ import { generateAiraloLink } from '@/lib/airalo'
 import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
 import { MapPin, Plane, Bus, Wifi } from 'lucide-react'
 import { countries } from '@/data/countries'
+import { buildAlternates } from '@/lib/seo-alternates'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -14,6 +15,8 @@ export async function generateMetadata({
 }) {
   const { lang, country: countrySlug } = await params
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
+
+  const alternates = buildAlternates(lang, `/${countrySlug}/esim`)
 
   return {
     title: `${country} eSIM — Stay Connected | AsiaBuddy`,
@@ -30,6 +33,10 @@ export async function generateMetadata({
           alt: 'AsiaBuddy - Travel Asia Like a Local',
         },
       ],
+    },
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
   }
 }

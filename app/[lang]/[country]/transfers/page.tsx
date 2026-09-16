@@ -4,6 +4,7 @@ import TransferServiceCard from '@/components/shared/services/TransferServiceCar
 import { getTransferLinksByCity } from '@/lib/queries/transferLinks'
 import TransferChatWrapper from '@/components/shared/TransferChatWrapper'
 import { normalizeLocale } from '@/lib/i18n'
+import { buildAlternates } from '@/lib/seo-alternates'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -15,6 +16,8 @@ export async function generateMetadata({
 }) {
   const { lang, country: countrySlug } = await params
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
+
+  const alternates = buildAlternates(lang, `/${countrySlug}/transfers`)
 
   return {
     title: `${country} Transfers — AsiaBuddy`,
@@ -31,6 +34,10 @@ export async function generateMetadata({
           alt: 'AsiaBuddy - Travel Asia Like a Local',
         },
       ],
+    },
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
   }
 }

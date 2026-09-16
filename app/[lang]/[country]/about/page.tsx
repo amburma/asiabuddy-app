@@ -1,5 +1,27 @@
 import Link from 'next/link'
 import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
+import { Metadata } from 'next'
+import { buildAlternates } from '@/lib/seo-alternates'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string; country: string }>
+}): Promise<Metadata> {
+  const { lang, country } = await params
+  const countryName = country.charAt(0).toUpperCase() + country.slice(1)
+
+  const alternates = buildAlternates(lang, `/${country}/about`)
+
+  return {
+    title: `About Us — ${countryName} Travel — AsiaBuddy`,
+    description: `Learn about AsiaBuddy's mission to help you explore ${countryName} with expert local guides and curated travel experiences.`,
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
+  }
+}
 
 export default async function AboutPage({
   params,

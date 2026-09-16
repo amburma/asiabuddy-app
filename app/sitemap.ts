@@ -1,10 +1,37 @@
 import type { MetadataRoute } from 'next'
 import { getSupabase } from '../lib/supabase'
 import { countries } from '../data/countries'
+import { SUPPORTED_LANGUAGES, buildAlternates } from '../lib/seo-alternates'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://asiabuddy.app'
   const activeCountryIds = countries.filter(c => c.status === 'live').map(c => c.id)
+
+  // Helper function to generate language-specific entries for a given path
+  function generateLanguageEntries(
+    pathWithoutLangPrefix: string,
+    changeFrequency: MetadataRoute.Sitemap[number]['changeFrequency'],
+    priority: number,
+    lastModified?: Date
+  ): MetadataRoute.Sitemap {
+    const entries: MetadataRoute.Sitemap = []
+
+    for (const lang of SUPPORTED_LANGUAGES) {
+      const alternates = buildAlternates(lang, pathWithoutLangPrefix)
+      
+      entries.push({
+        url: alternates.canonical,
+        changeFrequency,
+        priority,
+        lastModified,
+        alternates: {
+          languages: alternates.languages,
+        },
+      })
+    }
+
+    return entries
+  }
 
   // Static routes
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -17,26 +44,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Add country-specific static routes for all active countries
   activeCountryIds.forEach((country) => {
-    staticRoutes.push({
-      url: `${baseUrl}/${country}`,
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    })
-    staticRoutes.push({
-      url: `${baseUrl}/${country}/tours`,
-      changeFrequency: 'daily',
-      priority: 0.8,
-    })
-    staticRoutes.push({
-      url: `${baseUrl}/${country}/destination`,
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    })
-    staticRoutes.push({
-      url: `${baseUrl}/${country}/blog`,
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    })
+    staticRoutes.push(
+      ...generateLanguageEntries(
+        `/${country}`,
+        'weekly',
+        0.9
+      )
+    )
+    staticRoutes.push(
+      ...generateLanguageEntries(
+        `/${country}/tours`,
+        'daily',
+        0.8
+      )
+    )
+    staticRoutes.push(
+      ...generateLanguageEntries(
+        `/${country}/destination`,
+        'weekly',
+        0.8
+      )
+    )
+    staticRoutes.push(
+      ...generateLanguageEntries(
+        `/${country}/blog`,
+        'weekly',
+        0.8
+      )
+    )
   })
 
   // Dynamic routes from Supabase
@@ -54,12 +89,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (tours) {
       const tourRoutes = tours
         .filter(tour => activeCountryIds.includes(tour.country))
-        .map((tour) => ({
-        url: `${baseUrl}/${tour.country}/tours/${tour.slug}`,
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-        lastModified: tour.updated_at ? new Date(tour.updated_at) : undefined,
-      }))
+        .flatMap((tour) =>
+          generateLanguageEntries(
+            `/${tour.country}/tours/${tour.slug}`,
+            'weekly',
+            0.8,
+            tour.updated_at ? new Date(tour.updated_at) : undefined
+          )
+        )
       dynamicRoutes.push(...tourRoutes)
     }
 
@@ -71,12 +108,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (destinations) {
       const destinationRoutes = destinations
         .filter(dest => activeCountryIds.includes(dest.country))
-        .map((dest) => ({
-        url: `${baseUrl}/${dest.country}/destination`,
-        changeFrequency: 'weekly' as const,
-        priority: 0.8,
-        lastModified: dest.updated_at ? new Date(dest.updated_at) : undefined,
-      }))
+        .flatMap((dest) =>
+          generateLanguageEntries(
+            `/${dest.country}/destination`,
+            'weekly',
+            0.8,
+            dest.updated_at ? new Date(dest.updated_at) : undefined
+          )
+        )
       dynamicRoutes.push(...destinationRoutes)
     }
 
@@ -89,12 +128,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (posts) {
       const postRoutes = posts
         .filter(post => activeCountryIds.includes(post.country))
-        .map((post) => ({
-        url: `${baseUrl}/${post.country}/blog/${post.slug}`,
-        changeFrequency: 'weekly' as const,
-        priority: 0.7,
-        lastModified: post.updated_at ? new Date(post.updated_at) : undefined,
-      }))
+        .flatMap((post) =>
+          generateLanguageEntries(
+            `/${post.country}/blog/${post.slug}`,
+            'weekly',
+            0.7,
+            post.updated_at ? new Date(post.updated_at) : undefined
+          )
+        )
       dynamicRoutes.push(...postRoutes)
     }
   } catch {

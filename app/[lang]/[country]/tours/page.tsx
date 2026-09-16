@@ -1,6 +1,7 @@
 import { getSupabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { normalizeLocale } from '@/lib/i18n'
+import { buildAlternates } from '@/lib/seo-alternates'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -33,12 +34,15 @@ export async function generateMetadata(
   { params }: { params: Promise<{ lang: string; country: string }> }
 ) {
   const { lang, country: countrySlug } = await params
-  const country = countrySlug.charAt(0).toUpperCase() 
+  const country = countrySlug.charAt(0).toUpperCase()
     + countrySlug.slice(1)
+
+  const alternates = buildAlternates(lang, `/${countrySlug}/tours`)
+
   return {
     title: `${country} Tours & Packages — AsiaBuddy`,
-    description: `Discover handpicked ${country} tours and travel 
-      experiences. Expert local guides, secure booking, 
+    description: `Discover handpicked ${country} tours and travel
+      experiences. Expert local guides, secure booking,
       best price guarantee.`,
     openGraph: {
       title: `${country} Tours & Packages — AsiaBuddy`,
@@ -52,6 +56,10 @@ export async function generateMetadata(
           alt: 'AsiaBuddy - Travel Asia Like a Local',
         },
       ],
+    },
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
   }
 }

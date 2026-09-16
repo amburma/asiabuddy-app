@@ -4,6 +4,7 @@ import TourServiceCard from '@/components/shared/services/TourServiceCard'
 import { getGygLinksByCity } from '@/lib/queries/gygLinks'
 import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
 import { MapPin, Calendar, Plane } from 'lucide-react'
+import { buildAlternates } from '@/lib/seo-alternates'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -15,6 +16,8 @@ export async function generateMetadata({
 }) {
   const { lang, country: countrySlug } = await params
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
+
+  const alternates = buildAlternates(lang, `/${countrySlug}/activities`)
 
   return {
     title: `${country} Activities — AsiaBuddy`,
@@ -31,6 +34,10 @@ export async function generateMetadata({
           alt: 'AsiaBuddy - Travel Asia Like a Local',
         },
       ],
+    },
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
   }
 }

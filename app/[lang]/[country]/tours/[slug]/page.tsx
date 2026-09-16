@@ -11,6 +11,7 @@ import { translateText, translateTourBatch } from '@/lib/translate'
 import { normalizeLocale } from '@/lib/i18n'
 import { cookies } from 'next/headers'
 import { unstable_cache } from 'next/cache'
+import { buildAlternates } from '@/lib/seo-alternates'
 
 // ─── Types ────────────────────────────────────────────────────
 interface Tour {
@@ -74,6 +75,8 @@ export async function generateMetadata({
 
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
 
+  const alternates = buildAlternates(lang, `/${countrySlug}/tours/${slug}`)
+
   if (!data) return { title: 'Tour – AsiaBuddy' }
 
   const heroImage = Array.isArray(data.images) && data.images.length > 0 ? data.images[0] : null
@@ -86,6 +89,10 @@ export async function generateMetadata({
       description: data.short_description ?? undefined,
       images: heroImage ? [heroImage] : [],
       url: `https://asiabuddy.app/${lang}/${countrySlug}/tours/${slug}`,
+    },
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
   }
 }

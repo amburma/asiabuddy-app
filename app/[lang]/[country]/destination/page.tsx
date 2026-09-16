@@ -2,6 +2,7 @@ import { getSupabase } from '@/lib/supabase'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { countryContent } from '@/data/countryContent'
+import { buildAlternates } from '@/lib/seo-alternates'
 
 export const revalidate = 3600
 // Revalidate every 1 hour
@@ -19,15 +20,21 @@ interface Tour {
 }
 
 export async function generateMetadata(
-  { params }: { params: Promise<{ country: string }> }
+  { params }: { params: Promise<{ lang: string; country: string }> }
 ) {
-  const { country: countrySlug } = await params
+  const { lang, country: countrySlug } = await params
   const content = countryContent[countrySlug]
+
+  const alternates = buildAlternates(lang, `/${countrySlug}/destination`)
 
   if (!content) {
     return {
       title: `${countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)} Travel Guide — AsiaBuddy`,
       description: `Explore ${countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)} with AsiaBuddy — tours, travel tips, and expert guidance.`,
+      alternates: {
+        canonical: alternates.canonical,
+        languages: alternates.languages,
+      },
     }
   }
 
@@ -40,15 +47,19 @@ export async function generateMetadata(
       url: `https://asiabuddy.app/${countrySlug}/destination`,
       images: content.image ? [{ url: `https://asiabuddy.app${content.image}` }] : undefined,
     },
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
+    },
   }
 }
 
 export default async function DestinationPage({
   params,
 }: {
-  params: Promise<{ country: string }>
+  params: Promise<{ lang: string; country: string }>
 }) {
-  const { country } = await params
+  const { lang, country } = await params
   const content = countryContent[country]
 
   if (!content) {

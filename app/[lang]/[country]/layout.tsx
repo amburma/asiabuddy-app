@@ -6,6 +6,7 @@ import FloatingContactButtonLoader from '@/components/shared/FloatingContactButt
 import { normalizeLocale } from '@/lib/i18n'
 import { countries } from '@/data/countries'
 import { notFound } from 'next/navigation'
+import { buildAlternates } from '@/lib/seo-alternates'
 
 export const dynamic = 'force-dynamic'
 
@@ -89,7 +90,9 @@ export async function generateMetadata({
   const countryName = meta?.name ?? country.charAt(0).toUpperCase() + country.slice(1)
   const description =
     meta?.description ??
-    `Explore ${countryName} with AsiaBuddy — tours, travel tips, and booking services.` 
+    `Explore ${countryName} with AsiaBuddy — tours, travel tips, and booking services.`
+
+  const alternates = buildAlternates(lang, `/${country}`)
 
   return {
     title: `${countryName} Travel Guide — AsiaBuddy`,
@@ -127,7 +130,8 @@ export async function generateMetadata({
       ],
     },
     alternates: {
-      canonical: `https://asiabuddy.app/${lang}/${country}`,
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
   }
 }

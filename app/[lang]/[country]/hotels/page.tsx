@@ -1,6 +1,7 @@
 import HotelsPageClient from './HotelsPageClient'
 import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
 import { SupportedLanguage } from '@/types/country'
+import { buildAlternates } from '@/lib/seo-alternates'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -12,6 +13,8 @@ export async function generateMetadata({
 }) {
   const { lang, country: countrySlug } = await params
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
+
+  const alternates = buildAlternates(lang, `/${countrySlug}/hotels`)
 
   return {
     title: `${country} Hotels — AsiaBuddy`,
@@ -28,6 +31,10 @@ export async function generateMetadata({
           alt: 'AsiaBuddy - Travel Asia Like a Local',
         },
       ],
+    },
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
   }
 }

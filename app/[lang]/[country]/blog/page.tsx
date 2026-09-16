@@ -2,6 +2,7 @@ import { createPublicClient } from '@/lib/supabase/public-server'
 import { Metadata } from 'next'
 import { unstable_cache } from 'next/cache'
 import Link from 'next/link'
+import { buildAlternates } from '@/lib/seo-alternates'
 
 // ─── Types ────────────────────────────────────────────────────
 interface Post {
@@ -19,10 +20,12 @@ interface Post {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ country: string }>
+  params: Promise<{ lang: string; country: string }>
 }): Promise<Metadata> {
-  const { country: countrySlug } = await params
+  const { lang, country: countrySlug } = await params
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
+
+  const alternates = buildAlternates(lang, `/${countrySlug}/blog`)
 
   return {
     title: `Blog – AsiaBuddy ${country}`,
@@ -39,6 +42,10 @@ export async function generateMetadata({
           alt: 'AsiaBuddy - Travel Asia Like a Local',
         },
       ],
+    },
+    alternates: {
+      canonical: alternates.canonical,
+      languages: alternates.languages,
     },
   }
 }
