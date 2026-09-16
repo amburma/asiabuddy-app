@@ -72,6 +72,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         0.8
       )
     )
+    staticRoutes.push(
+      ...generateLanguageEntries(
+        `/${country}/about`,
+        'monthly',
+        0.7
+      )
+    )
   })
 
   // Dynamic routes from Supabase

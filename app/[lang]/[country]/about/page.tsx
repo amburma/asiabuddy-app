@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
 import { Metadata } from 'next'
 import { buildAlternates } from '@/lib/seo-alternates'
+import Script from 'next/script'
 
 export async function generateMetadata({
   params,
@@ -28,13 +29,14 @@ export default async function AboutPage({
 }: {
   params: Promise<{ lang: string; country: string }>
 }) {
-  const { lang } = await params
+  const { lang, country } = await params
   const targetLanguage = normalizeLocale(lang)
   const t = (UI_TRANSLATIONS[targetLanguage as keyof typeof UI_TRANSLATIONS] || UI_TRANSLATIONS.EN).about
+  const canonicalUrl = `https://asiabuddy.app/${lang}/${country}/about`
   return (
     <div className="min-h-screen bg-sacred-bg">
       <div className="bg-sacred-bg px-6 py-4">
-        <Link href="/thailand" className="inline-flex items-center gap-2 text-sacred-green hover:text-gold-deep transition-colors text-sm font-semibold">
+        <Link href={`/${country}`} className="inline-flex items-center gap-2 text-sacred-green hover:text-gold-deep transition-colors text-sm font-semibold">
           <span>←</span>
           <span>Back to Home</span>
         </Link>
@@ -159,7 +161,7 @@ export default async function AboutPage({
             {t.ctaSubtitle}
           </p>
           <Link
-            href="/thailand"
+            href={`/${country}`}
             className="inline-flex items-center gap-3 bg-gold-deep text-white font-bold px-10 py-4 rounded-full shadow-xl hover:bg-gold-deep/90 transition-all"
           >
             <span>{t.ctaButton}</span>
@@ -167,6 +169,35 @@ export default async function AboutPage({
           </Link>
         </div>
       </section>
+
+      {/* JSON-LD Structured Data */}
+      <Script
+        id="structured-data-about"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "Organization",
+                "@id": "https://asiabuddy.app/#organization",
+                "name": "AsiaBuddy",
+                "url": "https://asiabuddy.app",
+                "description": "We know what it feels like to land in an unfamiliar city without a trusted guide — confused by signage, unsure about transport, overwhelmed by choices. That feeling is exactly what AsiaBuddy was built to eliminate.",
+                "logo": "https://asiabuddy.app/AB_Logo.png"
+              },
+              {
+                "@type": "AboutPage",
+                "@id": canonicalUrl,
+                "name": "About AsiaBuddy",
+                "about": {
+                  "@id": "https://asiabuddy.app/#organization"
+                }
+              }
+            ]
+          })
+        }}
+      />
 
     </div>
   )

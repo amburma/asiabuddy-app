@@ -306,7 +306,7 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
                     {t.home || UI_TRANSLATIONS.EN.home}
                   </Link>
                   <Link 
-                    href="/about"
+                    href={`/${currentLanguage.toLowerCase()}/${country}/about`}
                     onClick={() => setShowMenu(false)}
                     className="block px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
                   >
