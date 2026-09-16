@@ -320,7 +320,7 @@ export default async function CountryPage({
               {latestPosts.map((post: any) => (
                 <Link
                   key={post.id}
-                  href={`/${lowerCountry}/blog/${post.slug}`}
+                  href={`/${routeLangParam}/${lowerCountry}/blog/${post.slug}`}
                   className="glass-card group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                 >
                   {/* Image */}

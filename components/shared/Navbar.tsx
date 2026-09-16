@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Menu, Globe, Home, Info, FileCheck, Plane, Bus, Home as HomeIcon, Utensils, ShoppingBag, Stethoscope, Music, Receipt, Calculator, MessageSquare, Gavel, ShieldCheck, Headphones } from 'lucide-react'
 import GuideModal from './GuideModal'
@@ -47,6 +47,8 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
   )
   const [activeModal, setActiveModal] = useState<string | null>(null)
   const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     if (language) {
@@ -169,10 +171,26 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
 
   const handleLanguageChange = (lang: string) => {
     const upper = lang.toUpperCase()
+    const newLangLowercase = lang.toLowerCase()
     document.cookie = `NEXT_LOCALE=${upper};path=/;max-age=31536000`
     setCurrentLanguage(upper)
     setShowLanguageDropdown(false)
-    window.location.reload()
+    
+    // Navigate to the new locale-prefixed URL
+    const pathSegments = pathname.split('/').filter(Boolean)
+    
+    // Strip existing locale prefix if present
+    let pathWithoutLocale = pathname
+    if (pathSegments.length > 0 && ['en', 'mm', 'th', 'de', 'fr', 'es'].includes(pathSegments[0].toLowerCase())) {
+      pathWithoutLocale = '/' + pathSegments.slice(1).join('/')
+    } else if (pathname === '/') {
+      // Special case: if on root, keep it as is
+      pathWithoutLocale = ''
+    }
+    
+    // Build new path with new locale prefix
+    const newPath = `/${newLangLowercase}${pathWithoutLocale}${searchParams.toString() ? '?' + searchParams.toString() : ''}`
+    router.push(newPath)
   }
 
   return (
@@ -528,9 +546,26 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
       {showLanguageWelcome && (
         <LanguageWelcome
           onStart={(lang: ThaiLanguage) => {
-            document.cookie = `NEXT_LOCALE=${lang};path=/;max-age=31536000`
+            const upper = lang.toUpperCase()
+            const newLangLowercase = lang.toLowerCase()
+            document.cookie = `NEXT_LOCALE=${upper};path=/;max-age=31536000`
             setShowLanguageWelcome(false)
-            window.location.reload()
+            
+            // Navigate to the new locale-prefixed URL
+            const pathSegments = pathname.split('/').filter(Boolean)
+            
+            // Strip existing locale prefix if present
+            let pathWithoutLocale = pathname
+            if (pathSegments.length > 0 && ['en', 'mm', 'th', 'de', 'fr', 'es'].includes(pathSegments[0].toLowerCase())) {
+              pathWithoutLocale = '/' + pathSegments.slice(1).join('/')
+            } else if (pathname === '/') {
+              // Special case: if on root, keep it as is
+              pathWithoutLocale = ''
+            }
+            
+            // Build new path with new locale prefix
+            const newPath = `/${newLangLowercase}${pathWithoutLocale}${searchParams.toString() ? '?' + searchParams.toString() : ''}`
+            router.push(newPath)
           }}
         />
       )}

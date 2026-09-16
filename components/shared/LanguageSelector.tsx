@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 const LANGUAGES = [
   { code: 'EN', label: 'English', flag: '🇬🇧' },
@@ -13,6 +14,9 @@ const LANGUAGES = [
 
 export default function LanguageSelector() {
   const [currentLang, setCurrentLang] = useState('EN');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const savedLang = localStorage.getItem('language') || 'EN';
@@ -20,10 +24,26 @@ export default function LanguageSelector() {
   }, []);
 
   const handleLanguageChange = (langCode: string) => {
+    const newLangLowercase = langCode.toLowerCase()
     localStorage.setItem('language', langCode);
     setCurrentLang(langCode);
     document.cookie = `NEXT_LOCALE=${langCode}; path=/; max-age=31536000; SameSite=Lax`;
-    window.location.reload();
+    
+    // Navigate to the new locale-prefixed URL
+    const pathSegments = pathname.split('/').filter(Boolean)
+    
+    // Strip existing locale prefix if present
+    let pathWithoutLocale = pathname
+    if (pathSegments.length > 0 && ['en', 'mm', 'th', 'de', 'fr', 'es'].includes(pathSegments[0].toLowerCase())) {
+      pathWithoutLocale = '/' + pathSegments.slice(1).join('/')
+    } else if (pathname === '/') {
+      // Special case: if on root, keep it as is
+      pathWithoutLocale = ''
+    }
+    
+    // Build new path with new locale prefix
+    const newPath = `/${newLangLowercase}${pathWithoutLocale}${searchParams.toString() ? '?' + searchParams.toString() : ''}`
+    router.push(newPath)
   };
 
   return (

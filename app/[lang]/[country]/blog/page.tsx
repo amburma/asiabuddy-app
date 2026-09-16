@@ -104,10 +104,10 @@ export default async function BlogListingPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ country: string }>
+  params: Promise<{ lang: string; country: string }>
   searchParams: Promise<{ page?: string }>
 }) {
-  const { country: countrySlug } = await params
+  const { lang, country: countrySlug } = await params
   const { page } = await searchParams
   const currentPage = Math.max(1, parseInt(page || '1', 10))
   const POSTS_PER_PAGE = 9
@@ -134,7 +134,7 @@ export default async function BlogListingPage({
         {/* Featured Post Banner */}
         {featuredPost && featuredPost.length > 0 && (
           <Link
-            href={`/${countrySlug}/blog/${featuredPost[0].slug}`}
+            href={`/${lang}/${countrySlug}/blog/${featuredPost[0].slug}`}
             className="group block mb-12"
           >
             <article className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
@@ -185,7 +185,7 @@ export default async function BlogListingPage({
             {posts.map((post) => (
               <Link
                 key={post.id}
-                href={`/${countrySlug}/blog/${post.slug}`}
+                href={`/${lang}/${countrySlug}/blog/${post.slug}`}
                 className="group block"
               >
                 <article className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
