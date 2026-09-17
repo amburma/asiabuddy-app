@@ -11,6 +11,16 @@ interface Tour {
   slug: string
   title: string
   short_description: string
+  title_mm?: string | null
+  title_th?: string | null
+  title_de?: string | null
+  title_fr?: string | null
+  title_es?: string | null
+  short_description_mm?: string | null
+  short_description_th?: string | null
+  short_description_de?: string | null
+  short_description_fr?: string | null
+  short_description_es?: string | null
   price_from: number
   currency: string
   duration_days: number

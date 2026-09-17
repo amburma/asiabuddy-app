@@ -7,7 +7,7 @@ import { Metadata } from 'next'
 import { Clock, ArrowLeft, Play, CheckCircle2, ChevronDown } from 'lucide-react'
 import BookNowClient from './BookNowClient'
 import { ThaiLanguage } from '@/types/country'
-import { translateText, translateTourBatch } from '@/lib/translate'
+import { translateText } from '@/lib/translate'
 import { normalizeLocale } from '@/lib/i18n'
 import { cookies } from 'next/headers'
 import { unstable_cache } from 'next/cache'
@@ -18,8 +18,18 @@ interface Tour {
   id: string
   tour_code?: string
   title: string
+  title_mm?: string | null
+  title_th?: string | null
+  title_de?: string | null
+  title_fr?: string | null
+  title_es?: string | null
   slug: string
   short_description: string
+  short_description_mm?: string | null
+  short_description_th?: string | null
+  short_description_de?: string | null
+  short_description_fr?: string | null
+  short_description_es?: string | null
   description: string
   price_from: number
   currency: string
@@ -37,6 +47,36 @@ interface Tour {
   status: string
   video_url: string | null
   created_at: string
+  translations_mm: {
+    description: string
+    highlights: string[]
+    inclusions: string[]
+    exclusions: string[]
+  } | null
+  translations_th: {
+    description: string
+    highlights: string[]
+    inclusions: string[]
+    exclusions: string[]
+  } | null
+  translations_de: {
+    description: string
+    highlights: string[]
+    inclusions: string[]
+    exclusions: string[]
+  } | null
+  translations_fr: {
+    description: string
+    highlights: string[]
+    inclusions: string[]
+    exclusions: string[]
+  } | null
+  translations_es: {
+    description: string
+    highlights: string[]
+    inclusions: string[]
+    exclusions: string[]
+  } | null
 }
 
 interface Itinerary {
@@ -56,6 +96,41 @@ interface Itinerary {
     name: string | null
   } | null
   created_at: string
+  translations_mm: {
+    title: string
+    content: string
+    highlights: string[]
+    meals_included: string[]
+    accommodation: string
+  } | null
+  translations_th: {
+    title: string
+    content: string
+    highlights: string[]
+    meals_included: string[]
+    accommodation: string
+  } | null
+  translations_de: {
+    title: string
+    content: string
+    highlights: string[]
+    meals_included: string[]
+    accommodation: string
+  } | null
+  translations_fr: {
+    title: string
+    content: string
+    highlights: string[]
+    meals_included: string[]
+    accommodation: string
+  } | null
+  translations_es: {
+    title: string
+    content: string
+    highlights: string[]
+    meals_included: string[]
+    accommodation: string
+  } | null
 }
 
 // ─── Metadata ─────────────────────────────────────────────────
@@ -68,12 +143,13 @@ export async function generateMetadata({
   const supabase = await createClient()
   const { data } = await supabase
     .from('tours')
-    .select('title, short_description, images')
+    .select('title, title_mm, title_th, title_de, title_fr, title_es, short_description, short_description_mm, short_description_th, short_description_de, short_description_fr, short_description_es, images')
     .eq('slug', slug)
     .eq('country', countrySlug)
     .single()
 
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
+  const targetLanguage = normalizeLocale(lang)
 
   const alternates = buildAlternates(lang, `/${countrySlug}/tours/${slug}`)
 
@@ -81,12 +157,48 @@ export async function generateMetadata({
 
   const heroImage = Array.isArray(data.images) && data.images.length > 0 ? data.images[0] : null
 
+  // Helper function to get translated column field with fallback to English
+  const getTranslatedColumn = (
+    translatedValue: string | null | undefined,
+    englishValue: string
+  ): string => {
+    if (targetLanguage === 'EN') {
+      return englishValue
+    }
+    
+    // If translated value is null/missing/empty, fall back to English
+    if (!translatedValue || translatedValue.trim() === '') {
+      return englishValue
+    }
+    
+    return translatedValue
+  }
+
+  // Get translated title and short_description for metadata
+  const translatedTitle = getTranslatedColumn(
+    targetLanguage === 'MM' ? data.title_mm :
+    targetLanguage === 'TH' ? data.title_th :
+    targetLanguage === 'DE' ? data.title_de :
+    targetLanguage === 'FR' ? data.title_fr :
+    targetLanguage === 'ES' ? data.title_es : null,
+    data.title
+  )
+
+  const translatedShortDescription = getTranslatedColumn(
+    targetLanguage === 'MM' ? data.short_description_mm :
+    targetLanguage === 'TH' ? data.short_description_th :
+    targetLanguage === 'DE' ? data.short_description_de :
+    targetLanguage === 'FR' ? data.short_description_fr :
+    targetLanguage === 'ES' ? data.short_description_es : null,
+    data.short_description ?? ''
+  )
+
   return {
-    title: `${data.title} – AsiaBuddy ${country}`,
-    description: data.short_description ?? undefined,
+    title: `${translatedTitle} – AsiaBuddy ${country}`,
+    description: translatedShortDescription || undefined,
     openGraph: {
-      title: `${data.title} – AsiaBuddy ${country}`,
-      description: data.short_description ?? undefined,
+      title: `${translatedTitle} – AsiaBuddy ${country}`,
+      description: translatedShortDescription || undefined,
       images: heroImage ? [heroImage] : [],
       url: `https://asiabuddy.app/${lang}/${countrySlug}/tours/${slug}`,
     },
@@ -104,7 +216,7 @@ function getCachedTour(slug: string, country: string) {
       const supabase = createPublicClient()
       const { data, error } = await supabase
         .from('tours')
-        .select('*')
+        .select('*, title_mm, title_th, title_de, title_fr, title_es, short_description_mm, short_description_th, short_description_de, short_description_fr, short_description_es, translations_mm, translations_th, translations_de, translations_fr, translations_es')
         .eq('slug', slug)
         .eq('country', country)
         .single()
@@ -121,7 +233,7 @@ function getCachedItineraries(tourId: string) {
       const supabase = createPublicClient()
       const { data } = await supabase
         .from('itineraries')
-        .select('*, landmarks(image_url, alt_text, name)')
+        .select('*, translations_mm, translations_th, translations_de, translations_fr, translations_es, landmarks(image_url, alt_text, name)')
         .eq('tour_id', tourId)
         .order('day_number', { ascending: true })
       return data
@@ -131,73 +243,7 @@ function getCachedItineraries(tourId: string) {
   )()
 }
 
-function getCachedTranslation(
-  tourId: string,
-  targetLanguage: string,
-  t: Tour,
-  highlights: string[],
-  inclusions: string[],
-  exclusions: string[],
-  itineraries: Itinerary[] | null
-) {
-  return unstable_cache(
-    async () => {
-      // Build the batch translation data object
-      const batchData = {
-        title: t.title || '',
-        short_description: t.short_description || '',
-        description: t.description || '',
-        highlights: highlights,
-        inclusions: inclusions,
-        exclusions: exclusions,
-        itineraries: (itineraries || []).map(day => ({
-          title: day.title || '',
-          content: day.content || '',
-          highlights: Array.isArray(day.highlights) ? day.highlights : [],
-          meals_included: Array.isArray(day.meals_included) ? day.meals_included : [],
-          accommodation: day.accommodation || null,
-        })),
-      }
 
-      // Single batch API call
-      const translatedData = await translateTourBatch(batchData, targetLanguage)
-
-      // Map results back to expected structure
-      const translatedTour = {
-        ...t,
-        title: translatedData.title,
-        short_description: translatedData.short_description,
-        description: translatedData.description,
-      }
-
-      const translatedHighlights = translatedData.highlights
-      const translatedInclusions = translatedData.inclusions
-      const translatedExclusions = translatedData.exclusions
-
-      let translatedItineraries = itineraries
-      if (itineraries && itineraries.length > 0) {
-        translatedItineraries = itineraries.map((day, index) => ({
-          ...day,
-          title: translatedData.itineraries[index]?.title || day.title,
-          content: translatedData.itineraries[index]?.content || day.content,
-          highlights: translatedData.itineraries[index]?.highlights || day.highlights,
-          meals_included: translatedData.itineraries[index]?.meals_included || day.meals_included,
-          accommodation: translatedData.itineraries[index]?.accommodation || day.accommodation,
-        }))
-      }
-
-      return {
-        translatedTour,
-        translatedHighlights,
-        translatedInclusions,
-        translatedExclusions,
-        translatedItineraries,
-      }
-    },
-    [`translation-${tourId}-${targetLanguage}`],
-    { revalidate: 3600, tags: [`translation-${tourId}-${targetLanguage}`] }
-  )()
-}
 
 // ─── YouTube ID ───────────────────────────────────────────────
 function getYouTubeId(url: string): string | null {
@@ -278,28 +324,94 @@ export default async function TourDetailPage({
 
   const countryName = country.charAt(0).toUpperCase() + country.slice(1)
 
-  // Translate tour data if needed with caching
-  let translatedTour = t
-  let translatedItineraries = itineraries
-  let translatedHighlights = highlights
-  let translatedInclusions = inclusions
-  let translatedExclusions = exclusions
+  // Helper function to get translated field with fallback to English
+  function getTranslatedField<T>(
+    translationObj: Record<string, unknown> | null,
+    fieldName: string,
+    englishValue: T
+  ): T {
+    if (targetLanguage === 'EN') return englishValue
+    if (!translationObj) return englishValue
+    const value = translationObj[fieldName]
+    if (value === null || value === undefined) return englishValue
+    if (typeof value === 'string' && value.trim() === '') return englishValue
+    if (Array.isArray(value) && value.length === 0) return englishValue
+    return value as T
+  }
 
-  if (targetLanguage !== 'EN') {
-    const translationResult = await getCachedTranslation(
-      tour.id,
-      targetLanguage,
-      t,
-      highlights,
-      inclusions,
-      exclusions,
-      itineraries
-    )
-    translatedTour = translationResult.translatedTour
-    translatedHighlights = translationResult.translatedHighlights
-    translatedInclusions = translationResult.translatedInclusions
-    translatedExclusions = translationResult.translatedExclusions
-    translatedItineraries = translationResult.translatedItineraries
+  // Helper function to get translated column field with fallback to English
+  const getTranslatedColumn = (
+    translatedValue: string | null | undefined,
+    englishValue: string
+  ): string => {
+    if (targetLanguage === 'EN') {
+      return englishValue
+    }
+    
+    // If translated value is null/missing/empty, fall back to English
+    if (!translatedValue || translatedValue.trim() === '') {
+      return englishValue
+    }
+    
+    return translatedValue
+  }
+
+  // Get tour translations with per-field fallback
+  const tourTranslations = targetLanguage === 'EN' ? null : 
+    (targetLanguage === 'MM' ? t.translations_mm :
+     targetLanguage === 'TH' ? t.translations_th :
+     targetLanguage === 'DE' ? t.translations_de :
+     targetLanguage === 'FR' ? t.translations_fr :
+     targetLanguage === 'ES' ? t.translations_es : null)
+
+  const translatedDescription = getTranslatedField(tourTranslations, 'description', t.description)
+  const translatedHighlights = getTranslatedField(tourTranslations, 'highlights', highlights)
+  const translatedInclusions = getTranslatedField(tourTranslations, 'inclusions', inclusions)
+  const translatedExclusions = getTranslatedField(tourTranslations, 'exclusions', exclusions)
+
+  // Get itinerary translations with per-field fallback
+  const translatedItineraries = itineraries?.map(day => {
+    const dayTranslations = targetLanguage === 'EN' ? null :
+      (targetLanguage === 'MM' ? day.translations_mm :
+       targetLanguage === 'TH' ? day.translations_th :
+       targetLanguage === 'DE' ? day.translations_de :
+       targetLanguage === 'FR' ? day.translations_fr :
+       targetLanguage === 'ES' ? day.translations_es : null)
+    
+    return {
+      ...day,
+      title: getTranslatedField(dayTranslations, 'title', day.title),
+      content: getTranslatedField(dayTranslations, 'content', day.content),
+      highlights: getTranslatedField(dayTranslations, 'highlights', day.highlights),
+      meals_included: getTranslatedField(dayTranslations, 'meals_included', day.meals_included),
+      accommodation: getTranslatedField(dayTranslations, 'accommodation', day.accommodation),
+    }
+  })
+
+  // Get translated title and short_description from columns
+  const translatedTitle = getTranslatedColumn(
+    targetLanguage === 'MM' ? t.title_mm :
+    targetLanguage === 'TH' ? t.title_th :
+    targetLanguage === 'DE' ? t.title_de :
+    targetLanguage === 'FR' ? t.title_fr :
+    targetLanguage === 'ES' ? t.title_es : null,
+    t.title
+  )
+
+  const translatedShortDescription = getTranslatedColumn(
+    targetLanguage === 'MM' ? t.short_description_mm :
+    targetLanguage === 'TH' ? t.short_description_th :
+    targetLanguage === 'DE' ? t.short_description_de :
+    targetLanguage === 'FR' ? t.short_description_fr :
+    targetLanguage === 'ES' ? t.short_description_es : null,
+    t.short_description
+  )
+
+  const translatedTour = {
+    ...t,
+    description: translatedDescription,
+    title: translatedTitle,
+    short_description: translatedShortDescription,
   }
 
   return (
