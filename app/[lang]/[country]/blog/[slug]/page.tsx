@@ -91,6 +91,25 @@ function getCachedPost(slug: string, country: string) {
   )
 }
 
+function getCachedRelatedPosts(country: string, currentSlug: string) {
+  return unstable_cache(
+    async () => {
+      const supabase = createPublicClient()
+      const { data, error } = await supabase
+        .from('posts')
+        .select('id, title, slug, excerpt, cover_image, author, created_at')
+        .eq('country', country)
+        .eq('published', true)
+        .neq('slug', currentSlug)
+        .order('created_at', { ascending: false })
+        .limit(3)
+      return { data, error }
+    },
+    [`related-posts-${country}-${currentSlug}`],
+    { revalidate: 3600, tags: [`posts-${country}`] }
+  )
+}
+
 // ─── Helper Functions ──────────────────────────────────────────
 function formatDate(dateString: string): string {
   const date = new Date(dateString)
@@ -98,6 +117,12 @@ function formatDate(dateString: string): string {
   const day = String(date.getDate()).padStart(2, '0')
   const year = date.getFullYear()
   return `${month}/${day}/${year}`
+}
+
+function truncateExcerpt(excerpt: string | null, maxLength: number = 120): string {
+  if (!excerpt) return ''
+  if (excerpt.length <= maxLength) return excerpt
+  return excerpt.slice(0, maxLength).trim() + '...'
 }
 
 function calculateReadingTime(content: string): number {
@@ -163,6 +188,7 @@ export default async function BlogPostPage({
 }) {
   const { lang, country: countrySlug, slug } = await params
   const { data: post, error } = await getCachedPost(slug, countrySlug)()
+  const { data: relatedPosts } = await getCachedRelatedPosts(countrySlug, slug)()
 
   if (error || !post) {
     notFound()
@@ -241,6 +267,63 @@ export default async function BlogPostPage({
         {/* Photo Gallery */}
         {post.images && post.images.length > 0 && (
           <PhotoGallery images={post.images} />
+        )}
+
+        {/* Related Posts */}
+        {relatedPosts && relatedPosts.length > 0 && (
+          <div className="mt-12 pt-8 border-t border-gray-200">
+            <h3 className="text-sm font-semibold text-[#0D0D0D] uppercase tracking-wide mb-6">
+              More from {country} Travel
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {relatedPosts.map((relatedPost) => (
+                <Link
+                  key={relatedPost.id}
+                  href={`/${lang}/${countrySlug}/blog/${relatedPost.slug}`}
+                  className="group block"
+                >
+                  <article className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
+                    {/* Cover Image */}
+                    {relatedPost.cover_image ? (
+                      <div className="relative aspect-video overflow-hidden bg-gray-100">
+                        <Image
+                          src={relatedPost.cover_image}
+                          alt={relatedPost.title}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                    ) : (
+                      <div className="aspect-video bg-gray-100 flex items-center justify-center">
+                        <span className="text-gray-400 text-sm">No image</span>
+                      </div>
+                    )}
+
+                    {/* Content */}
+                    <div className="p-5 flex-1 flex flex-col">
+                      <h2 className="text-[#0D0D0D] font-bold text-lg mb-2 line-clamp-2 group-hover:text-[#D4AF37] transition-colors">
+                        {relatedPost.title}
+                      </h2>
+
+                      {relatedPost.excerpt && (
+                        <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-1">
+                          {truncateExcerpt(relatedPost.excerpt)}
+                        </p>
+                      )}
+
+                      {/* Meta */}
+                      <div className="flex items-center gap-2 text-gray-500 text-xs pt-4 border-t border-gray-100">
+                        <span className="font-medium">{relatedPost.author}</span>
+                        <span>•</span>
+                        <span>{formatDate(relatedPost.created_at)}</span>
+                      </div>
+                    </div>
+                  </article>
+                </Link>
+              ))}
+            </div>
+          </div>
         )}
 
         {/* Share Buttons */}
