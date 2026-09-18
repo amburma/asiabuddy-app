@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface Tour {
   id: string
@@ -87,16 +88,20 @@ export default function TourFilterSection({ tours, country }: Props) {
               {/* IMAGE AREA */}
               <div className="relative w-full h-48 bg-amber-50">
                 {tour.image_url ? (
-                  <img
+                  <Image
                     src={tour.image_url}
                     alt={tour.title}
                     className="w-full h-full object-cover"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 ) : tour.images && tour.images.length > 0 && tour.images[0] ? (
-                  <img
+                  <Image
                     src={tour.images[0]}
                     alt={tour.title}
                     className="w-full h-full object-cover"
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-6xl">🌏</div>

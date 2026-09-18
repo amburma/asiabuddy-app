@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export default function PhotoGallery({ images }: { images: string[] }) {
   if (!images || images.length === 0) {
     return null
@@ -10,12 +12,13 @@ export default function PhotoGallery({ images }: { images: string[] }) {
       </h3>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {images.map((image, index) => (
-          <div key={`${image}-${index}`} className="relative aspect-square">
-            <img
+          <div key={`${image}-${index}`} className="relative w-full aspect-square overflow-hidden">
+            <Image
               src={image}
               alt={`Gallery photo ${index + 1}`}
-              loading="lazy"
-              className="w-full h-full object-cover rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              className="object-cover rounded-lg shadow-sm hover:shadow-md transition-shadow"
             />
           </div>
         ))}

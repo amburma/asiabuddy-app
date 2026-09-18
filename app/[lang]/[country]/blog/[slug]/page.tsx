@@ -177,11 +177,14 @@ export default async function BlogPostPage({
 
         {/* Cover Image */}
         {post.cover_image && (
-          <div className="mb-8">
-            <img
+          <div className="mb-8 relative w-full h-[400px] md:h-[500px] rounded-lg shadow-sm overflow-hidden">
+            <Image
               src={post.cover_image}
               alt={post.title}
-              className="w-full h-auto rounded-lg shadow-sm object-cover max-h-[500px]"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
+              className="object-cover"
+              priority
             />
           </div>
         )}

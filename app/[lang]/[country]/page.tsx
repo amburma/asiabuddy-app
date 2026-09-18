@@ -1,5 +1,6 @@
 import { getSupabase } from '@/lib/supabase'
 import Link from 'next/link'
+import Image from 'next/image'
 import dynamic from 'next/dynamic'
 import { unstable_cache } from 'next/cache'
 const ChatWidgetGrid = dynamic(() => import('@/components/shared/ChatWidgetGrid'))
@@ -144,11 +145,13 @@ export default async function CountryPage({
       <section id="home" className="relative min-h-[40vh] flex items-center justify-center overflow-hidden bg-sacred-green/5">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
-          <img
+          <Image
             alt="Background"
             className="w-full h-full object-cover opacity-20 grayscale-[20%]"
-            referrerPolicy="no-referrer"
             src="https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80"
+            fill
+            priority
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-sacred-bg via-transparent to-transparent" />
         </div>
@@ -259,12 +262,14 @@ export default async function CountryPage({
                   className="glass-card group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                 >
                   {/* Image */}
-                  <div className="h-56 w-full overflow-hidden">
+                  <div className="h-56 w-full overflow-hidden relative">
                     {tour.image_url ? (
-                      <img
+                      <Image
                         src={tour.image_url}
                         alt={tour.title}
                         className="w-full h-full object-cover"
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     ) : (
                       <div className="w-full h-full bg-sacred-bg/30" />
@@ -324,12 +329,14 @@ export default async function CountryPage({
                   className="glass-card group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                 >
                   {/* Image */}
-                  <div className="h-56 w-full overflow-hidden">
+                  <div className="h-56 w-full overflow-hidden relative">
                     {post.cover_image ? (
-                      <img
+                      <Image
                         src={post.cover_image}
                         alt={post.title}
                         className="w-full h-full object-cover"
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     ) : (
                       <div className="w-full h-full bg-sacred-bg/30" />

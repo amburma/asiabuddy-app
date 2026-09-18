@@ -28,6 +28,7 @@ import CurrencyConverter from '../shared/CurrencyConverter';
 import { TripChecklist } from '../shared/TripChecklist';
 import BookingWebForm from '../shared/BookingWebForm';
 import CookieBanner from '../shared/CookieBanner';
+import Image from 'next/image';
 
 // Dynamic imports for chat components with SSR disabled
 const ConciergeChat = dynamic(() => import('./ConciergeChat'), { 
@@ -199,12 +200,14 @@ useEffect(() => {
 
       {/* Hero Section */}
       <section className="relative min-h-[40vh] flex items-center justify-center overflow-hidden bg-sacred-green/5">
-        <div className="absolute inset-0 z-0">
-          <img 
+        <div className="absolute inset-0 z-0 relative">
+          <Image
             src="https://thutatravel.com/wp-content/uploads/2026/04/Gemini_Generated_Image_rrwlx8rrwlx8rrwl.png"
             alt="Thailand Background"
-            className="w-full h-full object-cover opacity-20 grayscale-[20%]"
-            referrerPolicy="no-referrer"
+            fill
+            sizes="100vw"
+            className="object-cover opacity-20 grayscale-[20%]"
+            priority
           />
           <div className="absolute inset-0 bg-gradient-to-t from-sacred-bg via-transparent to-transparent" />
         </div>

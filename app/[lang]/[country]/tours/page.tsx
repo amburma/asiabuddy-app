@@ -1,5 +1,6 @@
 import { getSupabase } from '@/lib/supabase'
 import Link from 'next/link'
+import Image from 'next/image'
 import { normalizeLocale } from '@/lib/i18n'
 import { buildAlternates } from '@/lib/seo-alternates'
 
@@ -357,10 +358,12 @@ export default async function ToursPage({
                   {/* IMAGE AREA */}
                   <div className="relative w-full h-48 bg-amber-50">
                     {imageUrl !== '/placeholder.jpg' ? (
-                      <img
+                      <Image
                         src={imageUrl}
                         alt={tour.title ?? ''}
                         className="w-full h-full object-cover"
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-6xl">🌏</div>

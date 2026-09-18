@@ -2,6 +2,7 @@ import { createPublicClient } from '@/lib/supabase/public-server'
 import { Metadata } from 'next'
 import { unstable_cache } from 'next/cache'
 import Link from 'next/link'
+import Image from 'next/image'
 import { buildAlternates } from '@/lib/seo-alternates'
 
 // ─── Types ────────────────────────────────────────────────────
@@ -148,10 +149,13 @@ export default async function BlogListingPage({
               {/* Cover Image */}
               {featuredPost[0].cover_image ? (
                 <div className="relative aspect-[21/9] overflow-hidden bg-gray-100">
-                  <img
+                  <Image
                     src={featuredPost[0].cover_image}
                     alt={featuredPost[0].title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 80vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    priority
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-transparent" />
                   <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
@@ -199,10 +203,12 @@ export default async function BlogListingPage({
                   {/* Cover Image */}
                   {post.cover_image ? (
                     <div className="relative aspect-video overflow-hidden bg-gray-100">
-                      <img
+                      <Image
                         src={post.cover_image}
                         alt={post.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
                   ) : (

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { MapPin, UtensilsCrossed, Compass, Activity, Gem } from 'lucide-react'
 import { UI_TRANSLATIONS } from '../../lib/i18n'
+import Image from 'next/image'
 
 interface Destination {
   id: string
@@ -90,11 +91,13 @@ export default function DestinationTabs({ destinations, language = 'EN' }: Props
       </div>
 
       {destination?.image_url && (
-        <div className="w-full h-56 md:h-72 rounded-2xl overflow-hidden mb-6">
-          <img
+        <div className="w-full h-56 md:h-72 rounded-2xl overflow-hidden mb-6 relative">
+          <Image
             src={destination.image_url}
             alt={destination.name}
-            className="w-full h-full object-cover"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover"
           />
         </div>
       )}
