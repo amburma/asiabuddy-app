@@ -125,6 +125,21 @@ function truncateExcerpt(excerpt: string | null, maxLength: number = 120): strin
   return excerpt.slice(0, maxLength).trim() + '...'
 }
 
+function slugify(text: string): string {
+  return text.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
+}
+
+function extractHeadings(content: string): { text: string; id: string }[] {
+  const headingRegex = /^##\s+(.+)$/gm
+  const headings: { text: string; id: string }[] = []
+  let match
+  while ((match = headingRegex.exec(content)) !== null) {
+    const text = match[1].trim()
+    headings.push({ text, id: slugify(text) })
+  }
+  return headings
+}
+
 function calculateReadingTime(content: string): number {
   const words = content.trim().split(/\s+/).length
   return Math.round(words / 200) || 1
@@ -198,6 +213,7 @@ export default async function BlogPostPage({
   const { firstBlockquote, remainingContent } = extractFirstBlockquote(post.content)
   const { firstParagraph, remainingContent: bodyContent } = extractFirstParagraph(remainingContent)
   const faqItems = extractFaqItems(post.content)
+  const headings = extractHeadings(bodyContent)
   const readingTime = calculateReadingTime(post.content)
   const formattedDate = formatDate(post.created_at)
 
@@ -257,6 +273,24 @@ export default async function BlogPostPage({
         {/* Key Takeaway Box */}
         {firstBlockquote && (
           <KeyTakeawayBox content={firstBlockquote} />
+        )}
+
+        {/* Table of Contents */}
+        {headings.length >= 3 && (
+          <nav className="mb-8 p-6 bg-white border border-gray-100 rounded-xl">
+            <h3 className="text-sm font-semibold text-[#0D0D0D] uppercase tracking-wide mb-4">
+              Table of Contents
+            </h3>
+            <ul className="space-y-2">
+              {headings.map((h) => (
+                <li key={h.id}>
+                  <a href={`#${h.id}`} className="text-[#D4AF37] hover:underline text-sm">
+                    {h.text}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
         )}
 
         {/* Main Content */}

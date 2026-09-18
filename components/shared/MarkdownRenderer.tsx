@@ -3,6 +3,10 @@ import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import remarkGfm from 'remark-gfm';
 
+function slugify(text: string): string {
+  return text.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')
+}
+
 const MarkdownComponents: any = {
   img: ({ node, src, alt, title, ...props }: any) => (
     <figure className="my-6">
@@ -22,9 +26,15 @@ const MarkdownComponents: any = {
   h1: ({ node, ...props }: any) => (
     <h1 className="text-2xl font-serif text-obsidian mb-8 border-b border-gold-soft/20 pb-4 leading-tight" {...props} />
   ),
-  h2: ({ node, ...props }: any) => (
-    <h2 className="text-lg font-serif text-obsidian mt-12 mb-6 flex items-center gap-3 before:content-[''] before:w-1 before:h-6 before:bg-gold-deep before:rounded-full" {...props} />
-  ),
+  h2: ({ node, children, ...props }: any) => {
+    const text = React.Children.toArray(children).join('')
+    const id = slugify(text)
+    return (
+      <h2 id={id} className="text-lg font-serif text-obsidian mt-12 mb-6 flex items-center gap-3 before:content-[''] before:w-1 before:h-6 before:bg-gold-deep before:rounded-full" {...props}>
+        {children}
+      </h2>
+    )
+  },
   h3: ({ node, ...props }: any) => (
     <h3 className="text-base font-bold uppercase tracking-widest text-gold-deep mt-8 mb-4 border-b border-gray-50 pb-2" {...props} />
   ),
