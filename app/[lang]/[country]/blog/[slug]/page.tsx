@@ -380,6 +380,21 @@ export default async function BlogPostPage({
             Back to Blog →
           </Link>
         </div>
+
+        {/* Author Bio */}
+        {post.author === 'AsiaBuddy Team' && (
+          <div className="mt-8 p-6 bg-white border border-gray-100 rounded-xl flex items-center gap-4">
+            <div className="w-14 h-14 rounded-full bg-[#0D0D0D] flex items-center justify-center flex-shrink-0">
+              <span className="text-[#D4AF37] font-bold text-lg">AB</span>
+            </div>
+            <div>
+              <p className="text-[#0D0D0D] font-bold text-sm">AsiaBuddy Team</p>
+              <p className="text-gray-600 text-sm mt-1">
+                Local experts helping travelers explore Southeast Asia with confidence — trusted guides, curated tours, and real destination knowledge.
+              </p>
+            </div>
+          </div>
+        )}
       </article>
 
       {/* JSON-LD Structured Data */}
