@@ -233,6 +233,36 @@ export default async function BlogPostPage({
         </div>
       </article>
 
+      {/* JSON-LD Structured Data */}
+      <script
+        id="structured-data-blog-post"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": post.title,
+            "description": post.excerpt || undefined,
+            "image": post.cover_image ? [post.cover_image] : undefined,
+            "datePublished": post.created_at,
+            "dateModified": post.updated_at || post.created_at,
+            "author": {
+              "@type": "Organization",
+              "name": post.author || "AsiaBuddy Team"
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "AsiaBuddy",
+              "url": "https://asiabuddy.app"
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": `https://asiabuddy.app/${lang}/${countrySlug}/blog/${slug}`
+            }
+          })
+        }}
+      />
+
       {/* Sticky CTA Bar (Mobile) */}
       <StickyCTA lang={lang} country={countrySlug} />
     </div>
