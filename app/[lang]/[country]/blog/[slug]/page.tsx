@@ -218,22 +218,23 @@ export default async function BlogPostPage({
             postTitle={post.title}
             postSlug={post.slug}
             country={countrySlug}
+            lang={lang}
           />
         </div>
 
         {/* Back Button */}
         <div className="mt-8 pt-8 border-t border-gray-200 flex items-center justify-between flex-wrap gap-4">
-          <Link href={`/${countrySlug}`} className="inline-flex items-center gap-2 text-[#D4AF37] font-semibold hover:underline">
+          <Link href={`/${lang}/${countrySlug}`} className="inline-flex items-center gap-2 text-[#D4AF37] font-semibold hover:underline">
             ← Back to {country} Guide
           </Link>
-          <Link href={`/${countrySlug}/blog`} className="inline-flex items-center gap-2 text-[#D4AF37] font-semibold hover:underline">
+          <Link href={`/${lang}/${countrySlug}/blog`} className="inline-flex items-center gap-2 text-[#D4AF37] font-semibold hover:underline">
             Back to Blog →
           </Link>
         </div>
       </article>
 
       {/* Sticky CTA Bar (Mobile) */}
-      <StickyCTA country={countrySlug} />
+      <StickyCTA lang={lang} country={countrySlug} />
     </div>
   )
 }

@@ -6,10 +6,11 @@ interface ArticleShareButtonsProps {
   postTitle: string
   postSlug: string
   country: string
+  lang: string
 }
 
-export default function ArticleShareButtons({ postTitle, postSlug, country }: ArticleShareButtonsProps) {
-  const blogPostUrl = `https://asiabuddy.app/${country}/blog/${postSlug}`
+export default function ArticleShareButtons({ postTitle, postSlug, country, lang }: ArticleShareButtonsProps) {
+  const blogPostUrl = `https://asiabuddy.app/${lang}/${country}/blog/${postSlug}`
 
   const handleNativeShare = () => {
     if (navigator.share) {

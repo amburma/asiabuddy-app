@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ArrowLeft, ChevronRight } from 'lucide-react'
 
-export default function StickyCTA({ country }: { country: string }) {
+export default function StickyCTA({ country, lang }: { country: string; lang: string }) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function StickyCTA({ country }: { country: string }) {
       <div className="max-w-4xl mx-auto flex items-center justify-between gap-4">
         {/* Left: Back to Country Guide */}
         <Link
-          href={`/${country}`}
+          href={`/${lang}/${country}`}
           className="flex items-center gap-2 text-white text-sm font-medium hover:text-[#D4AF37] transition-colors"
         >
           <ArrowLeft size={16} />
@@ -39,19 +39,19 @@ export default function StickyCTA({ country }: { country: string }) {
         {/* Middle: Page Numbers */}
         <div className="flex items-center gap-2">
           <Link
-            href={`/${country}/blog?page=1`}
+            href={`/${lang}/${country}/blog?page=1`}
             className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white text-xs font-medium hover:bg-white/20 transition-colors"
           >
             1
           </Link>
           <Link
-            href={`/${country}/blog?page=2`}
+            href={`/${lang}/${country}/blog?page=2`}
             className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white text-xs font-medium hover:bg-white/20 transition-colors"
           >
             2
           </Link>
           <Link
-            href={`/${country}/blog?page=3`}
+            href={`/${lang}/${country}/blog?page=3`}
             className="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white text-xs font-medium hover:bg-white/20 transition-colors"
           >
             3
@@ -60,7 +60,7 @@ export default function StickyCTA({ country }: { country: string }) {
 
         {/* Right: Back to Blog */}
         <Link
-          href={`/${country}/blog`}
+          href={`/${lang}/${country}/blog`}
           className="flex items-center gap-2 text-white text-sm font-medium hover:text-[#D4AF37] transition-colors"
         >
           <span>Back to Blog</span>

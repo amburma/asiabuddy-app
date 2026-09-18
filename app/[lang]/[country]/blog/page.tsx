@@ -247,7 +247,7 @@ export default async function BlogListingPage({
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
               <Link
                 key={pageNum}
-                href={`/${countrySlug}/blog?page=${pageNum}`}
+                href={`/${lang}/${countrySlug}/blog?page=${pageNum}`}
                 className={`min-w-[40px] h-10 flex items-center justify-center rounded-lg text-sm font-semibold transition ${
                   pageNum === currentPage
                     ? 'bg-[#D4AF37] text-white'
