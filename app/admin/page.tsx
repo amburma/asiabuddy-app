@@ -166,6 +166,7 @@ export default function GlobalAdminPage() {
   const [postExcerpt, setPostExcerpt] = useState('');
   const [postContent, setPostContent] = useState('');
   const [postAuthor, setPostAuthor] = useState('AsiaBuddy Team');
+  const [postCategory, setPostCategory] = useState('');
   const [postCoverImage, setPostCoverImage] = useState('');
   const [postImages, setPostImages] = useState('');
   const [blogImagePreview, setBlogImagePreview] = useState('');
@@ -398,6 +399,7 @@ export default function GlobalAdminPage() {
   const resetPostForm = () => {
     setPostTitle(''); setPostSlug(''); setPostSlugManuallyEdited(false); setPostExcerpt('');
     setPostContent(''); setPostAuthor('AsiaBuddy Team');
+    setPostCategory('');
     setPostCoverImage(''); setPostImages(''); setBlogImagePreview(''); setPostPublished(false);
     setPostIsFeatured(false);
     setShowPostForm(false); setEditing(null);
@@ -1755,6 +1757,19 @@ export default function GlobalAdminPage() {
                 <input value={postAuthor} onChange={e => setPostAuthor(e.target.value)} placeholder="AsiaBuddy Team" className={inputCls} />
               </Field>
 
+              <Field label="Category">
+                <select value={postCategory} onChange={e => setPostCategory(e.target.value)} className={inputCls}>
+                  <option value="">No category</option>
+                  <option value="Flights & Transit">Flights & Transit</option>
+                  <option value="Visas & Documents">Visas & Documents</option>
+                  <option value="Destinations & Guides">Destinations & Guides</option>
+                  <option value="Food & Culture">Food & Culture</option>
+                  <option value="Budget & Money Tips">Budget & Money Tips</option>
+                  <option value="Safety & Health">Safety & Health</option>
+                  <option value="Tours & Activities">Tours & Activities</option>
+                </select>
+              </Field>
+
               <Field label="Cover Image URL">
                 <input value={postCoverImage} onChange={e => setPostCoverImage(e.target.value)} placeholder="https://example.com/cover.jpg" className={inputCls} />
                 {blogImagePreview && (
@@ -1851,9 +1866,10 @@ export default function GlobalAdminPage() {
                       excerpt: postExcerpt || null,
                       content: postContent,
                       author: postAuthor,
+                      category: postCategory || null,
                       cover_image: postCoverImage || null,
-                      images: postImages 
-                        ? postImages.split(',').map((s: string) => s.trim()).filter(Boolean) 
+                      images: postImages
+                        ? postImages.split(',').map((s: string) => s.trim()).filter(Boolean)
                         : null,
                       published: postPublished,
                       is_featured: postIsFeatured,
@@ -1911,6 +1927,7 @@ export default function GlobalAdminPage() {
                           setPostExcerpt(item.excerpt || '');
                           setPostContent(item.content || '');
                           setPostAuthor(item.author || 'AsiaBuddy Team');
+                          setPostCategory(item.category || '');
                           setPostCoverImage(item.cover_image || '');
                           setPostImages(Array.isArray(item.images) ? item.images.join(', ') : '');
                           setPostPublished(item.published || false);
