@@ -124,6 +124,31 @@ function extractFirstParagraph(content: string): { firstParagraph: string; remai
   return { firstParagraph: '', remainingContent: content }
 }
 
+function extractFaqItems(content: string): { question: string; answer: string }[] {
+  const faqSectionRegex = /^##\s*.*frequently asked questions.*$/im
+  const match = content.match(faqSectionRegex)
+  if (!match || match.index === undefined) return []
+
+  const afterFaqHeading = content.slice(match.index + match[0].length)
+  // Stop at the next H2 heading (##  not ###) if one exists
+  const nextH2Match = afterFaqHeading.match(/^##\s+(?!#)/m)
+  const faqSection = nextH2Match && nextH2Match.index !== undefined
+    ? afterFaqHeading.slice(0, nextH2Match.index)
+    : afterFaqHeading
+
+  const items: { question: string; answer: string }[] = []
+  const parts = faqSection.split(/^###\s+/m).slice(1) // drop text before first ###
+  for (const part of parts) {
+    const lines = part.trim().split('\n')
+    const question = lines[0].trim()
+    const answer = lines.slice(1).join('\n').trim()
+    if (question && answer) {
+      items.push({ question, answer })
+    }
+  }
+  return items
+}
+
 // ─── Main Page Component ───────────────────────────────────────
 export default async function BlogPostPage({
   params,
@@ -140,6 +165,7 @@ export default async function BlogPostPage({
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
   const { firstBlockquote, remainingContent } = extractFirstBlockquote(post.content)
   const { firstParagraph, remainingContent: bodyContent } = extractFirstParagraph(remainingContent)
+  const faqItems = extractFaqItems(post.content)
   const readingTime = calculateReadingTime(post.content)
   const formattedDate = formatDate(post.created_at)
 
@@ -262,6 +288,27 @@ export default async function BlogPostPage({
           })
         }}
       />
+
+      {faqItems.length > 0 && (
+        <script
+          id="structured-data-faq"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": faqItems.map((item) => ({
+                "@type": "Question",
+                "name": item.question,
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": item.answer
+                }
+              }))
+            })
+          }}
+        />
+      )}
 
       {/* Sticky CTA Bar (Mobile) */}
       <StickyCTA lang={lang} country={countrySlug} />
