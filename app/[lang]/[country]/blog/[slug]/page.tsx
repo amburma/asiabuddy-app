@@ -59,6 +59,12 @@ export async function generateMetadata({
       images: data.cover_image ? [data.cover_image] : [],
       url: `https://asiabuddy.app/${countrySlug}/blog/${slug}`,
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${data.title} – AsiaBuddy ${country}`,
+      description: data.excerpt ?? undefined,
+      images: data.cover_image ? [data.cover_image] : [],
+    },
     alternates: {
       canonical: alternates.canonical,
       languages: alternates.languages,

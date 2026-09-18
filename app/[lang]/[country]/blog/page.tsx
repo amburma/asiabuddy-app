@@ -44,6 +44,12 @@ export async function generateMetadata({
         },
       ],
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: `Blog – AsiaBuddy ${country}`,
+      description: `Travel guides, tips, and stories for ${country}`,
+      images: ['https://asiabuddy.app/images/thailand-destination-hero.jpg'],
+    },
     alternates: {
       canonical: alternates.canonical,
       languages: alternates.languages,
