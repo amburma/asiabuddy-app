@@ -127,6 +127,33 @@ export default async function BlogListingPage({
 
   return (
     <div className="min-h-screen bg-[#F5F0E8]">
+      <script
+        id="structured-data-blog-listing"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Blog",
+            "name": `${country} Travel Blog — AsiaBuddy`,
+            "url": `https://asiabuddy.app/${lang}/${countrySlug}/blog`,
+            "publisher": {
+              "@type": "Organization",
+              "name": "AsiaBuddy",
+              "url": "https://asiabuddy.app"
+            },
+            "blogPost": [
+              ...(featuredPost || []),
+              ...(posts || [])
+            ].map((post) => ({
+              "@type": "BlogPosting",
+              "headline": post.title,
+              "url": `https://asiabuddy.app/${lang}/${countrySlug}/blog/${post.slug}`,
+              "image": post.cover_image || undefined,
+              "datePublished": post.created_at
+            }))
+          })
+        }}
+      />
       {/* Header */}
       <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
         <h1 className="text-[#0D0D0D] font-bold text-[28px] md:text-[36px] mb-2">
