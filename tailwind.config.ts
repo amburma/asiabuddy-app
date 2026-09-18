@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         "sacred-bg": "#FDFCF0",
         "sacred-green": "#2D4A3E",
+        "obsidian": "#0D0D0D",
         "gold-deep": "#D4AF37",
         "gold-light": "#F4E7B5",
         "gold-soft": "#d4b94a",
