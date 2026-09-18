@@ -28,6 +28,18 @@ interface Post {
   updated_at: string
 }
 
+interface Tour {
+  id: string
+  slug: string
+  title: string
+  short_description: string | null
+  price_from: number
+  currency: string
+  image_url: string | null
+  images: string[] | null
+  featured: boolean
+}
+
 // ─── Metadata ─────────────────────────────────────────────────
 export async function generateMetadata({
   params,
@@ -107,6 +119,25 @@ function getCachedRelatedPosts(country: string, currentSlug: string) {
     },
     [`related-posts-${country}-${currentSlug}`],
     { revalidate: 3600, tags: [`posts-${country}`] }
+  )
+}
+
+function getCachedFeaturedTours(country: string) {
+  return unstable_cache(
+    async () => {
+      const supabase = createPublicClient()
+      const { data, error } = await supabase
+        .from('tours')
+        .select('id, slug, title, short_description, price_from, currency, image_url, images, featured')
+        .eq('status', 'active')
+        .eq('country', country)
+        .order('featured', { ascending: false })
+        .order('display_order', { ascending: true })
+        .limit(3)
+      return { data, error }
+    },
+    [`featured-tours-${country}`],
+    { revalidate: 3600, tags: [`tours-${country}`] }
   )
 }
 
@@ -204,6 +235,7 @@ export default async function BlogPostPage({
   const { lang, country: countrySlug, slug } = await params
   const { data: post, error } = await getCachedPost(slug, countrySlug)()
   const { data: relatedPosts } = await getCachedRelatedPosts(countrySlug, slug)()
+  const { data: featuredTours } = await getCachedFeaturedTours(countrySlug)()
 
   if (error || !post) {
     notFound()
@@ -291,6 +323,46 @@ export default async function BlogPostPage({
               ))}
             </ul>
           </nav>
+        )}
+
+        {/* Explore Tours CTA */}
+        {featuredTours && featuredTours.length > 0 && (
+          <div className="mb-10 p-6 bg-[#0D0D0D] rounded-2xl">
+            <h3 className="text-[#D4AF37] text-xs font-semibold uppercase tracking-wide mb-4">
+              Explore {country} Tours
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {featuredTours.map((tour) => (
+                <Link
+                  key={tour.id}
+                  href={`/${lang}/${countrySlug}/tours/${tour.slug}`}
+                  className="group block bg-white rounded-xl overflow-hidden hover:-translate-y-1 transition-transform duration-300"
+                >
+                  <div className="relative aspect-video overflow-hidden bg-gray-100">
+                    {(tour.image_url || tour.images?.[0]) ? (
+                      <Image
+                        src={tour.image_url || tour.images[0]}
+                        alt={tour.title}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-gray-400 text-xs">No image</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3">
+                    <p className="text-[#0D0D0D] font-bold text-sm line-clamp-2 mb-1">{tour.title}</p>
+                    <p className="text-[#D4AF37] font-semibold text-xs">
+                      From {tour.currency} {tour.price_from}
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         )}
 
         {/* Main Content */}
