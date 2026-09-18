@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect } from 'react';
 import { X, Share, Plus } from 'lucide-react';
+import Image from 'next/image';
 
 export default function IOSInstallBanner({ language }: { language: string }) {
   const [showBanner, setShowBanner] = useState(false);
@@ -36,7 +37,9 @@ export default function IOSInstallBanner({ language }: { language: string }) {
       <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 p-6 max-w-sm mx-auto">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <img src="/thailand/icons/icon-192x192.png" className="w-10 h-10 rounded-xl" alt="ThaiGuide" />
+            <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0">
+              <Image src="/thailand/icons/icon-192x192.png" width={40} height={40} alt="ThaiGuide" />
+            </div>
             <p className="font-bold text-sacred-green text-sm uppercase tracking-widest">{msg.title}</p>
           </div>
           <button onClick={handleDismiss} className="text-gray-400 hover:text-gray-600">

@@ -78,12 +78,14 @@ export default async function SalespersonPage({ params }: PageProps) {
           <div className="flex flex-col md:flex-row items-center gap-6">
             
             {/* Avatar */}
-            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gold-deep to-gold-soft flex items-center justify-center overflow-hidden border-4 border-white/30 shadow-2xl">
+            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-gold-deep to-gold-soft flex items-center justify-center overflow-hidden border-4 border-white/30 shadow-2xl relative">
               {salesperson.avatar_url ? (
-                <img
+                <Image
                   src={salesperson.avatar_url}
                   alt={salesperson.display_name}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="96px"
+                  className="object-cover"
                 />
               ) : (
                 <span className="text-4xl font-bold text-white">

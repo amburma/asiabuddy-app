@@ -1,5 +1,6 @@
 ﻿import { useState, useEffect } from 'react';
 import { Download, X } from 'lucide-react';
+import Image from 'next/image';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -44,7 +45,9 @@ export default function InstallBanner({ language }: { language: string }) {
   return (
     <div className="fixed bottom-24 left-0 right-0 z-50 flex justify-center px-4">
       <div className="bg-sacred-green text-white rounded-2xl shadow-2xl flex items-center gap-4 px-5 py-4 max-w-sm w-full">
-        <img src="/thailand/icons/icon-192x192.png" className="w-10 h-10 rounded-xl" alt="ThaiGuide" />
+        <div className="w-10 h-10 rounded-xl overflow-hidden flex-shrink-0">
+          <Image src="/thailand/icons/icon-192x192.png" width={40} height={40} alt="ThaiGuide" />
+        </div>
         <div className="flex-grow">
           <p className="text-xs font-bold uppercase tracking-widest">{msg.title}</p>
           <p className="text-[10px] opacity-60 mt-0.5">AsiaBuddy Services</p>

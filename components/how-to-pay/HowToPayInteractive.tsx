@@ -6,6 +6,7 @@ import { UI_TRANSLATIONS } from '../../lib/i18n';
 import { SupportedLanguage } from '../../types/country';
 import Navbar from '../shared/Navbar';
 import { countries } from '../../data/countries';
+import Image from 'next/image';
 
 interface HowToPayInteractiveProps {
   // No props needed - all data is fetched client-side
@@ -264,9 +265,11 @@ export default function HowToPayInteractive({}: HowToPayInteractiveProps) {
                   </h2>
                 </div>
                 {/* TODO: KIM to drop the actual screenshot file into /public/images/ with this exact filename */}
-                <img 
-                  src="/images/facebook-950k-followers.png" 
+                <Image
+                  src="/images/facebook-950k-followers.png"
                   alt="AsiaBuddy Facebook Page — 950K+ followers"
+                  width={800}
+                  height={450}
                   className="mx-auto rounded-lg shadow-md mb-6 max-w-full h-auto"
                 />
                 <a

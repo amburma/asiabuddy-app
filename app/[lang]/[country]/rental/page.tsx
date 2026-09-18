@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { translateText } from '@/lib/translate'
 import { getCarRentalLinksByCity } from '@/lib/queries/carRentalLinks'
 import CarRentalChatWrapper from '@/components/shared/CarRentalChatWrapper'
@@ -148,11 +149,13 @@ export default async function RentalPage({
                   <div key={rental.id} className="w-full">
                     <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
                       {rental.image_url && (
-                        <div className="h-48 w-full overflow-hidden">
-                          <img
+                        <div className="h-48 w-full overflow-hidden relative">
+                          <Image
                             src={rental.image_url}
                             alt={rental.vehicle_type || 'Car Rental'}
-                            className="w-full h-full object-cover"
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover"
                           />
                         </div>
                       )}
