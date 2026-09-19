@@ -15,7 +15,13 @@ interface Post {
   author: string
   created_at: string
   is_featured?: boolean
+  category?: string | null
 }
+
+const BLOG_CATEGORIES = [
+  'Flights & Transit', 'Visas & Documents', 'Destinations & Guides',
+  'Food & Culture', 'Budget & Money Tips', 'Safety & Health', 'Tours & Activities'
+]
 
 // ─── Metadata ─────────────────────────────────────────────────
 export async function generateMetadata({
@@ -58,23 +64,27 @@ export async function generateMetadata({
 }
 
 // ─── Cached Data Fetching Functions ───────────────────────────
-function getCachedPosts(country: string, page: number) {
+function getCachedPosts(country: string, page: number, category?: string) {
   return unstable_cache(
     async () => {
       const supabase = createPublicClient()
       const from = (page - 1) * 9
       const to = from + 8
-      const { data, error, count } = await supabase
+      let query = supabase
         .from('posts')
-        .select('id, title, slug, excerpt, cover_image, author, created_at, is_featured', { count: 'exact' })
+        .select('id, title, slug, excerpt, cover_image, author, created_at, is_featured, category', { count: 'exact' })
         .eq('country', country)
         .eq('published', true)
         .eq('is_featured', false)
         .order('created_at', { ascending: false })
         .range(from, to)
+      if (category) {
+        query = query.eq('category', category)
+      }
+      const { data, error, count } = await query
       return { data, error, count }
     },
-    [`posts-${country}-page-${page}`],
+    [`posts-${country}-page-${page}-cat-${category || 'all'}`],
     { revalidate: 3600, tags: [`posts-${country}`] }
   )
 }
@@ -85,7 +95,7 @@ function getCachedFeaturedPost(country: string) {
       const supabase = createPublicClient()
       const { data, error } = await supabase
         .from('posts')
-        .select('id, title, slug, excerpt, cover_image, author, created_at, is_featured')
+        .select('id, title, slug, excerpt, cover_image, author, created_at, is_featured, category')
         .eq('country', country)
         .eq('published', true)
         .eq('is_featured', true)
@@ -119,13 +129,13 @@ export default async function BlogListingPage({
   searchParams,
 }: {
   params: Promise<{ lang: string; country: string }>
-  searchParams: Promise<{ page?: string }>
+  searchParams: Promise<{ page?: string; category?: string }>
 }) {
   const { lang, country: countrySlug } = await params
-  const { page } = await searchParams
+  const { page, category } = await searchParams
   const currentPage = Math.max(1, parseInt(page || '1', 10))
   const POSTS_PER_PAGE = 9
-  const { data: posts, error, count } = await getCachedPosts(countrySlug, currentPage)()
+  const { data: posts, error, count } = await getCachedPosts(countrySlug, currentPage, category)()
   const { data: featuredPost } = await getCachedFeaturedPost(countrySlug)()
   const totalPages = Math.ceil((count || 0) / 9)
 
@@ -220,6 +230,32 @@ export default async function BlogListingPage({
           </Link>
         )}
 
+        <div className="flex flex-wrap gap-2 mb-8">
+          <Link
+            href={`/${lang}/${countrySlug}/blog`}
+            className={`px-4 py-2 rounded-full text-sm font-semibold border transition ${
+              !category
+                ? 'bg-[#0D0D0D] text-white border-[#0D0D0D]'
+                : 'bg-white text-[#0D0D0D] border-gray-200 hover:border-[#D4AF37]'
+            }`}
+          >
+            All
+          </Link>
+          {BLOG_CATEGORIES.map((cat) => (
+            <Link
+              key={cat}
+              href={`/${lang}/${countrySlug}/blog?category=${encodeURIComponent(cat)}`}
+              className={`px-4 py-2 rounded-full text-sm font-semibold border transition ${
+                category === cat
+                  ? 'bg-[#0D0D0D] text-white border-[#0D0D0D]'
+                  : 'bg-white text-[#0D0D0D] border-gray-200 hover:border-[#D4AF37]'
+              }`}
+            >
+              {cat}
+            </Link>
+          ))}
+        </div>
+
         {error || !posts || posts.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-gray-500 text-lg">No posts yet</p>
@@ -252,6 +288,11 @@ export default async function BlogListingPage({
 
                   {/* Content */}
                   <div className="p-5 flex-1 flex flex-col">
+                    {post.category && (
+                      <span className="inline-block bg-[#F5F0E8] text-[#0D0D0D] text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-full mb-2 w-fit">
+                        {post.category}
+                      </span>
+                    )}
                     <h2 className="text-[#0D0D0D] font-bold text-lg mb-2 line-clamp-2 group-hover:text-[#D4AF37] transition-colors">
                       {post.title}
                     </h2>
@@ -280,7 +321,7 @@ export default async function BlogListingPage({
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
               <Link
                 key={pageNum}
-                href={`/${lang}/${countrySlug}/blog?page=${pageNum}`}
+                href={`/${lang}/${countrySlug}/blog?page=${pageNum}${category ? `&category=${encodeURIComponent(category)}` : ''}`}
                 className={`min-w-[40px] h-10 flex items-center justify-center rounded-lg text-sm font-semibold transition ${
                   pageNum === currentPage
                     ? 'bg-[#D4AF37] text-white'
