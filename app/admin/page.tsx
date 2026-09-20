@@ -157,13 +157,25 @@ function getBerlinDay(utcString: string): string {
 function formatBerlinDate(utcString: string): string {
   if (!utcString) return '';
   const date = new Date(utcString);
-  const berlinOffset = 60; // Berlin is UTC+1 in winter, UTC+2 in summer (CEST)
-  const berlinDate = new Date(date.getTime() + berlinOffset * 60000);
-  const year = berlinDate.getFullYear();
-  const month = String(berlinDate.getMonth() + 1).padStart(2, '0');
-  const day = String(berlinDate.getDate()).padStart(2, '0');
-  const hours = String(berlinDate.getHours()).padStart(2, '0');
-  const minutes = String(berlinDate.getMinutes()).padStart(2, '0');
+
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Berlin',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+
+  const parts = formatter.formatToParts(date);
+  const getPart = (type: string) => parts.find(p => p.type === type)?.value;
+  const year = getPart('year');
+  const month = getPart('month');
+  const day = getPart('day');
+  const hours = getPart('hour');
+  const minutes = getPart('minute');
+
   return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
 
