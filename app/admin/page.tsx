@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { createClient } from '../../lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { LogOut, Plus, Pencil, Trash2, X, ChevronDown, ChevronRight, GripVertical, Upload, ArrowUp, ArrowDown, ImagePlus } from 'lucide-react';
+import { LogOut, Plus, Pencil, Trash2, X, ChevronDown, ChevronRight, GripVertical, Upload, ArrowUp, ArrowDown, ImagePlus, Check } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,6 +46,158 @@ function extractStoragePath(url: string, bucketName: string): string | null {
   const index = url.indexOf(marker);
   if (index === -1) return null;
   return url.substring(index + marker.length);
+}
+
+// Convert Berlin datetime-local string to UTC ISO string (DST-aware)
+function berlinToUTC(berlinDateTime: string): string {
+  // Parse the "YYYY-MM-DDTHH:mm" string manually
+  const [datePart, timePart] = berlinDateTime.split('T');
+  const [year, month, day] = datePart.split('-').map(Number);
+  const [hours, minutes] = timePart.split(':').map(Number);
+
+  // Treat it as UTC to get a guess timestamp
+  const guessDate = new Date(Date.UTC(year, month - 1, day, hours, minutes));
+
+  // Use Intl.DateTimeFormat to read the Berlin offset at that instant
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Berlin',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    hour12: false,
+  });
+
+  const parts = formatter.formatToParts(guessDate);
+  const getPart = (type: string) => parts.find(p => p.type === type)?.value;
+  const berlinYear = parseInt(getPart('year')!);
+  const berlinMonth = parseInt(getPart('month')!) - 1;
+  const berlinDay = parseInt(getPart('day')!);
+  const berlinHour = parseInt(getPart('hour')!);
+  const berlinMinute = parseInt(getPart('minute')!);
+  const berlinSecond = parseInt(getPart('second')!);
+
+  const berlinDate = new Date(Date.UTC(berlinYear, berlinMonth, berlinDay, berlinHour, berlinMinute, berlinSecond));
+  const offsetMinutes = (berlinDate.getTime() - guessDate.getTime()) / 60000;
+
+  // Adjust and re-check the offset once (to handle DST boundaries)
+  const adjustedDate = new Date(guessDate.getTime() - offsetMinutes * 60000);
+  const adjustedParts = formatter.formatToParts(adjustedDate);
+  const getAdjustedPart = (type: string) => adjustedParts.find(p => p.type === type)?.value;
+  const adjustedBerlinHour = parseInt(getAdjustedPart('hour')!);
+  const adjustedBerlinMinute = parseInt(getAdjustedPart('minute')!);
+
+  // If the offset changed, recalculate
+  if (adjustedBerlinHour !== hours || adjustedBerlinMinute !== minutes) {
+    const adjustedBerlinDate = new Date(Date.UTC(
+      parseInt(getAdjustedPart('year')!),
+      parseInt(getAdjustedPart('month')!) - 1,
+      parseInt(getAdjustedPart('day')!),
+      adjustedBerlinHour,
+      adjustedBerlinMinute,
+      parseInt(getAdjustedPart('second')!)
+    ));
+    const adjustedOffsetMinutes = (adjustedBerlinDate.getTime() - adjustedDate.getTime()) / 60000;
+    return new Date(adjustedDate.getTime() - adjustedOffsetMinutes * 60000).toISOString();
+  }
+
+  return adjustedDate.toISOString();
+}
+
+// Convert UTC ISO string to Berlin datetime-local string (DST-aware)
+function utcToBerlin(utcString: string): string {
+  if (!utcString) return '';
+  const date = new Date(utcString);
+
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Berlin',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  });
+
+  const parts = formatter.formatToParts(date);
+  const getPart = (type: string) => parts.find(p => p.type === type)?.value;
+  const year = getPart('year');
+  const month = getPart('month');
+  const day = getPart('day');
+  const hours = getPart('hour');
+  const minutes = getPart('minute');
+
+  return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+// Get Berlin calendar day from UTC ISO string (YYYY-MM-DD) (DST-aware)
+function getBerlinDay(utcString: string): string {
+  if (!utcString) return '';
+  const date = new Date(utcString);
+
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Berlin',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  });
+
+  const parts = formatter.formatToParts(date);
+  const getPart = (type: string) => parts.find(p => p.type === type)?.value;
+  const year = getPart('year');
+  const month = getPart('month');
+  const day = getPart('day');
+
+  return `${year}-${month}-${day}`;
+}
+
+// Format Berlin date for display (manual formatting for SSR/client parity)
+function formatBerlinDate(utcString: string): string {
+  if (!utcString) return '';
+  const date = new Date(utcString);
+  const berlinOffset = 60; // Berlin is UTC+1 in winter, UTC+2 in summer (CEST)
+  const berlinDate = new Date(date.getTime() + berlinOffset * 60000);
+  const year = berlinDate.getFullYear();
+  const month = String(berlinDate.getMonth() + 1).padStart(2, '0');
+  const day = String(berlinDate.getDate()).padStart(2, '0');
+  const hours = String(berlinDate.getHours()).padStart(2, '0');
+  const minutes = String(berlinDate.getMinutes()).padStart(2, '0');
+  return `${day}.${month}.${year} ${hours}:${minutes}`;
+}
+
+// Check if there's a conflict with another post on the same Berlin day
+async function checkScheduleConflict(
+  supabase: any,
+  country: string,
+  berlinDay: string,
+  excludePostId?: string
+): Promise<{ hasConflict: boolean; conflictPost?: any }> {
+  // Compute the day range with the fixed berlinToUTC
+  const utcStart = berlinToUTC(`${berlinDay}T00:00`);
+  const nextDay = new Date(new Date(berlinDay).getTime() + 24 * 60 * 60 * 1000);
+  const nextDayStr = nextDay.toISOString().split('T')[0];
+  const utcEnd = berlinToUTC(`${nextDayStr}T00:00`);
+
+  let query = supabase
+    .from('posts')
+    .select('id, title, scheduled_publish_at, published')
+    .eq('country', country)
+    .gte('scheduled_publish_at', utcStart)
+    .lt('scheduled_publish_at', utcEnd);
+
+  if (excludePostId) {
+    query = query.neq('id', excludePostId);
+  }
+
+  const { data } = await query;
+
+  if (data && data.length > 0) {
+    return { hasConflict: true, conflictPost: data[0] };
+  }
+
+  return { hasConflict: false };
 }
 
 // Detect if an ID is a real database UUID vs a temporary client-generated ID
@@ -172,7 +324,17 @@ export default function GlobalAdminPage() {
   const [blogImagePreview, setBlogImagePreview] = useState('');
   const [postPublished, setPostPublished] = useState(false);
   const [postIsFeatured, setPostIsFeatured] = useState(false);
+  const [postScheduledAt, setPostScheduledAt] = useState('');
   const contentTextareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Bulk scheduling state
+  const [selectedPostIds, setSelectedPostIds] = useState<Set<string>>(new Set());
+  const [showBulkScheduleModal, setShowBulkScheduleModal] = useState(false);
+  const [bulkScheduleStartDate, setBulkScheduleStartDate] = useState('');
+  const [bulkScheduleTime, setBulkScheduleTime] = useState('09:00');
+  const [bulkScheduleInterval, setBulkScheduleInterval] = useState('2');
+  const [bulkScheduleConflicts, setBulkScheduleConflicts] = useState<any[]>([]);
+  const [bulkSchedulePreview, setBulkSchedulePreview] = useState<any[]>([]);
 
   // Itineraries state
   const [itineraryItems, setItineraryItems] = useState<any[]>([]);
@@ -401,7 +563,7 @@ export default function GlobalAdminPage() {
     setPostContent(''); setPostAuthor('AsiaBuddy Team');
     setPostCategory('');
     setPostCoverImage(''); setPostImages(''); setBlogImagePreview(''); setPostPublished(false);
-    setPostIsFeatured(false);
+    setPostIsFeatured(false); setPostScheduledAt('');
     setShowPostForm(false); setEditing(null);
     setSuccess(''); setError('');
   };
@@ -1846,6 +2008,29 @@ export default function GlobalAdminPage() {
                 </div>
               </Field>
 
+              <Field label="Schedule Post">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="datetime-local"
+                      value={postScheduledAt}
+                      onChange={e => setPostScheduledAt(e.target.value)}
+                      className={inputCls}
+                    />
+                    {postScheduledAt && (
+                      <button
+                        type="button"
+                        onClick={() => setPostScheduledAt('')}
+                        className="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg text-xs font-medium"
+                      >
+                        Unschedule
+                      </button>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500">Time is in Europe/Berlin timezone. Scheduled posts will auto-publish at the specified time.</p>
+                </div>
+              </Field>
+
               {error && <p className="text-red-500 text-sm">{error}</p>}
               {success && <p className="text-emerald-600 text-sm font-medium">{success}</p>}
 
@@ -1858,8 +2043,41 @@ export default function GlobalAdminPage() {
                       setError('Title and Content are required.');
                       return;
                     }
+
+                    // Handle scheduling
+                    let scheduledPublishAt = null;
+                    let isScheduled = false;
+
+                    if (postScheduledAt) {
+                      // Validate scheduled time is in the future
+                      const scheduledDate = new Date(postScheduledAt);
+                      const now = new Date();
+                      if (scheduledDate <= now) {
+                        setError('Scheduled time must be in the future.');
+                        return;
+                      }
+
+                      // Convert Berlin time to UTC
+                      scheduledPublishAt = berlinToUTC(postScheduledAt);
+                      isScheduled = true;
+
+                      // Check for conflicts
+                      const berlinDay = getBerlinDay(scheduledPublishAt);
+                      const { hasConflict, conflictPost } = await checkScheduleConflict(
+                        supabase,
+                        selectedCountry,
+                        berlinDay,
+                        editing?.id
+                      );
+
+                      if (hasConflict) {
+                        setError(`Conflict: Another post "${conflictPost.title}" is already scheduled or published on ${berlinDay}. Only one post per day is allowed.`);
+                        return;
+                      }
+                    }
+
                     console.log('POSTS_SAVE_selectedCountry:', selectedCountry);
-                    const payload = {
+                    const payload: any = {
                       country: selectedCountry,
                       title: postTitle,
                       slug: editing?.slug || postSlug,
@@ -1871,10 +2089,19 @@ export default function GlobalAdminPage() {
                       images: postImages
                         ? postImages.split(',').map((s: string) => s.trim()).filter(Boolean)
                         : null,
-                      published: postPublished,
                       is_featured: postIsFeatured,
                       updated_at: new Date().toISOString(),
                     };
+
+                    // If editing a published post with no new schedule, don't touch scheduled_publish_at
+                    if (editing && editing.published === true && !postScheduledAt) {
+                      payload.published = postPublished;
+                      // Don't include scheduled_publish_at at all - leave DB value untouched
+                    } else {
+                      // Normal scheduling logic
+                      payload.published = isScheduled ? false : postPublished;
+                      payload.scheduled_publish_at = scheduledPublishAt;
+                    }
                     if (editing) {
                       await supabase.from('posts').update(payload).eq('id', editing.id);
                       setSuccess('Post updated successfully');
@@ -1904,94 +2131,405 @@ export default function GlobalAdminPage() {
 
           {/* Posts List */}
           <div className="border-t border-gray-100 pt-6">
-            <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider mb-4">Posts List</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bold text-gray-600 uppercase tracking-wider">Posts List</h3>
+              {selectedPostIds.size > 0 && (
+                <button
+                  onClick={() => setShowBulkScheduleModal(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-sm"
+                >
+                  Bulk Schedule ({selectedPostIds.size})
+                </button>
+              )}
+            </div>
             {postsItems.length === 0 ? (
               <div className="text-center py-12 text-gray-400 text-sm">No posts found for {selectedCountry}</div>
             ) : (
               <div className="space-y-3">
-                {postsItems.map(item => (
-                  <div key={item.id} className="bg-gray-50 rounded-xl p-4 flex gap-4 items-start">
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-bold text-gray-800 text-sm">{item.title}</h4>
-                      <p className="text-xs text-gray-500 mt-1">
-                        {item.published ? 'Published' : 'Draft'} · {new Date(item.created_at).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => {
-                          setEditing(item);
-                          setPostTitle(item.title || '');
-                          setPostSlug(item.slug || '');
-                          setPostSlugManuallyEdited(true);
-                          setPostExcerpt(item.excerpt || '');
-                          setPostContent(item.content || '');
-                          setPostAuthor(item.author || 'AsiaBuddy Team');
-                          setPostCategory(item.category || '');
-                          setPostCoverImage(item.cover_image || '');
-                          setPostImages(Array.isArray(item.images) ? item.images.join(', ') : '');
-                          setPostPublished(item.published || false);
-                          setPostIsFeatured(item.is_featured || false);
-                          setShowPostForm(true);
-                          window.scrollTo(0, 0);
-                        }}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-amber-50 text-amber-600 rounded-lg text-xs font-medium hover:bg-amber-100"
-                      >
-                        <Pencil size={11} /> Edit
-                      </button>
-                      <button
-                        onClick={async () => {
-                          if (!confirm('Delete this post?')) return;
-                          // Collect all image URLs to delete from storage
-                          const urlsToDelete: string[] = [];
-                          // Add cover image
-                          if (item.cover_image) {
-                            urlsToDelete.push(item.cover_image);
-                          }
-                          // Extract images from content using Markdown image syntax
-                          if (item.content) {
-                            const contentImageRegex = /!\[[^\]]*\]\(([^)]+)\)/g;
-                            let match;
-                            while ((match = contentImageRegex.exec(item.content)) !== null) {
-                              urlsToDelete.push(match[1]);
+                {postsItems.map(item => {
+                  const isDraft = !item.published && !item.scheduled_publish_at;
+                  const isScheduled = !item.published && item.scheduled_publish_at;
+                  const isPublished = item.published;
+
+                  return (
+                    <div key={item.id} className="bg-gray-50 rounded-xl p-4 flex gap-4 items-start">
+                      {!item.published && (
+                        <input
+                          type="checkbox"
+                          checked={selectedPostIds.has(item.id)}
+                          onChange={e => {
+                            const newSelected = new Set(selectedPostIds);
+                            if (e.target.checked) {
+                              newSelected.add(item.id);
+                            } else {
+                              newSelected.delete(item.id);
                             }
-                          }
-                          // Add gallery images from comma-separated field
-                          if (item.images) {
-                            const galleryUrls = item.images.split(',').map((url: string) => url.trim()).filter(Boolean);
-                            urlsToDelete.push(...galleryUrls);
-                          }
-                          // Deduplicate URLs
-                          const uniqueUrls = Array.from(new Set(urlsToDelete));
-                          // Extract storage paths and filter out external URLs
-                          const pathsToDelete = uniqueUrls
-                            .map(url => extractStoragePath(url, 'blog-images'))
-                            .filter((path): path is string => path !== null);
-                          // Batch delete all storage files
-                          if (pathsToDelete.length > 0) {
-                            const { error: storageError } = await supabase.storage.from('blog-images').remove(pathsToDelete);
-                            if (storageError) console.error('Post storage delete error:', storageError);
-                          }
-                          await supabase.from('posts').delete().eq('id', item.id);
-                          await fetch('/api/admin/revalidate-posts', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ country: item.country, slug: item.slug }),
-                          });
-                          fetchPosts();
-                        }}
-                        className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-xs font-medium hover:bg-red-100"
-                      >
-                        <Trash2 size={11} /> Delete
-                      </button>
+                            setSelectedPostIds(newSelected);
+                          }}
+                          className="mt-1 w-4 h-4 text-emerald-500 rounded"
+                        />
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-bold text-gray-800 text-sm">{item.title}</h4>
+                        <div className="flex items-center gap-2 mt-1">
+                          {isDraft && (
+                            <span className="px-2 py-0.5 bg-gray-200 text-gray-600 rounded text-xs font-medium">Draft</span>
+                          )}
+                          {isScheduled && (
+                            <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded text-xs font-medium">Scheduled</span>
+                          )}
+                          {isPublished && (
+                            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded text-xs font-medium">Published</span>
+                          )}
+                          {isScheduled && item.scheduled_publish_at && (
+                            <span className="text-xs text-gray-500">
+                              {formatBerlinDate(item.scheduled_publish_at)}
+                            </span>
+                          )}
+                          {!isScheduled && (
+                            <span className="text-xs text-gray-500">
+                              {new Date(item.created_at).toLocaleDateString()}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => {
+                            setEditing(item);
+                            setPostTitle(item.title || '');
+                            setPostSlug(item.slug || '');
+                            setPostSlugManuallyEdited(true);
+                            setPostExcerpt(item.excerpt || '');
+                            setPostContent(item.content || '');
+                            setPostAuthor(item.author || 'AsiaBuddy Team');
+                            setPostCategory(item.category || '');
+                            setPostCoverImage(item.cover_image || '');
+                            setPostImages(Array.isArray(item.images) ? item.images.join(', ') : '');
+                            setPostPublished(item.published || false);
+                            setPostIsFeatured(item.is_featured || false);
+                            // Only set scheduled time if post is NOT published AND time is in the future
+                            if (!item.published && item.scheduled_publish_at) {
+                              const scheduledDate = new Date(item.scheduled_publish_at);
+                              const now = new Date();
+                              if (scheduledDate > now) {
+                                setPostScheduledAt(utcToBerlin(item.scheduled_publish_at));
+                              } else {
+                                setPostScheduledAt('');
+                              }
+                            } else {
+                              setPostScheduledAt('');
+                            }
+                            setShowPostForm(true);
+                            window.scrollTo(0, 0);
+                          }}
+                          className="flex items-center gap-1 px-3 py-1.5 bg-amber-50 text-amber-600 rounded-lg text-xs font-medium hover:bg-amber-100"
+                        >
+                          <Pencil size={11} /> Edit
+                        </button>
+                        <button
+                          onClick={async () => {
+                            if (!confirm('Delete this post?')) return;
+                            // Collect all image URLs to delete from storage
+                            const urlsToDelete: string[] = [];
+                            // Add cover image
+                            if (item.cover_image) {
+                              urlsToDelete.push(item.cover_image);
+                            }
+                            // Extract images from content using Markdown image syntax
+                            if (item.content) {
+                              const contentImageRegex = /!\[[^\]]*\]\(([^)]+)\)/g;
+                              let match;
+                              while ((match = contentImageRegex.exec(item.content)) !== null) {
+                                urlsToDelete.push(match[1]);
+                              }
+                            }
+                            // Add gallery images from comma-separated field
+                            if (item.images) {
+                              const galleryUrls = item.images.split(',').map((url: string) => url.trim()).filter(Boolean);
+                              urlsToDelete.push(...galleryUrls);
+                            }
+                            // Deduplicate URLs
+                            const uniqueUrls = Array.from(new Set(urlsToDelete));
+                            // Extract storage paths and filter out external URLs
+                            const pathsToDelete = uniqueUrls
+                              .map(url => extractStoragePath(url, 'blog-images'))
+                              .filter((path): path is string => path !== null);
+                            // Batch delete all storage files
+                            if (pathsToDelete.length > 0) {
+                              const { error: storageError } = await supabase.storage.from('blog-images').remove(pathsToDelete);
+                              if (storageError) console.error('Post storage delete error:', storageError);
+                            }
+                            await supabase.from('posts').delete().eq('id', item.id);
+                            await fetch('/api/admin/revalidate-posts', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ country: item.country, slug: item.slug }),
+                            });
+                            fetchPosts();
+                          }}
+                          className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-500 rounded-lg text-xs font-medium hover:bg-red-100"
+                        >
+                          <Trash2 size={11} /> Delete
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* Bulk Schedule Modal */}
+      {showBulkScheduleModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-sm max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b border-gray-100">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-gray-800">Bulk Schedule Posts</h3>
+                <button
+                  onClick={() => {
+                    setShowBulkScheduleModal(false);
+                    setBulkScheduleConflicts([]);
+                    setBulkSchedulePreview([]);
+                  }}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-3 gap-4">
+                <Field label="Start Date">
+                  <input
+                    type="date"
+                    value={bulkScheduleStartDate}
+                    onChange={e => setBulkScheduleStartDate(e.target.value)}
+                    className={inputCls}
+                  />
+                </Field>
+                <Field label="Time (Berlin)">
+                  <input
+                    type="time"
+                    value={bulkScheduleTime}
+                    onChange={e => setBulkScheduleTime(e.target.value)}
+                    className={inputCls}
+                  />
+                </Field>
+                <Field label="Interval (days)">
+                  <input
+                    type="number"
+                    value={bulkScheduleInterval}
+                    onChange={e => setBulkScheduleInterval(e.target.value)}
+                    min="1"
+                    className={inputCls}
+                  />
+                </Field>
+              </div>
+
+              <button
+                onClick={async () => {
+                  // Validate inputs
+                  if (!bulkScheduleStartDate || !bulkScheduleTime) {
+                    setError('Please fill in start date and time');
+                    return;
+                  }
+
+                  const interval = parseInt(bulkScheduleInterval);
+                  if (!Number.isInteger(interval) || interval < 1) {
+                    setError('Interval must be a positive integer');
+                    return;
+                  }
+
+                  const selectedPosts = postsItems.filter(item => selectedPostIds.has(item.id));
+                  const preview = [];
+                  const conflicts = [];
+                  const berlinDaysInBatch = new Set<string>();
+
+                  for (let i = 0; i < selectedPosts.length; i++) {
+                    const post = selectedPosts[i];
+                    const startDate = new Date(bulkScheduleStartDate);
+                    const [hours, minutes] = bulkScheduleTime.split(':').map(Number);
+                    startDate.setHours(hours, minutes, 0, 0);
+
+                    const scheduledDate = new Date(startDate.getTime() + i * interval * 24 * 60 * 60 * 1000);
+                    const year = scheduledDate.getFullYear();
+                    const month = String(scheduledDate.getMonth() + 1).padStart(2, '0');
+                    const day = String(scheduledDate.getDate()).padStart(2, '0');
+                    const hour = String(scheduledDate.getHours()).padStart(2, '0');
+                    const minute = String(scheduledDate.getMinutes()).padStart(2, '0');
+                    const scheduledBerlin = `${year}-${month}-${day}T${hour}:${minute}`;
+                    const scheduledUTC = berlinToUTC(scheduledBerlin);
+                    const berlinDay = getBerlinDay(scheduledUTC);
+
+                    // Validate slot is in the future
+                    const now = new Date();
+                    if (new Date(scheduledUTC) <= now) {
+                      conflicts.push({
+                        post: post.title,
+                        date: berlinDay,
+                        conflictWith: 'Past date',
+                      });
+                      preview.push({
+                        post,
+                        scheduledDate: formatBerlinDate(scheduledUTC),
+                        scheduledUTC,
+                        hasConflict: true,
+                        conflictPost: 'Past date',
+                      });
+                      continue;
+                    }
+
+                    // Detect conflicts within the same batch
+                    if (berlinDaysInBatch.has(berlinDay)) {
+                      conflicts.push({
+                        post: post.title,
+                        date: berlinDay,
+                        conflictWith: 'Another post in this batch',
+                      });
+                      preview.push({
+                        post,
+                        scheduledDate: formatBerlinDate(scheduledUTC),
+                        scheduledUTC,
+                        hasConflict: true,
+                        conflictPost: 'Another post in this batch',
+                      });
+                      continue;
+                    }
+                    berlinDaysInBatch.add(berlinDay);
+
+                    const { hasConflict, conflictPost } = await checkScheduleConflict(
+                      supabase,
+                      selectedCountry,
+                      berlinDay,
+                      post.id
+                    );
+
+                    preview.push({
+                      post,
+                      scheduledDate: formatBerlinDate(scheduledUTC),
+                      scheduledUTC,
+                      hasConflict,
+                      conflictPost: conflictPost?.title,
+                    });
+
+                    if (hasConflict) {
+                      conflicts.push({
+                        post: post.title,
+                        date: berlinDay,
+                        conflictWith: conflictPost?.title,
+                      });
+                    }
+                  }
+
+                  setBulkSchedulePreview(preview);
+                  setBulkScheduleConflicts(conflicts);
+                }}
+                className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl text-sm"
+              >
+                Preview Schedule
+              </button>
+
+              {bulkSchedulePreview.length > 0 && (
+                <div className="space-y-4">
+                  <h4 className="text-sm font-bold text-gray-600 uppercase tracking-wider">Preview</h4>
+                  {bulkScheduleConflicts.length > 0 && (
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                      <p className="text-sm font-medium text-red-700 mb-2">
+                        Conflicts found ({bulkScheduleConflicts.length}):
+                      </p>
+                      <ul className="text-sm text-red-600 space-y-1">
+                        {bulkScheduleConflicts.map((conflict, idx) => (
+                          <li key={idx}>
+                            "{conflict.post}" conflicts with "{conflict.conflictWith}" on {conflict.date}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  <div className="border border-gray-200 rounded-xl overflow-hidden">
+                    <table className="w-full text-sm">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-4 py-2 text-left font-medium text-gray-600">Post</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-600">Scheduled Date</th>
+                          <th className="px-4 py-2 text-left font-medium text-gray-600">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {bulkSchedulePreview.map((item, idx) => (
+                          <tr key={idx} className="border-t border-gray-100">
+                            <td className="px-4 py-2">{item.post.title}</td>
+                            <td className="px-4 py-2">{item.scheduledDate}</td>
+                            <td className="px-4 py-2">
+                              {item.hasConflict ? (
+                                <span className="text-red-600 font-medium">Conflict</span>
+                              ) : (
+                                <span className="flex items-center gap-1 text-emerald-600 font-medium">
+                                  <Check size={14} /> OK
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <button
+                    disabled={bulkScheduleConflicts.length > 0}
+                    onClick={async () => {
+                      const results = { success: 0, failed: 0, errors: [] as string[] };
+
+                      for (const item of bulkSchedulePreview) {
+                        try {
+                          const { error } = await supabase
+                            .from('posts')
+                            .update({
+                              published: false,
+                              scheduled_publish_at: item.scheduledUTC,
+                              updated_at: new Date().toISOString(),
+                            })
+                            .eq('id', item.post.id);
+
+                          if (error) {
+                            results.failed++;
+                            results.errors.push(`${item.post.title}: ${error.message}`);
+                          } else {
+                            results.success++;
+                          }
+                        } catch (err: any) {
+                          results.failed++;
+                          results.errors.push(`${item.post.title}: ${err?.message || 'Unknown error'}`);
+                        }
+                      }
+
+                      setSuccess(`Bulk schedule complete: ${results.success} succeeded, ${results.failed} failed`);
+                      if (results.errors.length > 0) {
+                        setError(results.errors.join('; '));
+                      }
+
+                      setShowBulkScheduleModal(false);
+                      setSelectedPostIds(new Set());
+                      setBulkScheduleConflicts([]);
+                      setBulkSchedulePreview([]);
+                      fetchPosts();
+                    }}
+                    className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Confirm Schedule
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
