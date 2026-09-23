@@ -148,7 +148,7 @@ export default async function CountryPage({
           <Image
             alt="Background"
             className="w-full h-full object-cover opacity-20 grayscale-[20%]"
-            src="https://images.unsplash.com/photo-1528181304800-259b08848526?w=1920&q=80"
+            src="/images/hero-background.webp"
             fill
             priority
             sizes="100vw"
