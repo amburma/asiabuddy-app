@@ -98,8 +98,6 @@ export default async function DestinationPage({
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Inter:wght@400;500;600&display=swap');
-        
         @keyframes underline-expand {
           from {
             width: 0;
@@ -119,7 +117,7 @@ export default async function DestinationPage({
         <div className="relative min-h-[70vh] overflow-hidden bg-gradient-to-br from-[#F5F0E4] to-[#EDE8D8]">
           {/* Top-left eyebrow */}
           <div className="absolute top-8 left-8 z-20">
-            <span className="text-[#E07B20] font-['Inter'] text-xs tracking-[0.3em] uppercase font-semibold">
+            <span className="text-[#E07B20] font-[family-name:var(--font-inter)] text-xs tracking-[0.3em] uppercase font-semibold">
               ASIABUDDY DESTINATION GUIDE
             </span>
           </div>
@@ -128,14 +126,14 @@ export default async function DestinationPage({
           <div className="relative z-10 flex flex-col items-center justify-center h-full px-6 text-center">
             {/* H1 with animated underline */}
             <div className="relative">
-              <h1 className="font-['Playfair_Display'] text-7xl md:text-9xl font-bold text-[#1B3A2D]">
+              <h1 className="font-[family-name:var(--font-playfair)] text-7xl md:text-9xl font-bold text-[#1B3A2D]">
                 {countryName}
               </h1>
               <div className="h-1 bg-[#E07B20] mt-4 animated-underline"></div>
             </div>
             
             {/* Italic tagline */}
-            <p className="font-['Playfair_Display'] italic text-2xl text-[#6B7280] mt-6 max-w-3xl">
+            <p className="font-[family-name:var(--font-playfair)] italic text-2xl text-[#6B7280] mt-6 max-w-3xl">
               {tagline}
             </p>
             
@@ -158,7 +156,7 @@ export default async function DestinationPage({
           
           {/* Bottom right decorative faded country name */}
           <div className="absolute bottom-8 right-8 z-0 opacity-5 pointer-events-none select-none">
-            <span className="text-[15vw] font-bold text-[#1B3A2D] font-['Playfair_Display']">
+            <span className="text-[15vw] font-bold text-[#1B3A2D] font-[family-name:var(--font-playfair)]">
               {countryName.toUpperCase()}
             </span>
           </div>
@@ -176,34 +174,34 @@ export default async function DestinationPage({
           <div className="max-w-7xl mx-auto px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center border-r border-[#2D5A3D] last:border-r-0">
-                <div className="font-['Playfair_Display'] text-4xl text-[#C9A84C] font-bold">
+                <div className="font-[family-name:var(--font-playfair)] text-4xl text-[#C9A84C] font-bold">
                   50+
                 </div>
-                <div className="font-['Inter'] text-sm text-[#A8C5B5] uppercase tracking-wide mt-1">
+                <div className="font-[family-name:var(--font-inter)] text-sm text-[#A8C5B5] uppercase tracking-wide mt-1">
                   Curated Tours
                 </div>
               </div>
               <div className="text-center border-r border-[#2D5A3D] last:border-r-0">
-                <div className="font-['Playfair_Display'] text-4xl text-[#C9A84C] font-bold">
+                <div className="font-[family-name:var(--font-playfair)] text-4xl text-[#C9A84C] font-bold">
                   4.9★
                 </div>
-                <div className="font-['Inter'] text-sm text-[#A8C5B5] uppercase tracking-wide mt-1">
+                <div className="font-[family-name:var(--font-inter)] text-sm text-[#A8C5B5] uppercase tracking-wide mt-1">
                   Traveler Rating
                 </div>
               </div>
               <div className="text-center border-r border-[#2D5A3D] last:border-r-0">
-                <div className="font-['Playfair_Display'] text-4xl text-[#C9A84C] font-bold">
+                <div className="font-[family-name:var(--font-playfair)] text-4xl text-[#C9A84C] font-bold">
                   24/7
                 </div>
-                <div className="font-['Inter'] text-sm text-[#A8C5B5] uppercase tracking-wide mt-1">
+                <div className="font-[family-name:var(--font-inter)] text-sm text-[#A8C5B5] uppercase tracking-wide mt-1">
                   Expert Support
                 </div>
               </div>
               <div className="text-center border-r border-[#2D5A3D] last:border-r-0">
-                <div className="font-['Playfair_Display'] text-4xl text-[#C9A84C] font-bold">
+                <div className="font-[family-name:var(--font-playfair)] text-4xl text-[#C9A84C] font-bold">
                   10K+
                 </div>
-                <div className="font-['Inter'] text-sm text-[#A8C5B5] uppercase tracking-wide mt-1">
+                <div className="font-[family-name:var(--font-inter)] text-sm text-[#A8C5B5] uppercase tracking-wide mt-1">
                   Happy Travelers
                 </div>
               </div>
@@ -220,7 +218,7 @@ export default async function DestinationPage({
             </div>
             
             {/* H2 */}
-            <h2 className="font-['Playfair_Display'] text-4xl text-[#1B3A2D] mt-2">
+            <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#1B3A2D] mt-2">
               Travel Smarter, Not Harder
             </h2>
             
@@ -229,10 +227,10 @@ export default async function DestinationPage({
               {/* Card 1 */}
               <div className="bg-white rounded-2xl p-8 border border-[#E5E0D5] hover:border-[#E07B20] hover:shadow-md transition-all duration-300">
                 <div className="text-4xl mb-4">✈️</div>
-                <h3 className="font-['Playfair_Display'] text-xl text-[#1B3A2D] font-bold">
+                <h3 className="font-[family-name:var(--font-playfair)] text-xl text-[#1B3A2D] font-bold">
                   Expert Local Guides
                 </h3>
-                <p className="font-['Inter'] text-sm text-[#6B7280] mt-3 leading-relaxed">
+                <p className="font-[family-name:var(--font-inter)] text-sm text-[#6B7280] mt-3 leading-relaxed">
                   Our guides are born and raised here — they know the hidden gems no tourist map shows.
                 </p>
               </div>
@@ -240,10 +238,10 @@ export default async function DestinationPage({
               {/* Card 2 */}
               <div className="bg-white rounded-2xl p-8 border border-[#E5E0D5] hover:border-[#E07B20] hover:shadow-md transition-all duration-300">
                 <div className="text-4xl mb-4">🔒</div>
-                <h3 className="font-['Playfair_Display'] text-xl text-[#1B3A2D] font-bold">
+                <h3 className="font-[family-name:var(--font-playfair)] text-xl text-[#1B3A2D] font-bold">
                   Secure & Flexible Booking
                 </h3>
-                <p className="font-['Inter'] text-sm text-[#6B7280] mt-3 leading-relaxed">
+                <p className="font-[family-name:var(--font-inter)] text-sm text-[#6B7280] mt-3 leading-relaxed">
                   Book with confidence — full refund guarantee and free rescheduling up to 48 hours before.
                 </p>
               </div>
@@ -251,10 +249,10 @@ export default async function DestinationPage({
               {/* Card 3 */}
               <div className="bg-white rounded-2xl p-8 border border-[#E5E0D5] hover:border-[#E07B20] hover:shadow-md transition-all duration-300">
                 <div className="text-4xl mb-4">⭐</div>
-                <h3 className="font-['Playfair_Display'] text-xl text-[#1B3A2D] font-bold">
+                <h3 className="font-[family-name:var(--font-playfair)] text-xl text-[#1B3A2D] font-bold">
                   5-Star Rated Experiences
                 </h3>
-                <p className="font-['Inter'] text-sm text-[#6B7280] mt-3 leading-relaxed">
+                <p className="font-[family-name:var(--font-inter)] text-sm text-[#6B7280] mt-3 leading-relaxed">
                   Consistently rated #1 by independent travelers across Google, TripAdvisor, and Trustpilot.
                 </p>
               </div>
@@ -272,12 +270,12 @@ export default async function DestinationPage({
               </div>
               
               {/* H2 */}
-              <h2 className="font-['Playfair_Display'] text-4xl text-[#1B3A2D] mt-2">
+              <h2 className="font-[family-name:var(--font-playfair)] text-4xl text-[#1B3A2D] mt-2">
                 Featured Experiences
               </h2>
               
               {/* Subtitle */}
-              <p className="font-['Inter'] text-[#6B7280] mt-2">
+              <p className="font-[family-name:var(--font-inter)] text-[#6B7280] mt-2">
                 Each tour personally vetted by our travel experts
               </p>
               
@@ -305,12 +303,12 @@ export default async function DestinationPage({
                       </div>
                       
                       {/* Title */}
-                      <h3 className="font-['Playfair_Display'] text-xl text-[#1B3A2D] mt-3 font-bold">
+                      <h3 className="font-[family-name:var(--font-playfair)] text-xl text-[#1B3A2D] mt-3 font-bold">
                         {tour.title}
                       </h3>
                       
                       {/* Description */}
-                      <p className="font-['Inter'] text-sm text-[#6B7280] mt-2 line-clamp-2">
+                      <p className="font-[family-name:var(--font-inter)] text-sm text-[#6B7280] mt-2 line-clamp-2">
                         {tour.short_description}
                       </p>
                       
@@ -322,11 +320,11 @@ export default async function DestinationPage({
                         {/* Price */}
                         {tour.price_from && (
                           <div>
-                            <div className="font-['Inter'] text-xs text-[#6B7280]">From</div>
-                            <div className="font-['Playfair_Display'] text-2xl text-[#E07B20] font-bold">
+                            <div className="font-[family-name:var(--font-inter)] text-xs text-[#6B7280]">From</div>
+                            <div className="font-[family-name:var(--font-playfair)] text-2xl text-[#E07B20] font-bold">
                               {tour.price_from.toLocaleString()}
                             </div>
-                            <div className="font-['Inter'] text-xs text-[#6B7280]">
+                            <div className="font-[family-name:var(--font-inter)] text-xs text-[#6B7280]">
                               USD
                             </div>
                           </div>
@@ -354,12 +352,12 @@ export default async function DestinationPage({
             </div>
             
             {/* H2 */}
-            <h2 className="font-['Playfair_Display'] text-5xl text-white mt-3">
+            <h2 className="font-[family-name:var(--font-playfair)] text-5xl text-white mt-3">
               Your Perfect Trip Awaits
             </h2>
             
             {/* Sub */}
-            <p className="font-['Inter'] text-[#A8C5B5] text-lg mt-4 max-w-xl mx-auto">
+            <p className="font-[family-name:var(--font-inter)] text-[#A8C5B5] text-lg mt-4 max-w-xl mx-auto">
               Let our local experts craft every detail — you just show up and experience.
             </p>
             
