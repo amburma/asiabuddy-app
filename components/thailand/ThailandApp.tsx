@@ -208,6 +208,7 @@ useEffect(() => {
             sizes="100vw"
             className="object-cover opacity-20 grayscale-[20%]"
             priority
+            quality={60}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-sacred-bg via-transparent to-transparent" />
         </div>

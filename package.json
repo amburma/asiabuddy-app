@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:bot": "tsx watch app/thailand/src/index.ts",
-    "build": "next build",
+    "build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 next build",
     "analyze": "set ANALYZE=true && npx next build --webpack",
     "build:bot": "tsc",
     "start": "next start",
@@ -65,6 +65,7 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "autoprefixer": "^10.5.0",
+    "cross-env": "^10.1.0",
     "eslint": "^10.7.0",
     "eslint-config-next": "^16.2.11",
     "playwright": "^1.61.1",

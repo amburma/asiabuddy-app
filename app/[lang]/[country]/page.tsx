@@ -152,6 +152,7 @@ export default async function CountryPage({
             fill
             priority
             sizes="100vw"
+            quality={60}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-sacred-bg via-transparent to-transparent" />
         </div>
