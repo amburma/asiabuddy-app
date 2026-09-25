@@ -19,6 +19,7 @@ interface Post {
 }
 
 const BLOG_CATEGORIES = [
+  'News & Updates', 'Tips & Recommendations',
   'Flights & Transit', 'Visas & Documents', 'Destinations & Guides',
   'Food & Culture', 'Budget & Money Tips', 'Safety & Health', 'Tours & Activities'
 ]

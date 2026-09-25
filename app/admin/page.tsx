@@ -1941,6 +1941,8 @@ export default function GlobalAdminPage() {
                   <option value="Budget & Money Tips">Budget & Money Tips</option>
                   <option value="Safety & Health">Safety & Health</option>
                   <option value="Tours & Activities">Tours & Activities</option>
+                  <option value="News & Updates">News & Updates</option>
+                  <option value="Tips & Recommendations">Tips & Recommendations</option>
                 </select>
               </Field>
 
