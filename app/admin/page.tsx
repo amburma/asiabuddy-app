@@ -331,6 +331,7 @@ export default function GlobalAdminPage() {
   const [postContent, setPostContent] = useState('');
   const [postAuthor, setPostAuthor] = useState('AsiaBuddy Team');
   const [postCategory, setPostCategory] = useState('');
+  const [postCategories, setPostCategories] = useState<string[]>([]);
   const [postCoverImage, setPostCoverImage] = useState('');
   const [postImages, setPostImages] = useState('');
   const [blogImagePreview, setBlogImagePreview] = useState('');
@@ -574,6 +575,7 @@ export default function GlobalAdminPage() {
     setPostTitle(''); setPostSlug(''); setPostSlugManuallyEdited(false); setPostExcerpt('');
     setPostContent(''); setPostAuthor('AsiaBuddy Team');
     setPostCategory('');
+    setPostCategories([]);
     setPostCoverImage(''); setPostImages(''); setBlogImagePreview(''); setPostPublished(false);
     setPostIsFeatured(false); setPostScheduledAt('');
     setShowPostForm(false); setEditing(null);
@@ -1931,19 +1933,24 @@ export default function GlobalAdminPage() {
                 <input value={postAuthor} onChange={e => setPostAuthor(e.target.value)} placeholder="AsiaBuddy Team" className={inputCls} />
               </Field>
 
-              <Field label="Category">
-                <select value={postCategory} onChange={e => setPostCategory(e.target.value)} className={inputCls}>
-                  <option value="">No category</option>
-                  <option value="Flights & Transit">Flights & Transit</option>
-                  <option value="Visas & Documents">Visas & Documents</option>
-                  <option value="Destinations & Guides">Destinations & Guides</option>
-                  <option value="Food & Culture">Food & Culture</option>
-                  <option value="Budget & Money Tips">Budget & Money Tips</option>
-                  <option value="Safety & Health">Safety & Health</option>
-                  <option value="Tours & Activities">Tours & Activities</option>
-                  <option value="News & Updates">News & Updates</option>
-                  <option value="Tips & Recommendations">Tips & Recommendations</option>
-                </select>
+              <Field label="Categories">
+                <div className="space-y-2">
+                  {['News & Updates', 'Tips & Recommendations', 'Flights & Transit', 'Visas & Documents', 'Destinations & Guides', 'Food & Culture', 'Budget & Money Tips', 'Safety & Health', 'Tours & Activities'].map((cat) => (
+                    <label key={cat} className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        checked={postCategories.includes(cat)}
+                        onChange={(e) => {
+                          setPostCategories(prev =>
+                            e.target.checked ? [...prev, cat] : prev.filter(c => c !== cat)
+                          )
+                        }}
+                        className="w-4 h-4 text-emerald-500 rounded"
+                      />
+                      <span className="text-sm text-gray-600">{cat}</span>
+                    </label>
+                  ))}
+                </div>
               </Field>
 
               <Field label="Cover Image URL">
@@ -2098,7 +2105,8 @@ export default function GlobalAdminPage() {
                       excerpt: postExcerpt || null,
                       content: postContent,
                       author: postAuthor,
-                      category: postCategory || null,
+                      categories: postCategories.length > 0 ? postCategories : null,
+                      category: postCategories[0] || null,
                       cover_image: postCoverImage || null,
                       images: postImages
                         ? postImages.split(',').map((s: string) => s.trim()).filter(Boolean)
@@ -2218,6 +2226,7 @@ export default function GlobalAdminPage() {
                             setPostContent(item.content || '');
                             setPostAuthor(item.author || 'AsiaBuddy Team');
                             setPostCategory(item.category || '');
+                            setPostCategories(item.categories && item.categories.length > 0 ? item.categories : (item.category ? [item.category] : []));
                             setPostCoverImage(item.cover_image || '');
                             setPostImages(Array.isArray(item.images) ? item.images.join(', ') : '');
                             setPostPublished(item.published || false);

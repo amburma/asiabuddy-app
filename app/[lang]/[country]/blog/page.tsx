@@ -16,6 +16,7 @@ interface Post {
   created_at: string
   is_featured?: boolean
   category?: string | null
+  categories?: string[] | null
 }
 
 const BLOG_CATEGORIES = [
@@ -73,14 +74,14 @@ function getCachedPosts(country: string, page: number, category?: string) {
       const to = from + 8
       let query = supabase
         .from('posts')
-        .select('id, title, slug, excerpt, cover_image, author, created_at, is_featured, category', { count: 'exact' })
+        .select('id, title, slug, excerpt, cover_image, author, created_at, is_featured, category, categories', { count: 'exact' })
         .eq('country', country)
         .eq('published', true)
         .eq('is_featured', false)
         .order('created_at', { ascending: false })
         .range(from, to)
       if (category) {
-        query = query.eq('category', category)
+        query = query.contains('categories', [category])
       }
       const { data, error, count } = await query
       return { data, error, count }
@@ -96,7 +97,7 @@ function getCachedFeaturedPost(country: string) {
       const supabase = createPublicClient()
       const { data, error } = await supabase
         .from('posts')
-        .select('id, title, slug, excerpt, cover_image, author, created_at, is_featured, category')
+        .select('id, title, slug, excerpt, cover_image, author, created_at, is_featured, category, categories')
         .eq('country', country)
         .eq('published', true)
         .eq('is_featured', true)
@@ -289,11 +290,19 @@ export default async function BlogListingPage({
 
                   {/* Content */}
                   <div className="p-5 flex-1 flex flex-col">
-                    {post.category && (
+                    {post.categories && post.categories.length > 0 ? (
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        {post.categories.map((cat: string) => (
+                          <span key={cat} className="inline-block bg-[#F5F0E8] text-[#0D0D0D] text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-full w-fit">
+                            {cat}
+                          </span>
+                        ))}
+                      </div>
+                    ) : post.category ? (
                       <span className="inline-block bg-[#F5F0E8] text-[#0D0D0D] text-[10px] font-bold uppercase tracking-wide px-2 py-1 rounded-full mb-2 w-fit">
                         {post.category}
                       </span>
-                    )}
+                    ) : null}
                     <h2 className="text-[#0D0D0D] font-bold text-lg mb-2 line-clamp-2 group-hover:text-[#D4AF37] transition-colors">
                       {post.title}
                     </h2>
