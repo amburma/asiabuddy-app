@@ -5,6 +5,7 @@ import { getTransferLinksByCity } from '@/lib/queries/transferLinks'
 import TransferChatWrapper from '@/components/shared/TransferChatWrapper'
 import { normalizeLocale } from '@/lib/i18n'
 import { buildAlternates } from '@/lib/seo-alternates'
+import { getDefaultCity } from '@/data/countryDefaults'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -52,7 +53,7 @@ export default async function TransfersPage({
 
   const targetLanguage = normalizeLocale(lang)
 
-  const defaultCity = 'bangkok'
+  const defaultCity = getDefaultCity(country)
   const transferLinks = await getTransferLinksByCity(defaultCity)
 
   const translationPayload = {
