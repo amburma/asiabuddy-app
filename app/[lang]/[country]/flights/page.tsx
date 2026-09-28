@@ -12,6 +12,7 @@ import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
 import { SupportedLanguage } from '@/types/country'
 import { Plane, Calendar, MapPin, Clock } from 'lucide-react'
 import dynamicImport from 'next/dynamic'
+import { getDefaultCity } from '@/data/countryDefaults'
 
 const ChatWidgetGrid = dynamicImport(() => import('@/components/shared/ChatWidgetGrid'))
 
@@ -55,7 +56,7 @@ export default async function FlightsPage({
 
   const targetLanguage = normalizeLocale(lang)
 
-  const defaultCity = 'bangkok'
+  const defaultCity = getDefaultCity(country)
   const flightLinks = await getFlightLinksByCity(defaultCity)
 
   const t = UI_TRANSLATIONS[targetLanguage].flights
