@@ -594,7 +594,7 @@ export default function GlobalAdminPage() {
     const errors: Record<string, string> = {};
     if (!toursTitle.trim()) errors.title = 'Tour title is required';
     if (!toursSlug.trim()) errors.slug = 'Slug is required';
-    const country = toursCountry.trim() || 'thailand';
+    const country = toursCountry.trim().toLowerCase() || selectedCountry;
     const durationDays = parseInt(toursDurationDays);
     if (!durationDays || durationDays < 1) errors.duration_days = 'Duration must be at least 1 day';
 
