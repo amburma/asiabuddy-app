@@ -11,6 +11,7 @@ const COUNTRIES = [
   { id: 'thailand', name: 'Thailand', flag: 'TH' },
   { id: 'singapore', name: 'Singapore', flag: 'SG' },
   { id: 'japan', name: 'Japan', flag: 'JP' },
+  { id: 'vietnam', name: 'Vietnam', flag: 'VN' },
 ];
 
 const CURRENCIES = ['USD', 'THB', 'SGD', 'JPY', 'EUR'];
