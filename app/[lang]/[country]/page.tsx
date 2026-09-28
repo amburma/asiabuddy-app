@@ -19,6 +19,7 @@ import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
 import ServicesStrip from '@/components/shared/services/ServicesStrip'
 import TicketServiceCard from '@/components/shared/services/TicketServiceCard'
 import { COUNTRY_META } from './layout'
+import { getDefaultCity } from '@/data/countryDefaults'
 
 export default async function CountryPage({
   params,
@@ -85,8 +86,8 @@ export default async function CountryPage({
   // 3. Fetch GYG Links Summary for Services Strip
   const gygSummary = await getGygLinksSummary()
 
-  // 4. Fetch service links for Services Strip (using hardcoded defaultCity = 'bangkok')
-  const defaultCity = 'bangkok'
+  // 4. Fetch service links for Services Strip (using per-country defaultCity)
+  const defaultCity = getDefaultCity(country)
   const agodaLinks = await getAgodaLinksByCity(defaultCity)
   const klookLinks = await getKlookLinksByCity(defaultCity)
   const transfer12goLinks = await getTransferLinksByCity(defaultCity, '12go')
