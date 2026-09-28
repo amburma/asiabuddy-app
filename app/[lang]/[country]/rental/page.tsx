@@ -5,6 +5,7 @@ import { getCarRentalLinksByCity } from '@/lib/queries/carRentalLinks'
 import CarRentalChatWrapper from '@/components/shared/CarRentalChatWrapper'
 import { normalizeLocale } from '@/lib/i18n'
 import { buildAlternates } from '@/lib/seo-alternates'
+import { getDefaultCity } from '@/data/countryDefaults'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -52,7 +53,7 @@ export default async function RentalPage({
 
   const targetLanguage = normalizeLocale(lang)
 
-  const defaultCity = 'bangkok'
+  const defaultCity = getDefaultCity(country)
   const carRentalLinks = await getCarRentalLinksByCity(defaultCity)
 
   const translationPayload = {
