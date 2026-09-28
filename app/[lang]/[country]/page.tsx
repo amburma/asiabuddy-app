@@ -83,8 +83,11 @@ export default async function CountryPage({
     title: (tour as any)[`title_${lang}`] || tour.title,
   })) || []
 
-  // 3. Fetch GYG Links Summary for Services Strip
-  const gygSummary = await getGygLinksSummary()
+  // 3. Fetch GYG Links Summary for Services Strip (Thailand only: gyg_links is not filtered by country)
+  const gygSummary =
+    lowerCountry === 'thailand'
+      ? await getGygLinksSummary()
+      : { count: 0, minPrice: null }
 
   // 4. Fetch service links for Services Strip (using per-country defaultCity)
   const defaultCity = getDefaultCity(country)
