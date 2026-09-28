@@ -567,6 +567,7 @@ export default function GlobalAdminPage() {
     setDestName(''); setDestSlug(''); setDestShortDescription('');
     setDestDescription(''); setDestMustVisit(''); setDestDining('');
     setDestActivities(''); setDestHiddenGems(''); setDestExperiences('');
+    setDestNameMm(''); setDestNameTh(''); setDestDescMm(''); setDestDescTh('');
     setDestImages(''); setDestImagePreview(''); setDestFeatured(false);
     setShowDestForm(false); setEditing(null);
     setSuccess(''); setError('');
