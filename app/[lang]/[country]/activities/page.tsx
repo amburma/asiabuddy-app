@@ -5,6 +5,7 @@ import { getGygLinksByCity } from '@/lib/queries/gygLinks'
 import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
 import { MapPin, Calendar, Plane } from 'lucide-react'
 import { buildAlternates } from '@/lib/seo-alternates'
+import { getDefaultCity } from '@/data/countryDefaults'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -55,7 +56,7 @@ export default async function ActivitiesPage({
   const targetLanguage = normalizeLocale(lang)
 
   const { city: cityParam } = await searchParams
-  const city = cityParam || 'bangkok'
+  const city = cityParam || getDefaultCity(country)
   const gygLinks = await getGygLinksByCity(city)
 
   const t = UI_TRANSLATIONS[targetLanguage].activities
