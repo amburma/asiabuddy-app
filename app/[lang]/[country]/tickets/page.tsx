@@ -5,7 +5,7 @@ import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
 import { SupportedLanguage } from '@/types/country'
 import { MapPin, Calendar, Plane } from 'lucide-react'
 import { buildAlternates } from '@/lib/seo-alternates'
-import { getDefaultCity } from '@/data/countryDefaults'
+import { getDefaultCity, getCountryTicketCities } from '@/data/countryDefaults'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -63,20 +63,7 @@ export default async function TicketsPage({
   const servicesStrip = UI_TRANSLATIONS[targetLanguage].servicesStrip
   const destinationTabs = UI_TRANSLATIONS[targetLanguage].destinationTabs
 
-  const cities = [
-    { slug: 'bangkok', name: 'Bangkok' },
-    { slug: 'pattaya', name: 'Pattaya' },
-    { slug: 'phuket', name: 'Phuket' },
-    { slug: 'krabi', name: 'Krabi' },
-    { slug: 'huahin', name: 'Hua Hin' },
-    { slug: 'hatyai', name: 'Hat Yai' },
-    { slug: 'kanchanaburi', name: 'Kanchanaburi' },
-    { slug: 'pakchong', name: 'Pak Chong' },
-    { slug: 'kochang', name: 'Ko Chang' },
-    { slug: 'satun', name: 'Satun' },
-    { slug: 'chiangrai', name: 'Chiang Rai' },
-    { slug: 'kosamui', name: 'Ko Samui' },
-  ]
+  const cities = getCountryTicketCities(country)
 
   return (
     <>
