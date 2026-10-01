@@ -35,12 +35,15 @@ export interface GygLinksSummary {
   minPrice: string | null;
 }
 
-export async function getGygLinksSummary(): Promise<GygLinksSummary> {
+export async function getGygLinksSummary(citySlugs?: string[]): Promise<GygLinksSummary> {
   const supabase = getSupabase();
-  
-  const { data, error } = await supabase
-    .from('gyg_links')
-    .select('price_from');
+
+  let query = supabase.from('gyg_links').select('price_from')
+  if (citySlugs !== undefined) {
+    if (citySlugs.length === 0) return { count: 0, minPrice: null }
+    query = query.in('city', citySlugs)
+  }
+  const { data, error } = await query
 
   if (error) {
     console.error('[getGygLinksSummary] Error fetching gyg_links:', error);
