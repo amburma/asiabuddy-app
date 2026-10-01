@@ -19,7 +19,7 @@ import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
 import ServicesStrip from '@/components/shared/services/ServicesStrip'
 import TicketServiceCard from '@/components/shared/services/TicketServiceCard'
 import { COUNTRY_META } from './layout'
-import { getDefaultCity } from '@/data/countryDefaults'
+import { getDefaultCity, getCountryCities } from '@/data/countryDefaults'
 
 export default async function CountryPage({
   params,
@@ -83,11 +83,10 @@ export default async function CountryPage({
     title: (tour as any)[`title_${lang}`] || tour.title,
   })) || []
 
-  // 3. Fetch GYG Links Summary for Services Strip (Thailand only: gyg_links is not filtered by country)
-  const gygSummary =
-    lowerCountry === 'thailand'
-      ? await getGygLinksSummary()
-      : { count: 0, minPrice: null }
+  // 3. Fetch GYG Links Summary for Services Strip (filtered by the country's city slugs; gyg_links has no country column)
+  const gygSummary = await getGygLinksSummary(
+    getCountryCities(lowerCountry).map((c) => c.slug)
+  )
 
   // 4. Fetch service links for Services Strip (using per-country defaultCity)
   const defaultCity = getDefaultCity(country)
