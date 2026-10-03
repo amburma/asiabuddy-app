@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
-export default function AviasalesSearchWidget() {
+export default function AviasalesSearchWidget({ originIata = 'BKK' }: { originIata?: string }) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -13,9 +13,9 @@ export default function AviasalesSearchWidget() {
     const script = document.createElement('script')
     script.async = true
     script.charset = 'utf-8'
-    script.src = 'https://tpembd.com/content?currency=usd&trs=546392&shmarker=746660&show_hotels=false&powered_by=true&locale=en&searchUrl=www.aviasales.com%2Fsearch&primary_override=%23D4AF37&color_button=%23D4AF37&color_icons=%23D4AF37&dark=%23000000&light=%23FFFFFF&secondary=%23D4AF37&special=%23D4AF37&color_focused=%23D4AF37&border_radius=0&plain=false&promo_id=7879&campaign_id=100&origin_iata=BKK'
+    script.src = 'https://tpembd.com/content?currency=usd&trs=546392&shmarker=746660&show_hotels=false&powered_by=true&locale=en&searchUrl=www.aviasales.com%2Fsearch&primary_override=%23D4AF37&color_button=%23D4AF37&color_icons=%23D4AF37&dark=%23000000&light=%23FFFFFF&secondary=%23D4AF37&special=%23D4AF37&color_focused=%23D4AF37&border_radius=0&plain=false&promo_id=7879&campaign_id=100' + (originIata ? `&origin_iata=${encodeURIComponent(originIata)}` : '')
     containerRef.current.appendChild(script)
-  }, [])
+  }, []) // originIata read once on mount
 
   return <div ref={containerRef} className="w-full flex justify-center min-h-[300px]" />
 }
