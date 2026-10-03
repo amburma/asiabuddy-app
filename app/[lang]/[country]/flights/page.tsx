@@ -116,7 +116,7 @@ export default async function FlightsPage({
             </h3>
             {/* TEMP: White Label widget causes layout breakage, reverted pending Travelpayouts dashboard investigation */}
             {/* <WhiteLabelFlightWidget /> */}
-            <AviasalesSearchWidgetWrapper />
+            <AviasalesSearchWidgetWrapper originIata={country.toLowerCase() === 'thailand' ? undefined : ''} />
             {country.toLowerCase() === 'thailand' && (
               <div className="mt-4 flex justify-center">
                 <TripComFlightButton departureCity="Yangon" departureIata="RGN" arrivalCity="Bangkok" arrivalIata="BKK" language={targetLanguage} />
