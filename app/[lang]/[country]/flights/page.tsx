@@ -117,15 +117,19 @@ export default async function FlightsPage({
             {/* TEMP: White Label widget causes layout breakage, reverted pending Travelpayouts dashboard investigation */}
             {/* <WhiteLabelFlightWidget /> */}
             <AviasalesSearchWidgetWrapper />
-            <div className="mt-4 flex justify-center">
-              <TripComFlightButton departureCity="Yangon" departureIata="RGN" arrivalCity="Bangkok" arrivalIata="BKK" language={targetLanguage} />
-            </div>
+            {country.toLowerCase() === 'thailand' && (
+              <div className="mt-4 flex justify-center">
+                <TripComFlightButton departureCity="Yangon" departureIata="RGN" arrivalCity="Bangkok" arrivalIata="BKK" language={targetLanguage} />
+              </div>
+            )}
           </div>
 
           {/* Pricing Calendar Widget */}
-          <div className="mb-8">
-            <PricingCalendarWidget />
-          </div>
+          {country.toLowerCase() === 'thailand' && (
+            <div className="mb-8">
+              <PricingCalendarWidget />
+            </div>
+          )}
 
           {/* Trust Badges */}
           <FlightTrustBadges language={targetLanguage} />
