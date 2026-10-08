@@ -345,7 +345,7 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
               )}
 
               {/* Section: ESSENTIAL GUIDES */}
-              {country && (
+              {country && country.toLowerCase() === 'thailand' && (
                 <>
                   <h4 className="text-xs uppercase tracking-widest text-[#C9A84C] mt-4 mb-1 px-4">
                     {t.menuCategories?.guides || 'ESSENTIAL GUIDES'}
@@ -423,7 +423,7 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
               )}
 
               {/* Section: TRAVEL TOOLS */}
-              {country && (
+              {country && country.toLowerCase() === 'thailand' && (
                 <>
                   <h4 className="text-xs uppercase tracking-widest text-[#C9A84C] mt-4 mb-1 px-4">
                     {t.menuCategories?.tools || 'TRAVEL TOOLS'}
@@ -490,7 +490,7 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
               )}
 
               {/* Section: SERVICE MINDED HELP */}
-              {country && (
+              {country && country.toLowerCase() === 'thailand' && (
                 <>
                   <h4 className="text-xs uppercase tracking-widest text-[#C9A84C] mt-4 mb-1 px-4">
                     {t.tools?.serviceMinded || 'SERVICE MINDED HELP'}
