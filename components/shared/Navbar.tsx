@@ -9,6 +9,7 @@ import MarkdownRenderer from './MarkdownRenderer'
 import { UI_TRANSLATIONS } from '../../lib/i18n'
 import { GENERAL_INFORMATION } from '../../data/thailand/generalInformation'
 import { VISA_GUIDE } from '../../data/thailand/visaGuide'
+import { VISA_GUIDE as VISA_GUIDE_VIETNAM } from '../../data/vietnam/visaGuide'
 import { TRAVEL_STYLE_GUIDE } from '../../data/thailand/travelStyleGuide'
 import { TRANSPORT_DETAILS } from '../../data/thailand/transportDetails'
 import { ACCOMMODATION_GUIDE } from '../../data/thailand/accommodationGuide'
@@ -67,11 +68,11 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
       footer: 'AsiaBuddy Services • Preserving Excellence in Thai Hospitality'
     },
     visa: {
-      title: t.visa?.modalTitle || 'Thailand Visa Guide',
+      title: country?.toLowerCase() !== 'thailand' ? 'Vietnam Visa Guide' : t.visa?.modalTitle || 'Thailand Visa Guide',
       subtitle: 'Immigration & Entry',
       icon: <FileCheck size={20} />,
-      content: VISA_GUIDE[currentLanguage as ThaiLanguage] || VISA_GUIDE['EN'],
-      footer: 'Essential Thai Travel Visa Guide • AsiaBuddy Services'
+      content: country?.toLowerCase() !== 'thailand' ? VISA_GUIDE_VIETNAM[currentLanguage as ThaiLanguage] || VISA_GUIDE_VIETNAM['EN'] : VISA_GUIDE[currentLanguage as ThaiLanguage] || VISA_GUIDE['EN'],
+      footer: country?.toLowerCase() !== 'thailand' ? 'Vietnam Visa Guide • AsiaBuddy Services' : 'Essential Thai Travel Visa Guide • AsiaBuddy Services'
     },
     'travel-types': {
       title: t.travelTypes?.modalTitle || 'Comprehensive Guide to Traveling in Thailand',
@@ -341,6 +342,17 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
                   >
                     {t.tourGuide || 'Tour Guide'}
                   </Link>
+                </div>
+              )}
+
+              {country && country.toLowerCase() !== 'thailand' && (
+                <div className="space-y-1">
+                  <button
+                    onClick={() => { setActiveModal('visa'); setShowMenu(false) }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
+                  >
+                    {t.visa?.title || 'Visa Info'}
+                  </button>
                 </div>
               )}
 
