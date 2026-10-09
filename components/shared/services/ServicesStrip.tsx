@@ -121,15 +121,17 @@ export default function ServicesStrip({
             )}
           </Link>
 
-          <Link
-            href={`/${country}/transport-tickets`}
-            className="flex flex-col items-center justify-center bg-white border border-gray-100 rounded-2xl py-4 px-2 shadow-sm hover:shadow-md hover:border-amber-300 hover:bg-amber-50 transition-all duration-200 cursor-pointer"
-          >
-            <span className="text-3xl mb-2 hover:scale-110 transition-transform">🚌</span>
-            <span className="text-xs font-semibold text-gray-700 text-center whitespace-nowrap">
-              Transport
-            </span>
-          </Link>
+          {country?.toLowerCase() === 'thailand' && (
+            <Link
+              href={`/${country}/transport-tickets`}
+              className="flex flex-col items-center justify-center bg-white border border-gray-100 rounded-2xl py-4 px-2 shadow-sm hover:shadow-md hover:border-amber-300 hover:bg-amber-50 transition-all duration-200 cursor-pointer"
+            >
+              <span className="text-3xl mb-2 hover:scale-110 transition-transform">🚌</span>
+              <span className="text-xs font-semibold text-gray-700 text-center whitespace-nowrap">
+                Transport
+              </span>
+            </Link>
+          )}
 
           <Link
             href={`/${country}/esim`}
