@@ -182,18 +182,20 @@ export default async function EsimPage({
                 </div>
                 <p className="text-gray-600 text-sm">Book your travel to {countryName}</p>
               </Link>
-              <Link
-                href={`/${country}/transport-tickets`}
-                className="bg-white border border-gray-200 hover:border-[#D4AF37] rounded-lg p-6 transition-all duration-300 group"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <Bus className="w-6 h-6 text-[#D4AF37]" />
-                  <h3 className="font-semibold text-gray-800 group-hover:text-[#D4AF37] transition-colors">
-                    Transport Tickets
-                  </h3>
-                </div>
-                <p className="text-gray-600 text-sm">Book buses, trains &amp; ferries</p>
-              </Link>
+              {country?.toLowerCase() === 'thailand' && (
+                <Link
+                  href={`/${country}/transport-tickets`}
+                  className="bg-white border border-gray-200 hover:border-[#D4AF37] rounded-lg p-6 transition-all duration-300 group"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <Bus className="w-6 h-6 text-[#D4AF37]" />
+                    <h3 className="font-semibold text-gray-800 group-hover:text-[#D4AF37] transition-colors">
+                      Transport Tickets
+                    </h3>
+                  </div>
+                  <p className="text-gray-600 text-sm">Book buses, trains &amp; ferries</p>
+                </Link>
+              )}
             </div>
           </div>
         </div>
