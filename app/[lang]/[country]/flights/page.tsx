@@ -103,9 +103,11 @@ export default async function FlightsPage({
             <p className="text-gray-700 text-lg leading-relaxed mb-4">
               {t.intro}
             </p>
-            <VisaModalTrigger country={country} language={targetLanguage}>
-              {t.visaLinkText} →
-            </VisaModalTrigger>
+            {country.toLowerCase() === 'thailand' && (
+              <VisaModalTrigger country={country} language={targetLanguage}>
+                {t.visaLinkText} →
+              </VisaModalTrigger>
+            )}
           </div>
 
           {/* Widget Labels and Widgets */}
