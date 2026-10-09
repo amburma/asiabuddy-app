@@ -247,13 +247,15 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
             <div className="w-[1px] h-6 bg-gray-200 mx-1" />
             
             {/* Tour Guide Button */}
-            <Link
-              href="/tourguide"
-              className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 text-gray-600 hover:border-[#C9A84C] hover:text-[#C9A84C] hover:bg-[#C9A84C]/5 transition-all"
-              title={t.tourGuideLogin || 'Tour Guide Login'}
-            >
-              <Headphones size={18} />
-            </Link>
+            {country?.toLowerCase() === 'thailand' && (
+              <Link
+                href="/tourguide"
+                className="flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 text-gray-600 hover:border-[#C9A84C] hover:text-[#C9A84C] hover:bg-[#C9A84C]/5 transition-all"
+                title={t.tourGuideLogin || 'Tour Guide Login'}
+              >
+                <Headphones size={18} />
+              </Link>
+            )}
             
             {/* Home Button */}
             {showRootHomeButton && (
