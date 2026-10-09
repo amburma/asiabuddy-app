@@ -452,7 +452,7 @@ Ist die Online-Beantragung des Vietnam E-Visums sicher?
 Ja, wenn Sie die offizielle Website der Regierung evisa.gov.vn nutzen. Vermeiden Sie andere Websites, die zusätzliche Gebühren verlangen.`
 
 // ===== FR =====
-const FR = `je besoin d'un visa pour le Vietnam ? Guide d'entrée (2026)
+const FR = `# Ai-je besoin d'un visa pour le Vietnam ? Guide d'entrée (2026)
 Dernière vérification : octobre 2026. De nombreux voyageurs peuvent entrer au Vietnam sans visa. Tous les autres peuvent demander un visa électronique (e-visa) en ligne. Votre passeport détermine l'option que vous pouvez utiliser, vérifiez donc le site officiel avant de réserver.
 
 Réponse rapide : quelle option est faite pour vous ?
@@ -560,7 +560,8 @@ L'application en ligne pour l'e-visa pour le Vietnam est-elle sûre ?
 Oui, si vous utilisez le site officiel du gouvernement, evisa.gov.vn. Évitez les autres sites qui facturent des frais supplémentaires.`
 
 // ===== ES =====
-const ES = `¿Necesito visado para Vietnam? Guía de entrada (2026)
+const ES = `# ¿Necesito visado para Vietnam? Guía de entrada (2026)
+
 Última comprobación: octubre de 2026. Muchos viajeros pueden entrar en Vietnam sin visado. Todos los demás pueden solicitar un visado electrónico (e-visa) en línea. Su pasaporte determina cuál puede utilizar, por lo que le recomendamos consultar el sitio web oficial antes de reservar.
 
 Respuesta rápida: ¿qué opción es la adecuada para usted?
