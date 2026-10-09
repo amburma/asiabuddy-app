@@ -60,7 +60,7 @@ export default async function TransportTicketsPage({
 
   // Thailand-only gate
   const countryData = countries.find(c => c.id === country)
-  if (countryData?.status !== 'live') {
+  if (countryData?.status !== 'live' || country.toLowerCase() !== 'thailand') {
     return (
       <div className="max-w-7xl mx-auto px-6 py-16 text-center">
         <h1 className="font-serif text-3xl md:text-4xl font-bold text-sacred-green mb-4">
