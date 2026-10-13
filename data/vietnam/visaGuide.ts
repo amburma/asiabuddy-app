@@ -55,7 +55,7 @@ If your country is not in the lists above, you need a visa or e-visa. This inclu
 
 ### Phu Quoc Island
 
-All nationalities can stay on Phu Quoc for up to 30 days without a visa. You must arrive from outside Vietnam and Phu Quoc must be your final stop. If you want to travel to the mainland, you need a visa or a visa-free right that covers it.
+All nationalities can stay on Phu Quoc for up to 30 days without a visa. You must arrive directly from outside Vietnam by air or sea. If you connect through another Vietnamese airport, you must stay in the transit area. Keep a ticket to leave Vietnam within 30 days, because officers may ask to see it. Phu Quoc must be your final stop. If you want to travel to the mainland, you need a visa or a visa-free right that covers it.
 
 Visa-free entry is for short visits. It does not allow work or a long stay.
 
@@ -173,7 +173,7 @@ const MM = `# ကျွန်ုပ်အနေဖြင့် ဗီယက်�
 
 ### ဖူးကွတ်ခ် ကျွန်း (Phu Quoc Island)
 
-နိုင်ငံသားအားလုံးသည် ဖူးကွတ်ခ်ကျွန်းတွင် ဗီဇာမလိုဘဲ ရက် ၃၀ အထိ နေထိုင်နိုင်ပါသည်။ သင်သည် ဗီယက်နမ်နိုင်ငံပြင်ပမှ ရောက်ရှိလာရမည်ဖြစ်ပြီး ဖူးကွတ်ခ်သည် သင်၏ နောက်ဆုံးမှတ်တိုင် ဖြစ်ရပါမည်။ အကယ်၍ သင်သည် ကုန်းတွင်းပိုင်းသို့ ခရီးသွားလိုပါက၊ ၎င်းကို အကျုံးဝင်စေမည့် ဗီဇာ သို့မဟုတ် ဗီဇာကင်းလွတ်ခွင့် ရပိုင်ခွင့် လိုအပ်ပါသည်။
+နိုင်ငံသားအားလုံးသည် ဖူးကွတ်ခ်ကျွန်းတွင် ဗီဇာမလိုဘဲ ရက် ၃၀ အထိ နေထိုင်နိုင်ပါသည်။ သင်သည် ဗီယက်နမ်နိုင်ငံပြင်ပမှ ရောက်ရှိလာရမည်ဖြစ်ပြီး ဖူးကွတ်ခ်သည် သင်၏ နောက်ဆုံးမှတ်တိုင် ဖြစ်ရပါမည်။ အကယ်၍ သင်သည် အခြား ဗီယက်နမ် လေဆိပ်တစ်ခုမှတစ်ဆင့် ချိတ်ဆက် သွားရောက်ပါက၊ ဖြတ်သန်းသွားလာရေးဧရိယာ (Transit Area) အတွင်း၌သာ နေထိုင်ရပါမည်။ အရာရှိများက ကြည့်ရှုရန် တောင်းဆိုနိုင်သည့်အတွက် ဗီယက်နမ်နိုင်ငံမှ ရက်ပေါင်း ၃၀ အတွင်း ပြန်လည်ထွက်ခွာမည့် လေယာဉ်လက်မှတ်ကို သိမ်းဆည်းထားပါ။ အကယ်၍ သင်သည် ကုန်းတွင်းပိုင်းသို့ ခရီးသွားလိုပါက၊ ၎င်းကို အကျုံးဝင်စေမည့် ဗီဇာ သို့မဟုတ် ဗီဇာကင်းလွတ်ခွင့် ရပိုင်ခွင့် လိုအပ်ပါသည်။
 
 ဗီဇာကင်းလွတ်ခွင့်သည် ခေတ္တလည်ပတ်မှုများအတွက် ဖြစ်သည်။ ၎င်းသည် အလုပ်လုပ်ခွင့် သို့မဟုတ် ရေရှည်နေထိုင်ခွင့် မပြုပါ။
 
@@ -290,7 +290,7 @@ const TH = `# ต้องใช้วีซ่าสำหรับเวีย
 
 ### เกาะฟู้โกว๊ก (Phu Quoc Island)
 
-ทุกสัญชาติสามารถพำนักบนเกาะฟู้โกว๊กได้สูงสุด 30 วันโดยไม่ต้องใช้วีซ่า คุณต้องเดินทางมาจากภายนอกประเทศเวียดนามและเกาะฟู้โกว๊กต้องเป็นจุดหมายปลายทางสุดท้ายของคุณ หากคุณต้องการเดินทางไปยังแผ่นดินใหญ่ คุณต้องมีวีซ่าหรือสิทธิฟรีวีซ่าที่ครอบคลุมการเดินทางนั้น
+ทุกสัญชาติสามารถพำนักบนเกาะฟู้โกว๊กได้สูงสุด 30 วันโดยไม่ต้องใช้วีซ่า คุณต้องเดินทางมาจากภายนอกประเทศเวียดนามและเกาะฟู้โกว๊กต้องเป็นจุดหมายปลายทางสุดท้ายของคุณ หากคุณเชื่อมต่อเที่ยวบินผ่านสนามบินอื่นในเวียดนาม คุณต้องอยู่ในพื้นที่ต่อเครื่อง (transit area) โปรดเก็บตั๋วเดินทางออกจากเวียดนามภายใน 30 วันไว้ เนื่องจากเจ้าหน้าที่อาจขอดู หากคุณต้องการเดินทางไปยังแผ่นดินใหญ่ คุณต้องมีวีซ่าหรือสิทธิฟรีวีซ่าที่ครอบคลุมการเดินทางนั้น
 
 การเดินทางเข้าโดยไม่ต้องใช้วีซ่าสำหรับการเยี่ยมชมระยะสั้นเท่านั้น ไม่อนุญาตให้ทำงานหรือพำนักระยะยาว
 
@@ -407,7 +407,7 @@ Wenn Ihr Land nicht in den obigen Listen enthalten ist, benötigen Sie ein Visum
 
 ### Insel Phu Quoc
 
-Alle Nationalitäten können sich bis zu 30 Tage ohne Visum auf Phu Quoc aufhalten. Sie müssen von außerhalb Vietnams anreisen und Phu Quoc muss Ihr letzter Zwischenstopp sein. Wenn Sie auf das Festland reisen möchten, benötigen Sie ein Visum oder ein entsprechendes visumfreies Recht.
+Alle Nationalitäten können sich bis zu 30 Tage ohne Visum auf Phu Quoc aufhalten. Sie müssen von außerhalb Vietnams anreisen und Phu Quoc muss Ihr letzter Zwischenstopp sein. Wenn Sie über einen anderen vietnamesischen Flughafen umsteigen, müssen Sie im Transitbereich bleiben. Bewahren Sie Ihr Ticket für die Ausreise aus Vietnam innerhalb von 30 Tagen auf, da die Beamten Sie möglicherweise darum bitten, es vorzuzeigen. Wenn Sie auf das Festland reisen möchten, benötigen Sie ein Visum oder ein entsprechendes visumfreies Recht.
 
 Die visumfreie Einreise gilt für kurze Aufenthalte. Sie erlaubt keine Arbeitsaufnahme und keinen Langzeitaufenthalt.
 
@@ -524,7 +524,7 @@ Si votre pays ne figure pas dans les listes ci-dessus, vous avez besoin d'un vis
 
 ### Île de Phu Quoc
 
-Toutes les nationalités peuvent séjourner sur l'île de Phu Quoc jusqu'à 30 jours sans visa. Vous devez arriver de l'extérieur du Vietnam et Phu Quoc doit être votre dernière étape. Si vous souhaitez vous rendre sur le continent, vous avez besoin d'un visa ou d'un droit d'exemption de visa qui le couvre.
+Toutes les nationalités peuvent séjourner sur l'île de Phu Quoc jusqu'à 30 jours sans visa. Vous devez arriver de l'extérieur du Vietnam et Phu Quoc doit être votre dernière étape. Si vous effectuez une correspondance dans un autre aéroport vietnamien, vous devez rester dans la zone de transit. Conservez un billet de sortie du Vietnam sous 30 jours, car les agents de l'immigration peuvent demander à le voir. Si vous souhaitez vous rendre sur le continent, vous avez besoin d'un visa ou d'un droit d'exemption de visa qui le couvre.
 
 L'entrée sans visa est destinée aux visites de courte durée. Elle ne permet pas de travailler ni de faire un long séjour.
 
@@ -641,7 +641,7 @@ Si su país no figura en las listas anteriores, necesita un visado o visado elec
 
 ### Isla de Phu Quoc
 
-Todas las nacionalidades pueden permanecer en Phu Quoc hasta 30 días sin visado. Debe llegar desde fuera de Vietnam y Phu Quoc debe ser su última escala. Si desea viajar a la parte continental, necesitará un visado o un derecho de exención de visado que lo cubra.
+Todas las nacionalidades pueden permanecer en Phu Quoc hasta 30 días sin visado. Debe llegar desde fuera de Vietnam y Phu Quoc debe ser su última escala. Si conecta a través de otro aeropuerto vietnamita, debe permanecer en la zona de tránsito. Conserve un billete para salir de Vietnam dentro de los 30 días, ya que los agentes pueden pedir verlo. Si desea viajar a la parte continental, necesitará un visado o un derecho de exención de visado que lo cubra.
 
 La entrada sin visado es para visitas cortas. No permite trabajar ni realizar estancias de larga duración.
 
