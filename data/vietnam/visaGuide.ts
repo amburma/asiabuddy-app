@@ -36,7 +36,7 @@ const EN = `# Do I Need a Visa for Vietnam? Entry Guide (2026)
 
 **Group 2: tourism only (until 14 August 2028)**
 
-* Belgium, Croatia, Czech Republic, Hungary, Luxembourg, Netherlands, Poland, Romania, Slovakia, Slovenia, Switzerland
+* Belgium, Bulgaria, Croatia, Czech Republic, Hungary, Luxembourg, Netherlands, Poland, Romania, Slovakia, Slovenia, Switzerland
 
 You do not need a tour group. Group 2 is for tourism only. For business, use a visa or e-visa.
 
@@ -154,7 +154,7 @@ const MM = `# ကျွန်ုပ်အနေဖြင့် ဗီယက်�
 
 **အုပ်စု ၂ - အပျော်စီးခရီးသွားအတွက်သာ (၁၄ ဩဂုတ် ၂၀၂၈ အထိ)**
 
-* ဘယ်လ်ဂျီယံ၊ ခရိုအေးရှား၊ ချက်သမ္မတနိုင်ငံ၊ ဟန်ဂေရီ၊ လူဇင်ဘတ်၊ နယ်သာလန်၊ ပိုလန်၊ ရိုမေးနီးယား၊ ဆလိုဗက်ကီးယား၊ ဆလိုဗေးနီးယား၊ ဆွစ်ဇာလန်
+* ဘယ်လ်ဂျီယံ၊ ဘူလ်ဂေးရီးယား၊ ခရိုအေးရှား၊ ချက်သမ္မတနိုင်ငံ၊ ဟန်ဂေရီ၊ လူဇင်ဘတ်၊ နယ်သာလန်၊ ပိုလန်၊ ရိုမေးနီးယား၊ ဆလိုဗက်ကီးယား၊ ဆလိုဗေးနီးယား၊ ဆွစ်ဇာလန်
 
 ခရီးသွားအဖွဲ့ဖြင့် သွားရန်မလိုအပ်ပါ။ အုပ်စု ၂ သည် အပျော်စီးခရီးသွားအတွက်သာ ဖြစ်သည်။ စီးပွားရေးကိစ္စအတွက် ဗီဇာ သို့မဟုတ် အီး-ဗီဇာကို အသုံးပြုပါ။
 
@@ -271,7 +271,7 @@ const TH = `# ต้องใช้วีซ่าสำหรับเวีย
 
 **กลุ่มที่ 2: เพื่อการท่องเที่ยวเท่านั้น (จนถึงวันที่ 14 สิงหาคม 2028)**
 
-* เบลเยียม, โครเอเชีย, สาธารณรัฐเช็ก, ฮังการี, ลักเซมเบิร์ก, เนเธอร์แลนด์, โปแลนด์, โรมาเนีย, สโลวาเกีย, สโลวีเนีย, สวิตเซอร์แลนด์
+* เบลเยียม, บัลแกเรีย, โครเอเชีย, สาธารณรัฐเช็ก, ฮังการี, ลักเซมเบิร์ก, เนเธอร์แลนด์, โปแลนด์, โรมาเนีย, สโลวาเกีย, สโลวีเนีย, สวิตเซอร์แลนด์
 
 คุณไม่จำเป็นต้องเดินทางกับกรุ๊ปทัวร์ กลุ่มที่ 2 สำหรับการท่องเที่ยวเท่านั้น สำหรับธุรกิจ ให้ใช้วีซ่าหรือ e-visa
 
@@ -388,7 +388,7 @@ const DE = `# Benötige ich ein Visum für Vietnam? Einreiseratgeber (2026)
 
 **Gruppe 2: Nur für Tourismus (bis zum 14. August 2028)**
 
-* Belgien, Kroatien, Tschechische Republik, Ungarn, Luxemburg, Niederlande, Polen, Rumänien, Slowakei, Slowenien, Schweiz
+* Belgien, Bulgarien, Kroatien, Tschechische Republik, Ungarn, Luxemburg, Niederlande, Polen, Rumänien, Slowakei, Slowenien, Schweiz
 
 Sie benötigen keine Reisegruppe. Gruppe 2 gilt nur für touristische Zwecke. Für geschäftliche Zwecke nutzen Sie ein Visum oder ein E-Visum.
 
@@ -505,7 +505,7 @@ const FR = `# Ai-je besoin d'un visa pour le Vietnam ? Guide d'entrée (2026)
 
 **Groupe 2 : tourisme uniquement (jusqu'au 14 août 2028)**
 
-* Belgique, Croatie, République tchèque, Hongrie, Luxembourg, Pays-Bas, Pologne, Roumanie, Slovaquie, Slovénie, Suisse
+* Belgique, Bulgarie, Croatie, République tchèque, Hongrie, Luxembourg, Pays-Bas, Pologne, Roumanie, Slovaquie, Slovénie, Suisse
 
 Vous n'avez pas besoin d'un groupe touristique. Le groupe 2 concerne le tourisme uniquement. Pour les affaires, utilisez un visa ou un e-visa.
 
@@ -622,7 +622,7 @@ const ES = `# ¿Necesito visado para Vietnam? Guía de entrada (2026)
 
 **Grupo 2: solo turismo (hasta el 14 de agosto de 2028)**
 
-* Bélgica, Croacia, República Checa, Hungría, Luxemburgo, Países Bajos, Polonia, Rumanía, Eslovaquia, Eslovenia, Suiza
+* Bélgica, Bulgaria, Croacia, República Checa, Hungría, Luxemburgo, Países Bajos, Polonia, Rumanía, Eslovaquia, Eslovenia, Suiza
 
 No necesita un grupo turístico. El Grupo 2 es exclusivo para turismo. Para negocios, utilice un visado o un visado electrónico.
 
