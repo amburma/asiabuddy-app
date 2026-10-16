@@ -3,6 +3,7 @@ import { translateText } from '@/lib/translate'
 import TourServiceCard from '@/components/shared/services/TourServiceCard'
 import { getGygLinksByCity } from '@/lib/queries/gygLinks'
 import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
+import { VIETNAM_GENERIC_UI, mergeVietnamGeneric } from '@/lib/i18n-vietnam-generic'
 import { MapPin, Calendar, Plane } from 'lucide-react'
 import { buildAlternates } from '@/lib/seo-alternates'
 import { getDefaultCity, getCountryCities } from '@/data/countryDefaults'
@@ -59,7 +60,10 @@ export default async function ActivitiesPage({
   const city = cityParam || getDefaultCity(country)
   const gygLinks = await getGygLinksByCity(city)
 
-  const t = UI_TRANSLATIONS[targetLanguage].activities
+  const baseActivities = UI_TRANSLATIONS[targetLanguage].activities
+  const t = country.toLowerCase() === 'thailand'
+    ? baseActivities
+    : mergeVietnamGeneric(baseActivities, VIETNAM_GENERIC_UI[targetLanguage].activitiesGeneric)
   const servicesStrip = UI_TRANSLATIONS[targetLanguage].servicesStrip
   const destinationTabs = UI_TRANSLATIONS[targetLanguage].destinationTabs
 

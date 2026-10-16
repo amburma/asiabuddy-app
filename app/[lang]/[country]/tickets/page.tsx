@@ -2,6 +2,7 @@ import Link from 'next/link'
 import TicketServiceCard from '@/components/shared/services/TicketServiceCard'
 import { getKlookLinksByCity } from '@/lib/queries/klookLinks'
 import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
+import { VIETNAM_GENERIC_UI, mergeVietnamGeneric } from '@/lib/i18n-vietnam-generic'
 import { SupportedLanguage } from '@/types/country'
 import { MapPin, Calendar, Plane } from 'lucide-react'
 import { buildAlternates } from '@/lib/seo-alternates'
@@ -59,7 +60,10 @@ export default async function TicketsPage({
   const city = cityParam || getDefaultCity(country)
   const klookLinks = await getKlookLinksByCity(city)
 
-  const t = UI_TRANSLATIONS[targetLanguage].tickets
+  const baseTickets = UI_TRANSLATIONS[targetLanguage].tickets
+  const t = country.toLowerCase() === 'thailand'
+    ? baseTickets
+    : mergeVietnamGeneric(baseTickets, VIETNAM_GENERIC_UI[targetLanguage].ticketsGeneric)
   const servicesStrip = UI_TRANSLATIONS[targetLanguage].servicesStrip
   const destinationTabs = UI_TRANSLATIONS[targetLanguage].destinationTabs
 
