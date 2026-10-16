@@ -432,3 +432,20 @@ export const VIETNAM_GENERIC_UI: Record<SupportedLanguage, VietnamGenericUI> = {
     }
   }
 };
+
+export function mergeVietnamGeneric<T extends object>(base: T, generic: object | undefined): T {
+  if (!generic) return base;
+  const result: Record<string, unknown> = { ...(base as Record<string, unknown>) };
+  for (const [key, value] of Object.entries(generic as Record<string, unknown>)) {
+    const current = result[key];
+    if (typeof value === 'string') {
+      if (value.trim() !== '') result[key] = value;
+    } else if (value && typeof value === 'object' && !Array.isArray(value)) {
+      result[key] = mergeVietnamGeneric(
+        (current && typeof current === 'object' ? current : {}) as object,
+        value as object
+      );
+    }
+  }
+  return result as T;
+}

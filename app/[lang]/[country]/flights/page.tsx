@@ -9,6 +9,7 @@ import FlightTrustBadges from '@/components/shared/FlightTrustBadges'
 import TripComFlightButton from '@/components/shared/services/TripComFlightButton'
 import PricingCalendarWidget from '@/components/shared/services/PricingCalendarWidget'
 import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
+import { VIETNAM_GENERIC_UI, mergeVietnamGeneric } from '@/lib/i18n-vietnam-generic'
 import { SupportedLanguage } from '@/types/country'
 import { Plane, Calendar, MapPin, Clock } from 'lucide-react'
 import dynamicImport from 'next/dynamic'
@@ -59,7 +60,10 @@ export default async function FlightsPage({
   const defaultCity = getDefaultCity(country)
   const flightLinks = await getFlightLinksByCity(defaultCity)
 
-  const t = UI_TRANSLATIONS[targetLanguage].flights
+  const baseFlights = UI_TRANSLATIONS[targetLanguage].flights
+  const t = country.toLowerCase() === 'thailand'
+    ? baseFlights
+    : mergeVietnamGeneric(baseFlights, VIETNAM_GENERIC_UI[targetLanguage].flightsGeneric)
   const servicesStrip = UI_TRANSLATIONS[targetLanguage].servicesStrip
   const destinationTabs = UI_TRANSLATIONS[targetLanguage].destinationTabs
 
