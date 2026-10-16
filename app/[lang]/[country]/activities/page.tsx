@@ -242,7 +242,7 @@ export default async function ActivitiesPage({
                         {servicesStrip.flight}
                       </h3>
                     </div>
-                    <p className="text-gray-600 text-sm">Book your travel to Thailand</p>
+                    <p className="text-gray-600 text-sm">Book your travel to {countryName}</p>
                   </Link>
                   <Link 
                     href={`/${country}/tickets`}

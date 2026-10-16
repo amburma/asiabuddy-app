@@ -142,7 +142,7 @@ export default async function RentalPage({
             <>
               <div className="mb-8">
                 <p className="text-sm text-gray-600 mb-2">
-                  Powered by <span className="font-semibold text-gold-deep">QEEQ</span> — Reliable car rentals across Thailand
+                  Powered by <span className="font-semibold text-gold-deep">QEEQ</span> — Reliable car rentals across {countryName}
                 </p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
