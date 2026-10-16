@@ -5,6 +5,7 @@ import AgodaSearchWidget from '@/components/shared/services/AgodaSearchWidget'
 import HotelProviderRedirectCard from '@/components/shared/services/HotelProviderRedirectCard'
 import AccommodationChatWrapper from '@/components/shared/AccommodationChatWrapper'
 import { UI_TRANSLATIONS } from '@/lib/i18n'
+import { VIETNAM_GENERIC_UI, mergeVietnamGeneric } from '@/lib/i18n-vietnam-generic'
 import { SupportedLanguage } from '@/types/country'
 import dynamicImport from 'next/dynamic'
 
@@ -18,7 +19,10 @@ interface HotelsPageClientProps {
 export default function HotelsPageClient({ country, targetLanguage }: HotelsPageClientProps) {
   const [selectedCity, setSelectedCity] = useState<string>('Bangkok')
 
-  const t = UI_TRANSLATIONS[targetLanguage].hotels
+  const baseHotels = UI_TRANSLATIONS[targetLanguage].hotels
+  const t = country.toLowerCase() === 'thailand'
+    ? baseHotels
+    : mergeVietnamGeneric(baseHotels, VIETNAM_GENERIC_UI[targetLanguage].hotelsGeneric)
 
   return (
     <div className="min-h-screen bg-white">

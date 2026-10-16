@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import { UI_TRANSLATIONS, normalizeLocale } from '@/lib/i18n'
+import { VIETNAM_GENERIC_UI, mergeVietnamGeneric } from '@/lib/i18n-vietnam-generic'
+import { getDestinationCountLabel } from '@/data/countryDefaults'
 import { Metadata } from 'next'
 import { buildAlternates } from '@/lib/seo-alternates'
 import Script from 'next/script'
@@ -31,7 +33,10 @@ export default async function AboutPage({
 }) {
   const { lang, country } = await params
   const targetLanguage = normalizeLocale(lang)
-  const t = (UI_TRANSLATIONS[targetLanguage as keyof typeof UI_TRANSLATIONS] || UI_TRANSLATIONS.EN).about
+  const baseAbout = (UI_TRANSLATIONS[targetLanguage as keyof typeof UI_TRANSLATIONS] || UI_TRANSLATIONS.EN).about
+  const t = country.toLowerCase() === 'thailand'
+    ? baseAbout
+    : mergeVietnamGeneric(baseAbout, VIETNAM_GENERIC_UI[targetLanguage as keyof typeof VIETNAM_GENERIC_UI].aboutGeneric)
   const canonicalUrl = `https://asiabuddy.app/${lang}/${country}/about`
   return (
     <div className="min-h-screen bg-sacred-bg">
@@ -88,7 +93,7 @@ export default async function AboutPage({
               {[
                 { number: '6', label: t.stat1 },
                 { number: '24/7', label: t.stat2 },
-                { number: '7+', label: t.stat3 },
+                { number: getDestinationCountLabel(country), label: t.stat3 },
                 { number: '100%', label: t.stat4 },
               ].map((stat) => (
                 <div

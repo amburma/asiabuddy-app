@@ -70,3 +70,12 @@ export function getCountryTicketCities(country: string): CityOption[] {
   }
   return thailandTicketCities
 }
+
+const destinationCountLabels: Record<string, string> = {
+  thailand: '7+',
+  vietnam: '2+',
+}
+
+export function getDestinationCountLabel(country: string): string {
+  return destinationCountLabels[country.toLowerCase()] ?? destinationCountLabels.thailand
+}
