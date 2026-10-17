@@ -7,6 +7,7 @@ import { Menu, Globe, Home, Info, FileCheck, Plane, Bus, Home as HomeIcon, Utens
 import GuideModal from './GuideModal'
 import MarkdownRenderer from './MarkdownRenderer'
 import { UI_TRANSLATIONS } from '../../lib/i18n'
+import { VIETNAM_BRAND } from '../../lib/i18n-vietnam-generic'
 import { GENERAL_INFORMATION } from '../../data/thailand/generalInformation'
 import { VISA_GUIDE } from '../../data/thailand/visaGuide'
 import { VISA_GUIDE as VISA_GUIDE_VIETNAM } from '../../data/vietnam/visaGuide'
@@ -216,7 +217,7 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
               <span className="text-[10px] uppercase font-bold tracking-widest hidden sm:inline">{t.menu}</span>
             </button>
               <div className="flex flex-col">
-              <h1 className="text-xl md:text-2xl font-serif text-gold-deep leading-none">{t.brand?.name || UI_TRANSLATIONS.EN.brand.name}</h1>
+              <h1 className="text-xl md:text-2xl font-serif text-gold-deep leading-none">{country?.toLowerCase() === 'vietnam' ? VIETNAM_BRAND : (t.brand?.name || UI_TRANSLATIONS.EN.brand.name)}</h1>
               <p className="text-[8px] uppercase tracking-[0.4em] font-bold text-gray-400 mt-1">{t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}</p>
             </div>
           </div>
