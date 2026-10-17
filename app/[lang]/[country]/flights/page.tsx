@@ -133,7 +133,7 @@ export default async function FlightsPage({
           {/* Pricing Calendar Widget */}
           {country.toLowerCase() === 'thailand' && (
             <div className="mb-8">
-              <PricingCalendarWidget />
+              <PricingCalendarWidget language={targetLanguage} />
             </div>
           )}
 

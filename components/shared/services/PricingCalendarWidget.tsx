@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
-export default function PricingCalendarWidget() {
+export default function PricingCalendarWidget({ language }: { language?: string }) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -20,7 +20,13 @@ export default function PricingCalendarWidget() {
   return (
     <div className="w-full">
       <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-        ရက်အလိုက် ဈေးနှုန်းများ
+        {(!language || language.toUpperCase() === 'MM') ? (
+          <>
+            ရက်အလိုက် ဈေးနှုန်းများ
+          </>
+        ) : (
+          'Prices by Day'
+        )}
       </h3>
       <div ref={containerRef} className="w-full flex justify-center min-h-[300px]" />
     </div>
