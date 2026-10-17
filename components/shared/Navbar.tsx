@@ -7,7 +7,7 @@ import { Menu, Globe, Home, Info, FileCheck, Plane, Bus, Home as HomeIcon, Utens
 import GuideModal from './GuideModal'
 import MarkdownRenderer from './MarkdownRenderer'
 import { UI_TRANSLATIONS } from '../../lib/i18n'
-import { VIETNAM_BRAND } from '../../lib/i18n-vietnam-generic'
+import { VIETNAM_BRAND, VIETNAM_MODAL_TITLES } from '../../lib/i18n-vietnam-generic'
 import { GENERAL_INFORMATION } from '../../data/thailand/generalInformation'
 import { VISA_GUIDE } from '../../data/thailand/visaGuide'
 import { VISA_GUIDE as VISA_GUIDE_VIETNAM } from '../../data/vietnam/visaGuide'
@@ -61,6 +61,8 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
 
   const t = UI_TRANSLATIONS[currentLanguage as keyof typeof UI_TRANSLATIONS] || UI_TRANSLATIONS.EN
 
+  const vnTitles = VIETNAM_MODAL_TITLES[currentLanguage] || VIETNAM_MODAL_TITLES.EN
+
   const modalContent: Record<string, { title: string; subtitle: string; icon: React.ReactNode; content: string; footer?: string }> = {
     information: {
       title: t.infoModalTitle || 'Thailand Essentials Guide',
@@ -70,18 +72,18 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
       footer: 'AsiaBuddy Services • Preserving Excellence in Thai Hospitality'
     },
     visa: {
-      title: country?.toLowerCase() !== 'thailand' ? 'Vietnam Visa Guide' : t.visa?.modalTitle || 'Thailand Visa Guide',
+      title: country?.toLowerCase() !== 'thailand' ? vnTitles.visa : t.visa?.modalTitle || 'Thailand Visa Guide',
       subtitle: 'Immigration & Entry',
       icon: <FileCheck size={20} />,
       content: country?.toLowerCase() !== 'thailand' ? VISA_GUIDE_VIETNAM[currentLanguage as ThaiLanguage] || VISA_GUIDE_VIETNAM['EN'] : VISA_GUIDE[currentLanguage as ThaiLanguage] || VISA_GUIDE['EN'],
-      footer: country?.toLowerCase() !== 'thailand' ? 'Vietnam Visa Guide • AsiaBuddy Services' : 'Essential Thai Travel Visa Guide • AsiaBuddy Services'
+      footer: country?.toLowerCase() !== 'thailand' ? `${vnTitles.visa} • ${t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}` : 'Essential Thai Travel Visa Guide • AsiaBuddy Services'
     },
     budget: {
-      title: 'Vietnam Budget Guide',
+      title: vnTitles.budget,
       subtitle: 'Smart Travel Tips',
       icon: <Wallet size={20} />,
       content: BUDGET_GUIDE_VIETNAM[currentLanguage as ThaiLanguage] || BUDGET_GUIDE_VIETNAM['EN'],
-      footer: 'Vietnam Budget Guide • AsiaBuddy Services'
+      footer: `${vnTitles.budget} • ${t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}`
     },
     'travel-types': {
       title: t.travelTypes?.modalTitle || 'Comprehensive Guide to Traveling in Thailand',
@@ -514,7 +516,7 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
                       onClick={() => setShowMenu(false)}
                       className="block px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
                     >
-                        Destinations
+                        {country?.toLowerCase() === 'vietnam' ? (t.destinations || UI_TRANSLATIONS.EN.destinations) : 'Destinations'}
                     </Link>
                   </div>
                 </>
