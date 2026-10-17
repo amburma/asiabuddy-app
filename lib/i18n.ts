@@ -897,7 +897,7 @@ const ENGLISH_UI = {
     }
   },
   "activities": {
-    "title": "ทัวร์และกิจกรรมในประเทศไทย",
+    "title": "Tours & Activities in Thailand",
     "intro": "Discover curated tours and experiences across Thailand with GetYourGuide. From cooking classes in Chiang Mai to snorkeling adventures in Krabi, explore authentic local activities led by expert guides. Whether you're seeking cultural immersion, outdoor adventures, or hidden gems, find the perfect experience for your journey.",
     "continuePlanning": "Continue Planning Your Trip",
     "faq": {
