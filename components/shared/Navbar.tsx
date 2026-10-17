@@ -577,15 +577,16 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
       {/* Language Welcome Modal */}
       {showLanguageWelcome && (
         <LanguageWelcome
+          country={country}
           onStart={(lang: ThaiLanguage) => {
             const upper = lang.toUpperCase()
             const newLangLowercase = lang.toLowerCase()
             document.cookie = `NEXT_LOCALE=${upper};path=/;max-age=31536000`
             setShowLanguageWelcome(false)
-            
+
             // Navigate to the new locale-prefixed URL
             const pathSegments = pathname.split('/').filter(Boolean)
-            
+
             // Strip existing locale prefix if present
             let pathWithoutLocale = pathname
             if (pathSegments.length > 0 && ['en', 'mm', 'th', 'de', 'fr', 'es'].includes(pathSegments[0].toLowerCase())) {
@@ -594,7 +595,7 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
               // Special case: if on root, keep it as is
               pathWithoutLocale = ''
             }
-            
+
             // Build new path with new locale prefix
             const newPath = `/${newLangLowercase}${pathWithoutLocale}${searchParams.toString() ? '?' + searchParams.toString() : ''}`
             router.push(newPath)

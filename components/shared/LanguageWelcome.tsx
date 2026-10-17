@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'motion/react';
 import { ThaiLanguage } from '../../types/country';
 import { Sparkles, Languages } from 'lucide-react';
 import { UI_TRANSLATIONS } from '../../lib/i18n';
+import { VIETNAM_BRAND, VIETNAM_WELCOME, VIETNAM_GREETING } from '@/lib/i18n-vietnam-generic';
 
 interface Props {
   onStart: (lang: ThaiLanguage) => void;
+  country?: string;
 }
 
 const PagodaIcon = ({ size = 48, className = "" }: { size?: number; className?: string }) => (
@@ -33,8 +35,9 @@ const LANGUAGES: { id: ThaiLanguage; label: string; flag: string; start: string 
   { id: 'FR', label: 'Français', flag: '🇫🇷', start: 'Démarrer' },
 ];
 
-export default function LanguageWelcome({ onStart }: Props) {
+export default function LanguageWelcome({ onStart, country }: Props) {
   const [selected, setSelected] = useState<ThaiLanguage | null>(null);
+  const isVietnam = country?.toLowerCase() === 'vietnam';
 
   const currentLang = LANGUAGES.find(l => l.id === selected);
 
@@ -65,7 +68,7 @@ export default function LanguageWelcome({ onStart }: Props) {
                 exit={{ opacity: 0, y: -10 }}
                 className="text-white font-serif tracking-wide font-medium text-lg md:text-2xl"
               >
-                {UI_TRANSLATIONS[selected]?.welcome || "Sawasdee"}
+                {isVietnam ? VIETNAM_WELCOME : (UI_TRANSLATIONS[selected]?.welcome || "Sawasdee")}
               </motion.span>
             ) : (
               <motion.span
@@ -75,7 +78,7 @@ export default function LanguageWelcome({ onStart }: Props) {
                 exit={{ opacity: 0 }}
                 className="text-white/90 font-serif tracking-[0.3em] font-medium text-lg uppercase"
               >
-                Sawasdee
+                {isVietnam ? VIETNAM_GREETING : "Sawasdee"}
               </motion.span>
             )}
           </AnimatePresence>
@@ -88,7 +91,7 @@ export default function LanguageWelcome({ onStart }: Props) {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl md:text-6xl mb-2 text-sacred-green">ThaiGuide</h1>
+          <h1 className="text-4xl md:text-6xl mb-2 text-sacred-green">{isVietnam ? VIETNAM_BRAND : 'ThaiGuide'}</h1>
           <p className="text-[10px] uppercase tracking-[0.4em] font-bold text-gray-700 italic">{(UI_TRANSLATIONS[selected || 'EN']?.appTagline) || 'AsiaBuddy Digital Concierge'}</p>
         </motion.div>
 

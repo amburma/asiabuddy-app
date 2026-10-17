@@ -449,3 +449,7 @@ export function mergeVietnamGeneric<T extends object>(base: T, generic: object |
   }
   return result as T;
 }
+
+export const VIETNAM_BRAND = 'VietnamGuide';
+export const VIETNAM_WELCOME = 'Welcome to Vietnam from VietnamGuide';
+export const VIETNAM_GREETING = 'Xin chào';
