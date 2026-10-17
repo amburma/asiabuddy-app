@@ -455,7 +455,7 @@ export const VIETNAM_MODAL_TITLES: Record<string, { visa: string; budget: string
   MM: { visa: 'ဗီယက်နမ် ဗီဇာ လမ်းညွှန်', budget: 'ဗီယက်နမ် ဘတ်ဂျက် လမ်းညွှန်' },
   TH: { visa: 'คู่มือวีซ่าเวียดนาม', budget: 'คู่มืองบประมาณเวียดนาม' },
   DE: { visa: 'Vietnam-Visum-Leitfaden', budget: 'Vietnam-Budget-Leitfaden' },
-  FR: { visa: 'Guide des visas pour le Viêt Nam', budget: 'Guide du budget pour le Viêt Nam' },
+  FR: { visa: 'Guide des visas pour le Vietnam', budget: 'Guide du budget pour le Vietnam' },
   ES: { visa: 'Guía de visados de Vietnam', budget: 'Guía de presupuestos de Vietnam' },
 };
 
