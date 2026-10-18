@@ -151,7 +151,7 @@ export default async function CountryPage({
           <Image
             alt="Background"
             className="w-full h-full object-cover opacity-20 grayscale-[20%]"
-            src="/images/hero-background.webp"
+            src={lowerCountry === 'vietnam' ? '/images/vietnam-destination-hero.jpg' : '/images/hero-background.webp'}
             fill
             priority
             sizes="100vw"
