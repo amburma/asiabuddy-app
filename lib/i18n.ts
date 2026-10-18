@@ -598,7 +598,7 @@ const ENGLISH_UI = {
     "suggestionsLabel": "Common Food Inquiries",
     "detailsTitle": "Thailand Food Guide",
     "guideLink": "Thailand Food Guide — For more information",
-    "modalTitle": "คู่มืออาหารไทย",
+    "modalTitle": "Food Guide",
     "modalSubtitle": "Local Cuisine & Dining Safety",
     "suggestions": [
       "Street food safety",
