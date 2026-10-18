@@ -81,6 +81,7 @@ export default function ServicesStrip({
             )}
           </Link>
 
+          {country?.toLowerCase() === 'thailand' && (
           <Link
             href={`/${country}/transfers`}
             className="flex flex-col items-center justify-center bg-white border border-gray-100 rounded-2xl py-4 px-2 shadow-sm hover:shadow-md hover:border-amber-300 hover:bg-amber-50 transition-all duration-200 cursor-pointer"
@@ -95,7 +96,9 @@ export default function ServicesStrip({
               </span>
             )}
           </Link>
+          )}
 
+          {country?.toLowerCase() === 'thailand' && (
           <Link
             href={`/${country}/rental`}
             className="flex flex-col items-center justify-center bg-white border border-gray-100 rounded-2xl py-4 px-2 shadow-sm hover:shadow-md hover:border-amber-300 hover:bg-amber-50 transition-all duration-200 cursor-pointer"
@@ -105,6 +108,7 @@ export default function ServicesStrip({
               {uiT.servicesStrip.carRental}
             </span>
           </Link>
+          )}
 
           <Link
             href={`/${country}/activities`}
