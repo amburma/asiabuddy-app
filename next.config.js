@@ -71,11 +71,7 @@ const nextConfig = {
         destination: '/about',
         permanent: true,
       },
-      {
-        source: '/vietnam/about',
-        destination: '/about',
-        permanent: true,
-      },
+
       {
         source: '/japan/about',
         destination: '/about',
