@@ -18,6 +18,7 @@ export async function generateMetadata({
 }) {
   const { lang, country: countrySlug } = await params
   const country = countrySlug.charAt(0).toUpperCase() + countrySlug.slice(1)
+  const heroImage = countrySlug.toLowerCase() === 'vietnam' ? 'vietnam-destination-hero.jpg' : 'thailand-destination-hero.jpg'
 
   const alternates = buildAlternates(lang, `/${countrySlug}/activities`)
 
@@ -30,7 +31,7 @@ export async function generateMetadata({
       url: `https://asiabuddy.app/${lang}/${countrySlug}/activities`,
       images: [
         {
-          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          url: `https://asiabuddy.app/images/${heroImage}`,
           width: 1200,
           height: 630,
           alt: 'AsiaBuddy - Travel Asia Like a Local',
