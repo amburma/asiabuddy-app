@@ -65,6 +65,20 @@ export default function HotelsPageClient({ country, targetLanguage }: HotelsPage
           )}
 
           {/* Hotel Provider Search Section */}
+          {country.toLowerCase() === 'vietnam' && (
+            <div className="flex gap-2 mb-4">
+              {Object.values(VIETNAM_SLUG_TO_NAME).map((name) => (
+                <button
+                  key={name}
+                  type="button"
+                  onClick={() => setSelectedCity(name)}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold border transition-colors ${selectedCity === name ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-gray-700 border-gray-200 hover:border-amber-300'}`}
+                >
+                  {name}
+                </button>
+              ))}
+            </div>
+          )}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Agoda Widget - Only for Thailand (Bangkok-specific) */}
             {(country === 'thailand' || country === 'vietnam') && (
