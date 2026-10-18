@@ -12,6 +12,7 @@ import { getDefaultCity } from '@/data/countryDefaults'
 
 const ChatWidgetGrid = dynamicImport(() => import('@/components/shared/ChatWidgetGrid'))
 const VIETNAM_SLUG_TO_NAME: Record<string, string> = { 'hanoi': 'Hanoi', 'ho-chi-minh-city': 'Ho Chi Minh City' }
+const VIETNAM_AGODA_CITY_ID: Record<string, number> = { 'Hanoi': 2758, 'Ho Chi Minh City': 13170 }
 
 interface HotelsPageClientProps {
   country: string
@@ -81,9 +82,23 @@ export default function HotelsPageClient({ country, targetLanguage }: HotelsPage
           )}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Agoda Widget - Only for Thailand (Bangkok-specific) */}
-            {(country === 'thailand' || country === 'vietnam') && (
+            {country === 'thailand' && (
               <div className="lg:col-span-1" key={selectedCity}>
                 <AgodaSearchWidget cityName={selectedCity} country={country} />
+              </div>
+            )}
+            {country.toLowerCase() === 'vietnam' && VIETNAM_AGODA_CITY_ID[selectedCity] && (
+              <div className="lg:col-span-1 bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
+                <h3 className="font-semibold text-gray-900 mb-2">Search Agoda</h3>
+                <p className="text-sm text-gray-600 mb-4">Compare hotel prices in {selectedCity}.</p>
+                <a
+                  href={`https://www.agoda.com/partners/partnersearch.aspx?pcs=1&cid=1968300&hl=en-us&city=${VIETNAM_AGODA_CITY_ID[selectedCity]}`}
+                  target="_blank"
+                  rel="nofollow noopener sponsored"
+                  className="inline-block w-full text-center bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3 rounded-xl transition-colors"
+                >
+                  Search hotels in {selectedCity} on Agoda
+                </a>
               </div>
             )}
 
