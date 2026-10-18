@@ -79,6 +79,7 @@ export async function generateMetadata({
   params: Promise<{ lang: string; country: string }>
 }): Promise<Metadata> {
   const { lang, country } = await params
+  const heroImage = country.toLowerCase() === 'vietnam' ? 'vietnam-destination-hero.jpg' : 'thailand-destination-hero.jpg'
   const activeCountryIds = countries.filter(c => c.status === 'live').map(c => c.id)
   if (!activeCountryIds.includes(country.toLowerCase())) {
     return {
@@ -109,7 +110,7 @@ export async function generateMetadata({
       type: 'website',
       images: [
         {
-          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          url: `https://asiabuddy.app/images/${heroImage}`,
           width: 1200,
           height: 630,
           alt: 'AsiaBuddy - Travel Asia Like a Local',
@@ -122,7 +123,7 @@ export async function generateMetadata({
       description,
       images: [
         {
-          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          url: `https://asiabuddy.app/images/${heroImage}`,
           width: 1200,
           height: 630,
           alt: 'AsiaBuddy - Travel Asia Like a Local',
