@@ -8,8 +8,10 @@ import { UI_TRANSLATIONS } from '@/lib/i18n'
 import { VIETNAM_GENERIC_UI, mergeVietnamGeneric } from '@/lib/i18n-vietnam-generic'
 import { SupportedLanguage } from '@/types/country'
 import dynamicImport from 'next/dynamic'
+import { getDefaultCity } from '@/data/countryDefaults'
 
 const ChatWidgetGrid = dynamicImport(() => import('@/components/shared/ChatWidgetGrid'))
+const VIETNAM_SLUG_TO_NAME: Record<string, string> = { 'hanoi': 'Hanoi', 'ho-chi-minh-city': 'Ho Chi Minh City' }
 
 interface HotelsPageClientProps {
   country: string
@@ -17,7 +19,7 @@ interface HotelsPageClientProps {
 }
 
 export default function HotelsPageClient({ country, targetLanguage }: HotelsPageClientProps) {
-  const [selectedCity, setSelectedCity] = useState<string>('Bangkok')
+  const [selectedCity, setSelectedCity] = useState<string>(country.toLowerCase() === 'vietnam' ? (VIETNAM_SLUG_TO_NAME[getDefaultCity(country)] || 'Hanoi') : 'Bangkok')
 
   const baseHotels = UI_TRANSLATIONS[targetLanguage].hotels
   const t = country.toLowerCase() === 'thailand'
@@ -65,16 +67,18 @@ export default function HotelsPageClient({ country, targetLanguage }: HotelsPage
           {/* Hotel Provider Search Section */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Agoda Widget - Only for Thailand (Bangkok-specific) */}
-            {country === 'thailand' && (
+            {(country === 'thailand' || country === 'vietnam') && (
               <div className="lg:col-span-1" key={selectedCity}>
-                <AgodaSearchWidget cityName={selectedCity} />
+                <AgodaSearchWidget cityName={selectedCity} country={country} />
               </div>
             )}
 
             {/* Trip.com and Booking.com Redirect Cards */}
-            <div className="lg:col-span-2">
-              <HotelProviderRedirectCard city={selectedCity} />
-            </div>
+            {country === 'thailand' && (
+              <div className="lg:col-span-2">
+                <HotelProviderRedirectCard city={selectedCity} />
+              </div>
+            )}
           </div>
         </div>
       </div>
