@@ -2,12 +2,14 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { THAILAND_CITIES, normalizeCityName } from '../../../src/config/thailandCities';
+import { VIETNAM_CITIES } from '../../../src/config/vietnamCities';
 
 interface AgodaSearchWidgetProps {
   cityName?: string;
+  country?: string;
 }
 
-export default function AgodaSearchWidget({ cityName = "Bangkok" }: AgodaSearchWidgetProps) {
+export default function AgodaSearchWidget({ cityName = "Bangkok", country }: AgodaSearchWidgetProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const [scriptError, setScriptError] = useState(false);
@@ -30,10 +32,10 @@ export default function AgodaSearchWidget({ cityName = "Bangkok" }: AgodaSearchW
       }
     });
 
-    // Normalize city name to handle language variants (e.g., Burmese "ချင်းမိုင်" -> "Chiang Mai")
-    const normalizedCityName = normalizeCityName(cityName);
-    // Lookup Agoda city ID from config
-    const cityData = THAILAND_CITIES[normalizedCityName] || THAILAND_CITIES['Bangkok'];
+    const isVietnam = country && country.toLowerCase() === 'vietnam';
+    const cityData = isVietnam ? VIETNAM_CITIES[cityName] : THAILAND_CITIES[normalizeCityName(cityName)] || THAILAND_CITIES['Bangkok'];
+    if (isVietnam && !cityData) return;
+    const normalizedCityName = isVietnam ? cityName : normalizeCityName(cityName);
     const agodaCityId = cityData.agodaCityId;
 
     // Generate unique widget id/name/crt per city to bypass Agoda's internal caching
@@ -70,7 +72,7 @@ export default function AgodaSearchWidget({ cityName = "Bangkok" }: AgodaSearchW
         stg.Language = "en-us";
         stg.Cid = "1968300";
         stg.City = agodaCityId.toString();
-        stg.DestinationName = `${normalizedCityName}, Thailand`;
+        stg.DestinationName = `${normalizedCityName}, ${country && country.toLowerCase() === 'vietnam' ? 'Vietnam' : 'Thailand'}`;
         stg.OverideConf = false;
 
         if (typeof (window as any).AgdSherpa === 'function') {
