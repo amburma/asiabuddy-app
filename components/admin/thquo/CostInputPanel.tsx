@@ -197,7 +197,7 @@ const CostInputPanelComponent: React.FC<CostInputPanelProps> = ({
         }
         return;
       }
-      const { data, error } = await supabase.from('destinations').select('name');
+      const { data, error } = await supabase.from('destinations').select('name').eq('country', 'thailand');
       if (cancelled) return;
       if (error) {
         setDestinationsError(error.message);
