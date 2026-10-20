@@ -12,6 +12,7 @@ import { GENERAL_INFORMATION } from '../../data/thailand/generalInformation'
 import { VISA_GUIDE } from '../../data/thailand/visaGuide'
 import { VISA_GUIDE as VISA_GUIDE_VIETNAM } from '../../data/vietnam/visaGuide'
 import { BUDGET_GUIDE as BUDGET_GUIDE_VIETNAM } from '../../data/vietnam/budgetGuide'
+import { GENERAL_INFO_GUIDE as GENERAL_INFO_VIETNAM } from '../../data/vietnam/generalInfo'
 import { TRAVEL_STYLE_GUIDE } from '../../data/thailand/travelStyleGuide'
 import { TRANSPORT_DETAILS } from '../../data/thailand/transportDetails'
 import { ACCOMMODATION_GUIDE } from '../../data/thailand/accommodationGuide'
@@ -84,6 +85,13 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
       icon: <Wallet size={20} />,
       content: BUDGET_GUIDE_VIETNAM[currentLanguage as ThaiLanguage] || BUDGET_GUIDE_VIETNAM['EN'],
       footer: `${vnTitles.budget} • ${t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}`
+    },
+    'general-info': {
+      title: vnTitles.generalInfo,
+      subtitle: 'Know Before You Go',
+      icon: <Info size={20} />,
+      content: GENERAL_INFO_VIETNAM[currentLanguage as ThaiLanguage] || GENERAL_INFO_VIETNAM['EN'],
+      footer: `${vnTitles.generalInfo} • ${t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}`
     },
     'travel-types': {
       title: t.travelTypes?.modalTitle || 'Comprehensive Guide to Traveling in Thailand',
@@ -373,6 +381,12 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
                     className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
                   >
                     {t.budget || 'Budget Tips'}
+                  </button>
+                  <button
+                    onClick={() => { setActiveModal('general-info'); setShowMenu(false) }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
+                  >
+                    {vnTitles.generalInfo}
                   </button>
                 </div>
               )}
