@@ -13,6 +13,7 @@ import { VISA_GUIDE } from '../../data/thailand/visaGuide'
 import { VISA_GUIDE as VISA_GUIDE_VIETNAM } from '../../data/vietnam/visaGuide'
 import { BUDGET_GUIDE as BUDGET_GUIDE_VIETNAM } from '../../data/vietnam/budgetGuide'
 import { GENERAL_INFO_GUIDE as GENERAL_INFO_VIETNAM } from '../../data/vietnam/generalInfo'
+import { ACCOMMODATION_GUIDE as ACCOMMODATION_VIETNAM } from '../../data/vietnam/accommodationGuide'
 import { TRAVEL_STYLE_GUIDE } from '../../data/thailand/travelStyleGuide'
 import { TRANSPORT_DETAILS } from '../../data/thailand/transportDetails'
 import { ACCOMMODATION_GUIDE } from '../../data/thailand/accommodationGuide'
@@ -92,6 +93,13 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
       icon: <Info size={20} />,
       content: GENERAL_INFO_VIETNAM[currentLanguage as ThaiLanguage] || GENERAL_INFO_VIETNAM['EN'],
       footer: `${vnTitles.generalInfo} • ${t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}`
+    },
+    'vn-accommodation': {
+      title: vnTitles.accommodation,
+      subtitle: 'Where to Stay',
+      icon: <Info size={20} />,
+      content: ACCOMMODATION_VIETNAM[currentLanguage as ThaiLanguage] || ACCOMMODATION_VIETNAM['EN'],
+      footer: `${vnTitles.accommodation} • ${t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}`
     },
     'travel-types': {
       title: t.travelTypes?.modalTitle || 'Comprehensive Guide to Traveling in Thailand',
@@ -387,6 +395,12 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
                     className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
                   >
                     {vnTitles.generalInfo}
+                  </button>
+                  <button
+                    onClick={() => { setActiveModal('vn-accommodation'); setShowMenu(false) }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
+                  >
+                    {vnTitles.accommodation}
                   </button>
                 </div>
               )}
