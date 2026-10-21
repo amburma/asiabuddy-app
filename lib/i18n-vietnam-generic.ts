@@ -450,13 +450,13 @@ export function mergeVietnamGeneric<T extends object>(base: T, generic: object |
   return result as T;
 }
 
-export const VIETNAM_MODAL_TITLES: Record<string, { visa: string; budget: string; generalInfo: string }> = {
-  EN: { visa: 'Vietnam Visa Guide', budget: 'Vietnam Budget Guide', generalInfo: 'General Info' },
-  MM: { visa: 'ဗီယက်နမ် ဗီဇာ လမ်းညွှန်', budget: 'ဗီယက်နမ် ဘတ်ဂျက် လမ်းညွှန်', generalInfo: 'ယေဘုယျ အချက်အလက်' },
-  TH: { visa: 'คู่มือวีซ่าเวียดนาม', budget: 'คู่มืองบประมาณเวียดนาม', generalInfo: 'ข้อมูลทั่วไป' },
-  DE: { visa: 'Vietnam-Visum-Leitfaden', budget: 'Vietnam-Budget-Leitfaden', generalInfo: 'Allgemeine Infos' },
-  FR: { visa: 'Guide des visas pour le Vietnam', budget: 'Guide du budget pour le Vietnam', generalInfo: 'Infos générales' },
-  ES: { visa: 'Guía de visados de Vietnam', budget: 'Guía de presupuestos de Vietnam', generalInfo: 'Información general' },
+export const VIETNAM_MODAL_TITLES: Record<string, { visa: string; budget: string; generalInfo: string; accommodation: string }> = {
+  EN: { visa: 'Vietnam Visa Guide', budget: 'Vietnam Budget Guide', generalInfo: 'General Info', accommodation: 'Accommodation Guide' },
+  MM: { visa: 'ဗီယက်နမ် ဗီဇာ လမ်းညွှန်', budget: 'ဗီယက်နမ် ဘတ်ဂျက် လမ်းညွှန်', generalInfo: 'ယေဘုယျ အချက်အလက်', accommodation: 'တည်းခိုစရာ လမ်းညွှန်' },
+  TH: { visa: 'คู่มือวีซ่าเวียดนาม', budget: 'คู่มืองบประมาณเวียดนาม', generalInfo: 'ข้อมูลทั่วไป', accommodation: 'คู่มือที่พัก' },
+  DE: { visa: 'Vietnam-Visum-Leitfaden', budget: 'Vietnam-Budget-Leitfaden', generalInfo: 'Allgemeine Infos', accommodation: 'Unterkunfts-Leitfaden' },
+  FR: { visa: 'Guide des visas pour le Vietnam', budget: 'Guide du budget pour le Vietnam', generalInfo: 'Infos générales', accommodation: "Guide de l'hébergement" },
+  ES: { visa: 'Guía de visados de Vietnam', budget: 'Guía de presupuestos de Vietnam', generalInfo: 'Información general', accommodation: 'Guía de alojamiento' },
 };
 
 export const VIETNAM_BRAND = 'VietnamGuide';
