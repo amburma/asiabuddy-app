@@ -115,7 +115,7 @@ const EN = `🇻🇳 Planning a trip to Vietnam? Here are the basic facts every 
 ## ⚖️ Rules to Know
 
 - **ID:** You may be asked to show your passport. Ask your hotel if you should carry the original or a copy. Keep your original passport safe.
-- **Drugs:** Vietnam has very strict drug laws. Penalties can be very serious, including long prison terms. Never carry or use drugs.
+- **Drugs:** Vietnam has very strict drug laws. Penalties can be very serious, including long prison terms. Never carry or use drugs. Cannabis is also illegal in Vietnam.
 - **E-cigarettes and vapes** are banned in Vietnam. Do not bring them.
 - **Drones:** You need permission to fly a drone. Many places are no-fly zones, such as airports and military areas. The rules changed recently, so check the latest rules before you travel.
 - **Photos:** Do not take photos of military places or border areas. Be polite when taking photos of people. Ask first.`
@@ -228,7 +228,7 @@ const MM = `🇻🇳 ဗီယက်နမ်ကို ခရီးစဉ် စ
 ## ⚖️ သိထားသင့်သော စည်းမျဉ်းများ
 
 - **မှတ်ပုံတင်:** သင့်အနေဖြင့် ပတ်စ်ပို့ကို ပြသရန် တောင်းဆိုခံရနိုင်ပါသည်။ မူရင်းကို ကိုင်ဆောင်သင့်သလား သို့မဟုတ် မိတ္တူကို ကိုင်ဆောင်သင့်သလား ဟိုတယ်ကို မေးမြန်းပါ။ သင့်မူရင်းပတ်စ်ပို့ကို လုံခြုံစွာ သိမ်းဆည်းပါ။
-- **မူးယစ်ဆေးဝါး:** Vietnam တွင် မူးယစ်ဆေးဝါးဆိုင်ရာ ဥပဒေများ အလွန်တင်းကျပ်ပါသည်။ ပြစ်ဒဏ်များသည် အလွန်ပြင်းထန်နိုင်ပြီး ထောင်ဒဏ်ကြာရှည်စွာ ကျခံရနိုင်သည်။ မူးယစ်ဆေးဝါးများကို ဘယ်တော့မှ မသယ်ဆောင်ပါနှင့် သို့မဟုတ် မသုံးစွဲပါနှင့်။
+- **မူးယစ်ဆေးဝါး:** Vietnam တွင် မူးယစ်ဆေးဝါးဆိုင်ရာ ဥပဒေများ အလွန်တင်းကျပ်ပါသည်။ ပြစ်ဒဏ်များသည် အလွန်ပြင်းထန်နိုင်ပြီး ထောင်ဒဏ်ကြာရှည်စွာ ကျခံရနိုင်သည်။ မူးယစ်ဆေးဝါးများကို ဘယ်တော့မှ မသယ်ဆောင်ပါနှင့် သို့မဟုတ် မသုံးစွဲပါနှင့်။ ဗီယက်နမ်တွင် ဆေးခြောက်သည်လည်း တရားမဝင်ပါ။
 - **အီး-စီးကရက်နှင့် ဗေးပ်စ်** များကို Vietnam တွင် တားမြစ်ထားပါသည်။ ၎င်းတို့ကို မယူလာပါနှင့်။
 - **ဒရုန်းများ:** ဒရုန်းပျံသန်းရန် ခွင့်ပြုချက် လိုအပ်ပါသည်။ လေဆိပ်များနှင့် စစ်ဘက်ဆိုင်ရာ နေရာများကဲ့သို့ ပျံသန်းခွင့်မရှိသော ဇုန်များစွာ ရှိပါသည်။ မကြာသေးမီက စည်းမျဉ်းများ ပြောင်းလဲခဲ့သည်၊ ထို့ကြောင့် ခရီးမထွက်ခွာမီ နောက်ဆုံးစည်းမျဉ်းများကို စစ်ဆေးပါ။
 - **ဓာတ်ပုံများ:** စစ်ဘက်ဆိုင်ရာ နေရာများ သို့မဟုတ် နယ်စပ်ဒေသများ၏ ဓာတ်ပုံများကို မရိုက်ပါနှင့်။ လူများကို ဓာတ်ပုံရိုက်သည့်အခါ ယဉ်ကျေးစွာ ပြုမူပါ။ ဦးစွာ ခွင့်တောင်းပါ။`
@@ -341,7 +341,7 @@ const TH = `🇻🇳 กำลังวางแผนเที่ยวเว�
 ## ⚖️ กฎที่ควรรู้
 
 - **บัตรประจำตัว:** คุณอาจถูกขอให้แสดงหนังสือเดินทาง ถามโรงแรมของคุณว่าควรพกฉบับจริงหรือสำเนา เก็บหนังสือเดินทางฉบับจริงของคุณไว้ให้ปลอดภัย
-- **ยาเสพติด:** Vietnam มีกฎหมายยาเสพติดที่เข้มงวดมาก บทลงโทษอาจร้ายแรงมาก รวมถึงโทษจำคุกเป็นเวลานาน ห้ามพกพาหรือใช้ยาเสพติดโดยเด็ดขาด
+- **ยาเสพติด:** Vietnam มีกฎหมายยาเสพติดที่เข้มงวดมาก บทลงโทษอาจร้ายแรงมาก รวมถึงโทษจำคุกเป็นเวลานาน ห้ามพกพาหรือใช้ยาเสพติดโดยเด็ดขาด กัญชา ก็ยัง ผิดกฎหมาย ในเวียดนาม
 - **บุหรี่ไฟฟ้าและวีป** ถูกห้ามใน Vietnam ห้ามนำเข้ามา
 - **โดรน:** คุณต้องได้รับอนุญาตในการบินโดรน หลายพื้นที่มีเขตห้ามบิน เช่น สนามบินและพื้นที่ทางทหาร กฎมีการเปลี่ยนแปลงเมื่อเร็วๆ นี้ ดังนั้นโปรดตรวจสอบกฎล่าสุดก่อนเดินทาง
 - **รูปถ่าย:** ห้ามถ่ายรูปสถานที่ทางทหารหรือพื้นที่ชายแดน สุภาพเมื่อถ่ายรูปผู้คน ขออนุญาตก่อน`
@@ -454,7 +454,7 @@ const DE = `🇻🇳 Planen Sie eine Reise nach Vietnam? Hier sind die grundlege
 ## ⚖️ Regeln, die Sie kennen sollten
 
 - **Ausweis:** Möglicherweise werden Sie aufgefordert, Ihren Reisepass vorzuzeigen. Fragen Sie in Ihrem Hotel nach, ob Sie das Original oder eine Kopie mitführen sollten. Bewahren Sie Ihren Originalreisepass sicher auf.
-- **Drogen:** Vietnam hat sehr strenge Drogengesetze. Die Strafen können sehr schwerwiegend sein, einschließlich langer Gefängnisstrafen. Tragen oder verwenden Sie niemals Drogen.
+- **Drogen:** Vietnam hat sehr strenge Drogengesetze. Die Strafen können sehr schwerwiegend sein, einschließlich langer Gefängnisstrafen. Tragen oder verwenden Sie niemals Drogen. Cannabis ist auch illegal in Vietnam.
 - **E-Zigaretten und Vapes** sind in Vietnam verboten. Bringen Sie diese nicht mit.
 - **Drohnen:** Sie benötigen eine Genehmigung, um eine Drohne zu fliegen. Viele Orte sind Sperrzonen, wie Flughäfen und Militärgebiete. Die Regeln haben sich kürzlich geändert, prüfen Sie daher die neuesten Regeln, bevor Sie reisen.
 - **Fotos:** Machen Sie keine Fotos von Militäranlagen oder Grenzgebieten. Seien Sie höflich, wenn Sie Fotos von Personen machen. Fragen Sie zuerst.`
@@ -567,7 +567,7 @@ const FR = `🇻🇳 Vous prévoyez un voyage au Vietnam ? Voici les information
 ## ⚖️ Règles à connaître
 
 - **Pièce d'identité :** On peut vous demander de présenter votre passeport. Demandez à votre hôtel si vous devez transporter l'original ou une copie. Gardez votre passeport original en lieu sûr.
-- **Drogues :** Le Vietnam a des lois très strictes sur les drogues. Les sanctions peuvent être très graves, y compris de longues peines de prison. Ne transportez ni n'utilisez jamais de drogues.
+- **Drogues :** Le Vietnam a des lois très strictes sur les drogues. Les sanctions peuvent être très graves, y compris de longues peines de prison. Ne transportez ni n'utilisez jamais de drogues. Le cannabis est également illégal au Vietnam.
 - **Cigarettes électroniques et vapoteuses** sont interdites au Vietnam. Ne les apportez pas.
 - **Drones :** Vous avez besoin d'une autorisation pour faire voler un drone. De nombreux endroits sont des zones interdites de vol, comme les aéroports et les zones militaires. Les règles ont récemment changé, alors vérifiez les dernières règles avant de voyager.
 - **Photos :** Ne prenez pas de photos de lieux militaires ou de zones frontalières. Soyez poli lorsque vous prenez des photos de personnes. Demandez d'abord.`
@@ -680,7 +680,7 @@ const ES = `🇻🇳 ¿Planeando un viaje a Vietnam? ¡Aquí tienes los datos b�
 ## ⚖️ Reglas a tener en cuenta
 
 - **Identificación:** Es posible que te pidan que muestres tu pasaporte. Pregunta en tu hotel si debes llevar el original o una copia. Guarda tu pasaporte original en un lugar seguro.
-- **Drogas:** Vietnam tiene leyes muy estrictas contra las drogas. Las sanciones pueden ser muy graves, incluyendo largas penas de prisión. Nunca transportes ni uses drogas.
+- **Drogas:** Vietnam tiene leyes muy estrictas contra las drogas. Las sanciones pueden ser muy graves, incluyendo largas penas de prisión. Nunca transportes ni uses drogas. El cannabis también es ilegal en Vietnam.
 - **Cigarrillos electrónicos y vapers** están prohibidos en Vietnam. No los traigas.
 - **Drones:** Necesitas permiso para volar un dron. Muchos lugares son zonas de exclusión aérea, como aeropuertos y áreas militares. Las reglas cambiaron recientemente, así que consulta las últimas normas antes de viajar.
 - **Fotos:** No tomes fotos de lugares militares o áreas fronterizas. Sé educado al tomar fotos de personas. Pide permiso primero.`
