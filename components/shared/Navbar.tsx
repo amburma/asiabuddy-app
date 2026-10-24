@@ -63,6 +63,24 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
     }
   }, [language])
 
+  useEffect(() => {
+    const guideToModal: Record<string, string> = {
+      'general-info': 'general-info',
+      'travel-types': 'vn-travel-types',
+      visa: 'visa',
+      transport: 'vn-transport',
+      accommodation: 'vn-accommodation',
+      budget: 'budget',
+    }
+    const handler = (e: Event) => {
+      const guide = (e as CustomEvent).detail?.guide
+      const modalId = guide ? guideToModal[guide] : undefined
+      if (modalId) setActiveModal(modalId)
+    }
+    window.addEventListener('openVietnamGuide', handler)
+    return () => window.removeEventListener('openVietnamGuide', handler)
+  }, [])
+
   const t = UI_TRANSLATIONS[currentLanguage as keyof typeof UI_TRANSLATIONS] || UI_TRANSLATIONS.EN
 
   const vnTitles = VIETNAM_MODAL_TITLES[currentLanguage] || VIETNAM_MODAL_TITLES.EN
