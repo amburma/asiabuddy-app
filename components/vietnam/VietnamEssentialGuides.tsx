@@ -16,6 +16,8 @@ export default function VietnamEssentialGuides({ language }: { language: string 
     { guide: 'transport', title: titles.transport, icon: '\u{1F695}' },
     { guide: 'accommodation', title: titles.accommodation, icon: '\u{1F3E8}' },
     { guide: 'budget', title: titles.budget, icon: '\u{1F4B0}' },
+    { guide: 'food-dining', title: titles.foodDining, icon: '\u{1F35C}' },
+    { guide: 'culture-etiquette', title: titles.cultureEtiquette, icon: '\u{1F3AD}' },
   ]
 
   const handleGuideClick = (guide: string) => {
