@@ -105,7 +105,7 @@ Vietnamese people are usually warm, patient, and kind to visitors. You do not ne
 ---
 
 ## Local Laws to Know
-- Drug laws are very strict. Penalties can include long prison sentences, and the death penalty exists for drug trafficking.
+- Drug laws are very strict. Penalties can include long prison sentences, and the death penalty exists for drug trafficking. Cannabis is also illegal in Vietnam.
 - E-cigarettes and heated tobacco products are banned. Do not bring them.
 - Smoking is not allowed in many indoor public places.
 - Keep your passport or a copy with you, and follow the rules about registering where you stay.
@@ -213,7 +213,7 @@ const MM = `# ဗီယက်နမ်နိုင်ငံ၏ ယဉ်ကျ�
 ---
 
 ## သိထားသင့်သော ဒေသတွင်း ဥပဒေများ
-- မူးယစ်ဆေးဝါး ဥပဒေများသည် အလွန်တင်းကျပ်ပါသည်။ ပြစ်ဒဏ်များတွင် ထောင်ဒဏ်ရှည်များ ပါဝင်နိုင်ပြီး မူးယစ်ဆေးဝါး ကူးသန်းရောင်းဝယ်မှုအတွက် သေဒဏ်လည်း ရှိပါသည်။
+- မူးယစ်ဆေးဝါး ဥပဒေများသည် အလွန်တင်းကျပ်ပါသည်။ ပြစ်ဒဏ်များတွင် ထောင်ဒဏ်ရှည်များ ပါဝင်နိုင်ပြီး မူးယစ်ဆေးဝါး ကူးသန်းရောင်းဝယ်မှုအတွက် သေဒဏ်လည်း ရှိပါသည်။ ဗီယက်နမ်တွင် ဆေးခြောက်သည်လည်း တရားမဝင်ပါ။
 - အီလက်ထရောနစ်စီးကရက် (E-cigarettes) နှင့် အပူပေးဆေးရွက်ကြီး ထုတ်ကုန်များကို တားမြစ်ထားပါသည်။ ၎င်းတို့ကို ယူဆောင်လာခြင်း မပြုရ။
 - မိုးလုံလေလုံ အများပြည်သူနေရာများစွာတွင် ဆေးလိပ်သောက်ခြင်းကို ခွင့်မပြုပါ။
 - သင်၏ နိုင်ငံကူးလက်မှတ် သို့မဟုတ် မိတ္တူကို သင်နှင့်အတူ ဆောင်ထားပြီး သင်တည်းခိုသည့်နေရာကို မှတ်ပုံတင်ခြင်းဆိုင်ရာ စည်းမျဉ်းများကို လိုက်နာပါ။
@@ -321,7 +321,7 @@ const TH = `# วัฒนธรรมและมารยาทในเวี
 ---
 
 ## กฎหมายท้องถิ่นที่ควรรู้
-- กฎหมายยาเสพติดเข้มงวดมาก บทลงโทษอาจรวมถึงการจำคุกเป็นเวลานาน และมีโทษประหารชีวิตสำหรับการค้ายาเสพติด
+- กฎหมายยาเสพติดเข้มงวดมาก บทลงโทษอาจรวมถึงการจำคุกเป็นเวลานาน และมีโทษประหารชีวิตสำหรับการค้ายาเสพติด กัญชา ก็ยัง ผิดกฎหมาย ในเวียดนาม
 - บุหรี่ไฟฟ้าและผลิตภัณฑ์ยาสูบแบบให้ความร้อนเป็นสิ่งต้องห้าม ห้ามนำเข้ามา
 - ห้ามสูบบุหรี่ในสถานที่สาธารณะในร่มหลายแห่ง
 - พกหนังสือเดินทางหรือสำเนาติดตัวไว้ และปฏิบัติตามกฎการลงทะเบียนที่พักของคุณ
@@ -429,7 +429,7 @@ Vietnamesen sind normalerweise herzlich, geduldig und freundlich zu Besuchern. S
 ---
 
 ## Wissenswerte lokale Gesetze
-- Drogengesetze sind sehr streng. Strafen können lange Gefängnisstrafen umfassen, und für Drogenhandel gibt es die Todesstrafe.
+- Drogengesetze sind sehr streng. Strafen können lange Gefängnisstrafen umfassen, und für Drogenhandel gibt es die Todesstrafe. Cannabis ist auch illegal in Vietnam.
 - E-Zigaretten und erhitzte Tabakprodukte sind verboten. Bringen Sie diese nicht mit.
 - Rauchen ist in vielen öffentlichen Innenräumen nicht gestattet.
 - Führen Sie Ihren Reisepass oder eine Kopie davon mit sich, und befolgen Sie die Regeln zur Registrierung Ihres Aufenthaltsortes.
@@ -537,7 +537,7 @@ Les Vietnamiens sont généralement chaleureux, patients et gentils avec les vis
 ---
 
 ## Lois locales à connaître
-- Les lois sur la drogue sont très strictes. Les peines peuvent inclure de longues peines de prison, et la peine de mort existe pour le trafic de drogue.
+- Les lois sur la drogue sont très strictes. Les peines peuvent inclure de longues peines de prison, et la peine de mort existe pour le trafic de drogue. Le cannabis est également illégal au Vietnam.
 - Les cigarettes électroniques et les produits du tabac chauffés sont interdits. Ne les apportez pas.
 - Il est interdit de fumer dans de nombreux lieux publics intérieurs.
 - Gardez votre passeport ou une copie sur vous, et suivez les règles concernant l'enregistrement de votre lieu de séjour.
@@ -645,7 +645,7 @@ Los vietnamitas suelen ser cálidos, pacientes y amables con los visitantes. No 
 ---
 
 ## Leyes Locales a Conocer
-- Las leyes de drogas son muy estrictas. Las penas pueden incluir largas sentencias de prisión, y la pena de muerte existe para el tráfico de drogas.
+- Las leyes de drogas son muy estrictas. Las penas pueden incluir largas sentencias de prisión, y la pena de muerte existe para el tráfico de drogas. El cannabis también es ilegal en Vietnam.
 - Los cigarrillos electrónicos y los productos de tabaco calentado están prohibidos. No los traiga.
 - No se permite fumar en muchos lugares públicos interiores.
 - Lleve su pasaporte o una copia consigo, y siga las reglas sobre el registro de su alojamiento.
