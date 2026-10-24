@@ -16,6 +16,8 @@ import { GENERAL_INFO_GUIDE as GENERAL_INFO_VIETNAM } from '../../data/vietnam/g
 import { ACCOMMODATION_GUIDE as ACCOMMODATION_VIETNAM } from '../../data/vietnam/accommodationGuide'
 import { TRANSPORT_GUIDE as TRANSPORT_VIETNAM } from '../../data/vietnam/transportGuide'
 import { TRAVEL_TYPES_GUIDE as TRAVEL_TYPES_VIETNAM } from '../../data/vietnam/travelTypesGuide'
+import { FOOD_DINING_GUIDE as FOOD_DINING_VIETNAM } from '../../data/vietnam/foodDiningGuide'
+import { CULTURE_ETIQUETTE_GUIDE as CULTURE_ETIQUETTE_VIETNAM } from '../../data/vietnam/cultureEtiquetteGuide'
 import { TRAVEL_STYLE_GUIDE } from '../../data/thailand/travelStyleGuide'
 import { TRANSPORT_DETAILS } from '../../data/thailand/transportDetails'
 import { ACCOMMODATION_GUIDE } from '../../data/thailand/accommodationGuide'
@@ -71,6 +73,8 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
       transport: 'vn-transport',
       accommodation: 'vn-accommodation',
       budget: 'budget',
+      'food-dining': 'vn-food-dining',
+      'culture-etiquette': 'vn-culture-etiquette',
     }
     const handler = (e: Event) => {
       const guide = (e as CustomEvent).detail?.guide
@@ -134,6 +138,20 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
       icon: <Plane size={20} />,
       content: TRAVEL_TYPES_VIETNAM[currentLanguage as ThaiLanguage] || TRAVEL_TYPES_VIETNAM['EN'],
       footer: `${vnTitles.travelTypes} • ${t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}`
+    },
+    'vn-food-dining': {
+      title: vnTitles.foodDining,
+      subtitle: 'Food & Dining',
+      icon: <Utensils size={20} />,
+      content: FOOD_DINING_VIETNAM[currentLanguage as ThaiLanguage] || FOOD_DINING_VIETNAM['EN'],
+      footer: `${vnTitles.foodDining} • ${t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}`
+    },
+    'vn-culture-etiquette': {
+      title: vnTitles.cultureEtiquette,
+      subtitle: 'Culture & Etiquette',
+      icon: <ShieldCheck size={20} />,
+      content: CULTURE_ETIQUETTE_VIETNAM[currentLanguage as ThaiLanguage] || CULTURE_ETIQUETTE_VIETNAM['EN'],
+      footer: `${vnTitles.cultureEtiquette} • ${t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}`
     },
     'travel-types': {
       title: t.travelTypes?.modalTitle || 'Comprehensive Guide to Traveling in Thailand',
@@ -447,6 +465,18 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
                     className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
                   >
                     {vnTitles.travelTypes}
+                  </button>
+                  <button
+                    onClick={() => { setActiveModal('vn-food-dining'); setShowMenu(false) }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
+                  >
+                    {vnTitles.foodDining}
+                  </button>
+                  <button
+                    onClick={() => { setActiveModal('vn-culture-etiquette'); setShowMenu(false) }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
+                  >
+                    {vnTitles.cultureEtiquette}
                   </button>
                 </div>
               )}
