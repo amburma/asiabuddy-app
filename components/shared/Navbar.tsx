@@ -15,6 +15,7 @@ import { BUDGET_GUIDE as BUDGET_GUIDE_VIETNAM } from '../../data/vietnam/budgetG
 import { GENERAL_INFO_GUIDE as GENERAL_INFO_VIETNAM } from '../../data/vietnam/generalInfo'
 import { ACCOMMODATION_GUIDE as ACCOMMODATION_VIETNAM } from '../../data/vietnam/accommodationGuide'
 import { TRANSPORT_GUIDE as TRANSPORT_VIETNAM } from '../../data/vietnam/transportGuide'
+import { TRAVEL_TYPES_GUIDE as TRAVEL_TYPES_VIETNAM } from '../../data/vietnam/travelTypesGuide'
 import { TRAVEL_STYLE_GUIDE } from '../../data/thailand/travelStyleGuide'
 import { TRANSPORT_DETAILS } from '../../data/thailand/transportDetails'
 import { ACCOMMODATION_GUIDE } from '../../data/thailand/accommodationGuide'
@@ -108,6 +109,13 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
       icon: <Bus size={20} />,
       content: TRANSPORT_VIETNAM[currentLanguage as ThaiLanguage] || TRANSPORT_VIETNAM['EN'],
       footer: `${vnTitles.transport} • ${t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}`
+    },
+    'vn-travel-types': {
+      title: vnTitles.travelTypes,
+      subtitle: 'Travel Styles',
+      icon: <Plane size={20} />,
+      content: TRAVEL_TYPES_VIETNAM[currentLanguage as ThaiLanguage] || TRAVEL_TYPES_VIETNAM['EN'],
+      footer: `${vnTitles.travelTypes} • ${t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}`
     },
     'travel-types': {
       title: t.travelTypes?.modalTitle || 'Comprehensive Guide to Traveling in Thailand',
@@ -415,6 +423,12 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
                     className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
                   >
                     {vnTitles.transport}
+                  </button>
+                  <button
+                    onClick={() => { setActiveModal('vn-travel-types'); setShowMenu(false) }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
+                  >
+                    {vnTitles.travelTypes}
                   </button>
                 </div>
               )}
