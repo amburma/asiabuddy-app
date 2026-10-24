@@ -22,7 +22,7 @@ Vietnam is easy to move around once you know the main options. In big cities, mo
 ---
 
 ## Ride-Hailing Apps
-- Grab is the most popular app in Vietnam. Be and Xanh SM are also common in the big cities.
+- Grab, Xanh SM, and Be are the main ride-hailing apps. Grab is often the easiest for visitors because the app is in English and works with foreign cards. Some local apps may not accept foreign cards, so check before you ride.
 - You see the price in the app before the ride starts. This helps you avoid arguments about the fare.
 - You can choose a car or a motorbike. A car is better with luggage or in the rain.
 - You need mobile data to use the apps. A local SIM card or an eSIM is very helpful.
@@ -72,6 +72,7 @@ Vietnam is easy to move around once you know the main options. In big cities, mo
 - Not all IDPs follow this rule. An IDP from the older 1949 Geneva Convention may not be valid in Vietnam. Check which type you have before you travel.
 - Many rental shops do not ask for a license. But if you have an accident or a police check, you can have problems with the police and with your insurance.
 - Check your travel insurance. Many policies do not cover riders without a valid license.
+- Never ride or drive after drinking alcohol. Vietnam has a zero limit for drivers.
 - If you are not sure, use ride-hailing apps, or hire a car with a driver instead.
 
 ---
@@ -144,7 +145,7 @@ const MM = `# ဗီယက်နမ်တွင် သွားလာရေး
 ---
 
 ## ကား/ဆိုင်ကယ်ငှားရမ်းသည့်အက်ပ်များ
-- Grab သည် Vietnam တွင် အလွန်ရေပန်းစားသော အက်ပ်ဖြစ်သည်။ Be နှင့် Xanh SM တို့သည်လည်း မြို့ကြီးများတွင် အသုံးများပါသည်။
+- Grab, Xanh SM, နဲ့ Be တို့ဟာ အဓိက ခရီးသွားပို့ဆောင်ရေး အက်ပ်များ ဖြစ်ကြပါတယ်။ Grab ကတော့ ဧည့်သည်တွေအတွက် အလွယ်ဆုံး ဖြစ်တတ်ပါတယ်၊ ဘာလို့လဲဆိုတော့ အက်ပ်က အင်္ဂလိပ်လို ဖြစ်ပြီး နိုင်ငံခြားကတ်တွေနဲ့လည်း အသုံးပြုလို့ရလို့ပါ။ ဒေသတွင်း အက်ပ်တချို့ကတော့ နိုင်ငံခြားကတ်တွေကို လက်မခံတာမျိုး ရှိနိုင်ပါတယ်၊ ဒါကြောင့် စီးနင်းမယ့်အခါ ကြိုတင်စစ်ဆေးပါ။
 - ခရီးမစတင်မီ အက်ပ်တွင် ဈေးနှုန်းကို မြင်တွေ့ရမည်။ ၎င်းသည် ခရီးခအတွက် ငြင်းခုံမှုများကို ရှောင်ရှားရန် ကူညီပေးပါသည်။
 - ကား သို့မဟုတ် ဆိုင်ကယ်ကို ရွေးချယ်နိုင်ပါသည်။ ကားသည် ခရီးဆောင်အိတ်များ သို့မဟုတ် မိုးရွာနေချိန်တွင် ပိုကောင်းပါသည်။
 - အက်ပ်များကို အသုံးပြုရန် မိုဘိုင်းဒေတာ လိုအပ်ပါသည်။ ဒေသခံ SIM ကတ် သို့မဟုတ် eSIM သည် အလွန်အထောက်အကူဖြစ်ပါသည်။
@@ -194,6 +195,7 @@ const MM = `# ဗီယက်နမ်တွင် သွားလာရေး
 - IDP အားလုံးက ဒီစည်းမျဉ်းကို လိုက်နာတာ မဟုတ်ပါဘူး။ ၁၉၄၉ ဂျီနီဗာ ကွန်ဗန်းရှင်းဟောင်းက IDP က Vietnam မှာ အတည်ဖြစ်မှာ မဟုတ်ပါဘူး။ ခရီးမထွက်ခင် ဘယ်လိုအမျိုးအစားကို ကိုင်ဆောင်ထားလဲ စစ်ဆေးပါ။
 - ငှားရမ်းတဲ့ဆိုင်အများစုက လိုင်စင်မတောင်းပါဘူး။ ဒါပေမယ့် မတော်တဆမှုတစ်ခုခုဖြစ်ခဲ့ရင် ဒါမှမဟုတ် ရဲကစစ်ဆေးရင် ရဲနဲ့ အာမခံကုမ္ပဏီတွေနဲ့ ပြဿနာတက်နိုင်ပါတယ်။
 - ခရီးသွားအာမခံကို စစ်ဆေးပါ။ မူဝါဒအများစုက တရားဝင်လိုင်စင်မရှိတဲ့ စီးနင်းသူတွေကို အကျုံးမဝင်ပါဘူး။
+- အရက်သောက်ပြီးနောက် မောင်းနှင်ခြင်း သို့မဟုတ် စီးနင်းခြင်း လုံးဝမပြုရ။ ဗီယက်နမ်တွင် ယာဉ်မောင်းများအတွက် သုည ကန့်သတ်ချက်ရှိသည်။
 - သေချာမသိရင်၊ ride-hailing app တွေကိုသုံးပါ၊ ဒါမှမဟုတ် ယာဉ်မောင်းနဲ့ ကားငှားတာကို ရွေးချယ်ပါ။
 
 ---
@@ -266,7 +268,7 @@ const TH = `# การเดินทางในเวียดนาม
 ---
 
 ## แอปพลิเคชันเรียกรถ
-- Grab เป็นแอปที่ได้รับความนิยมมากที่สุดใน Vietnam แอป Be และ Xanh SM ก็เป็นที่นิยมในเมืองใหญ่เช่นกัน
+- Grab, Xanh SM และ Be เป็นแอปเรียกรถหลัก Grab มักจะเป็นตัวเลือกที่ง่ายที่สุดสำหรับนักท่องเที่ยว เพราะแอปเป็นภาษาอังกฤษและใช้ได้กับบัตรต่างประเทศ แอปท้องถิ่นบางแอปอาจไม่รับบัตรต่างประเทศ ดังนั้นควรตรวจสอบก่อนใช้บริการ
 - คุณจะเห็นราคาในแอปก่อนเริ่มเดินทาง ซึ่งช่วยให้คุณหลีกเลี่ยงการโต้เถียงเรื่องค่าโดยสาร
 - คุณสามารถเลือกรถยนต์หรือมอเตอร์ไซค์ รถยนต์เหมาะกว่าเมื่อมีสัมภาระหรือตอนฝนตก
 - คุณต้องมีข้อมูลมือถือเพื่อใช้แอป ซิมการ์ดท้องถิ่นหรือ eSIM จะมีประโยชน์มาก
@@ -316,6 +318,7 @@ const TH = `# การเดินทางในเวียดนาม
 - ใบขับขี่สากลบางประเภทไม่เป็นไปตามกฎนี้ ใบขับขี่สากลจากอนุสัญญากรุงเจนีวาปี 1949 ที่เก่ากว่าอาจไม่สามารถใช้ได้ใน Vietnam โปรดตรวจสอบประเภทที่คุณมีก่อนเดินทาง
 - ร้านเช่าหลายแห่งไม่ขอดูใบขับขี่ แต่หากคุณประสบอุบัติเหตุหรือถูกตำรวจตรวจ คุณอาจมีปัญหากับตำรวจและประกันของคุณ
 - ตรวจสอบประกันการเดินทางของคุณ กรมธรรม์ส่วนใหญ่ไม่ครอบคลุมผู้ขับขี่ที่ไม่มีใบขับขี่ที่ถูกต้อง
+- ห้ามขับขี่หรือโดยสารยานพาหนะหลังดื่มแอลกอฮอล์เด็ดขาด เวียดนามมีข้อจำกัดแอลกอฮอล์เป็นศูนย์สำหรับผู้ขับขี่
 - หากคุณไม่แน่ใจ ให้ใช้แอปเรียกรถ หรือจ้างรถพร้อมคนขับแทน
 
 ---
@@ -388,7 +391,7 @@ Vietnam ist leicht zu bereisen, wenn man die wichtigsten Optionen kennt. In gro�
 ---
 
 ## Ride-Hailing Apps
-- Grab ist die beliebteste App in Vietnam. Be und Xanh SM sind in den Großstädten ebenfalls verbreitet.
+- Grab, Xanh SM und Be sind die wichtigsten Ride-Hailing-Apps. Grab ist für Besucher oft am einfachsten, da die App auf Englisch ist und mit ausländischen Karten funktioniert. Einige lokale Apps akzeptieren möglicherweise keine ausländischen Karten, daher sollten Sie vor der Fahrt prüfen.
 - Sie sehen den Preis in der App, bevor die Fahrt beginnt. Das hilft, Streitigkeiten über den Fahrpreis zu vermeiden.
 - Sie können ein Auto oder ein Motorrad wählen. Ein Auto ist besser mit Gepäck oder bei Regen.
 - Sie benötigen mobile Daten, um die Apps zu nutzen. Eine lokale SIM-Karte oder eine eSIM ist sehr hilfreich.
@@ -438,6 +441,7 @@ Vietnam ist leicht zu bereisen, wenn man die wichtigsten Optionen kennt. In gro�
 - Nicht alle internationalen Führerscheine (IDP) folgen dieser Regel. Ein internationaler Führerschein (IDP) nach der älteren Genfer Konvention von 1949 ist in Vietnam möglicherweise nicht gültig. Prüfen Sie vor Ihrer Reise, welchen Typ Sie haben.
 - Viele Verleihfirmen verlangen keinen Führerschein. Aber wenn Sie einen Unfall haben oder eine Polizeikontrolle, können Sie Probleme mit der Polizei und Ihrer Versicherung bekommen.
 - Überprüfen Sie Ihre Reiseversicherung. Viele Policen decken Fahrer ohne gültigen Führerschein nicht ab.
+- Fahren Sie niemals, nachdem Sie Alkohol getrunken haben. In Vietnam gilt eine Null-Promille-Grenze für Fahrer.
 - Wenn Sie unsicher sind, nutzen Sie Ride-Hailing-Apps oder mieten Sie stattdessen ein Auto mit Fahrer.
 
 ---
@@ -510,7 +514,7 @@ Il est facile de se déplacer au Vietnam une fois que vous connaissez les princi
 ---
 
 ## Applications de VTC
-- Grab est l'application la plus populaire au Vietnam. Be et Xanh SM sont aussi courantes dans les grandes villes.
+- Grab, Xanh SM et Be sont les principales applications de VTC. Grab est souvent la plus facile pour les visiteurs car l'application est en anglais et fonctionne avec les cartes étrangères. Certaines applications locales peuvent ne pas accepter les cartes étrangères, alors vérifiez avant de commander une course.
 - Vous voyez le prix dans l'application avant le début du trajet. Cela vous aide à éviter les disputes sur le tarif.
 - Vous pouvez choisir une voiture ou une moto. Une voiture est mieux avec des bagages ou sous la pluie.
 - Vous avez besoin de données mobiles pour utiliser les applications. Une carte SIM locale ou une eSIM est très utile.
@@ -560,6 +564,7 @@ Il est facile de se déplacer au Vietnam une fois que vous connaissez les princi
 - Tous les IDP ne suivent pas cette règle. Un IDP de l'ancienne Convention de Genève de 1949 peut ne pas être valide au Vietnam. Vérifiez le type que vous avez avant de voyager.
 - De nombreux magasins de location ne demandent pas de permis. Mais si vous avez un accident ou un contrôle de police, vous pouvez avoir des problèmes avec la police et votre assurance.
 - Vérifiez votre assurance voyage. De nombreuses polices ne couvrent pas les conducteurs sans permis valide.
+- Ne conduisez jamais après avoir bu de l'alcool. Le Vietnam a une tolérance zéro pour les conducteurs.
 - Si vous n'êtes pas sûr, utilisez des applications de covoiturage, ou louez une voiture avec chauffeur à la place.
 
 ---
@@ -632,7 +637,7 @@ Vietnam es fácil de recorrer una vez que conozcas las opciones principales. En 
 ---
 
 ## Aplicaciones de Transporte
-- Grab es la aplicación más popular en Vietnam. Be y Xanh SM también son comunes en las grandes ciudades.
+- Grab, Xanh SM y Be son las principales aplicaciones de transporte. Grab suele ser la más fácil para los visitantes porque la aplicación está en inglés y funciona con tarjetas extranjeras. Algunas aplicaciones locales pueden no aceptar tarjetas extranjeras, así que verifica antes de pedir el viaje.
 - Ves el precio en la aplicación antes de que comience el viaje. Esto te ayuda a evitar discusiones sobre la tarifa.
 - Puedes elegir un coche o una moto. Un coche es mejor con equipaje o con lluvia.
 - Necesitas datos móviles para usar las aplicaciones. Una tarjeta SIM local o una eSIM es muy útil.
@@ -682,6 +687,7 @@ Vietnam es fácil de recorrer una vez que conozcas las opciones principales. En 
 - No todos los IDP siguen esta norma. Un IDP de la Convención de Ginebra de 1949, más antigua, puede no ser válido en Vietnam. Comprueba qué tipo tienes antes de viajar.
 - Muchas tiendas de alquiler no piden carnet. Pero si tienes un accidente o una inspección policial, puedes tener problemas con la policía y con tu seguro.
 - Revisa tu seguro de viaje. Muchas pólizas no cubren a los conductores sin carnet válido.
+- Nunca conduzcas después de beber alcohol. Vietnam tiene un límite cero para los conductores.
 - Si no estás seguro, utiliza aplicaciones de transporte, o contrata un coche con conductor.
 
 ---
