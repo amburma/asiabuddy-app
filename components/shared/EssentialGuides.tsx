@@ -2,8 +2,10 @@
 
 import { SupportedLanguage } from '../../types/country'
 import { UI_TRANSLATIONS } from '../../lib/i18n'
+import VietnamEssentialGuides from '../vietnam/VietnamEssentialGuides'
 
 export default function EssentialGuides({ country, language }: { country: string; language: string }) {
+  if (country === 'vietnam') return <VietnamEssentialGuides language={language} />
   if (country !== 'thailand') return null
 
   const t = UI_TRANSLATIONS[(language || 'EN').toUpperCase() as SupportedLanguage] || UI_TRANSLATIONS.EN
