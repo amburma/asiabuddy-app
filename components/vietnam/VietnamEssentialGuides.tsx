@@ -1,6 +1,5 @@
 'use client'
 
-import { Info, Plane, FileCheck, Bus, Home, Wallet } from 'lucide-react'
 import { UI_TRANSLATIONS } from '../../lib/i18n'
 import { VIETNAM_MODAL_TITLES } from '../../lib/i18n-vietnam-generic'
 import { SupportedLanguage } from '../../types/country'
@@ -11,12 +10,12 @@ export default function VietnamEssentialGuides({ language }: { language: string 
   const titles = VIETNAM_MODAL_TITLES[lang] || VIETNAM_MODAL_TITLES.EN
 
   const guides = [
-    { guide: 'general-info', title: titles.generalInfo, icon: <Info size={22} /> },
-    { guide: 'travel-types', title: titles.travelTypes, icon: <Plane size={22} /> },
-    { guide: 'visa', title: titles.visa, icon: <FileCheck size={22} /> },
-    { guide: 'transport', title: titles.transport, icon: <Bus size={22} /> },
-    { guide: 'accommodation', title: titles.accommodation, icon: <Home size={22} /> },
-    { guide: 'budget', title: titles.budget, icon: <Wallet size={22} /> },
+    { guide: 'general-info', title: titles.generalInfo, icon: '\u2139\uFE0F' },
+    { guide: 'travel-types', title: titles.travelTypes, icon: '\u2708\uFE0F' },
+    { guide: 'visa', title: titles.visa, icon: '\u{1F6C2}' },
+    { guide: 'transport', title: titles.transport, icon: '\u{1F695}' },
+    { guide: 'accommodation', title: titles.accommodation, icon: '\u{1F3E8}' },
+    { guide: 'budget', title: titles.budget, icon: '\u{1F4B0}' },
   ]
 
   const handleGuideClick = (guide: string) => {
@@ -42,7 +41,7 @@ export default function VietnamEssentialGuides({ language }: { language: string 
               onClick={() => handleGuideClick(guide.guide)}
               className="bg-white rounded-2xl border border-amber-100 shadow-sm hover:shadow-md hover:border-amber-300 transition-all duration-200 p-5 flex flex-col items-start gap-2 cursor-pointer w-full text-left"
             >
-              <span className="text-amber-600 mb-1">{guide.icon}</span>
+              <span className="text-2xl mb-1">{guide.icon}</span>
               <span className="text-sm font-bold text-gray-800">{guide.title}</span>
               <span className="text-xs text-amber-600">{t.essentialGuides?.learnMore || t.learnMore || ''}</span>
             </button>
