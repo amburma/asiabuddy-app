@@ -450,13 +450,13 @@ export function mergeVietnamGeneric<T extends object>(base: T, generic: object |
   return result as T;
 }
 
-export const VIETNAM_MODAL_TITLES: Record<string, { visa: string; budget: string; generalInfo: string; accommodation: string; transport: string; travelTypes: string }> = {
-  EN: { visa: 'Vietnam Visa Guide', budget: 'Vietnam Budget Guide', generalInfo: 'General Info', accommodation: 'Accommodation Guide', transport: 'Getting Around Vietnam', travelTypes: 'Travel Types in Vietnam' },
-  MM: { visa: 'ဗီယက်နမ် ဗီဇာ လမ်းညွှန်', budget: 'ဗီယက်နမ် ဘတ်ဂျက် လမ်းညွှန်', generalInfo: 'ယေဘုယျ အချက်အလက်', accommodation: 'တည်းခိုစရာ လမ်းညွှန်', transport: 'ဗီယက်နမ်တွင် သွားလာခြင်း', travelTypes: 'ဗီယက်နမ် ခရီးသွားပုံစံများ' },
-  TH: { visa: 'คู่มือวีซ่าเวียดนาม', budget: 'คู่มืองบประมาณเวียดนาม', generalInfo: 'ข้อมูลทั่วไป', accommodation: 'คู่มือที่พัก', transport: 'การเดินทางในเวียดนาม', travelTypes: 'ประเภทการท่องเที่ยวในเวียดนาม' },
-  DE: { visa: 'Vietnam-Visum-Leitfaden', budget: 'Vietnam-Budget-Leitfaden', generalInfo: 'Allgemeine Infos', accommodation: 'Unterkunfts-Leitfaden', transport: 'Unterwegs in Vietnam', travelTypes: 'Reisearten in Vietnam' },
-  FR: { visa: 'Guide des visas pour le Vietnam', budget: 'Guide du budget pour le Vietnam', generalInfo: 'Infos générales', accommodation: "Guide de l'hébergement", transport: "Se déplacer au Vietnam", travelTypes: 'Types de voyage au Vietnam' },
-  ES: { visa: 'Guía de visados de Vietnam', budget: 'Guía de presupuestos de Vietnam', generalInfo: 'Información general', accommodation: 'Guía de alojamiento', transport: 'Cómo moverse por Vietnam', travelTypes: 'Tipos de viaje en Vietnam' },
+export const VIETNAM_MODAL_TITLES: Record<string, { visa: string; budget: string; generalInfo: string; accommodation: string; transport: string; travelTypes: string; foodDining: string; cultureEtiquette: string }> = {
+  EN: { visa: 'Vietnam Visa Guide', budget: 'Vietnam Budget Guide', generalInfo: 'General Info', accommodation: 'Accommodation Guide', transport: 'Getting Around Vietnam', travelTypes: 'Travel Types in Vietnam', foodDining: 'Food & Dining', cultureEtiquette: 'Culture & Etiquette' },
+  MM: { visa: 'ဗီယက်နမ် ဗီဇာ လမ်းညွှန်', budget: 'ဗီယက်နမ် ဘတ်ဂျက် လမ်းညွှန်', generalInfo: 'ယေဘုယျ အချက်အလက်', accommodation: 'တည်းခိုစရာ လမ်းညွှန်', transport: 'ဗီယက်နမ်တွင် သွားလာခြင်း', travelTypes: 'ဗီယက်နမ် ခရီးသွားပုံစံများ', foodDining: 'အစားအသောက်', cultureEtiquette: 'ယဉ်ကျေးမှုနှင့် လူမှုဆက်ဆံရေး' },
+  TH: { visa: 'คู่มือวีซ่าเวียดนาม', budget: 'คู่มืองบประมาณเวียดนาม', generalInfo: 'ข้อมูลทั่วไป', accommodation: 'คู่มือที่พัก', transport: 'การเดินทางในเวียดนาม', travelTypes: 'ประเภทการท่องเที่ยวในเวียดนาม', foodDining: 'อาหารและการรับประทาน', cultureEtiquette: 'วัฒนธรรมและมารยาท' },
+  DE: { visa: 'Vietnam-Visum-Leitfaden', budget: 'Vietnam-Budget-Leitfaden', generalInfo: 'Allgemeine Infos', accommodation: 'Unterkunfts-Leitfaden', transport: 'Unterwegs in Vietnam', travelTypes: 'Reisearten in Vietnam', foodDining: 'Essen & Trinken', cultureEtiquette: 'Kultur & Etikette' },
+  FR: { visa: 'Guide des visas pour le Vietnam', budget: 'Guide du budget pour le Vietnam', generalInfo: 'Infos générales', accommodation: "Guide de l'hébergement", transport: "Se déplacer au Vietnam", travelTypes: 'Types de voyage au Vietnam', foodDining: 'Cuisine et restauration', cultureEtiquette: 'Culture et étiquette' },
+  ES: { visa: 'Guía de visados de Vietnam', budget: 'Guía de presupuestos de Vietnam', generalInfo: 'Información general', accommodation: 'Guía de alojamiento', transport: 'Cómo moverse por Vietnam', travelTypes: 'Tipos de viaje en Vietnam', foodDining: 'Comida y restauración', cultureEtiquette: 'Cultura y etiqueta' },
 };
 
 export const VIETNAM_BRAND = 'VietnamGuide';
