@@ -61,7 +61,7 @@ export async function generateMetadata(
       url: `https://asiabuddy.app/${lang}/${countrySlug}/tours`,
       images: [
         {
-          url: 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
+          url: countrySlug.toLowerCase() === 'vietnam' ? 'https://asiabuddy.app/images/vietnam-destination-hero.jpg' : 'https://asiabuddy.app/images/thailand-destination-hero.jpg',
           width: 1200,
           height: 630,
           alt: 'AsiaBuddy - Travel Asia Like a Local',
@@ -450,7 +450,7 @@ export default async function ToursPage({
               ⚡ Instant Response
             </span>
             <span className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-slate-300 text-sm px-4 py-2 rounded-full">
-              🌏 Thailand Expert
+              🌏 {countryName} Expert
             </span>
             <span className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-slate-300 text-sm px-4 py-2 rounded-full">
               💬 Free to Chat
