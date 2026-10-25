@@ -31,6 +31,9 @@ import { ETIQUETTE_DATA } from '../../data/thailand/etiquetteData'
 import { LAWS_DATA } from '../../data/thailand/lawsData'
 import { ThaiLanguage } from '../../types/country'
 import LanguageWelcome from './LanguageWelcome'
+import type { SupportedLanguage } from '../../types/country'
+import VietnamPhrases from '../vietnam/VietnamPhrases'
+import { VIETNAM_PHRASES_DATA } from '../../data/vietnam/phrasesData'
 
 interface NavbarProps {
   country?: string
@@ -478,6 +481,12 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
                   >
                     {vnTitles.cultureEtiquette}
                   </button>
+                  <button
+                    onClick={() => { setActiveModal('vn-phrases'); setShowMenu(false) }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-800 hover:bg-[#C9A84C]/10 rounded-lg"
+                  >
+                    {vnTitles.phrases}
+                  </button>
                 </div>
               )}
 
@@ -665,6 +674,18 @@ export default function Navbar({ country, language, isFirstVisit, showRootHomeBu
         </div>
       )}
 
+      {activeModal === 'vn-phrases' && country && country.toLowerCase() !== 'thailand' && (
+        <GuideModal
+          isOpen={true}
+          onClose={() => setActiveModal(null)}
+          title={vnTitles.phrases}
+          subtitle={VIETNAM_PHRASES_DATA.ui.subtitle[currentLanguage as SupportedLanguage] || VIETNAM_PHRASES_DATA.ui.subtitle.EN}
+          icon={<MessageSquare size={20} />}
+          footer={`${vnTitles.phrases} • ${t.brand?.subtitle || UI_TRANSLATIONS.EN.brand.subtitle}`}
+        >
+          <VietnamPhrases language={currentLanguage as SupportedLanguage} />
+        </GuideModal>
+      )}
       {/* Guide Modal */}
       {activeModal && modalContent[activeModal] && (
         <GuideModal
