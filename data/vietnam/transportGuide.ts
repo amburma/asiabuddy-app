@@ -22,7 +22,7 @@ Vietnam is easy to move around once you know the main options. In big cities, mo
 ---
 
 ## Ride-Hailing Apps
-- Grab, Xanh SM, and Be are the main ride-hailing apps. Grab is often the easiest for visitors because the app is in English and works with foreign cards. Some local apps may not accept foreign cards, so check before you ride.
+- Grab, Green SM (formerly Xanh SM), and Be are the main ride-hailing apps. Grab is often the easiest for visitors because the app is in English and works with foreign cards. Some local apps may not accept foreign cards, so check before you ride.
 - You see the price in the app before the ride starts. This helps you avoid arguments about the fare.
 - You can choose a car or a motorbike. A car is better with luggage or in the rain.
 - You need mobile data to use the apps. A local SIM card or an eSIM is very helpful.
@@ -33,7 +33,7 @@ Vietnam is easy to move around once you know the main options. In big cities, mo
 
 ## Taxis
 - Taxis are easy to find in Hanoi and Ho Chi Minh City.
-- Choose well-known companies, such as Mai Linh, Vinasun, or Xanh SM, and ask the driver to use the meter.
+- Choose well-known companies, such as Mai Linh, Vinasun, or Green SM, and ask the driver to use the meter.
 - Do not accept a fixed price from a driver on the street. It is often higher than the meter.
 - Show your hotel name or address on your phone. Writing it in Vietnamese helps.
 - If the meter looks wrong or the driver refuses to use it, leave the taxi and find another one.
@@ -145,7 +145,7 @@ const MM = `# ဗီယက်နမ်တွင် သွားလာရေး
 ---
 
 ## ကား/ဆိုင်ကယ်ငှားရမ်းသည့်အက်ပ်များ
-- Grab, Xanh SM, နဲ့ Be တို့ဟာ အဓိက ခရီးသွားပို့ဆောင်ရေး အက်ပ်များ ဖြစ်ကြပါတယ်။ Grab ကတော့ ဧည့်သည်တွေအတွက် အလွယ်ဆုံး ဖြစ်တတ်ပါတယ်၊ ဘာလို့လဲဆိုတော့ အက်ပ်က အင်္ဂလိပ်လို ဖြစ်ပြီး နိုင်ငံခြားကတ်တွေနဲ့လည်း အသုံးပြုလို့ရလို့ပါ။ ဒေသတွင်း အက်ပ်တချို့ကတော့ နိုင်ငံခြားကတ်တွေကို လက်မခံတာမျိုး ရှိနိုင်ပါတယ်၊ ဒါကြောင့် စီးနင်းမယ့်အခါ ကြိုတင်စစ်ဆေးပါ။
+- Grab, Green SM (ယခင် Xanh SM), နဲ့ Be တို့ဟာ အဓိက ခရီးသွားပို့ဆောင်ရေး အက်ပ်များ ဖြစ်ကြပါတယ်။ Grab ကတော့ ဧည့်သည်တွေအတွက် အလွယ်ဆုံး ဖြစ်တတ်ပါတယ်၊ ဘာလို့လဲဆိုတော့ အက်ပ်က အင်္ဂလိပ်လို ဖြစ်ပြီး နိုင်ငံခြားကတ်တွေနဲ့လည်း အသုံးပြုလို့ရလို့ပါ။ ဒေသတွင်း အက်ပ်တချို့ကတော့ နိုင်ငံခြားကတ်တွေကို လက်မခံတာမျိုး ရှိနိုင်ပါတယ်၊ ဒါကြောင့် စီးနင်းမယ့်အခါ ကြိုတင်စစ်ဆေးပါ။
 - ခရီးမစတင်မီ အက်ပ်တွင် ဈေးနှုန်းကို မြင်တွေ့ရမည်။ ၎င်းသည် ခရီးခအတွက် ငြင်းခုံမှုများကို ရှောင်ရှားရန် ကူညီပေးပါသည်။
 - ကား သို့မဟုတ် ဆိုင်ကယ်ကို ရွေးချယ်နိုင်ပါသည်။ ကားသည် ခရီးဆောင်အိတ်များ သို့မဟုတ် မိုးရွာနေချိန်တွင် ပိုကောင်းပါသည်။
 - အက်ပ်များကို အသုံးပြုရန် မိုဘိုင်းဒေတာ လိုအပ်ပါသည်။ ဒေသခံ SIM ကတ် သို့မဟုတ် eSIM သည် အလွန်အထောက်အကူဖြစ်ပါသည်။
@@ -156,7 +156,7 @@ const MM = `# ဗီယက်နမ်တွင် သွားလာရေး
 
 ## တက္ကစီများ
 - ဟနoi နှင့် Ho Chi Minh City တို့တွင် တက္ကစီများကို အလွယ်တကူ ရှာတွေ့နိုင်ပါသည်။
-- Mai Linh, Vinasun, သို့မဟုတ် Xanh SM ကဲ့သို့ နာမည်ကြီး ကုမ္ပဏီများကို ရွေးချယ်ပြီး မီတာကို အသုံးပြုရန် ယာဉ်မောင်းကို တောင်းဆိုပါ။
+- Mai Linh, Vinasun, သို့မဟုတ် Green SM ကဲ့သို့ နာမည်ကြီး ကုမ္ပဏီများကို ရွေးချယ်ပြီး မီတာကို အသုံးပြုရန် ယာဉ်မောင်းကို တောင်းဆိုပါ။
 - လမ်းပေါ်တွင် ယာဉ်မောင်းထံမှ သတ်မှတ်စျေးနှုန်းကို မယူပါနှင့်။ မီတာထက် ပိုများလေ့ရှိပါသည်။
 - သင့်ဟိုတယ်အမည် သို့မဟုတ် လိပ်စာကို ဖုန်းပေါ်တွင် ပြပါ။ ဗီယက်နမ်ဘာသာဖြင့် ရေးသားထားခြင်းက အထောက်အကူဖြစ်စေပါသည်။
 - မီတာ မှားယွင်းနေသည်ဟု ထင်ပါက သို့မဟုတ် ၎င်းကို အသုံးပြုရန် ယာဉ်မောင်းက ငြင်းဆန်ပါက တက္ကစီမှ ဆင်းပြီး အခြားတစ်ခုကို ရှာပါ။
@@ -268,7 +268,7 @@ const TH = `# การเดินทางในเวียดนาม
 ---
 
 ## แอปพลิเคชันเรียกรถ
-- Grab, Xanh SM และ Be เป็นแอปเรียกรถหลัก Grab มักจะเป็นตัวเลือกที่ง่ายที่สุดสำหรับนักท่องเที่ยว เพราะแอปเป็นภาษาอังกฤษและใช้ได้กับบัตรต่างประเทศ แอปท้องถิ่นบางแอปอาจไม่รับบัตรต่างประเทศ ดังนั้นควรตรวจสอบก่อนใช้บริการ
+- Grab, Green SM (เดิมชื่อ Xanh SM) และ Be เป็นแอปเรียกรถหลัก Grab มักจะเป็นตัวเลือกที่ง่ายที่สุดสำหรับนักท่องเที่ยว เพราะแอปเป็นภาษาอังกฤษและใช้ได้กับบัตรต่างประเทศ แอปท้องถิ่นบางแอปอาจไม่รับบัตรต่างประเทศ ดังนั้นควรตรวจสอบก่อนใช้บริการ
 - คุณจะเห็นราคาในแอปก่อนเริ่มเดินทาง ซึ่งช่วยให้คุณหลีกเลี่ยงการโต้เถียงเรื่องค่าโดยสาร
 - คุณสามารถเลือกรถยนต์หรือมอเตอร์ไซค์ รถยนต์เหมาะกว่าเมื่อมีสัมภาระหรือตอนฝนตก
 - คุณต้องมีข้อมูลมือถือเพื่อใช้แอป ซิมการ์ดท้องถิ่นหรือ eSIM จะมีประโยชน์มาก
@@ -279,7 +279,7 @@ const TH = `# การเดินทางในเวียดนาม
 
 ## แท็กซี่
 - แท็กซี่หาได้ง่ายในฮานอยและนครโฮจิมินห์
-- เลือกบริษัทที่มีชื่อเสียง เช่น Mai Linh, Vinasun หรือ Xanh SM และขอให้คนขับเปิดมิเตอร์
+- เลือกบริษัทที่มีชื่อเสียง เช่น Mai Linh, Vinasun หรือ Green SM และขอให้คนขับเปิดมิเตอร์
 - อย่าตกลงราคาคงที่กับคนขับบนท้องถนน เพราะมักจะแพงกว่ามิเตอร์
 - แสดงชื่อโรงแรมหรือที่อยู่บนโทรศัพท์ของคุณ การเขียนเป็นภาษาเวียดนามจะช่วยได้
 - หากมิเตอร์ดูผิดปกติ หรือคนขับปฏิเสธที่จะใช้มิเตอร์ ให้ลงจากแท็กซี่และหาคันอื่น
@@ -391,7 +391,7 @@ Vietnam ist leicht zu bereisen, wenn man die wichtigsten Optionen kennt. In gro�
 ---
 
 ## Ride-Hailing Apps
-- Grab, Xanh SM und Be sind die wichtigsten Ride-Hailing-Apps. Grab ist für Besucher oft am einfachsten, da die App auf Englisch ist und mit ausländischen Karten funktioniert. Einige lokale Apps akzeptieren möglicherweise keine ausländischen Karten, daher sollten Sie vor der Fahrt prüfen.
+- Grab, Green SM (früher Xanh SM) und Be sind die wichtigsten Ride-Hailing-Apps. Grab ist für Besucher oft am einfachsten, da die App auf Englisch ist und mit ausländischen Karten funktioniert. Einige lokale Apps akzeptieren möglicherweise keine ausländischen Karten, daher sollten Sie vor der Fahrt prüfen.
 - Sie sehen den Preis in der App, bevor die Fahrt beginnt. Das hilft, Streitigkeiten über den Fahrpreis zu vermeiden.
 - Sie können ein Auto oder ein Motorrad wählen. Ein Auto ist besser mit Gepäck oder bei Regen.
 - Sie benötigen mobile Daten, um die Apps zu nutzen. Eine lokale SIM-Karte oder eine eSIM ist sehr hilfreich.
@@ -402,7 +402,7 @@ Vietnam ist leicht zu bereisen, wenn man die wichtigsten Optionen kennt. In gro�
 
 ## Taxis
 - Taxis sind in Hanoi und Ho Chi Minh City leicht zu finden.
-- Wählen Sie bekannte Unternehmen wie Mai Linh, Vinasun oder Xanh SM und bitten Sie den Fahrer, das Taxameter zu benutzen.
+- Wählen Sie bekannte Unternehmen wie Mai Linh, Vinasun oder Green SM und bitten Sie den Fahrer, das Taxameter zu benutzen.
 - Akzeptieren Sie keinen Festpreis von einem Fahrer auf der Straße. Er ist oft höher als der Taxameterpreis.
 - Zeigen Sie den Namen oder die Adresse Ihres Hotels auf Ihrem Handy. Wenn Sie es auf Vietnamesisch schreiben, hilft das.
 - Wenn das Taxameter falsch aussieht oder der Fahrer sich weigert, es zu benutzen, steigen Sie aus und suchen Sie ein anderes Taxi.
@@ -514,7 +514,7 @@ Il est facile de se déplacer au Vietnam une fois que vous connaissez les princi
 ---
 
 ## Applications de VTC
-- Grab, Xanh SM et Be sont les principales applications de VTC. Grab est souvent la plus facile pour les visiteurs car l'application est en anglais et fonctionne avec les cartes étrangères. Certaines applications locales peuvent ne pas accepter les cartes étrangères, alors vérifiez avant de commander une course.
+- Grab, Green SM (anciennement Xanh SM) et Be sont les principales applications de VTC. Grab est souvent la plus facile pour les visiteurs car l'application est en anglais et fonctionne avec les cartes étrangères. Certaines applications locales peuvent ne pas accepter les cartes étrangères, alors vérifiez avant de commander une course.
 - Vous voyez le prix dans l'application avant le début du trajet. Cela vous aide à éviter les disputes sur le tarif.
 - Vous pouvez choisir une voiture ou une moto. Une voiture est mieux avec des bagages ou sous la pluie.
 - Vous avez besoin de données mobiles pour utiliser les applications. Une carte SIM locale ou une eSIM est très utile.
@@ -525,7 +525,7 @@ Il est facile de se déplacer au Vietnam une fois que vous connaissez les princi
 
 ## Taxis
 - Les taxis sont faciles à trouver à Hanoi et Ho Chi Minh City.
-- Choisissez des compagnies connues, comme Mai Linh, Vinasun, ou Xanh SM, et demandez au chauffeur d'utiliser le compteur.
+- Choisissez des compagnies connues, comme Mai Linh, Vinasun, ou Green SM, et demandez au chauffeur d'utiliser le compteur.
 - N'acceptez pas de prix fixe d'un chauffeur dans la rue. C'est souvent plus cher que le compteur.
 - Montrez le nom ou l'adresse de votre hôtel sur votre téléphone. L'écrire en vietnamien aide.
 - Si le compteur semble incorrect ou si le chauffeur refuse de l'utiliser, quittez le taxi et trouvez-en un autre.
@@ -637,7 +637,7 @@ Vietnam es fácil de recorrer una vez que conozcas las opciones principales. En 
 ---
 
 ## Aplicaciones de Transporte
-- Grab, Xanh SM y Be son las principales aplicaciones de transporte. Grab suele ser la más fácil para los visitantes porque la aplicación está en inglés y funciona con tarjetas extranjeras. Algunas aplicaciones locales pueden no aceptar tarjetas extranjeras, así que verifica antes de pedir el viaje.
+- Grab, Green SM (antes Xanh SM) y Be son las principales aplicaciones de transporte. Grab suele ser la más fácil para los visitantes porque la aplicación está en inglés y funciona con tarjetas extranjeras. Algunas aplicaciones locales pueden no aceptar tarjetas extranjeras, así que verifica antes de pedir el viaje.
 - Ves el precio en la aplicación antes de que comience el viaje. Esto te ayuda a evitar discusiones sobre la tarifa.
 - Puedes elegir un coche o una moto. Un coche es mejor con equipaje o con lluvia.
 - Necesitas datos móviles para usar las aplicaciones. Una tarjeta SIM local o una eSIM es muy útil.
@@ -648,7 +648,7 @@ Vietnam es fácil de recorrer una vez que conozcas las opciones principales. En 
 
 ## Taxis
 - Los taxis son fáciles de encontrar en Hanoi y Ciudad Ho Chi Minh.
-- Elija empresas conocidas, como Mai Linh, Vinasun o Xanh SM, y pida al conductor que use el taxímetro.
+- Elija empresas conocidas, como Mai Linh, Vinasun o Green SM, y pida al conductor que use el taxímetro.
 - No acepte un precio fijo de un conductor en la calle. Suele ser más alto que el del taxímetro.
 - Muestre el nombre o la dirección de su hotel en su teléfono. Escribirlo en vietnamita ayuda.
 - Si el taxímetro parece incorrecto o el conductor se niega a usarlo, bájese del taxi y busque otro.
