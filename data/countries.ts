@@ -8,7 +8,7 @@ export interface Country {
 export const countries: Country[] = [
   { id: 'thailand', name: 'Thailand', flag: '🇹🇭', status: 'live' },
   { id: 'myanmar', name: 'Myanmar', flag: '🇲🇲', status: 'coming-soon' },
-  { id: 'vietnam', name: 'Vietnam', flag: '🇻🇳', status: 'coming-soon' },
+  { id: 'vietnam', name: 'Vietnam', flag: '🇻🇳', status: 'live' },
   { id: 'cambodia', name: 'Cambodia', flag: '🇰🇭', status: 'coming-soon' },
   { id: 'laos', name: 'Laos', flag: '🇱🇦', status: 'coming-soon' },
   { id: 'singapore', name: 'Singapore', flag: '🇸🇬', status: 'coming-soon' },
