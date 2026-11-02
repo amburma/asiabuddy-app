@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { revalidateTag } from 'next/cache'
 
 export async function GET(request: NextRequest) {
   const authHeader = request.headers.get('authorization')
@@ -17,7 +18,7 @@ export async function GET(request: NextRequest) {
   // Find posts due to publish (scheduled time has passed, not yet published)
   const { data: duePosts, error: fetchError } = await supabase
     .from('posts')
-    .select('id, scheduled_publish_at')
+    .select('id, scheduled_publish_at, slug, country')
     .eq('published', false)
     .not('scheduled_publish_at', 'is', null)
     .lte('scheduled_publish_at', now)
@@ -42,6 +43,15 @@ export async function GET(request: NextRequest) {
 
   if (updateError) {
     return NextResponse.json({ error: updateError.message }, { status: 500 })
+  }
+
+  // Revalidate caches
+  try {
+    revalidateTag(`posts-${postToPublish.country}`)
+    revalidateTag(`post-${postToPublish.slug}`)
+  } catch (revalidateError) {
+    // Log revalidation error but don't fail the request
+    console.error('Cache revalidation failed:', revalidateError)
   }
 
   return NextResponse.json({ published: 1, postId: postToPublish.id })
