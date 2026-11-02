@@ -21,6 +21,17 @@ import TicketServiceCard from '@/components/shared/services/TicketServiceCard'
 import { COUNTRY_META } from './layout'
 import { getDefaultCity, getCountryCities } from '@/data/countryDefaults'
 
+interface Post {
+  id: string
+  title: string
+  slug: string
+  excerpt: string | null
+  cover_image: string | null
+  author: string
+  created_at: string
+  published_at: string | null
+}
+
 export default async function CountryPage({
   params,
 }: {
@@ -102,14 +113,15 @@ export default async function CountryPage({
         const supabase = getSupabase()
         const { data, error } = await supabase
           .from('posts')
-          .select('id, title, slug, excerpt, cover_image, author, created_at')
+          .select('id, title, slug, excerpt, cover_image, author, created_at, published_at')
           .eq('country', country)
           .eq('published', true)
+          .order('published_at', { ascending: false, nullsFirst: false })
           .order('created_at', { ascending: false })
           .limit(3)
         return { data, error }
       },
-      [`posts-${country}-latest`],
+      [`posts-${country}-latest-v2`],
       { revalidate: 3600, tags: [`posts-${country}`] }
     )
   }
@@ -362,7 +374,7 @@ export default async function CountryPage({
                     <div className="text-xs text-gray-500">
                       <span className="font-medium">{post.author}</span>
                       <span className="mx-1">•</span>
-                      <span>{new Date(post.created_at).toLocaleDateString()}</span>
+                      <span>{new Date(post.published_at ?? post.created_at).toLocaleDateString()}</span>
                     </div>
                   </div>
                 </Link>
