@@ -25,6 +25,7 @@ interface Post {
   published: boolean
   country: string
   created_at: string
+  published_at: string | null
   updated_at: string
 }
 
@@ -38,6 +39,17 @@ interface Tour {
   image_url: string | null
   images: string[] | null
   featured: boolean
+}
+
+interface RelatedPost {
+  id: string
+  title: string
+  slug: string
+  excerpt: string | null
+  cover_image: string | null
+  author: string
+  created_at: string
+  published_at: string | null
 }
 
 // ─── Metadata ─────────────────────────────────────────────────
@@ -98,7 +110,7 @@ function getCachedPost(slug: string, country: string) {
         .single()
       return { data, error }
     },
-    [`post-${slug}-${country}`],
+    [`post-${slug}-${country}-v2`],
     { revalidate: 3600, tags: [`post-${slug}`] }
   )
 }
@@ -109,15 +121,16 @@ function getCachedRelatedPosts(country: string, currentSlug: string) {
       const supabase = createPublicClient()
       const { data, error } = await supabase
         .from('posts')
-        .select('id, title, slug, excerpt, cover_image, author, created_at')
+        .select('id, title, slug, excerpt, cover_image, author, created_at, published_at')
         .eq('country', country)
         .eq('published', true)
         .neq('slug', currentSlug)
+        .order('published_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
         .limit(3)
       return { data, error }
     },
-    [`related-posts-${country}-${currentSlug}`],
+    [`related-posts-${country}-${currentSlug}-v2`],
     { revalidate: 3600, tags: [`posts-${country}`] }
   )
 }
@@ -247,7 +260,7 @@ export default async function BlogPostPage({
   const faqItems = extractFaqItems(post.content)
   const headings = extractHeadings(bodyContent)
   const readingTime = calculateReadingTime(post.content)
-  const formattedDate = formatDate(post.created_at)
+  const formattedDate = formatDate(post.published_at ?? post.created_at)
 
   return (
     <div className="min-h-screen bg-[#F5F0E8]">
@@ -422,7 +435,7 @@ export default async function BlogPostPage({
                       <div className="flex items-center gap-2 text-gray-500 text-xs pt-4 border-t border-gray-100">
                         <span className="font-medium">{relatedPost.author}</span>
                         <span>•</span>
-                        <span>{formatDate(relatedPost.created_at)}</span>
+                        <span>{formatDate(relatedPost.published_at ?? relatedPost.created_at)}</span>
                       </div>
                     </div>
                   </article>
@@ -480,7 +493,7 @@ export default async function BlogPostPage({
             "headline": post.title,
             "description": post.excerpt || undefined,
             "image": post.cover_image ? [post.cover_image] : undefined,
-            "datePublished": post.created_at,
+            "datePublished": post.published_at ?? post.created_at,
             "dateModified": post.updated_at || post.created_at,
             "author": {
               "@type": "Organization",

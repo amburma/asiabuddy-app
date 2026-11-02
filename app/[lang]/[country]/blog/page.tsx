@@ -14,6 +14,7 @@ interface Post {
   cover_image: string | null
   author: string
   created_at: string
+  published_at: string | null
   is_featured?: boolean
   category?: string | null
   categories?: string[] | null
@@ -74,10 +75,11 @@ function getCachedPosts(country: string, page: number, category?: string) {
       const to = from + 8
       let query = supabase
         .from('posts')
-        .select('id, title, slug, excerpt, cover_image, author, created_at, is_featured, category, categories', { count: 'exact' })
+        .select('id, title, slug, excerpt, cover_image, author, created_at, published_at, is_featured, category, categories', { count: 'exact' })
         .eq('country', country)
         .eq('published', true)
         .eq('is_featured', false)
+        .order('published_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
         .range(from, to)
       if (category) {
@@ -86,7 +88,7 @@ function getCachedPosts(country: string, page: number, category?: string) {
       const { data, error, count } = await query
       return { data, error, count }
     },
-    [`posts-${country}-page-${page}-cat-${category || 'all'}`],
+    [`posts-${country}-page-${page}-cat-${category || 'all'}-v2`],
     { revalidate: 3600, tags: [`posts-${country}`] }
   )
 }
@@ -97,15 +99,16 @@ function getCachedFeaturedPost(country: string) {
       const supabase = createPublicClient()
       const { data, error } = await supabase
         .from('posts')
-        .select('id, title, slug, excerpt, cover_image, author, created_at, is_featured, category, categories')
+        .select('id, title, slug, excerpt, cover_image, author, created_at, published_at, is_featured, category, categories')
         .eq('country', country)
         .eq('published', true)
         .eq('is_featured', true)
+        .order('published_at', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
         .limit(1)
       return { data, error }
     },
-    [`featured-post-${country}`],
+    [`featured-post-${country}-v2`],
     { revalidate: 3600, tags: [`posts-${country}`] }
   )
 }
@@ -167,7 +170,7 @@ export default async function BlogListingPage({
               "headline": post.title,
               "url": `https://asiabuddy.app/${lang}/${countrySlug}/blog/${post.slug}`,
               "image": post.cover_image || undefined,
-              "datePublished": post.created_at
+              "datePublished": post.published_at ?? post.created_at
             }))
           })
         }}
@@ -317,7 +320,7 @@ export default async function BlogListingPage({
                     <div className="flex items-center gap-2 text-gray-500 text-xs pt-4 border-t border-gray-100">
                       <span className="font-medium">{post.author}</span>
                       <span>•</span>
-                      <span>{formatDate(post.created_at)}</span>
+                      <span>{formatDate(post.published_at ?? post.created_at)}</span>
                     </div>
                   </div>
                 </article>
